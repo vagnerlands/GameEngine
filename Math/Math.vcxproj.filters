@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="IvQuat.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvRay3.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvTriangle.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvVector2.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvVector3.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvVector4.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvGaussianElim.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvLine3.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvLineSegment3.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvMath.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvMatrix33.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvMatrix44.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IvPlane.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IvQuat.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvRay3.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvTriangle.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvVector2.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvVector3.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvVector4.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvGaussianElim.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvLine3.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvLineSegment3.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvMath.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvMatrix33.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvMatrix44.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IvPlane.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="IvMath.vcproj">
+      <Filter>Src</Filter>
+    </None>
+    <None Include="IvMath.vcxproj">
+      <Filter>Src</Filter>
+    </None>
+    <None Include="IvMath.vcxproj.filters">
+      <Filter>Src</Filter>
+    </None>
+  </ItemGroup>
+</Project>
