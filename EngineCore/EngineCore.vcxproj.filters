@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Src\OS">
+      <UniqueIdentifier>{77bf7373-3e83-4363-b36c-e3c7a80bf1d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\OS\Abstract">
+      <UniqueIdentifier>{8a9b3850-29de-461f-9450-c91f49673ec2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\OS\Windows">
+      <UniqueIdentifier>{19098107-03cd-4b5d-a4a5-2a52adf4b82e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Holders">
+      <UniqueIdentifier>{30fcb619-c016-4ed6-8949-4719f2b8191d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Cache">
+      <UniqueIdentifier>{6ea5c1d2-f378-4923-9f6e-fa66a8a56ec2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Cache\ResourceCache">
+      <UniqueIdentifier>{ddc9138a-82c8-4a6a-8ee5-2db840b8b864}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Loaders">
+      <UniqueIdentifier>{1590d157-63eb-435d-bac6-3e360b64fa9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Loaders\Model3D">
+      <UniqueIdentifier>{e7a98d41-c92a-4a1b-b819-ad12db05dd3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Loaders\Model3D\objParser">
+      <UniqueIdentifier>{26d74fa8-0c17-4083-a538-e9a7000ffa6c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainOGLEntry.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IGame.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="OS\Windows\CWinMutex.cpp">
+      <Filter>Src\OS\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="OS\Windows\CWinSocket.cpp">
+      <Filter>Src\OS\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="OS\Windows\CWinThread.cpp">
+      <Filter>Src\OS\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Holders\CSocketHolder.cpp">
+      <Filter>Src\Holders</Filter>
+    </ClCompile>
+    <ClCompile Include="Holders\CTextureHolder.cpp">
+      <Filter>Src\Holders</Filter>
+    </ClCompile>
+    <ClCompile Include="Holders\CThreadHolder.cpp">
+      <Filter>Src\Holders</Filter>
+    </ClCompile>
+    <ClCompile Include="Holders\CModelHolder.cpp">
+      <Filter>Src\Holders</Filter>
+    </ClCompile>
+    <ClCompile Include="Holders\CShaderHolder.cpp">
+      <Filter>Src\Holders</Filter>
+    </ClCompile>
+    <ClCompile Include="Cache\ResourceCache\CResHandle.cpp">
+      <Filter>Src\Cache\ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="Cache\ResourceCache\ZipFile.cpp">
+      <Filter>Src\Cache\ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Model3D\objParser\objLoader.cpp">
+      <Filter>Src\Loaders\Model3D\objParser</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Model3D\objParser\string_extra.cpp">
+      <Filter>Src\Loaders\Model3D\objParser</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Model3D\objParser\list.cpp">
+      <Filter>Src\Loaders\Model3D\objParser</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Model3D\objParser\obj_parser.cpp">
+      <Filter>Src\Loaders\Model3D\objParser</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IGame.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Abstract\IMutex.h">
+      <Filter>Src\OS\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Abstract\ISocket.h">
+      <Filter>Src\OS\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Abstract\IThread.h">
+      <Filter>Src\OS\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Windows\CWinMutex.h">
+      <Filter>Src\OS\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Windows\CWinSocket.h">
+      <Filter>Src\OS\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Windows\CWinThread.h">
+      <Filter>Src\OS\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Holders\CShaderHolder.h">
+      <Filter>Src\Holders</Filter>
+    </ClInclude>
+    <ClInclude Include="Holders\CSocketHolder.h">
+      <Filter>Src\Holders</Filter>
+    </ClInclude>
+    <ClInclude Include="Holders\CTextureHolder.h">
+      <Filter>Src\Holders</Filter>
+    </ClInclude>
+    <ClInclude Include="Holders\CThreadHolder.h">
+      <Filter>Src\Holders</Filter>
+    </ClInclude>
+    <ClInclude Include="Holders\CModelHolder.h">
+      <Filter>Src\Holders</Filter>
+    </ClInclude>
+    <ClInclude Include="Cache\ResourceCache\CResHandle.h">
+      <Filter>Src\Cache\ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="Cache\ResourceCache\IResourceFile.h">
+      <Filter>Src\Cache\ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="Cache\ResourceCache\ZipFile.h">
+      <Filter>Src\Cache\ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Model3D\objParser\objLoader.h">
+      <Filter>Src\Loaders\Model3D\objParser</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Model3D\objParser\string_extra.h">
+      <Filter>Src\Loaders\Model3D\objParser</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Model3D\objParser\list.h">
+      <Filter>Src\Loaders\Model3D\objParser</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Model3D\objParser\obj_parser.h">
+      <Filter>Src\Loaders\Model3D\objParser</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
