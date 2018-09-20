@@ -16,8 +16,7 @@ using namespace std;
 class CTextureHolder 
 {
 public:
-	static CTextureHolder* instance();
-	void OpenResourceFile();
+	static bool Create(const string pathToTexturesFile);
 	void LoadTexture(const string textId);
 	void RemoveTexture(const string textId);
 	GLuint getTextureById(string textId);
@@ -27,9 +26,12 @@ public:
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(string removeItem);
 
+	// local instance
+	static CTextureHolder* s_pInstance;
+
 
 private:
-	CTextureHolder();
+	CTextureHolder(const string pathToTexturesFile);
 	// build texture, if any available
 	void BuildTexture();
 	// local hashmap built textures
@@ -40,10 +42,7 @@ private:
 	IMutex* m_textureContentMapMutex;
 
 	// resource database - TEXTURES
-	CResourceZipFile m_textureFiles;
-
-	// local instance
-	static CTextureHolder* s_pInstance;
+	IResourceFile* m_textureFiles;
 
 };
 

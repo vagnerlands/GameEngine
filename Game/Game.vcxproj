@@ -149,6 +149,8 @@
     <ClCompile Include="Game.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\model.zip" />
+    <None Include="Assets\textures.zip" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

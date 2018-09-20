@@ -19,27 +19,29 @@ CModelHolder::~CModelHolder()
 	}	
 }
 
-CModelHolder*
-CModelHolder::instance()
+bool CModelHolder::Create(const string pathToModelFile)
 {
-	if (s_pInstance == NULL)
+	if (s_pInstance == nullptr)
 	{
-		s_pInstance = new CModelHolder();
-		s_pInstance->m_cacheDb.Init();
+		// creates instance of CModelHolder
+		s_pInstance = new CModelHolder(pathToModelFile);
+		// tries to open the resource file - out of the constructor so errors may be reported
+		if ((s_pInstance != nullptr) && (s_pInstance->m_modelFiles->VOpen()))
+		{
+			return true;
+		}
 	}
-
-	return s_pInstance;
+	return false;
 }
 
 void 
 CModelHolder::OnRemoveEvent(string removeItem)
 {
-	instance()->RemoveModel(removeItem);
+	s_pInstance->RemoveModel(removeItem);
 }
 
-CModelHolder::CModelHolder()
-	: m_modelFiles("C:\\Users\\Vagner\\Documents\\Visual Studio 2015\\Projects\\GameAvatar\\GameAvatar\\Resources\\model.zip", this->OnRemoveEvent),
-	  m_cacheDb(10, &m_modelFiles)
+CModelHolder::CModelHolder(std::string pathToResources)
+	: m_modelFiles(new CResourceZipFile(pathToResources.data(), this->OnRemoveEvent))
 {
 #ifdef WIN32
 	m_pModelContentMapMutex = new CWinMutex();
@@ -60,21 +62,30 @@ CModelHolder::LoadModel(const string modelId)
 
 	// cache missed - must reload it from resources db
 	CResource resModel(modelId);
-	shared_ptr<CResHandle> modelStream = m_cacheDb.GetHandle(&resModel);
-	string materialId = modelId.substr(0, modelId.find_last_of('.'));
-	materialId += ".mtl";
-	CResource resMaterial(materialId);
-	shared_ptr<CResHandle> materialStream = m_cacheDb.GetHandle(&resMaterial);
-	if (modelStream->GetSize() > 0)
+	Byte* modelStream = m_modelFiles->VAllocateAndGetResource(resModel);
+
+	// checks if return value isn't null
+	if (modelStream != 0)
 	{
-		Byte* data = modelStream->Buffer();
-		Byte* materialData = 0;
-		if (materialStream->GetSize() > 0) materialData = materialStream->Buffer();
-		AddModelContent(modelId, data, materialData);
+		// material stream 
+		string materialId = modelId.substr(0, modelId.find_last_of('.'));
+		materialId += ".mtl";
+		CResource resMaterial(materialId);
+		// tries to get the material data
+		Byte* materialStream = m_modelFiles->VAllocateAndGetResource(resMaterial);
+		// finally, perform allocation
+		AddModelContent(modelId, modelStream, materialStream);
+
+		// release resources
+		if (materialStream != 0)
+		{
+			delete[] materialStream;
+		}
+		delete[] modelStream;
 	}
 	else
 	{
-		printf("Model %s not found in resource file!\n", modelId);
+		DEBUG_OUT("Model %s not found in resource file!\n", modelId);
 	}	
 
 	// time measurement

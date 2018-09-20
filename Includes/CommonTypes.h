@@ -26,6 +26,12 @@ namespace Types
 	static const Float s_PI = 3.14159265359F;
 	static const Byte* s_GAME_CONNECTION_PORT = "1234";
 
+	enum EGraphicsAPI
+	{
+		EGraphics_OGL,
+		EGraphics_DirectX
+	};
+
 	enum CameraAttributeType
 	{
 		CameraAttribute_Position,

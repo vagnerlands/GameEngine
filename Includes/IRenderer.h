@@ -19,6 +19,12 @@ namespace Graphics
 
 		virtual void PrepareCamera3D() = 0;
 		virtual void Resize(UInt32 width, UInt32 height) = 0;
+
+		virtual void SetDisplayWidth(UInt32 width);
+		virtual void SetDisplayHeight(UInt32 height);
+		virtual void SetNearPlane(Float near);
+		virtual void SetFarPlane(Float far);
+		virtual void SetFOV(Float fov);
 		
 
 		const IvMatrix44& GetWorldMatrix();
@@ -66,6 +72,65 @@ namespace Graphics
 		IRenderer(const IRenderer& other);
 		IRenderer& operator=(const IRenderer& other);
 	};
+
+	//-------------------------------------------------------------------------------
+	// @ IRendererOGL::SetDisplayWidth()
+	//-------------------------------------------------------------------------------
+	// Set up GL the view width - this won't affect the window size, just the 
+	// viewport
+	//-------------------------------------------------------------------------------
+	inline void 
+	IRenderer::SetDisplayWidth(UInt32 width)
+	{
+		mWidth = width;
+	}
+
+	//-------------------------------------------------------------------------------
+	// @ IRendererOGL::SetDisplayHeight()
+	//-------------------------------------------------------------------------------
+	// Set up GL the view height - this won't affect the window size, just the 
+	// viewport
+	//-------------------------------------------------------------------------------
+	inline void 
+	IRenderer::SetDisplayHeight(UInt32 height)
+	{
+		mHeight = height;
+	}
+
+	//-------------------------------------------------------------------------------
+	// @ IRendererOGL::SetNearPlane()
+	//-------------------------------------------------------------------------------
+	// Set up GL near plane value (how close is the camera clip)
+	// We're using centimeters here.
+	//-------------------------------------------------------------------------------
+	inline void 
+	IRenderer::SetNearPlane(Float near)
+	{
+		mNear = near;
+	}
+
+	//-------------------------------------------------------------------------------
+	// @ IRendererOGL::SetFarPlane()
+	//-------------------------------------------------------------------------------
+	// Set up GL far plane value (how far the camera can see)
+	// We're using centimeters here.
+	//-------------------------------------------------------------------------------
+	inline void 
+		IRenderer::SetFarPlane(Float far)
+	{
+		mFar = far;
+	}
+
+	//-------------------------------------------------------------------------------
+	// @ IRendererOGL::SetFOV()
+	//-------------------------------------------------------------------------------
+	// Set up GL field of view in degrees
+	//-------------------------------------------------------------------------------
+	inline void 
+	IRenderer::SetFOV(Float fov)
+	{
+		mFOV = fov;
+	}
 
 }
 #endif // _IRENDERER_H_

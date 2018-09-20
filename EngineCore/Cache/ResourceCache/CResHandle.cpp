@@ -51,6 +51,33 @@ CResourceZipFile::VGetResource(const CResource &r, char *buffer)
 	return 0;
 }
 
+char* 
+CResourceZipFile::VAllocateAndGetResource(const CResource &r)
+{
+	// data to be returned to user - starts with no data (null)
+	char* contentBuffer = 0;
+	// retrieve file size
+	const Int32 fileSizeInBytes = VGetResourceSize(r);
+	// if the file was found, then we must allocate its data
+	if (fileSizeInBytes > 0)
+	{
+		// allocate this data - make sure we'll delete it after usage!
+		contentBuffer = new char[fileSizeInBytes];
+		// checks if allocation was succesfull - maybe the system ran out of memory
+		if (contentBuffer != 0)
+		{
+			// method return value is useless, so it's not being checked
+			VGetResource(r, contentBuffer);
+		}
+		else
+		{
+			DEBUG_OUT("Not enought memory to allocate resource %s\n", r.m_name.data());
+		}
+	}
+
+	return contentBuffer;
+}
+
 CResHandle::CResHandle(CResource& resource, char* buffer, unsigned int size, CResCache* pResCache)
 	: m_resource(resource) {
 	m_buffer = buffer;

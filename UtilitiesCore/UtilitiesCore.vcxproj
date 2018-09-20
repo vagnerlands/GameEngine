@@ -138,12 +138,16 @@ copy .\ZLib\*.h ..\Includes</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CClockOGL.cpp" />
     <ClCompile Include="Debugger.cpp" />
+    <ClCompile Include="IClock.cpp" />
     <ClCompile Include="Shaders\glsl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CClockOGL.h" />
     <ClInclude Include="CommonTypes.h" />
     <ClInclude Include="Debugger.h" />
+    <ClInclude Include="IClock.h" />
     <ClInclude Include="OGLTypes.h" />
     <ClInclude Include="Shaders\glsl.h" />
     <ClInclude Include="zlib\ioapi.h" />

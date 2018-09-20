@@ -1,6 +1,8 @@
 
 #include "IGame.h"
 #include "IRenderer.h"
+#include "IClock.h"
+#include "CClockOGL.h"
 #include "GL/glut.h"
 
 Int32 EngineCore::IGame::s_lastState = GLUT_UP;
@@ -20,13 +22,13 @@ bool EngineCore::IGame::PreRendererInitialize(int argc, char * argv[])
 	if (!ParseCommandLine(argc, argv))
 		return false;
 
-	if (!SetupSubsystems())
+	if (!SetupSubsystems(Types::EGraphicsAPI::EGraphics_OGL))
 		return false;
 
 	return true;
 }
 
-bool EngineCore::IGame::PostRendererInitialize()
+bool EngineCore::IGame::PostRendererInitialize() 
 {
 	// TODO: threads, semaphores, sockets and other features that are better to be initialized
 	// at the end of the initialization process...
@@ -61,9 +63,17 @@ bool EngineCore::IGame::ParseCommandLine(int argc, char * argv[])
 	return true;
 }
 
-bool EngineCore::IGame::SetupSubsystems()
+bool EngineCore::IGame::SetupSubsystems(Types::EGraphicsAPI gfxApi)
 {
-	// TODO: initialize clock
+	// initialize clock
+	if (gfxApi == Types::EGraphicsAPI::EGraphics_OGL)
+	{
+		mClock = new UtilitiesCore::CClockOGL();
+	}
+	else
+	{
+		return false;
+	}
 	// TODO: initialize threads
 	// TODO: initialize mutexes/semaphores
 	// Attach callback functions to rendering functions

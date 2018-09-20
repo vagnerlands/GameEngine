@@ -23,6 +23,8 @@ Game::~Game()
 bool Game::PostRendererInitialize()
 {
 	//TODO: initialize lighting default values (some basic light somewhere)
+	// Set the view parameters in renderer
+	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
 	return true;
 }
 

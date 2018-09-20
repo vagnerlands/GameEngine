@@ -7,34 +7,31 @@
 
 CTextureHolder* CTextureHolder::s_pInstance = NULL;
 
-CTextureHolder*
-CTextureHolder::instance()
+bool CTextureHolder::Create(const string pathToTexturesFile)
 {
-	if (s_pInstance == NULL)
+	if (s_pInstance == nullptr)
 	{
-		s_pInstance = new CTextureHolder();
-		s_pInstance->OpenResourceFile();
-		//s_pInstance->m_cacheDb.Init();
+		// creates instance of CModelHolder
+		s_pInstance = new CTextureHolder(pathToTexturesFile);
+		// tries to open the resource file - out of the constructor so errors may be reported
+		if ((s_pInstance != nullptr) && (s_pInstance->m_textureFiles->VOpen()))
+		{
+			return true;
+		}
 	}
-
-	return s_pInstance;
+	return false;
 }
 
-void 
-CTextureHolder::OpenResourceFile()
-{
-	m_textureFiles.VOpen();
-}
+
 
 void 
 CTextureHolder::OnRemoveEvent(string removeItem)
 {
-	instance()->RemoveTexture(removeItem);
+	s_pInstance->RemoveTexture(removeItem);
 }
 
-CTextureHolder::CTextureHolder() : 
-	m_textureFiles("C:\\Users\\Vagner\\Documents\\Visual Studio 2015\\Projects\\GameAvatar\\GameAvatar\\Resources\\respack.zip", this->OnRemoveEvent)
-	  //m_cacheDb(9, &m_textureFiles)
+CTextureHolder::CTextureHolder(const string pathToTexturesFile) :
+	m_textureFiles(new CResourceZipFile(pathToTexturesFile.data(), this->OnRemoveEvent))
 {
 #ifdef WIN32
 	m_textureContentMapMutex = new CWinMutex();
@@ -55,14 +52,18 @@ CTextureHolder::LoadTexture(const string textId)
 
 	// cache missed - must reload it from resources db
 	CResource resourceItem(textId);
-	//shared_ptr<CResHandle> bytesStream = m_cacheDb.GetHandle(&resExample);
-	Types::Byte* bytesStream = new Types::Byte[m_textureFiles.VGetResourceSize(resourceItem)];
-	Int32 status = m_textureFiles.VGetResource(resourceItem, bytesStream);
-	//TByte* data = bytesStream->Buffer();	
+
+	Byte* textureDataStream = m_textureFiles->VAllocateAndGetResource(resourceItem);
 	// status OK
-	if (status == 0)
+	if (textureDataStream != 0)
 	{
-		AddTextureContent(textId, bytesStream);
+		AddTextureContent(textId, textureDataStream);
+		// release allocated resources
+		delete[] textureDataStream;
+	}
+	else
+	{
+		DEBUG_OUT("Texture %s not found\n", textId);
 	}
 	
 	// time measurement

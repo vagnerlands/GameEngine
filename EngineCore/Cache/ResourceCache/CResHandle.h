@@ -46,6 +46,7 @@ public:
 	virtual bool VOpen();
 	virtual int VGetResourceSize(const CResource &r);
 	virtual int VGetResource(const CResource &r, char *buffer);
+	virtual char* VAllocateAndGetResource(const CResource &r);
 	virtual void VOnRemoveEvent(string removedItem);
 };
 

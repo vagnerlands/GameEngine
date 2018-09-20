@@ -15,18 +15,21 @@ using namespace std;
 class CModelHolder
 {
 public:
-	~CModelHolder();
-	static CModelHolder* instance();
+	// always create before using
+	static bool Create(const string pathToModelFile);
+	virtual ~CModelHolder();
+	
 	void LoadModel(const string modelId);
 	void RemoveModel(const string modelId);
 	bool getModelById(string modelId, SModelData& out);
 
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(string removeItem);
-
+	// local instance
+	static CModelHolder* s_pInstance;
 
 private:
-	CModelHolder();
+	CModelHolder(std::string pathToResources);
 	void AddModelContent(string modelId, Byte* bytesStream, Byte* materialStream);
 	// local hashmap built textures
 	ModelMap m_models;
@@ -34,11 +37,10 @@ private:
 	IMutex* m_pModelContentMapMutex;
 
 	// file content may be found here
-	CResourceZipFile m_modelFiles;
+	IResourceFile* m_modelFiles;
 	// cache database (allocated with fixed and known size)
-	CResCache m_cacheDb;
-	// local instance
-	static CModelHolder* s_pInstance;
+	//CResCache m_cacheDb;
+
 
 };
 
