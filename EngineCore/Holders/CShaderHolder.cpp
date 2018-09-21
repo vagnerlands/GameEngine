@@ -10,21 +10,24 @@
 
 CShaderHolder* CShaderHolder::s_pInstance = NULL;
 
-CShaderHolder*
-CShaderHolder::instance()
+bool
+CShaderHolder::Create()
 {
 	if (s_pInstance == NULL)
 	{
 		s_pInstance = new CShaderHolder();
+		// perform loading of all shaders you want down here
+
+		return true;
 	}
 
-	return s_pInstance;
+	return false;
 }
 
 void 
 CShaderHolder::OnRemoveEvent(string removeItem)
 {
-	instance()->RemoveShader(removeItem);
+	s_pInstance->RemoveShader(removeItem);
 }
 
 CShaderHolder::CShaderHolder()

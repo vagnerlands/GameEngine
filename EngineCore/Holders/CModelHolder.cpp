@@ -206,17 +206,24 @@ CModelHolder::RemoveModel(const string textId)
 }
 
 bool 
-CModelHolder::getModelById(string textId, SModelData& out)
+CModelHolder::getModelById(const string modelId, SModelData& out)
 {
 	// then try to find it in the textures map
-	ModelMap::iterator result = m_models.find(textId);
+	ModelMap::iterator result = m_models.find(modelId);
 	if (result != m_models.end())
 	{
 		
 		if (!result->second.m_vboBufferCreated)
 		{			
 			result->second.m_vboBufferCreated = true;
-			
+
+			GLenum error = glGetError();
+
+			if (error != GL_NO_ERROR)
+			{
+				std::cout << "OpenGL Error: " << error << std::endl;
+			}
+
 			// generates the VAO
 			glGenVertexArrays(1, &result->second.m_vertexArrayObject);
 			// binds the VAO for this model
@@ -252,7 +259,9 @@ CModelHolder::getModelById(string textId, SModelData& out)
 			// [------------------]
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, result->second.m_elementBuffer[Types::VertexBuffer_Element]);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * result->second.m_indexes.size(), &result->second.m_indexes[0], GL_STATIC_DRAW);
+			const Int32 numberOfIndexes = result->second.m_indexes.size();
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * numberOfIndexes, &result->second.m_indexes[0], GL_STATIC_DRAW);
+			result->second.m_numberOfIndexes = numberOfIndexes;
 
 			// allocation integrity check
 			Int32 allocIntegrityChk = 0;
@@ -260,7 +269,17 @@ CModelHolder::getModelById(string textId, SModelData& out)
 			if (allocIntegrityChk != result->second.m_indexes.size() * sizeof(GLushort))
 			{
 				glDeleteBuffers(Types::VertexBuffer_Max_Num, result->second.m_elementBuffer);
-				printf(" <!> error while allocating element buffer in %s\n", textId.data());
+				printf(" <!> error while allocating element buffer in %s\n", modelId.data());
+			}
+			else
+			{
+				// if the everything was passed to the GPU, no need to keep it in the RAM, so release it...
+				result->second.m_indexes = vector< GLushort >();
+				result->second.m_textures = vector< IvVector2 >();
+				result->second.m_normals = vector< IvVector3 >();
+				result->second.m_vertices = vector< IvVector3 >();
+				result->second.m_material = vector< SMaterialAttr >();
+				result->second.m_faces = vector< SFaceAttr >();
 			}
 			// [--------------------------------]
 		}
@@ -271,7 +290,7 @@ CModelHolder::getModelById(string textId, SModelData& out)
 	}
 
 	// cache miss - then add this texture to the process list
-	LoadModel(textId);
+	LoadModel(modelId);
 	
 	// if it somehow failed, returns -1
 	return false;

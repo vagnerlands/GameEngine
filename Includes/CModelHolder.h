@@ -21,7 +21,7 @@ public:
 	
 	void LoadModel(const string modelId);
 	void RemoveModel(const string modelId);
-	bool getModelById(string modelId, SModelData& out);
+	bool getModelById(const string modelId, SModelData& out);
 
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(string removeItem);

@@ -76,7 +76,10 @@ namespace Types
 			}
 		}
 
-		SModelData() : m_vboBufferCreated(false), m_vertexArrayObject(0)
+		SModelData() : 
+			m_vboBufferCreated(false), 
+			m_vertexArrayObject(0), 
+			m_numberOfIndexes(0)
 		{
 			for (Int32 i = 0; i < VertexBuffer_Max_Num; i++)
 			{
@@ -86,6 +89,7 @@ namespace Types
 
 		bool m_vboBufferCreated;
 		GLuint m_vertexArrayObject;
+		GLuint m_numberOfIndexes;
 		vector<GLushort> m_indexes;
 
 		GLuint m_elementBuffer[VertexBuffer_Max_Num];

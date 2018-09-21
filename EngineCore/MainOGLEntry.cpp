@@ -12,7 +12,6 @@
 int 
 main(int argv, char** argc)
 {
-
 	// Use a single buffered window in RGB mode (as opposed to a double-buffered
 	// window or color-index mode).
 	glutInit(&argv, argc);
@@ -31,6 +30,8 @@ main(int argv, char** argc)
 	{
 		glutInitWindowSize(640, 480);
 		glutCreateWindow("EngineCore - Vagner Landskron");
+
+		printf(" GPU & Driver: \n # %s \n # %s\n\n",glGetString(GL_VERSION), glGetString(GL_RENDERER));
 	}
 	// creates debug data file
 	gDebugger.DumpToFile("Debug.txt");

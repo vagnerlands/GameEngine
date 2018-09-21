@@ -13,7 +13,7 @@ using namespace std;
 class CShaderHolder
 {
 public:
-	static CShaderHolder* instance();
+	static bool Create();
 	void LoadShader(const string modelId);
 	void RemoveShader(const string modelId);
 	cwc::glShader* getShaderById(string shaderId);
@@ -21,6 +21,8 @@ public:
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(string removeItem);
 
+	// instance of the shader holder
+	static CShaderHolder* s_pInstance;
 
 private:
 	CShaderHolder();
@@ -28,8 +30,7 @@ private:
 	ShadersMap m_shaders;
 	// mutex for m_processes
 	IMutex* m_pShaderContentMapMutex;
-	// local instance
-	static CShaderHolder* s_pInstance;
+	// shader manager class
 	cwc::glShaderManager m_shaderManager;
 };
 
