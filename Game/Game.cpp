@@ -33,9 +33,6 @@ bool Game::PostRendererInitialize()
 	// create model holder
 	CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
 
-	// load models
-	CModelHolder::s_pInstance->LoadModel("skull.obj");
-
 	return true;
 }
 
@@ -58,42 +55,62 @@ void Game::Render()
 	static float rotate = 0.0f;
 	rotate += 0.01f;
 
+	glPushMatrix();
 	glEnable(GL_LIGHTING);
 
 	// enable vertices array pointer rendering	
 	static SModelData m_data;
-	if (CModelHolder::s_pInstance->getModelById("skull.obj", m_data))
+	if (CModelHolder::s_pInstance->getModelById("skull.obj", m_data) 
+		&& (CShaderHolder::s_pInstance->UseShaderById("model")))
 	{
-		glPushMatrix();
+
+		// light set-up
+		glEnable(GL_LIGHT0);
+
+		GLfloat lightColor0[] = { 0.8f, 0.8f, 0.0f, 1.0f }; //Color (0.5, 0.5, 0.5)
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
+		GLfloat lightPos[] = { 0, 0.5, 0.8, 1.0f };
+		glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 		Int32 err = glGetError();
 		if (err != 0)
 		{
 			printf("preparing matrix error = %d\n", err);
 		}
-		glTranslatef(0, 0, -20);
+		//glTranslatef(0, 0, -20);
+		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 0, -20);
+		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("scale", 1, 1, 1);
+		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", 0, 0, 1, 0);
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glEnable(GL_TEXTURE_2D);
 		glBindVertexArray(m_data.m_vertexArrayObject);
 		glDrawElements(GL_TRIANGLES, m_data.m_numberOfIndexes, GL_UNSIGNED_SHORT, (void*)(0));
+
 		err = glGetError();
 		if (err != 0)
 		{
 			printf("glError Drawing Model = %d\n", err);
 		}
 
+		glDisable(GL_TEXTURE_2D);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
+		
+
+		CShaderHolder::s_pInstance->StopShader();
+
 		err = glGetError();
 		if (err != 0)
 		{
 			printf("glError Drawing Model =%d\n", err);
 		}
-		glPopMatrix();
+		
 	}
 
 	glDisable(GL_LIGHTING);
+	glPopMatrix();
 
 
 	glRotatef(rotate, 0, 0, 1);

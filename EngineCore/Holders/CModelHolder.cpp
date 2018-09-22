@@ -256,6 +256,18 @@ CModelHolder::getModelById(const string modelId, SModelData& out)
 				glBufferData(GL_ARRAY_BUFFER, (result->second.m_textures.size() * sizeof(IvVector2)), &result->second.m_textures[0], GL_STATIC_DRAW);
 				glTexCoordPointer(2, GL_FLOAT, 0, (void*)(0));
 			}
+			else
+			{
+				// for AMD Radeon R9 M200X enabling textures directive with a non declared buffer for textures 
+				// leads to a fatal error in atioglxx.dll
+				// to bypass this error, in case we don't have textures, then we create a dummy map of textures
+				// here
+				Float textCoords[] = {0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 0.0F, 1.0F};
+				glBindBuffer(GL_ARRAY_BUFFER, result->second.m_elementBuffer[Types::VertexBuffer_Textures]);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(textCoords), &textCoords, GL_STATIC_DRAW);
+				glTexCoordPointer(2, GL_FLOAT, 0, (void*)(0));
+
+			}
 			// [------------------]
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, result->second.m_elementBuffer[Types::VertexBuffer_Element]);
@@ -274,12 +286,19 @@ CModelHolder::getModelById(const string modelId, SModelData& out)
 			else
 			{
 				// if the everything was passed to the GPU, no need to keep it in the RAM, so release it...
-				result->second.m_indexes = vector< GLushort >();
+				/*result->second.m_indexes = vector< GLushort >();
 				result->second.m_textures = vector< IvVector2 >();
 				result->second.m_normals = vector< IvVector3 >();
 				result->second.m_vertices = vector< IvVector3 >();
 				result->second.m_material = vector< SMaterialAttr >();
-				result->second.m_faces = vector< SFaceAttr >();
+				result->second.m_faces = vector< SFaceAttr >();*/
+			}
+
+			error = glGetError();
+
+			if (error != GL_NO_ERROR)
+			{
+				std::cout << "OpenGL Error while creating model " << modelId.data() << ": " << error << std::endl;
 			}
 			// [--------------------------------]
 		}

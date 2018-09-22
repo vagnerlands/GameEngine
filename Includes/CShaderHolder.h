@@ -16,7 +16,9 @@ public:
 	static bool Create();
 	void LoadShader(const string modelId);
 	void RemoveShader(const string modelId);
-	cwc::glShader* getShaderById(string shaderId);
+	cwc::glShader* GetShaderProgramById(const string shaderId);
+	bool UseShaderById(const string shaderId);
+	bool StopShader();
 	CShaderHolder::~CShaderHolder();
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(string removeItem);

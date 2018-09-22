@@ -150,12 +150,5 @@ copy .\*.h ..\Includes
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\freeglut.redist.2.8.1.15\build\native\freeglut.redist.targets" Condition="Exists('..\packages\freeglut.redist.2.8.1.15\build\native\freeglut.redist.targets')" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\freeglut.redist.2.8.1.15\build\native\freeglut.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\freeglut.redist.2.8.1.15\build\native\freeglut.redist.targets'))" />
-  </Target>
 </Project>

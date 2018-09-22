@@ -87,6 +87,7 @@ namespace Types
 		bool m_vboBufferCreated;
 		GLuint m_vertexArrayObject;
 		vector<GLushort> m_indexes;
+		GLuint m_numberOfIndexes;
 
 		GLuint m_elementBuffer[VertexBuffer_Max_Num];
 

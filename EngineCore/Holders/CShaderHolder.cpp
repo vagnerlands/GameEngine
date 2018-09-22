@@ -53,8 +53,8 @@ CShaderHolder::LoadShader(const string shaderId)
 	// read data from file
 	cwc::glShader* obj = 0;
 	char vertexFilename[200], fragmentFilename[200];
-	sprintf(vertexFilename, "./%sVertexshader.txt", shaderId.data());
-	sprintf(fragmentFilename, "./%sFragmentshader.txt", shaderId.data());
+	sprintf(vertexFilename, "../Game/Assets/%sVertexshader.txt", shaderId.data());
+	sprintf(fragmentFilename, "../Game/Assets/%sFragmentshader.txt", shaderId.data());
 
 	obj = m_shaderManager.loadfromFile(vertexFilename, fragmentFilename);
 
@@ -87,8 +87,8 @@ CShaderHolder::RemoveShader(const string shaderId)
 	//_CrtDumpMemoryLeaks();
 }
 
-cwc::glShader*
-CShaderHolder::getShaderById(string shaderId)
+cwc::glShader* 
+CShaderHolder::GetShaderProgramById(const string shaderId)
 {
 	// then try to find it in the textures map
 	ShadersMap::iterator result = m_shaders.find(shaderId);
@@ -97,11 +97,47 @@ CShaderHolder::getShaderById(string shaderId)
 		return result->second;
 	}
 
+	return NULL;
+}
+
+bool
+CShaderHolder::UseShaderById(const string shaderId)
+{
+	// clear all GL errors
+	Int32 glErr = glGetError();
+	if (glErr != GL_NO_ERROR)
+	{
+		return false;
+	}
+	// then try to find it in the textures map
+	ShadersMap::iterator result = m_shaders.find(shaderId);
+	if (result != m_shaders.end())
+	{
+		GLuint programId = result->second->GetProgramObject();
+		glUseProgram(programId);
+		glErr = glGetError();
+		if (glErr != 0)
+			return false;
+		else
+			return true;
+	}
+
 	// cache miss - then add this texture to the process list
 	LoadShader(shaderId);
 	
 	// if it somehow failed, returns -1
 	return false;
+}
+
+bool CShaderHolder::StopShader()
+{
+	glUseProgram(0);
+
+	Int32 glErr = glGetError();
+	if (glErr != 0)
+		return false;
+	else
+		return true;
 }
 
 
