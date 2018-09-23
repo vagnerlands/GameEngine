@@ -5,6 +5,8 @@
 #include "CWinMutex.h"
 #endif
 
+#include "CFactory2dImage.h"
+
 CTextureHolder* CTextureHolder::s_pInstance = NULL;
 
 bool CTextureHolder::Create(const string pathToTexturesFile)
@@ -57,8 +59,19 @@ CTextureHolder::LoadTexture(const string textId)
 	// status OK
 	if (textureDataStream != 0)
 	{
-		AddTextureContent(textId, textureDataStream);
-		// release allocated resources
+		// checks the first 2 bytes of the stream to know if we know how to parse it
+		Int16 fileType(0);
+		memcpy(&fileType, textureDataStream, 2);
+		I2dImage* pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
+		if (pRawImage != NULL) // is this file a BMP?
+		{
+			pRawImage->ParseStream(textureDataStream);
+			BuildTexture(textId, pRawImage);
+			// free allocated data from the heap
+			// this must also free the array of bmp pixels 
+			delete pRawImage;
+		}
+		// free file content buffer
 		delete[] textureDataStream;
 	}
 	else
@@ -70,102 +83,72 @@ CTextureHolder::LoadTexture(const string textId)
 	printf(" loading tex [%s] %.2fms\n", textId.data(), (float)(clock() - start));
 }
 
-void CTextureHolder::BuildTexture()
+void CTextureHolder::BuildTexture(const string textureId, const I2dImage* pData)
 {
 	const int wrap = 0;
 	// allocate a texture name
 	GLuint GeneratedTexture = -1;
 	// [BEGIN] CRITICAL AREA
-	m_textureContentMapMutex->mutexLock();
-	for (auto it = m_textureContentMap.begin(); !m_textureContentMap.empty();)
+
+	// then, allocate an indexer for new texture
+	glGenTextures(1, &GeneratedTexture);
+	// binds this texture as a 2D bitmap
+	glBindTexture(GL_TEXTURE_2D, GeneratedTexture);
+	Int32 err = glGetError();
+	if (err != GL_NO_ERROR)
 	{
-		// whole data content of the image (texture)
-		Byte* data = it->second;
-		// retrieve header information
-		// offset for start of bmp data
-		Int32 dataPos = *(int*)&(data[0x0A]);
-		// image size in bytes
-		Int32 imageSize = *(int*)&(data[0x22]);
-		// width in pixels
-		Int32 width = *(int*)&(data[0x12]);
-		// height in pixels
-		Int32 height = *(int*)&(data[0x16]);
-		// supports only 24bits and 32bits
-		Int32 numOfBytesPerPixel = 3;
-		// checks if this image is 32 bits
-		if (imageSize == (width * height * 4))
-			numOfBytesPerPixel = 4;
-
-		// then, allocate an indexer for new texture
-		glGenTextures(1, &GeneratedTexture);
-		// binds this texture as a 2D bitmap
-		glBindTexture(GL_TEXTURE_2D, GeneratedTexture);
-		int err = glGetError();
-		if (err != 0)
-		{
-			printf("glError BindTexture=%d\n", err);
-		}
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-		// always good to get the error in case it happens
-		err = glGetError();
-		if (err != 0)
-		{
-			printf("glError Texture parameters=%d\n", err);
-		}
-		// data must be sent in BGRA order - must swap byte order of integer
-		Byte* swapBuffer = new Byte[width*height*numOfBytesPerPixel];
-		for (Int32 x = 0; x < (width*height*numOfBytesPerPixel);)
-		{
-			if (numOfBytesPerPixel == 4)
-			{
-				swapBuffer[x] = data[x + dataPos + 2];
-				swapBuffer[x + 1] = data[x + dataPos + 1];
-				swapBuffer[x + 2] = data[x + dataPos + 0];
-				swapBuffer[x + 3] = data[x + dataPos + 3];
-				x += numOfBytesPerPixel;
-			}
-			if (numOfBytesPerPixel == 3)
-			{
-				swapBuffer[x] = data[x + dataPos + 2];
-				swapBuffer[x + 1] = data[x + dataPos + 1];
-				swapBuffer[x + 2] = data[x + dataPos];
-				x += numOfBytesPerPixel;
-			}
-		}
-
-		// build our texture mipmaps	
-		if (numOfBytesPerPixel == 4)
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, swapBuffer);
-		}
-		else
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, swapBuffer);
-		}
-		// release temporary buffer for swap
-		delete[] swapBuffer;
-		// checks for GL ERROR
-		err = glGetError();
-		if (err != 0)
-		{
-			printf("glError glTexImage2D=%d\n", err);
-		}
-		// adds to the hashmap
-		m_textures.insert(make_pair(it->first, GeneratedTexture));
-
-		// deletes allocated memory (do not allow it to leak)
-		delete[] it->second;
-		// deletes the object from the DS
-		m_textureContentMap.erase(it);
+		printf("glError BindTexture=%d\n", err);
 	}
-	// [END] CRITICAL AREA
-	m_textureContentMapMutex->mutexUnlock();
 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	// always good to get the error in case it happens
+	err = glGetError();
+	if (err != GL_NO_ERROR)
+	{
+		printf("glError Texture parameters=%d\n", err);
+	}
+	// build our texture mipmaps	
+	if (pData->GetNumberOfBytes() == 4)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 
+			0, 
+			GL_RGBA, 
+			pData->GetWidth(),
+			pData->GetHeight(),
+			0, 
+			GL_RGBA, 
+			GL_UNSIGNED_BYTE, 
+			pData->GetPointerToData());
+	}
+	else
+	{
+		glTexImage2D(GL_TEXTURE_2D, 
+			0, 
+			GL_RGB, 
+			pData->GetWidth(),
+			pData->GetHeight(),
+			0, 
+			GL_RGB, 
+			GL_UNSIGNED_BYTE, 
+			pData->GetPointerToData());
+	}
+	// checks for GL ERROR
+	err = glGetError();
+	if (err != GL_NO_ERROR)
+	{
+		printf("Error creating texture - glTexImage2D=%d\n", err);
+		glDeleteTextures(1, &GeneratedTexture);
+	}
+	else
+	{
+		// adds to the database of textures
+		m_textures.insert(make_pair(textureId, GeneratedTexture));
+	}
+		
 }
 
 void CTextureHolder::RemoveTexture(const string textId)
@@ -187,8 +170,6 @@ void CTextureHolder::RemoveTexture(const string textId)
 GLuint
 CTextureHolder::getTextureById(string textId)
 {
-	// builds any texture it has to build first
-	BuildTexture();
 	// then try to find it in the textures map
 	TextureMap::iterator result = m_textures.find(textId);
 	if (result != m_textures.end())

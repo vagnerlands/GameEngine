@@ -5,6 +5,7 @@
 #include "OGLTypes.h"
 #include "CResHandle.h"
 #include "IMutex.h"
+#include "I2dImage.h"
 
 #include <unordered_map>
 #include <memory>
@@ -33,7 +34,7 @@ public:
 private:
 	CTextureHolder(const string pathToTexturesFile);
 	// build texture, if any available
-	void BuildTexture();
+	void BuildTexture(const string textureId, const I2dImage* pData);
 	// local hashmap built textures
 	TextureMap m_textures;
 	// local hashmap for textures to be generated

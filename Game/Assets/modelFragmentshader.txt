@@ -25,8 +25,8 @@ void main(void)
     cf = intensity * (gl_FrontMaterial.diffuse).rgb +
                   gl_FrontMaterial.ambient.rgb;
     af = gl_FrontMaterial.diffuse.a;
-    //texel = texture2D(myTextureSampler,gl_TexCoord[0].st);
-	texel = vec4(1, 0, 0, 1);
+    texel = texture2D(myTextureSampler,gl_TexCoord[0].st);
+	//texel = vec4(1, 0, 0, 1);
  
     ct = texel.rgb;
     at = texel.a;

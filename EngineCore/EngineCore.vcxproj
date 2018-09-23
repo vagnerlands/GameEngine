@@ -79,7 +79,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../Includes;./OS;./OS/Abstract;./OS/Windows;./Cache;./Cache/ResourceCache;./Loaders/Model3D/objParser;./Loaders;./Loaders/Model3D</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Includes;./OS;./OS/Abstract;./OS/Windows;./Cache;./Cache/ResourceCache;./Loaders/Model3D/objParser;./Loaders;./Loaders/Model3D;./Loaders/Images</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -94,7 +94,8 @@ copy .\OS\Abstract\*.h ..\Includes
 copy .\OS\Windows\*.h ..\Includes
 copy .\Holders\*.h ..\Includes
 copy .\Cache\*.h ..\Includes
-copy .\Cache\ResourceCache\*.h ..\Includes</Command>
+copy .\Cache\ResourceCache\*.h ..\Includes
+copy .\Loaders\Images\*.h ..\Includes</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -150,6 +151,9 @@ copy .\Cache\ResourceCache\*.h ..\Includes</Command>
     <ClCompile Include="Holders\CTextureHolder.cpp" />
     <ClCompile Include="Holders\CThreadHolder.cpp" />
     <ClCompile Include="IGame.cpp" />
+    <ClCompile Include="Loaders\Images\CBmp.cpp" />
+    <ClCompile Include="Loaders\Images\CFactory2dImage.cpp" />
+    <ClCompile Include="Loaders\Images\I2dImage.cpp" />
     <ClCompile Include="Loaders\Model3D\objParser\list.cpp" />
     <ClCompile Include="Loaders\Model3D\objParser\objLoader.cpp" />
     <ClCompile Include="Loaders\Model3D\objParser\obj_parser.cpp" />
@@ -169,6 +173,9 @@ copy .\Cache\ResourceCache\*.h ..\Includes</Command>
     <ClInclude Include="Holders\CTextureHolder.h" />
     <ClInclude Include="Holders\CThreadHolder.h" />
     <ClInclude Include="IGame.h" />
+    <ClInclude Include="Loaders\Images\CBmp.h" />
+    <ClInclude Include="Loaders\Images\CFactory2dImage.h" />
+    <ClInclude Include="Loaders\Images\I2dImage.h" />
     <ClInclude Include="Loaders\Model3D\objParser\list.h" />
     <ClInclude Include="Loaders\Model3D\objParser\objLoader.h" />
     <ClInclude Include="Loaders\Model3D\objParser\obj_parser.h" />

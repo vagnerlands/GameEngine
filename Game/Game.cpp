@@ -5,6 +5,7 @@
 #include "IRenderer.h"
 #include "CModelHolder.h"
 #include "CShaderHolder.h"
+#include "CTextureHolder.h"
 #include "GL/glut.h"
 
 
@@ -32,6 +33,7 @@ bool Game::PostRendererInitialize()
 	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
 	// create model holder
 	CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
+	CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip");
 
 	return true;
 }
@@ -61,7 +63,8 @@ void Game::Render()
 	// enable vertices array pointer rendering	
 	static SModelData m_data;
 	if (CModelHolder::s_pInstance->getModelById("skull.obj", m_data) 
-		&& (CShaderHolder::s_pInstance->UseShaderById("model")))
+		&& (CShaderHolder::s_pInstance->UseShaderById("model"))
+		&& (CTextureHolder::s_pInstance->getTextureById("furTex.bmp")))
 	{
 
 		// light set-up
@@ -77,9 +80,21 @@ void Game::Render()
 			printf("preparing matrix error = %d\n", err);
 		}
 		//glTranslatef(0, 0, -20);
+		static float foolme = 0.0F;
+		static bool direction = false;
 		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 0, -20);
 		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("scale", 1, 1, 1);
-		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", 0, 0, 1, 0);
+		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", foolme, 1, 0, 0);
+		if (direction)
+		{
+			foolme += 0.1F;
+		}
+		else
+		{
+			foolme -= 0.1F;
+		}
+		if (foolme > 10) direction = false;
+		if (foolme < -40) direction = true;
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);

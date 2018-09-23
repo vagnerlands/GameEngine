@@ -32,6 +32,9 @@
     <Filter Include="Src\Loaders\Model3D\objParser">
       <UniqueIdentifier>{26d74fa8-0c17-4083-a538-e9a7000ffa6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Loaders\Images">
+      <UniqueIdentifier>{fe0a65be-2a7f-4719-8331-710cede7e129}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainOGLEntry.cpp">
@@ -81,6 +84,15 @@
     </ClCompile>
     <ClCompile Include="Loaders\Model3D\objParser\obj_parser.cpp">
       <Filter>Src\Loaders\Model3D\objParser</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Images\CBmp.cpp">
+      <Filter>Src\Loaders\Images</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Images\CFactory2dImage.cpp">
+      <Filter>Src\Loaders\Images</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Images\I2dImage.cpp">
+      <Filter>Src\Loaders\Images</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +152,15 @@
     </ClInclude>
     <ClInclude Include="Loaders\Model3D\objParser\obj_parser.h">
       <Filter>Src\Loaders\Model3D\objParser</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Images\CBmp.h">
+      <Filter>Src\Loaders\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Images\CFactory2dImage.h">
+      <Filter>Src\Loaders\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Images\I2dImage.h">
+      <Filter>Src\Loaders\Images</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

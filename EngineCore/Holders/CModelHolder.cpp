@@ -286,12 +286,12 @@ CModelHolder::getModelById(const string modelId, SModelData& out)
 			else
 			{
 				// if the everything was passed to the GPU, no need to keep it in the RAM, so release it...
-				/*result->second.m_indexes = vector< GLushort >();
+				result->second.m_indexes = vector< GLushort >();
 				result->second.m_textures = vector< IvVector2 >();
 				result->second.m_normals = vector< IvVector3 >();
 				result->second.m_vertices = vector< IvVector3 >();
 				result->second.m_material = vector< SMaterialAttr >();
-				result->second.m_faces = vector< SFaceAttr >();*/
+				result->second.m_faces = vector< SFaceAttr >();
 			}
 
 			error = glGetError();
