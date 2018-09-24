@@ -4,7 +4,7 @@ CBmp::CBmp()
 {
 }
 
-bool CBmp::ParseStream(const Byte * pData)
+bool CBmp::ParseStream(Byte* pData)
 {
 	if (pData != NULL)
 	{

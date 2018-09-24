@@ -1,5 +1,7 @@
 #include "CFactory2dImage.h"
 #include "CBmp.h"
+#include "CTga.h"
+#include "CPng.h"
 
 CFactory2dImage* CFactory2dImage::s_pInstance = nullptr;
 
@@ -13,16 +15,25 @@ CFactory2dImage* CFactory2dImage::instance()
 	return s_pInstance;
 }
 
-I2dImage* CFactory2dImage::Create2dImage(Int16 fileType)
+I2dImage* CFactory2dImage::Create2dImage(Byte fileType[])
 {
+	// default value is NULL
 	I2dImage* retVal = NULL;
-	switch (fileType)
+
+	if ((fileType[0] == 0x42) 
+		&& (fileType[1] == 0x4D)) // BMP
 	{
-		case 0x4D42:
-			retVal = new CBmp();
-			break;
-		default:
-			break;
+		retVal = new CBmp();
+	}
+	else if ((fileType[1] == 'P') // TGA, no best way to identify the format type than this
+		&& (fileType[2] == 'N'))
+	{
+		retVal = new CPng();
+	}
+	else if ((fileType[0] == 0x00) // TGA, no best way to identify the format type than this
+		&& (fileType[1] == 0x00)) 
+	{
+		retVal = new CTga();
 	}
 
 	return retVal;

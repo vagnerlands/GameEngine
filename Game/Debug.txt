@@ -1,2 +1,0 @@
-Button %d - %s At %d %d
-Button %d - %s At %d %d

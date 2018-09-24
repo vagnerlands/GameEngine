@@ -12,7 +12,7 @@ class CBmp : public I2dImage
 public:
 	CBmp();
 
-	virtual bool ParseStream(const Byte* pData) override;
+	virtual bool ParseStream(Byte* pData) override;
 
 	virtual ~CBmp();
 	

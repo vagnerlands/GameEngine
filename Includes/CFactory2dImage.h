@@ -14,7 +14,7 @@ public:
 	
 	static CFactory2dImage* instance();
 
-	I2dImage* Create2dImage(Int16 fileType);
+	I2dImage* Create2dImage(Byte fileType[]);
 
 private:
 	static CFactory2dImage* s_pInstance;

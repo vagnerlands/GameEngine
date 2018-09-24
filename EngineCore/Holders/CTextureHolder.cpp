@@ -60,8 +60,8 @@ CTextureHolder::LoadTexture(const string textId)
 	if (textureDataStream != 0)
 	{
 		// checks the first 2 bytes of the stream to know if we know how to parse it
-		Int16 fileType(0);
-		memcpy(&fileType, textureDataStream, 2);
+		Byte fileType[3];
+		memcpy(&fileType, textureDataStream, 3);
 		I2dImage* pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
 		if (pRawImage != NULL) // is this file a BMP?
 		{
@@ -99,7 +99,7 @@ void CTextureHolder::BuildTexture(const string textureId, const I2dImage* pData)
 	{
 		printf("glError BindTexture=%d\n", err);
 	}
-
+	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

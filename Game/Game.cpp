@@ -53,20 +53,17 @@ void Game::Render()
 	// adjust camera projection and view according to the current 
 	// frustum parameters (3d - perspective mode)
 	Graphics::IRenderer::mRenderer->PrepareCamera3D();
-	glColor4f(1.0, 0.0, 1.0, 0.5);
-	static float rotate = 0.0f;
-	rotate += 0.01f;
 
 	glPushMatrix();
 	glEnable(GL_LIGHTING);
-
+	glColor4f(1.0, 0.0, 1.0, 0.5);
+	static float rotate = 0.0f;
+	rotate += 0.01f;
 	// enable vertices array pointer rendering	
 	static SModelData m_data;
 	if (CModelHolder::s_pInstance->getModelById("skull.obj", m_data) 
-		&& (CShaderHolder::s_pInstance->UseShaderById("model"))
-		&& (CTextureHolder::s_pInstance->getTextureById("furTex.bmp")))
+		&& (CShaderHolder::s_pInstance->UseShaderById("model")))
 	{
-
 		// light set-up
 		glEnable(GL_LIGHT0);
 
@@ -82,7 +79,7 @@ void Game::Render()
 		//glTranslatef(0, 0, -20);
 		static float foolme = 0.0F;
 		static bool direction = false;
-		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 0, -20);
+		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 3, -20);
 		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("scale", 1, 1, 1);
 		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", foolme, 1, 0, 0);
 		if (direction)
@@ -99,6 +96,8 @@ void Game::Render()
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnable(GL_TEXTURE_2D);
+		GLuint textureId = CTextureHolder::s_pInstance->getTextureById("water.bmp");
+		glBindTexture(GL_TEXTURE_2D, textureId);
 		glBindVertexArray(m_data.m_vertexArrayObject);
 		glDrawElements(GL_TRIANGLES, m_data.m_numberOfIndexes, GL_UNSIGNED_SHORT, (void*)(0));
 
@@ -123,11 +122,32 @@ void Game::Render()
 		}
 		
 	}
-
 	glDisable(GL_LIGHTING);
+
+	// [ TEXTURED SQUARE ]
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+	
+	GLuint textureId = CTextureHolder::s_pInstance->getTextureById("image42.png");
+	//GLuint textureId = CTextureHolder::s_pInstance->getTextureById("_ivy_d.tga");
+	//GLuint textureId = CTextureHolder::s_pInstance->getTextureById("bard.bmp");
+	if (textureId != -1)
+	{
+		glBindTexture(GL_TEXTURE_2D, textureId);
+	}
+	glBegin(GL_QUADS);
+	glVertex3f(-100, -100, -1000); glTexCoord2f(0, 0);
+	glVertex3f(100, -100, -1000); glTexCoord2f(0, 1);
+	glVertex3f(100, 100, -1000); glTexCoord2f(1, 1);
+	glVertex3f(-100, 100, -1000); glTexCoord2f(1, 0);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
 	glPopMatrix();
 
 
+	// [ ROTATING TRIANGLE ]
+	glPopMatrix();
 	glRotatef(rotate, 0, 0, 1);
 	glBegin(GL_TRIANGLES);
 	glVertex3f(0, 0, -1000);

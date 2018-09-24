@@ -94,6 +94,12 @@
     <ClCompile Include="Loaders\Images\I2dImage.cpp">
       <Filter>Src\Loaders\Images</Filter>
     </ClCompile>
+    <ClCompile Include="Loaders\Images\CTga.cpp">
+      <Filter>Src\Loaders\Images</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Images\CPng.cpp">
+      <Filter>Src\Loaders\Images</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IGame.h">
@@ -160,6 +166,12 @@
       <Filter>Src\Loaders\Images</Filter>
     </ClInclude>
     <ClInclude Include="Loaders\Images\I2dImage.h">
+      <Filter>Src\Loaders\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Images\CTga.h">
+      <Filter>Src\Loaders\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Images\CPng.h">
       <Filter>Src\Loaders\Images</Filter>
     </ClInclude>
   </ItemGroup>
