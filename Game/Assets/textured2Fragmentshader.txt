@@ -1,0 +1,31 @@
+// Normal calculated in the vertex shader
+varying vec3 N;
+// vertex position comming from vertex shader
+varying vec3 v;
+
+// textures
+uniform sampler2D textureColor;
+uniform sampler2D textureNormal;
+
+void main(void)
+{
+	// texture normal sampled according to glTexCoord
+	vec4 texNormal = (texture2D(textureNormal,gl_TexCoord[0].xy) * 2) - 1;
+	// texture color sampled according to glTexCoord
+	vec4 texColor = texture2D(textureColor,gl_TexCoord[0].xy);   
+	
+    vec3 ct,cf;
+    vec4 texel;
+    float intensity,at,af;
+    intensity = max(dot(normalize(v - gl_LightSource[0].position.xyz),texNormal),0.1);
+ 
+    cf = intensity * (gl_FrontMaterial.diffuse).rgb +
+                  gl_FrontMaterial.ambient.rgb;
+    af = gl_FrontMaterial.diffuse.a;
+    texel = texColor;
+	//texel = vec4(1, 0, 0, 1);
+ 
+    ct = texel.rgb;
+    at = texel.a;
+    gl_FragColor = vec4(ct * cf, at * af);
+}

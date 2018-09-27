@@ -53,6 +53,75 @@ bool CPng::ParseStream(Byte* pData)
 		if (retval != 1)
 			return false;	// add error handling and cleanup
 
+		png_uint_32 channels = png_get_channels(png_ptr, info_ptr);
+
+		switch (colorType) 
+		{
+		case PNG_COLOR_TYPE_PALETTE:
+			png_set_palette_to_rgb(png_ptr);
+			//Don't forget to update the channel info (thanks Tom!)
+			//It's used later to know how big a buffer we need for the image
+			channels = 3;
+			break;
+		case PNG_COLOR_TYPE_GRAY:
+			if (bitDepth < 8)
+				png_set_expand_gray_1_2_4_to_8(png_ptr);
+			//And the bitdepth info
+			bitDepth = 8;
+			break;
+		}
+
+		/*if the image has a transperancy set.. convert it to a full Alpha channel..*/
+		if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
+			png_set_tRNS_to_alpha(png_ptr);
+			channels += 1;
+		}
+
+		//We don't support 16 bit precision.. so if the image Has 16 bits per channel
+		//precision... round it down to 8.
+		if (bitDepth == 16)
+			png_set_strip_16(png_ptr);
+
+		//As Nicholas suggested, we should let png update the information structs with the transformations we requested:
+		png_read_update_info(png_ptr, info_ptr);
+
+		// [ Reading Data]
+		//Here's one of the pointers we've defined in the error handler section:
+		//Array of row pointers. One for every row.
+		png_bytep* rowPtrs = new png_bytep[height];
+
+		//Alocate a buffer with enough space.
+		//(Don't use the stack, these blocks get big easilly)
+		//This pointer was also defined in the error handling section, so we can clean it up on error.
+		m_NumberOfBytes = (bitDepth * channels) / 8;
+		m_SizeInBytes = width * height * m_NumberOfBytes;
+		m_pContent = new Byte[m_SizeInBytes];
+		m_Width = width;
+		m_Height = height;		
+		//This is the length in bytes, of one row.
+		const unsigned int stride = width * bitDepth * channels / 8;
+
+		//A little for-loop here to set all the row pointers to the starting
+		//Adresses for every row in the buffer
+
+		for (size_t i = 0; i < height; i++) {
+			//Set the pointer to the data pointer + i times the row stride.
+			//Notice that the row order is reversed with q.
+			//This is how at least OpenGL expects it,
+			//and how many other image loaders present the data.
+			png_uint_32 q = (height - i - 1) * stride;
+			rowPtrs[i] = (png_bytep)m_pContent + q;
+		}
+
+		//And here it is! The actuall reading of the image!
+		//Read the imagedata and write it to the adresses pointed to
+		//by rowptrs (in other words: our image databuffer)
+		png_read_image(png_ptr, rowPtrs);
+		// [ End of Reading Data]
+		
+		// release data
+		delete[] rowPtrs;
+		// release all junk from png
 		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 		
 		return true;

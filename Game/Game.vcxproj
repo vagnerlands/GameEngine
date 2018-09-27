@@ -156,6 +156,18 @@
   <ItemGroup>
     <ClInclude Include="Game.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\lightFragmentshader.txt" />
+    <Text Include="Assets\lightVertexshader.txt" />
+    <Text Include="Assets\modelFragmentshader.txt" />
+    <Text Include="Assets\modelVertexshader.txt" />
+    <Text Include="Assets\simpleFragmentshader.txt" />
+    <Text Include="Assets\simpletextureFragmentshader.txt" />
+    <Text Include="Assets\simpletextureVertexshader.txt" />
+    <Text Include="Assets\simpleVertexshader.txt" />
+    <Text Include="Assets\textured2Fragmentshader.txt" />
+    <Text Include="Assets\textured2Vertexshader.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

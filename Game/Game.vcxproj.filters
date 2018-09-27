@@ -9,6 +9,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{e269fa3a-9ea2-481b-a453-1d917b423515}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -28,5 +31,37 @@
     <ClInclude Include="Game.h">
       <Filter>Src</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\lightVertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\modelFragmentshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\modelVertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\simpleFragmentshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\simpletextureFragmentshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\simpletextureVertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\simpleVertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\textured2Fragmentshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\textured2Vertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\lightFragmentshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
   </ItemGroup>
 </Project>

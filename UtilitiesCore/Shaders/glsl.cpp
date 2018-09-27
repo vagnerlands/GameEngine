@@ -1363,7 +1363,7 @@ unsigned long getFileLength(ifstream& file)
 int glShaderObject::load(char* filename)
 {
    ifstream file;
-	file.open(filename, ios::in);
+   file.open(filename, ios::in);
    if(!file) return -1;
     
    unsigned long len = getFileLength(file);

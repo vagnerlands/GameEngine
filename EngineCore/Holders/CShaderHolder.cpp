@@ -105,10 +105,7 @@ CShaderHolder::UseShaderById(const string shaderId)
 {
 	// clear all GL errors
 	Int32 glErr = glGetError();
-	if (glErr != GL_NO_ERROR)
-	{
-		return false;
-	}
+
 	// then try to find it in the textures map
 	ShadersMap::iterator result = m_shaders.find(shaderId);
 	if (result != m_shaders.end())

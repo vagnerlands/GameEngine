@@ -53,15 +53,29 @@ void Game::Render()
 	// adjust camera projection and view according to the current 
 	// frustum parameters (3d - perspective mode)
 	Graphics::IRenderer::mRenderer->PrepareCamera3D();
+	
+	GLuint textureId = -1;
 
 	glPushMatrix();
 	glEnable(GL_LIGHTING);
 	glColor4f(1.0, 0.0, 1.0, 0.5);
 	static float rotate = 0.0f;
 	rotate += 0.01f;
+	static float foolme = 0.0F;
+	static bool direction = false;
+	if (direction)
+	{
+		foolme += 0.005F;
+	}
+	else
+	{
+		foolme -= 0.005F;
+	}
+	if (foolme > 10) direction = false;
+	if (foolme < -40) direction = true;
 	// enable vertices array pointer rendering	
 	static SModelData m_data;
-	if (CModelHolder::s_pInstance->getModelById("skull.obj", m_data) 
+	if (CModelHolder::s_pInstance->getModelById("Hughes500.obj", m_data) 
 		&& (CShaderHolder::s_pInstance->UseShaderById("model")))
 	{
 		// light set-up
@@ -77,21 +91,12 @@ void Game::Render()
 			printf("preparing matrix error = %d\n", err);
 		}
 		//glTranslatef(0, 0, -20);
-		static float foolme = 0.0F;
-		static bool direction = false;
-		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 3, -20);
+
+		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 3, -200);
 		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("scale", 1, 1, 1);
-		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", foolme, 1, 0, 0);
-		if (direction)
-		{
-			foolme += 0.1F;
-		}
-		else
-		{
-			foolme -= 0.1F;
-		}
-		if (foolme > 10) direction = false;
-		if (foolme < -40) direction = true;
+		//CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", foolme, 1, 0, 0);
+		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", 160.0 + foolme, 0, 1, 0);
+
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -122,38 +127,126 @@ void Game::Render()
 		}
 		
 	}
+	
+	glPopMatrix();
+
+	glPushMatrix();
+	if (CShaderHolder::s_pInstance->UseShaderById("textured2"))
+	{
+
+		// light set-up
+		glEnable(GL_LIGHT0);
+
+		static float LightMoving = -3.F;
+		LightMoving -= 0.01f;
+
+		GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+		GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+		GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+		GLfloat light_position[] = { 0, 20, LightMoving, 1.0f };
+
+		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+		glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+		Int32 err = glGetError();
+		if (err != 0)
+		{
+			printf("preparing matrix error = %d\n", err);
+		}
+
+		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform3f("translate", 0, 0.25, 0);
+		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform3f("scale", 1, 1, 1);
+		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform4f("rotation", 20.F, 1, 0, 0);
+
+		glEnable(GL_TEXTURE_2D);
+		textureId = CTextureHolder::s_pInstance->getTextureById("brick_t.bmp");
+		if (textureId != -1)
+		{
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, textureId);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+			CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform1i("textureColor", 0);
+		}
+
+		textureId = CTextureHolder::s_pInstance->getTextureById("brick_n.bmp");
+
+		if (textureId != -1)
+		{
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, textureId);
+			CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform1i("textureNormal", 1);
+		}
+
+		GLfloat mat_shininess[] = { 1.0, 0.5, 0.31 };
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_shininess);
+
+		// draw blocks of 1 meter^2 and apply texture
+		glBegin(GL_QUADS);
+		for (Int32 bx = -10; bx < 10; ++bx)
+		{
+			for (Int32 by = 0; by > -20; --by)
+			{
+
+				glTexCoord2f(0, 0);  glVertex3f(bx, -0.5, by);
+				glTexCoord2f(1, 0);  glVertex3f(bx + 1, -0.5, by);
+				glTexCoord2f(1, 1);  glVertex3f(bx + 1, -0.5, by + 1);
+				glTexCoord2f(0, 1);  glVertex3f(bx, -0.5, by + 1);
+
+
+			}
+		}
+		glEnd();
+
+		CShaderHolder::s_pInstance->StopShader();
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE0);
+	}
+	glPopMatrix();
+
 	glDisable(GL_LIGHTING);
+
 
 	// [ TEXTURED SQUARE ]
 	glPushMatrix();
 	glEnable(GL_TEXTURE_2D);
 	
-	GLuint textureId = CTextureHolder::s_pInstance->getTextureById("image42.png");
+	textureId = CTextureHolder::s_pInstance->getTextureById("brick_t.bmp");
 	//GLuint textureId = CTextureHolder::s_pInstance->getTextureById("_ivy_d.tga");
 	//GLuint textureId = CTextureHolder::s_pInstance->getTextureById("bard.bmp");
 	if (textureId != -1)
 	{
 		glBindTexture(GL_TEXTURE_2D, textureId);
 	}
+	glEnable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.5f);
 	glBegin(GL_QUADS);
-	glVertex3f(-100, -100, -1000); glTexCoord2f(0, 0);
+	glVertex3f(-200, -100, -1000); glTexCoord2f(0, 0);
 	glVertex3f(100, -100, -1000); glTexCoord2f(0, 1);
 	glVertex3f(100, 100, -1000); glTexCoord2f(1, 1);
-	glVertex3f(-100, 100, -1000); glTexCoord2f(1, 0);
+	glVertex3f(-200, 100, -1000); glTexCoord2f(1, 0);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
-
+	glDisable(GL_BLEND);
+	glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
 
 
 	// [ ROTATING TRIANGLE ]
-	glPopMatrix();
+	glPushMatrix();
 	glRotatef(rotate, 0, 0, 1);
 	glBegin(GL_TRIANGLES);
 	glVertex3f(0, 0, -1000);
 	glVertex3f(100, 50, -1000);
 	glVertex3f(640 / 2, 0, -1000);
 	glEnd();
+	glPopMatrix();
+	// [TEXTURED GROUND]
+	
 
 	glutSwapBuffers();
 }
