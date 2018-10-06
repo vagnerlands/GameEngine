@@ -2,6 +2,7 @@
 #define CTEXTMANAGER_H_
 
 #include "CommonTypes.h"
+#include "ITexture.h"
 #include "OGLTypes.h"
 #include "CResHandle.h"
 #include "IMutex.h"
@@ -17,11 +18,15 @@ using namespace std;
 class CTextureHolder 
 {
 public:
+	typedef unordered_map<string, Graphics::ITexture*> TextureMap;
+	typedef unordered_map<string, Types::Byte*> TextureContentMap;
+
 	static bool Create(const string pathToTexturesFile);
 	void LoadTexture(const string textId);
 	void RemoveTexture(const string textId);
-	GLuint getTextureById(string textId);
+	Graphics::ITexture* getTextureById(string textId);
 	void AddTextureContent(string textId, Types::Byte* data);
+	bool Bind(const string texId) const ;
 	CTextureHolder::~CTextureHolder();
 
 	// external callback event in case a resource is deallocated

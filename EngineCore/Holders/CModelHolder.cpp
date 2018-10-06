@@ -7,15 +7,18 @@
 #include <objParser/objLoader.h>
 #ifdef WIN32
 #include "CWinMutex.h"
+#include "CModelOGL.h"
 #endif
 
 CModelHolder* CModelHolder::s_pInstance = NULL;
 
 CModelHolder::~CModelHolder()
 {
-	while (!m_models.empty())
+	while (!m_mapModels.empty())
 	{
-		m_models.erase(m_models.begin());
+		if (m_mapModels.begin()->second != NULL)
+			delete m_mapModels.begin()->second;
+		m_mapModels.erase(m_mapModels.begin());
 	}	
 }
 
@@ -107,8 +110,6 @@ CModelHolder::AddModelContent(string modelId, Byte* bytesStream, Byte* materialS
 	printf("Number of texture coordinates: %i\n", objData->textureCount);
 	printf("\n");
 
-	newNode.m_vboBufferCreated = false;
-
 	for (int i = 0; i < objData->materialCount; i++)
 	{
 		SMaterialAttr newMaterial;
@@ -182,135 +183,68 @@ CModelHolder::AddModelContent(string modelId, Byte* bytesStream, Byte* materialS
 		}
 	}
 
-	m_pModelContentMapMutex->mutexLock();
-	m_models.insert(make_pair(modelId, newNode));
-	m_pModelContentMapMutex->mutexUnlock();
 
+
+	/*m_pModelContentMapMutex->mutexLock();
+	m_models.insert(make_pair(modelId, newNode));
+	m_pModelContentMapMutex->mutexUnlock();*/
+	Graphics::IModel* pModelObj = new Graphics::CModelOGL();
+
+	pModelObj->Create(newNode);
+
+	m_mapModels.insert(make_pair(modelId, pModelObj));
 	// objData will lose its last reference and it will be deallocated
 }
 
 void 
 CModelHolder::RemoveModel(const string textId)
 {
-	ModelMap::iterator it = m_models.find(textId);
-	if (it == m_models.end())
+	ModelObject::iterator it = m_mapModels.find(textId);
+	if (it == m_mapModels.end())
 	{
 		// this shouldn't happen - never, but if happens, trying 
 		// to erase will cause an exception - so must quit method
 		return;
 	}
 
-	m_models.erase(it);
+	if (it->second != NULL)
+	{
+		delete it->second;
+	}
+
+	m_mapModels.erase(it);
 
 	//_CrtDumpMemoryLeaks();
 }
 
-bool 
-CModelHolder::getModelById(const string modelId, SModelData& out)
+Graphics::IModel&
+CModelHolder::GetModelById(const string modelId)
 {
 	// then try to find it in the textures map
-	ModelMap::iterator result = m_models.find(modelId);
-	if (result != m_models.end())
+	ModelObject::iterator result = m_mapModels.find(modelId);
+	if (result != m_mapModels.end())
 	{
-		
-		if (!result->second.m_vboBufferCreated)
-		{			
-			result->second.m_vboBufferCreated = true;
-
-			GLenum error = glGetError();
-
-			if (error != GL_NO_ERROR)
-			{
-				std::cout << "OpenGL Error: " << error << std::endl;
-			}
-
-			// generates the VAO
-			glGenVertexArrays(1, &result->second.m_vertexArrayObject);
-			// binds the VAO for this model
-			glBindVertexArray(result->second.m_vertexArrayObject);
-			// [          Load buffers          ]
-			//vertices
-			glGenBuffers(Types::VertexBuffer_Max_Num, result->second.m_elementBuffer);
-			int oglErr = glGetError();
-			if (oglErr != 0)
-			{
-				printf("glError after glGenBuffers =%d\n", glGenBuffers);
-			}
-
-			// [VERTEX PREPARATION]
-			glBindBuffer(GL_ARRAY_BUFFER, result->second.m_elementBuffer[Types::VertexBuffer_Vertices]);
-			glBufferData(GL_ARRAY_BUFFER, (result->second.m_vertices.size() * sizeof(IvVector3)), &result->second.m_vertices[0], GL_STATIC_DRAW);
-			glVertexPointer(3, GL_FLOAT, 0, (void*)(0));
-			// [------------------]
-
-			// [NORMAL PREPARATION]
-			glBindBuffer(GL_ARRAY_BUFFER, result->second.m_elementBuffer[Types::VertexBuffer_Normals]);
-			glBufferData(GL_ARRAY_BUFFER, (result->second.m_normals.size() * sizeof(IvVector3)), &result->second.m_normals[0], GL_STATIC_DRAW);
-			glNormalPointer(GL_FLOAT, 0, (void*)(0));
-			// [------------------]
-
-			// [TEXTURE PREPARATION]
-			if (result->second.m_textures.size() > 0)
-			{
-				glBindBuffer(GL_ARRAY_BUFFER, result->second.m_elementBuffer[Types::VertexBuffer_Textures]);
-				glBufferData(GL_ARRAY_BUFFER, (result->second.m_textures.size() * sizeof(IvVector2)), &result->second.m_textures[0], GL_STATIC_DRAW);
-				glTexCoordPointer(2, GL_FLOAT, 0, (void*)(0));
-			}
-			else
-			{
-				// for AMD Radeon R9 M200X enabling textures directive with a non declared buffer for textures 
-				// leads to a fatal error in atioglxx.dll
-				// to bypass this error, in case we don't have textures, then we create a dummy map of textures
-				// here
-				Float textCoords[] = {0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 0.0F, 1.0F};
-				glBindBuffer(GL_ARRAY_BUFFER, result->second.m_elementBuffer[Types::VertexBuffer_Textures]);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(textCoords), &textCoords, GL_STATIC_DRAW);
-				glTexCoordPointer(2, GL_FLOAT, 0, (void*)(0));
-
-			}
-			// [------------------]
-
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, result->second.m_elementBuffer[Types::VertexBuffer_Element]);
-			const Int32 numberOfIndexes = result->second.m_indexes.size();
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * numberOfIndexes, &result->second.m_indexes[0], GL_STATIC_DRAW);
-			result->second.m_numberOfIndexes = numberOfIndexes;
-
-			// allocation integrity check
-			Int32 allocIntegrityChk = 0;
-			glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &allocIntegrityChk);
-			if (allocIntegrityChk != result->second.m_indexes.size() * sizeof(GLushort))
-			{
-				glDeleteBuffers(Types::VertexBuffer_Max_Num, result->second.m_elementBuffer);
-				printf(" <!> error while allocating element buffer in %s\n", modelId.data());
-			}
-			else
-			{
-				// if the everything was passed to the GPU, no need to keep it in the RAM, so release it...
-				result->second.m_indexes = vector< GLushort >();
-				result->second.m_textures = vector< IvVector2 >();
-				result->second.m_normals = vector< IvVector3 >();
-				result->second.m_vertices = vector< IvVector3 >();
-				result->second.m_material = vector< SMaterialAttr >();
-				result->second.m_faces = vector< SFaceAttr >();
-			}
-
-			error = glGetError();
-
-			if (error != GL_NO_ERROR)
-			{
-				std::cout << "OpenGL Error while creating model " << modelId.data() << ": " << error << std::endl;
-			}
-			// [--------------------------------]
-		}
-
-		out = result->second;
-
-		return true;
+		return *result->second;
 	}
 
 	// cache miss - then add this texture to the process list
 	LoadModel(modelId);
 	
 	// if it somehow failed, returns -1
-	return false;
+	return *(Graphics::IModel*)(NULL);
+}
+
+void CModelHolder::DrawModelById(const string modelId)
+{
+	// then try to find it in the textures map
+	ModelObject::iterator result = m_mapModels.find(modelId);
+	if (result != m_mapModels.end())
+	{
+		result->second->Draw();
+	}
+	else
+	{
+		// cache miss - then add this texture to the process list
+		LoadModel(modelId);
+	}
 }

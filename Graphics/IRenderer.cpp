@@ -80,10 +80,12 @@ void Graphics::IRenderer::SetWorldMatrix(const IvMatrix44& matrix)
 	mWorldMat = matrix;
 	mWVPMat = mProjectionMat*mViewMat*mWorldMat;
 	IvMatrix33 worldMat3x3;
+	// inverse rows by cols - the GPU expects the information this way to be digested
 	IvVector3 col0(mWorldMat(0, 0), mWorldMat(1, 0), mWorldMat(2, 0));
 	IvVector3 col1(mWorldMat(0, 1), mWorldMat(1, 1), mWorldMat(2, 1));
 	IvVector3 col2(mWorldMat(0, 2), mWorldMat(1, 2), mWorldMat(2, 2));
 	worldMat3x3.SetColumns(col0, col1, col2);
+	// find the normal matrix
 	mNormalMat.Rotation(Transpose(Inverse(worldMat3x3)));
 }
 

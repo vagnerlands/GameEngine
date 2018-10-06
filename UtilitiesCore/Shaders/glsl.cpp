@@ -15,6 +15,8 @@ Last update: 2006/11/12 (Geometry Shader Support)
 #include <algorithm>
 #include <math.h>
 
+#include "CTextureHolder.h"
+
 using namespace std;
 using namespace cwc;
 
@@ -261,6 +263,9 @@ glShader::~glShader()
        }                      
 
        glDeleteShader(ProgramObject);
+
+	   m_samplerInShaderMap = unordered_map<string, Int32>();
+	    
        CHECK_GL_ERROR();
     }
 
@@ -594,6 +599,56 @@ bool glShader::setUniform4i(GLcharARB* varname, GLint v0, GLint v1, GLint v2, GL
     return true;
 }
 //-----------------------------------------------------------------------------
+
+bool glShader::setTexture(GLcharARB* varname, Graphics::ITexture* pTexture)
+{
+	if (!useGLSL) return false; // GLSL not available
+	if (!bGPUShader4) return false;
+	if (!_noshader) return true;
+	if (!pTexture) return false;
+
+	GLint loc;
+	if (!varname)
+		return false;
+	
+	loc = GetUniformLocation(varname);
+
+	if (loc == -1)
+		return false;  // can't find variable / invalid index
+
+
+	// index of the sampler in this shader
+	Int32 samplerIndex = 0;
+	// retrieves the sampler uniform name from the shader (must be identical with this varname parameter)
+	unordered_map<string, Int32>::iterator it = m_samplerInShaderMap.find(varname);
+	if (it != m_samplerInShaderMap.end())
+	{
+		// take the sampler index, this will be set as the active texture
+		samplerIndex = it->second;
+	}
+	else
+	{
+		// the index will be the size of the shader map
+		samplerIndex = m_samplerInShaderMap.size();
+		// pray that this value will never be bigger than 32, if so, we set it back to zero
+		if (samplerIndex >= 31)
+		{
+			samplerIndex = 0;
+		}
+		// insert it in the database
+		m_samplerInShaderMap.insert(make_pair(varname, samplerIndex));
+	}
+
+	// bind this texture
+	pTexture->BindTextureToSampler(samplerIndex);
+	Int32 glerr = glGetError();
+	glUniform1i(loc, samplerIndex); //glUniform1uiEXT(loc, samplerIndex);
+	glerr = glGetError();
+
+	return true;
+}
+
+
 //----------------------------------------------------------------------------- 
 
 bool glShader::setUniform1ui(GLcharARB* varname, GLuint v0, GLint index)

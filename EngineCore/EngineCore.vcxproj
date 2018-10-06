@@ -79,7 +79,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../Includes;../Includes/lpng1626;./OS;./OS/Abstract;./OS/Windows;./Cache;./Cache/ResourceCache;./Loaders/Model3D/objParser;./Loaders;./Loaders/Model3D;./Loaders/Images</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Includes;../Includes/lpng1626;./OS;./OS/Abstract;./OS/Windows;./Cache;./Cache/ResourceCache;./Loaders/Model3D/objParser;./Loaders;./Loaders/Model3D;./Loaders/Images;./Holders</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

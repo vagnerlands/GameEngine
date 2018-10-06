@@ -43,6 +43,8 @@ Make sure to check extension "GL_EXT_geometry_shader4" before using Geometry sha
 
 #include <GL/glew.h>
 
+#include "ITexture.h"
+
 #define GLSLAPI    // static build
 
 namespace cwc
@@ -153,6 +155,8 @@ namespace cwc
       bool       setUniform4i(GLcharARB* varname, GLint v0, GLint v1, GLint v2, GLint v3, GLint index = -1); //!< Specify value of uniform integer variable. \param varname The name of the uniform variable.
 
       // Note: unsigned integers require GL_EXT_gpu_shader4 (for example GeForce 8800)
+	  // texture - custom by Vagner Paludo Landskron
+	  bool       setTexture(GLcharARB* varname, Graphics::ITexture* pTexture); //!< Specify value of uniform unsigned integer variable. \warning Requires GL_EXT_gpu_shader4. \param varname The name of the uniform variable.
       bool       setUniform1ui(GLcharARB* varname, GLuint v0, GLint index = -1); //!< Specify value of uniform unsigned integer variable. \warning Requires GL_EXT_gpu_shader4. \param varname The name of the uniform variable.
       bool       setUniform2ui(GLcharARB* varname, GLuint v0, GLuint v1, GLint index = -1); //!< Specify value of uniform unsigned integer variable. \warning Requires GL_EXT_gpu_shader4. \param varname The name of the uniform variable.
       bool       setUniform3ui(GLcharARB* varname, GLuint v0, GLuint v1, GLuint v2, GLint index = -1); //!< Specify value of uniform unsigned integer variable. \warning Requires GL_EXT_gpu_shader4. \param varname The name of the uniform variable.
@@ -271,6 +275,9 @@ namespace cwc
       int         _nInputPrimitiveType;
       int         _nOutputPrimitiveType;
       int         _nVerticesOut;
+
+	  // map of samplers X index in shader 
+	  unordered_map<string, Int32> m_samplerInShaderMap;
         
    };
 

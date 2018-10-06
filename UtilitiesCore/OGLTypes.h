@@ -6,15 +6,14 @@
 #include <vector>
 #include <unordered_map>
 #include "CommonTypes.h"
-#include "GL/glew.h"
-#include "GL/glut.h"
-#include "glsl.h"
 
 #include "IvVector2.h"
 #include "IvVector3.h"
 #include "IvVector4.h"
 
-class CResHandle;
+#include "GL/glew.h"
+#include "GL/glut.h"
+
 using namespace std;
 
 namespace Types 
@@ -63,34 +62,18 @@ namespace Types
 
 	struct SModelData
 	{
-		~SModelData()
+		virtual ~SModelData()
 		{
-			if (m_vboBufferCreated)
-			{
-				glDeleteVertexArrays(1, &m_vertexArrayObject);
-				m_vertexArrayObject = 0;
 
-				glDeleteBuffers(VertexBuffer_Max_Num, m_elementBuffer);
-
-				m_vboBufferCreated = false;
-			}
 		}
 
-		SModelData() : m_vboBufferCreated(false), m_vertexArrayObject(0)
+		SModelData() 
 		{
-			for (Int32 i = 0; i < VertexBuffer_Max_Num; i++)
-			{
-				m_elementBuffer[i] = 0;
-			}
+			
 		}
 
-		bool m_vboBufferCreated;
-		GLuint m_vertexArrayObject;
-		vector<GLushort> m_indexes;
-		GLuint m_numberOfIndexes;
 
-		GLuint m_elementBuffer[VertexBuffer_Max_Num];
-
+		vector<UInt16> m_indexes;
 		vector<IvVector2> m_textures;
 		vector<IvVector3> m_normals;
 		vector<IvVector3> m_vertices;
@@ -98,10 +81,6 @@ namespace Types
 		vector<SFaceAttr> m_faces;
 	};
 
-	typedef unordered_map<string, cwc::glShader*> ShadersMap;
-	typedef unordered_map<string, SModelData> ModelMap;
-	typedef unordered_map<string, GLuint> TextureMap;
-	typedef unordered_map<string, Types::Byte*> TextureContentMap;	
 }
 
 #endif //_OGLTYPES_H_

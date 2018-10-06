@@ -9,6 +9,7 @@ uniform sampler2D textureNormal;
 
 void main(void)
 {
+
 	// texture normal sampled according to glTexCoord
 	vec4 texNormal = (texture2D(textureNormal,gl_TexCoord[0].xy) * 2) - 1;
 	// texture color sampled according to glTexCoord
@@ -28,4 +29,24 @@ void main(void)
     ct = texel.rgb;
     at = texel.a;
     gl_FragColor = vec4(ct * cf, at * af);
+
+/*	// texture normal sampled according to glTexCoord
+	vec4 texNormal = (texture2D(textureNormal,gl_TexCoord[0].xy) * 2) - 1;
+	// texture color sampled according to glTexCoord
+	vec4 texColor = texture2D(textureColor,gl_TexCoord[0].xy);   	
+
+	vec3 tangent  = -vec3(abs(texNormal.y) + abs(texNormal.z), abs(texNormal.x), 0);
+    vec3 binormal = -vec3(0, abs(texNormal.z), abs(texNormal.x) + abs(texNormal.y));
+	
+	// Transform light vector into tangent space
+	vec3 vLightVec;
+	
+    vec3 lightVec = v.xyz - gl_LightSource[0].position.xyz ;
+	
+    vLightVec.x = dot(lightVec, tangent);
+    vLightVec.y = dot(lightVec, binormal);
+    vLightVec.z = dot(lightVec, texNormal);
+	
+	gl_FragColor = (texColor * clamp( dot( lightVec, texNormal ) ,0.0, 1.0 )) * vec4(1.0, 1.0, 1.0, 1.0) + 0.1 * texColor ;*/
+
 }

@@ -35,6 +35,10 @@ bool Game::PostRendererInitialize()
 	CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
 	CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip");
 
+	CTextureHolder::s_pInstance->getTextureById("water.bmp");
+	CTextureHolder::s_pInstance->getTextureById("brick_t.bmp");
+	CTextureHolder::s_pInstance->getTextureById("brick_n.bmp");
+
 	return true;
 }
 
@@ -75,8 +79,7 @@ void Game::Render()
 	if (foolme < -40) direction = true;
 	// enable vertices array pointer rendering	
 	static SModelData m_data;
-	if (CModelHolder::s_pInstance->getModelById("Hughes500.obj", m_data) 
-		&& (CShaderHolder::s_pInstance->UseShaderById("model")))
+	if (CShaderHolder::s_pInstance->UseShaderById("model"))
 	{
 		// light set-up
 		glEnable(GL_LIGHT0);
@@ -90,34 +93,20 @@ void Game::Render()
 		{
 			printf("preparing matrix error = %d\n", err);
 		}
-		//glTranslatef(0, 0, -20);
 
 		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 3, -200);
 		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("scale", 1, 1, 1);
-		//CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", foolme, 1, 0, 0);
 		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", 160.0 + foolme, 0, 1, 0);
 
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		// attach a texture to the whole model
 		glEnable(GL_TEXTURE_2D);
-		GLuint textureId = CTextureHolder::s_pInstance->getTextureById("water.bmp");
-		glBindTexture(GL_TEXTURE_2D, textureId);
-		glBindVertexArray(m_data.m_vertexArrayObject);
-		glDrawElements(GL_TRIANGLES, m_data.m_numberOfIndexes, GL_UNSIGNED_SHORT, (void*)(0));
+		CTextureHolder::s_pInstance->Bind("water.bmp");
 
-		err = glGetError();
-		if (err != 0)
-		{
-			printf("glError Drawing Model = %d\n", err);
-		}
+		CModelHolder::s_pInstance->DrawModelById("Hughes500.obj");
 
 		glDisable(GL_TEXTURE_2D);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
 		
-
+		// deactivate this shader to not affect next rendering
 		CShaderHolder::s_pInstance->StopShader();
 
 		err = glGetError();
@@ -138,16 +127,18 @@ void Game::Render()
 		glEnable(GL_LIGHT0);
 
 		static float LightMoving = -3.F;
-		LightMoving -= 0.01f;
+		//LightMoving -= 0.001f;
 
 		GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
 		GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat light_position[] = { 0, 20, LightMoving, 1.0f };
+		GLfloat light_direction[] = { 0.0, -1.0, 0.0 };
+		GLfloat light_position[] = { 0, 1, LightMoving, 1.0f };
 
 		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 		glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
 		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 		Int32 err = glGetError();
@@ -158,26 +149,28 @@ void Game::Render()
 
 		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform3f("translate", 0, 0.25, 0);
 		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform3f("scale", 1, 1, 1);
-		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform4f("rotation", 20.F, 1, 0, 0);
+		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform4f("rotation", 5.F /*+ foolme*/, 1, 0, 0);
 
 		glEnable(GL_TEXTURE_2D);
-		textureId = CTextureHolder::s_pInstance->getTextureById("brick_t.bmp");
-		if (textureId != -1)
+		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setTexture("textureColor", 
+			CTextureHolder::s_pInstance->getTextureById("brick_t.bmp"));
+		/*if (textureId != -1)
 		{
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, textureId);
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 			CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform1i("textureColor", 0);
-		}
+		}*/
+		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setTexture("textureNormal",
+			CTextureHolder::s_pInstance->getTextureById("brick_n.bmp"));
+		//textureId = CTextureHolder::s_pInstance->getTextureById("brick_n.bmp");
 
-		textureId = CTextureHolder::s_pInstance->getTextureById("brick_n.bmp");
-
-		if (textureId != -1)
+		/*if (textureId != -1)
 		{
 			glActiveTexture(GL_TEXTURE1);
 			glBindTexture(GL_TEXTURE_2D, textureId);
 			CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform1i("textureNormal", 1);
-		}
+		}*/
 
 		GLfloat mat_shininess[] = { 1.0, 0.5, 0.31 };
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_shininess);
@@ -193,7 +186,6 @@ void Game::Render()
 				glTexCoord2f(1, 0);  glVertex3f(bx + 1, -0.5, by);
 				glTexCoord2f(1, 1);  glVertex3f(bx + 1, -0.5, by + 1);
 				glTexCoord2f(0, 1);  glVertex3f(bx, -0.5, by + 1);
-
 
 			}
 		}
@@ -214,13 +206,8 @@ void Game::Render()
 	glPushMatrix();
 	glEnable(GL_TEXTURE_2D);
 	
-	textureId = CTextureHolder::s_pInstance->getTextureById("brick_t.bmp");
-	//GLuint textureId = CTextureHolder::s_pInstance->getTextureById("_ivy_d.tga");
-	//GLuint textureId = CTextureHolder::s_pInstance->getTextureById("bard.bmp");
-	if (textureId != -1)
-	{
-		glBindTexture(GL_TEXTURE_2D, textureId);
-	}
+	CTextureHolder::s_pInstance->Bind("brick_t.bmp");
+
 	glEnable(GL_BLEND);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.5f);

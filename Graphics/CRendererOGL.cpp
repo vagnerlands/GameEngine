@@ -23,10 +23,11 @@ void Graphics::CRendererOGL::Destroy()
 
 void Graphics::CRendererOGL::PrepareCamera3D()
 {
-	// set up current viewport
+	// set up current viewport based on defined screen size
 	glViewport(0, 0, mWidth, mHeight);
-	// set default projection matrix
+	// d is distance from view view position to the projection plane
 	float d = 1.0f / IvTan(mFOV / 180.0f * Types::s_PI * 0.5f);
+	// a normalized 
 	float recip = 1.0f / (mNear - mFar);
 	IvMatrix44 perspective;
 

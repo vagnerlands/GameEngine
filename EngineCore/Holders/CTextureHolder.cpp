@@ -3,6 +3,7 @@
 #include <time.h>
 #ifdef WIN32
 #include "CWinMutex.h"
+#include "CTextureOGL.h"
 #endif
 
 #include "CFactory2dImage.h"
@@ -85,69 +86,19 @@ CTextureHolder::LoadTexture(const string textId)
 
 void CTextureHolder::BuildTexture(const string textureId, const I2dImage* pData)
 {
-	const int wrap = 0;
-	// allocate a texture name
-	GLuint GeneratedTexture = -1;
-	// [BEGIN] CRITICAL AREA
 
-	// then, allocate an indexer for new texture
-	glGenTextures(1, &GeneratedTexture);
-	// binds this texture as a 2D bitmap
-	glBindTexture(GL_TEXTURE_2D, GeneratedTexture);
-	Int32 err = glGetError();
-	if (err != GL_NO_ERROR)
+	Graphics::ITexture* pTextureObj = NULL;
+	if (pData != NULL)
 	{
-		printf("glError BindTexture=%d\n", err);
+		pTextureObj = new Graphics::CTextureOGL();
+		pTextureObj->BuildTexture(pData);
+		if (pTextureObj->ProcessStatus())
+		{
+			m_textures.insert(make_pair(textureId, pTextureObj));
+		}
 	}
+
 	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	// always good to get the error in case it happens
-	err = glGetError();
-	if (err != GL_NO_ERROR)
-	{
-		printf("glError Texture parameters=%d\n", err);
-	}
-	// build our texture mipmaps	
-	if (pData->GetNumberOfBytes() == 4)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 
-			0, 
-			GL_RGBA, 
-			pData->GetWidth(),
-			pData->GetHeight(),
-			0, 
-			GL_RGBA, 
-			GL_UNSIGNED_BYTE, 
-			pData->GetPointerToData());
-	}
-	else
-	{
-		glTexImage2D(GL_TEXTURE_2D, 
-			0, 
-			GL_RGB, 
-			pData->GetWidth(),
-			pData->GetHeight(),
-			0, 
-			GL_RGB, 
-			GL_UNSIGNED_BYTE, 
-			pData->GetPointerToData());
-	}
-	// checks for GL ERROR
-	err = glGetError();
-	if (err != GL_NO_ERROR)
-	{
-		printf("Error creating texture - glTexImage2D=%d\n", err);
-		glDeleteTextures(1, &GeneratedTexture);
-	}
-	else
-	{
-		// adds to the database of textures
-		m_textures.insert(make_pair(textureId, GeneratedTexture));
-	}
 		
 }
 
@@ -160,14 +111,13 @@ void CTextureHolder::RemoveTexture(const string textId)
 		// to erase will cause an exception - so must quit method
 		return;
 	}
-
-	glDeleteTextures(1, &(it->second));
+	it->second->Destroy();
 	m_textures.erase(it);
 
 	//_CrtDumpMemoryLeaks();
 }
 
-GLuint
+Graphics::ITexture*
 CTextureHolder::getTextureById(string textId)
 {
 	// then try to find it in the textures map
@@ -182,7 +132,7 @@ CTextureHolder::getTextureById(string textId)
 	LoadTexture(textId);
 
 	// if it somehow failed, returns -1
-	return -1;
+	return NULL;
 }
 
 void 
@@ -193,12 +143,23 @@ CTextureHolder::AddTextureContent(string textId, Types::Byte* data)
 	m_textureContentMapMutex->mutexUnlock();
 }
 
+bool CTextureHolder::Bind(const string texId) const
+{
+	// then try to find it in the textures map
+	TextureMap::const_iterator result = m_textures.find(texId);
+	if (result != m_textures.end())
+	{
+		return result->second->Bind();
+	}
+	return false;
+}
+
 CTextureHolder::~CTextureHolder()
 {
 	while (!m_textures.empty()) 
 	{		
 		TextureMap::iterator it = m_textures.begin();
-		glDeleteTextures(1, &(it->second));
+		it->second->Destroy();
 		m_textures.erase(it);
 	}		
 }

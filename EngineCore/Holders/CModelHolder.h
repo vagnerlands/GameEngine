@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <memory>
 #include "gl/glut.h"
+#include "IModel.h"
 
 using namespace Types;
 using namespace std;
@@ -15,13 +16,18 @@ using namespace std;
 class CModelHolder
 {
 public:
+
+	//typedef unordered_map<string, SModelData> ModelMap;
+	typedef unordered_map<string, Graphics::IModel*> ModelObject;
+
 	// always create before using
 	static bool Create(const string pathToModelFile);
 	virtual ~CModelHolder();
 	
 	void LoadModel(const string modelId);
 	void RemoveModel(const string modelId);
-	bool getModelById(const string modelId, SModelData& out);
+	Graphics::IModel& GetModelById(const string modelId);
+	void DrawModelById(const string modelId);
 
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(string removeItem);
@@ -31,8 +37,10 @@ public:
 private:
 	CModelHolder(std::string pathToResources);
 	void AddModelContent(string modelId, Byte* bytesStream, Byte* materialStream);
-	// local hashmap built textures
-	ModelMap m_models;
+	// hash map for the raw data models (vertexes, normals, material, etc)
+	//ModelMap m_models;
+	// hash map for the IModels* - containing what you need to render this model
+	ModelObject m_mapModels;
 	// mutex for m_processes
 	IMutex* m_pModelContentMapMutex;
 

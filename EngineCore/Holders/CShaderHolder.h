@@ -2,6 +2,7 @@
 #define CSHADERMANAGER_H_
 
 #include "CommonTypes.h"
+#include "glsl.h"
 #include "OGLTypes.h"
 #include "IMutex.h"
 #include <unordered_map>
@@ -13,6 +14,9 @@ using namespace std;
 class CShaderHolder
 {
 public:
+
+	typedef unordered_map<string, cwc::glShader*> ShadersMap;
+
 	static bool Create();
 	void LoadShader(const string modelId);
 	void RemoveShader(const string modelId);

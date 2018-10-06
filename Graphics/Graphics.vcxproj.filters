@@ -17,12 +17,36 @@
     <ClInclude Include="CRendererOGL.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="ITexture.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="CTextureOGL.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="IModel.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="CModelOGL.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRendererOGL.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="IRenderer.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="ITexture.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="CTextureOGL.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="IModel.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="CModelOGL.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
