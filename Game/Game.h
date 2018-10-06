@@ -3,12 +3,19 @@
 
 #include "IGame.h"
 
+class CGameController;
+
 class Game : public EngineCore::IGame
 {
 public:
 	Game();
 	virtual ~Game();
 	virtual bool PostRendererInitialize();
+
+	virtual CGameController* GetGameController()
+	{
+		return mpGameInput;
+	}
 
 protected:
 
@@ -19,6 +26,7 @@ private:
 	Game(const Game& other);
 	Game& operator=(const Game& other);
 
+	CGameController* mpGameInput;
 
 };
 

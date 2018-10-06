@@ -17,6 +17,7 @@ Graphics::IRenderer::IRenderer() :
 	mNear(0.1F),
 	mFar(20000.F)
 {
+
 	mDiffuseColor.Set(1.0f, 1.0f, 1.0f, 1.0f);
 
 	mLightAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);

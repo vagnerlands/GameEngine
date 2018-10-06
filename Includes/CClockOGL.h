@@ -36,9 +36,13 @@ namespace UtilitiesCore
 		// virtual destructor
 		virtual ~CClockOGL();
 
-		virtual void Update();
+		virtual void StartFrame();
+
+		virtual void Hold(Int32 numberOfFramesPerSecond);
 
 	private:
+		Float getTimeNow() const;
+		Float mStartFrameTime;
 		// copy operations
 		CClockOGL(const CClockOGL& other);
 		CClockOGL& operator=(const CClockOGL& other);

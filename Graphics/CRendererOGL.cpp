@@ -1,5 +1,6 @@
 #include "CRendererOGL.h"
 #include "IvMath.h"
+#include "IvMatrix33.h"
 #include "GL/glut.h"
 
 bool Graphics::CRendererOGL::Create()
@@ -41,13 +42,45 @@ void Graphics::CRendererOGL::PrepareCamera3D()
 	SetProjectionMatrix(perspective);
 
 	IvMatrix44 ident;
+/*
+	// must update the view matrix according to the UP/RIGHT and FORWARD vectors
+	IvMatrix33 rotate;
+	rotate.SetRows(mCamera.m_rightVector, mCamera.m_upVector, mCamera.m_viewDir);
 
+	// world->view translation
+	IvVector3 xlate = -(rotate* (mCamera.m_position + mCamera.m_viewDir));
+
+	// build 4x4 matrix
+	IvMatrix44 matrix(rotate);
+	matrix(0, 3) = xlate.GetX();
+	matrix(1, 3) = xlate.GetY();
+	matrix(2, 3) = xlate.GetZ();
+	*/
 	SetViewMatrix(ident);
 	SetWorldMatrix(ident);
 
+	
 	// set default modelview matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	// must update the view matrix according to the UP/RIGHT and FORWARD vectors
+	IvMatrix33 rotate;
+	rotate.SetRows(mCamera.m_rightVector, mCamera.m_upVector, mCamera.m_viewDir);
+
+	// world->view translation
+	IvVector3 xlate = -(rotate* (mCamera.m_position + mCamera.m_viewDir));
+
+	// build 4x4 matrix
+	IvMatrix44 matrix(rotate);
+	matrix(0, 3) = xlate.GetX();
+	matrix(1, 3) = xlate.GetY();
+	matrix(2, 3) = xlate.GetZ();
+	SetViewMatrix(matrix);
+
+	//IvVector3 viewPoint = mCamera.m_position + mCamera.m_viewDir;
+	//gluLookAt(mCamera.m_position.GetX(), mCamera.m_position.GetY(), mCamera.m_position.GetZ(), viewPoint.GetX(), viewPoint.GetY(), viewPoint.GetZ(), mCamera.m_upVector.GetX(), mCamera.m_upVector.GetY(), mCamera.m_upVector.GetZ());
+
 }
 
 //-------------------------------------------------------------------------------

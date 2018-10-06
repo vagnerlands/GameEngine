@@ -90,6 +90,9 @@
     <ClInclude Include="IvPlane.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="IvPoint.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="IvMath.vcproj">

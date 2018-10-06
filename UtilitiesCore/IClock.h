@@ -30,7 +30,9 @@ namespace UtilitiesCore
 
 		virtual Float GetTimeInMili();
 
-		virtual void Update() = 0;
+		virtual void StartFrame() = 0;
+
+		virtual void Hold(Int32 numberOfFramesPerSecond) = 0;
 
 	protected:
 		Float mElapsedTime;

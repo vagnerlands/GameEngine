@@ -162,6 +162,7 @@ copy .\*.h ..\Includes
     <ClInclude Include="IvMatrix33.h" />
     <ClInclude Include="IvMatrix44.h" />
     <ClInclude Include="IvPlane.h" />
+    <ClInclude Include="IvPoint.h" />
     <ClInclude Include="IvQuat.h" />
     <ClInclude Include="IvRay3.h" />
     <ClInclude Include="IvTriangle.h" />

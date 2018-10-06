@@ -35,6 +35,9 @@
     <Filter Include="Src\Loaders\Images">
       <UniqueIdentifier>{fe0a65be-2a7f-4719-8331-710cede7e129}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Input">
+      <UniqueIdentifier>{6f08bf17-c58c-4416-910a-d710de29be51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainOGLEntry.cpp">
@@ -99,6 +102,9 @@
     </ClCompile>
     <ClCompile Include="Loaders\Images\CPng.cpp">
       <Filter>Src\Loaders\Images</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\CGameController.cpp">
+      <Filter>Src\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +179,18 @@
     </ClInclude>
     <ClInclude Include="Loaders\Images\CPng.h">
       <Filter>Src\Loaders\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\CGameController.h">
+      <Filter>Src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\IKeyboardHandler.h">
+      <Filter>Src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\IMouseHandler.h">
+      <Filter>Src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\IEventInput.h">
+      <Filter>Src\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

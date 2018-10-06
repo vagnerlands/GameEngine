@@ -4,6 +4,8 @@
 #include "Debugger.h"
 #include "CRendererOGL.h"
 #include "CThreadHolder.h"
+#include "IvPoint.h"
+#include "CGameController.h"
 
 #include "gl/glew.h"
 #include "gl/glut.h"
@@ -53,14 +55,14 @@ void KeyboardInput(UByte key, Int32 x, Int32 y)
 		s_lastCursorX = -1;
 		s_lastCursorY = -1;
 	}
-	//CGameCockpit::instance()->getGameController()->VOnKeyDown(key);
+	EngineCore::IGame::mGame->GetGameController()->VOnKeyDown(key);
 }
 
 void MouseMotion(int x, int y)
 {
 	if ((s_lastCursorX != -1) && (s_lastCursorY != -1))
 	{
-		//CGameCockpit::instance()->getGameController()->VOnMouseMove(CPoint(x, y));
+		EngineCore::IGame::mGame->GetGameController()->VOnMouseMove(IvPoint(x, y));
 	}
 
 	if (s_lastCursorX == -1)
@@ -113,7 +115,7 @@ void MouseInput(Int32 button, Int32 state, Int32 x, Int32 y)
 // reads the user input key - KEY UP
 void KeyboardRelease(UByte key, int x, int y)
 {
-	//glutKeyboardUpFunc(EngineCore::IGame::mGame->);
+	EngineCore::IGame::mGame->GetGameController()->VOnKeyUp(key);
 }
 
 int 

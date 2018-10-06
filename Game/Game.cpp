@@ -6,8 +6,9 @@
 #include "CModelHolder.h"
 #include "CShaderHolder.h"
 #include "CTextureHolder.h"
+#include "CThreadHolder.h"
 #include "GL/glut.h"
-
+#include "CGameController.h"
 
 bool 
 EngineCore::IGame::Create()
@@ -16,12 +17,18 @@ EngineCore::IGame::Create()
 	return (IGame::mGame != nullptr);
 }
 
-Game::Game() : EngineCore::IGame()
+Game::Game() : 
+	EngineCore::IGame()
 {
+	mpGameInput = new CGameController(640, 480);
 }
 
 Game::~Game()
 {
+	// release all allocated resources
+	delete CTextureHolder::s_pInstance;
+	delete CShaderHolder::s_pInstance;
+	delete CModelHolder::s_pInstance;
 }
 
 bool Game::PostRendererInitialize()
@@ -39,12 +46,34 @@ bool Game::PostRendererInitialize()
 	CTextureHolder::s_pInstance->getTextureById("brick_t.bmp");
 	CTextureHolder::s_pInstance->getTextureById("brick_n.bmp");
 
+	IGame::mGame->SetFps(30);
+
 	return true;
 }
 
 void Game::UpdateObjects(float dt)
 {
-
+	if (mpGameInput->m_bKey[27])
+	{
+		mGame->Quit();
+		return;
+	}
+	if (mpGameInput->m_bKey['w'])
+	{
+		Graphics::IRenderer::mRenderer->MoveForward(dt*1.0);
+	} 
+	else if (mpGameInput->m_bKey['s'])
+	{
+		Graphics::IRenderer::mRenderer->MoveForward(-dt*1.0);
+	}
+	if (mpGameInput->m_bKey['d'])
+	{
+		Graphics::IRenderer::mRenderer->MoveRight(dt*1.0);
+	}
+	else if (mpGameInput->m_bKey['a'])
+	{
+		Graphics::IRenderer::mRenderer->MoveRight(-dt*1.0);
+	}
 }
 
 void Game::Render()
@@ -64,16 +93,16 @@ void Game::Render()
 	glEnable(GL_LIGHTING);
 	glColor4f(1.0, 0.0, 1.0, 0.5);
 	static float rotate = 0.0f;
-	rotate += 0.01f;
+	rotate += 0.1f;
 	static float foolme = 0.0F;
 	static bool direction = false;
 	if (direction)
 	{
-		foolme += 0.005F;
+		foolme += 0.5F;
 	}
 	else
 	{
-		foolme -= 0.005F;
+		foolme -= 0.5F;
 	}
 	if (foolme > 10) direction = false;
 	if (foolme < -40) direction = true;

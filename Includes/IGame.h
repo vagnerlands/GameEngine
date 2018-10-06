@@ -3,6 +3,8 @@
 
 #include "CommonTypes.h"
 
+class CGameController;
+
 using namespace Types;
 
 namespace UtilitiesCore
@@ -25,7 +27,8 @@ namespace EngineCore
 		// a process to be executed in the background
 		virtual void ExecuteBackground();
 
-		void Update();
+		virtual CGameController* GetGameController() = 0 ;
+
 		void Display();
 		void Reshape(Int32 w, Int32 h);
 		// finalize this application
@@ -34,6 +37,15 @@ namespace EngineCore
 		inline void Pause() { mPaused = true; }
 		inline void Continue() { mPaused = false; }
 		inline bool IsRunning() { return !mPaused; }
+		// is fixed frames per second
+		inline Int32 GetFps()
+		{
+			return mFps;
+		}
+		inline void SetFps(Int32 framesPerSecond)
+		{
+			mFps = framesPerSecond;
+		}
 
 		static IGame* mGame;          // global pointer
 
@@ -50,6 +62,7 @@ namespace EngineCore
 
 		bool mQuit;
 		bool mPaused;
+		Int32 mFps;
 
 		UtilitiesCore::IClock* mClock;
 

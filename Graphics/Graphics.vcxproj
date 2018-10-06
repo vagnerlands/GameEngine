@@ -140,11 +140,13 @@ copy .\*.h ..\Includes
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CModelOGL.cpp" />
     <ClCompile Include="CRendererOGL.cpp" />
     <ClCompile Include="CTextureOGL.cpp" />
     <ClCompile Include="IModel.cpp" />
     <ClCompile Include="ITexture.cpp" />
+    <ClInclude Include="CCamera.h" />
     <ClInclude Include="CModelOGL.h" />
     <ClInclude Include="CRendererOGL.h" />
     <ClCompile Include="IRenderer.cpp" />

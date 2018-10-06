@@ -40,33 +40,37 @@ void EngineCore::IGame::ExecuteBackground()
 	vagner++;
 }
 
-void EngineCore::IGame::Update()
-{
-	// checks whether the application is still running
-	if (mGame->IsRunning())
-	{
-		// execute events and update databases
-	}
-}
 
 void EngineCore::IGame::Display()
 {
 	// checks whether the application is still running
 	if (mGame->IsRunning())
 	{
+		// execute events and update databases
+		mClock->StartFrame();
+		// update all objects - the delta time (elapsed time)
+		// is a good feature to increase intensity of movement 
+		// if a few frames were lost - making the movements flow
+		UpdateObjects(mClock->GetElapsedTime());
 		// render a scene according to current position of objects
 		Render();
 
+		mClock->Hold(mGame->GetFps());
+
 		if (mQuit)
 		{
-			mGame->Destroy();
+			gDebugger.Flush();
+			Graphics::IRenderer::Destroy();
+			EngineCore::IGame::Destroy();
+			exit(1);
 		}
 	}
 }
 
 EngineCore::IGame::IGame() :
 	mPaused(false), 
-	mQuit(false)
+	mQuit(false),
+	mFps(0)
 {
 	// 
 }
