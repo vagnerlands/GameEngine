@@ -88,6 +88,8 @@ void MouseInput(Int32 button, Int32 state, Int32 x, Int32 y)
 		s_lastCursorY = y;
 	}
 
+	s_lastCursorX = x;
+	s_lastCursorY = y;
 
 	// Wheel reports as button 3(scroll up) and button 4(scroll down)
 	if ((button == 3) || (button == 4)) // It's a wheel event
@@ -105,11 +107,28 @@ void MouseInput(Int32 button, Int32 state, Int32 x, Int32 y)
 	}
 	else
 	{  // normal button event
+
+		if (button == 0) // It's a wheel event
+		{
+			if (state == GLUT_DOWN)
+				EngineCore::IGame::mGame->GetGameController()->VOnLButtonDown(IvPoint(x,y));
+			else
+				EngineCore::IGame::mGame->GetGameController()->VOnLButtonUp(IvPoint(x, y));
+		}
+		else if(button == 2)
+		{
+			if (state == GLUT_DOWN)
+				EngineCore::IGame::mGame->GetGameController()->VOnRButtonDown(IvPoint(x, y));
+			else
+				EngineCore::IGame::mGame->GetGameController()->VOnRButtonUp(IvPoint(x, y));
+		}
+
+		
+
 		DEBUG_OUT("Button %d - %s At %d %d\n", button, (state == GLUT_DOWN) ? "Down" : "Up", x, y);
 	}
 
-	s_lastCursorX = x;
-	s_lastCursorY = y;
+
 }
 
 // reads the user input key - KEY UP
@@ -181,6 +200,7 @@ main(int argv, char** argc)
 	glutKeyboardUpFunc(KeyboardRelease);
 	// mouse click input
 	glutMouseFunc(MouseInput);
+	glutMotionFunc(MouseMotion);
 	// mouse motion input
 	glutPassiveMotionFunc(MouseMotion);
 

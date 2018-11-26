@@ -60,19 +60,49 @@ void Game::UpdateObjects(float dt)
 	}
 	if (mpGameInput->m_bKey['w'])
 	{
-		Graphics::IRenderer::mRenderer->MoveForward(dt*1.0);
+		Graphics::IRenderer::mRenderer->GetCamera().MoveForward(dt*1.0);
 	} 
 	else if (mpGameInput->m_bKey['s'])
 	{
-		Graphics::IRenderer::mRenderer->MoveForward(-dt*1.0);
+		Graphics::IRenderer::mRenderer->GetCamera().MoveForward(-dt*1.0);
 	}
 	if (mpGameInput->m_bKey['d'])
 	{
-		Graphics::IRenderer::mRenderer->MoveRight(dt*1.0);
+		Graphics::IRenderer::mRenderer->GetCamera().MoveRight(dt*1.0);
 	}
 	else if (mpGameInput->m_bKey['a'])
 	{
-		Graphics::IRenderer::mRenderer->MoveRight(-dt*1.0);
+		Graphics::IRenderer::mRenderer->GetCamera().MoveRight(-dt*1.0);
+	}
+
+	if (mpGameInput->m_bKey['e'])
+	{
+		Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(dt*1.0);
+	}
+	else if (mpGameInput->m_bKey['q'])
+	{
+		Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(-dt*1.0);
+	}
+
+	if (mpGameInput->m_isLeftButtonPressed)
+	{		
+		const Float cosValue = cos((mpGameInput->m_movementAngle * (3.14159 / 180.F)));
+		const Float sinValue = sin((mpGameInput->m_movementAngle * (3.14159 / 180.F)));
+		//printf(" Intensity X %d Y %d cos %f sin %f\n", mpGameInput->m_movementIntensityX, mpGameInput->m_movementIntensityY, cosValue, sinValue);
+		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(mpGameInput->m_movementIntensityY) * dt * 10);
+		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(mpGameInput->m_movementIntensityX) * dt * 10);
+	}
+
+	if (mpGameInput->m_isRightButtonPressed)
+	{
+		const Float cosValue = cos((mpGameInput->m_angleFromCenter * (3.14159 / 180.F)));
+		const Float sinValue = sin((mpGameInput->m_angleFromCenter * (3.14159 / 180.F)));
+
+		const Float MovementIntensityOnX = clamp(0, mpGameInput->m_distanceFromCenter - 50);
+		const Float MovementIntensityOnY = clamp(0, mpGameInput->m_distanceFromCenter - 50);
+
+		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(MovementIntensityOnY) * dt * 0.5f);
+		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(MovementIntensityOnX) * dt * 0.5f);
 	}
 }
 
@@ -155,19 +185,28 @@ void Game::Render()
 		// light set-up
 		glEnable(GL_LIGHT0);
 
-		static float LightMoving = -3.F;
+		static float LightMoving = 2.F;
+		static float Angle = 0.0;
 		//LightMoving -= 0.001f;
-
+		Angle += 1.0f;
 		GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
 		GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat light_direction[] = { 0.0, -1.0, 0.0 };
-		GLfloat light_position[] = { 0, 1, LightMoving, 1.0f };
+		GLfloat light_position[] = { sin(Angle * 3.14159 / 180.F) * LightMoving, 1, cos(Angle * 3.14159 / 180.F) * LightMoving - 2.f, 1.0f};
+
+		glColor4f(1, 0, 0, 1);
+		glBegin(GL_QUADS);
+		glVertex3f(light_position[0] - 0.1f, light_position[1], light_position[2] - 0.1f);
+		glVertex3f(light_position[0] - 0.1f, light_position[1], light_position[2] + 0.1f);
+		glVertex3f(light_position[0] + 0.1f, light_position[1], light_position[2] + 0.1f);
+		glVertex3f(light_position[0] + 0.1f, light_position[1], light_position[2] - 0.1f);
+		glEnd();
 
 		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 		glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
+		glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
 		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 		Int32 err = glGetError();
@@ -206,15 +245,16 @@ void Game::Render()
 
 		// draw blocks of 1 meter^2 and apply texture
 		glBegin(GL_QUADS);
-		for (Int32 bx = -10; bx < 10; ++bx)
+		const Int32 sizeOfBlock = 2;
+		for (Int32 bx = -10; bx < 10; bx += sizeOfBlock)
 		{
-			for (Int32 by = 0; by > -20; --by)
+			for (Int32 by = 0; by > -20; by -= sizeOfBlock)
 			{
 
 				glTexCoord2f(0, 0);  glVertex3f(bx, -0.5, by);
-				glTexCoord2f(1, 0);  glVertex3f(bx + 1, -0.5, by);
-				glTexCoord2f(1, 1);  glVertex3f(bx + 1, -0.5, by + 1);
-				glTexCoord2f(0, 1);  glVertex3f(bx, -0.5, by + 1);
+				glTexCoord2f(1, 0);  glVertex3f(bx + sizeOfBlock, -0.5, by);
+				glTexCoord2f(1, 1);  glVertex3f(bx + sizeOfBlock, -0.5, by + sizeOfBlock);
+				glTexCoord2f(0, 1);  glVertex3f(bx, -0.5, by + sizeOfBlock);
 
 			}
 		}

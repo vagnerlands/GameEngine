@@ -28,6 +28,14 @@ private:
 
 	CGameController* mpGameInput;
 
+	inline Float clamp(Float number1, Float number2) const
+	{
+		if (number1 > number2)
+			return number1;
+		else
+			return number2;
+	}
+
 };
 
 

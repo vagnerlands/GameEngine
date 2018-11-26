@@ -44,7 +44,7 @@ void UtilitiesCore::CClockOGL::StartFrame()
 	// debug
 	if (now - lastTime >= 1.0) 
 	{ 
-		printf("%f frames per second\n", double(nbFrames));
+		//printf("%f frames per second\n", double(nbFrames));
 		nbFrames = 0;
 		lastTime += 1.0;
 	}

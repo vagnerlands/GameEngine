@@ -51,7 +51,7 @@ void CCamera::RotateX(Float Angle)
 {
 	m_rotation.SetX(m_rotation.GetX() + Angle);
 
-	printf("ang=%f totalangX = %f - ", Angle, m_rotation.GetX());
+	printf("[ang=%f totalangX = %f] - ", Angle, m_rotation.GetX());
 
 	//Rotate viewdir around the right vector:
 	m_viewDir = (m_viewDir * cos(Angle*PIdiv180) + m_upVector * sin(Angle*PIdiv180));
@@ -59,12 +59,14 @@ void CCamera::RotateX(Float Angle)
 
 	//now compute the new UpVector (by cross product)
 	m_upVector = m_viewDir.Cross(m_rightVector) * -1;
+	// try to keep the head up
+	m_upVector.SetY(1.0f);
 }
 
 void CCamera::RotateY(Float Angle)
 {
 	m_rotation.SetY(m_rotation.GetY() + Angle);
-	printf("ang=%f totalangY = %f\n\n", Angle, m_rotation.GetY());
+	printf("[ang=%f totalangY = %f]\n\n", Angle, m_rotation.GetY());
 
 	//Rotate viewdir around the up vector:
 	m_viewDir = (m_viewDir * cos(Angle * PIdiv180) - m_rightVector * sin(Angle * PIdiv180));

@@ -2,8 +2,8 @@
 #include <math.h>
 
 CGameController::CGameController(Int32 centerOfScreen_X, Int32 centerOfScreen_Y) :
-	mCenterOfScreen_X(centerOfScreen_X),
-	mCenterOfScreen_Y(centerOfScreen_Y)
+	mCenterOfScreen_X(centerOfScreen_X/2),
+	mCenterOfScreen_Y(centerOfScreen_Y/2)
 {
 	for (Int32 i = 0; i < 256; i++)
 	{
@@ -28,7 +28,7 @@ CGameController::VOnMouseMove(const IvPoint &mousePos)
 	if (m_lastPos != mousePos)
 	{
 		// radians factor for convertion
-		static const Float s_RadiansFactor = 180.0F / 3.14159;
+		static const Float s_RadiansFactor = 180.0f/ 3.14159;
 
 		// mouse coordinate difference between one cycle and another
 		float deltaX = 0;
@@ -37,10 +37,14 @@ CGameController::VOnMouseMove(const IvPoint &mousePos)
 		deltaX = m_lastPos.x - mousePos.x;
 		deltaY = m_lastPos.y - mousePos.y;
 
-		float angle = (int)((atan2(deltaY, deltaX) * 180.0F / 3.14F) + 270) % 360;
+		float angle = (int)((atan2(deltaY, deltaX) * s_RadiansFactor) + 90.F) % 360;
 		// intensity of the movement (how many pixels the cursor has moved from one cycle to another)
 		m_movementIntensityX = deltaX;
 		m_movementIntensityY = deltaY;
+
+		//if (m_movementIntensityX > 0) m_movementIntensityX = -m_movementIntensityX;
+		//if (m_movementIntensityY < 0) m_movementIntensityY = -m_movementIntensityY;
+
 		// angle of the cursor movement
 		m_movementAngle = angle;
 		// distance from screen center

@@ -11,7 +11,17 @@ using namespace Types;
 class IMouseHandler
 {
 public:
+	IMouseHandler() :
+		m_movementIntensityX(0),
+	    m_movementIntensityY(0),
+		m_movementAngle(0),
+		m_distanceFromCenter(0),
+		m_angleFromCenter(0),
+		m_isLeftButtonPressed(false),
+		m_isRightButtonPressed(false)
+	{
 
+	}
 	virtual ~IMouseHandler()
 	{
 
