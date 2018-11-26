@@ -47,7 +47,7 @@ void main(void)
     vLightVec.x = dot(lightVec, tangent);
     vLightVec.y = dot(lightVec, binormal);
     vLightVec.z = dot(lightVec, texNormal);
-	
+	// set colored by light
 	gl_FragColor = (texColor * clamp( dot( lightVec, texNormal ) ,0.0, 1.0 )) * vec4(1.0, 1.0, 1.0, 1.0) + 0.1 * texColor ;*/
 
 }
