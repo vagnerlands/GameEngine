@@ -1,0 +1,17 @@
+﻿  UtilitiesCore.vcxproj -> C:\DMAP\game\t\GameEngine\UtilitiesCore\Debug\UtilitiesCore.lib
+  .\Debug\UtilitiesCore.lib
+          1 file(s) copied.
+  .\CClockOGL.h
+  .\CommonTypes.h
+  .\Debugger.h
+  .\IClock.h
+  .\OGLTypes.h
+          5 file(s) copied.
+  .\Shaders\glsl.h
+          1 file(s) copied.
+  .\ZLib\ioapi.h
+  .\ZLib\unzip.h
+  .\ZLib\zconf.h
+  .\ZLib\zip.h
+  .\ZLib\zlib.h
+          5 file(s) copied.

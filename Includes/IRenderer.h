@@ -1,8 +1,8 @@
 #ifndef _IRENDERER_H_
 #define _IRENDERER_H_
-
+// includes
 #include "CommonTypes.h"
-#include "IvMatrix44.h"
+#include "IvMatrix44.h"   
 #include "CCamera.h"
 
 using namespace Types;
@@ -26,13 +26,9 @@ namespace Graphics
 		virtual void SetNearPlane(Float near);
 		virtual void SetFarPlane(Float far);
 		virtual void SetFOV(Float fov);
-		virtual void MoveForward(Float Distance)
+		virtual CCamera& GetCamera()
 		{
-			mCamera.MoveForward(Distance);
-		}
-		virtual void MoveRight(Float Distance)
-		{
-			mCamera.MoveRight(Distance);
+			return mCamera;
 		}
 		
 
