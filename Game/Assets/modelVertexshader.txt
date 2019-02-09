@@ -1,5 +1,3 @@
-
-
 attribute vec4 vPosition; 
 uniform vec3 translate;
 uniform vec3 scale;

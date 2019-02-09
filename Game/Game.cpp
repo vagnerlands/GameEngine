@@ -10,14 +10,14 @@
 #include "GL/glut.h"
 #include "CGameController.h"
 
-bool
+bool 
 EngineCore::IGame::Create()
 {
 	IGame::mGame = new Game();
 	return (IGame::mGame != nullptr);
 }
 
-Game::Game() :
+Game::Game() : 
 	EngineCore::IGame()
 {
 	mpGameInput = new CGameController(640, 480);
@@ -46,7 +46,7 @@ bool Game::PostRendererInitialize()
 	CTextureHolder::s_pInstance->getTextureById("brick_t.bmp");
 	CTextureHolder::s_pInstance->getTextureById("brick_n.bmp");
 
-	IGame::mGame->SetFps(30);
+	IGame::mGame->SetFps(60);
 
 	return true;
 }
@@ -61,7 +61,7 @@ void Game::UpdateObjects(float dt)
 	if (mpGameInput->m_bKey['w'])
 	{
 		Graphics::IRenderer::mRenderer->GetCamera().MoveForward(dt*1.0);
-	}
+	} 
 	else if (mpGameInput->m_bKey['s'])
 	{
 		Graphics::IRenderer::mRenderer->GetCamera().MoveForward(-dt*1.0);
@@ -85,7 +85,7 @@ void Game::UpdateObjects(float dt)
 	}
 
 	if (mpGameInput->m_isLeftButtonPressed)
-	{
+	{		
 		const Float cosValue = cos((mpGameInput->m_movementAngle * (3.14159 / 180.F)));
 		const Float sinValue = sin((mpGameInput->m_movementAngle * (3.14159 / 180.F)));
 		//printf(" Intensity X %d Y %d cos %f sin %f\n", mpGameInput->m_movementIntensityX, mpGameInput->m_movementIntensityY, cosValue, sinValue);
@@ -116,7 +116,7 @@ void Game::Render()
 	// adjust camera projection and view according to the current 
 	// frustum parameters (3d - perspective mode)
 	Graphics::IRenderer::mRenderer->PrepareCamera3D();
-
+	
 	GLuint textureId = -1;
 
 	glPushMatrix();
@@ -164,7 +164,7 @@ void Game::Render()
 		CModelHolder::s_pInstance->DrawModelById("Hughes500.obj");
 
 		glDisable(GL_TEXTURE_2D);
-
+		
 		// deactivate this shader to not affect next rendering
 		CShaderHolder::s_pInstance->StopShader();
 
@@ -173,9 +173,9 @@ void Game::Render()
 		{
 			printf("glError Drawing Model =%d\n", err);
 		}
-
+		
 	}
-
+	
 	glPopMatrix();
 
 	glPushMatrix();
@@ -193,7 +193,7 @@ void Game::Render()
 		GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat light_direction[] = { 0.0, -1.0, 0.0 };
-		GLfloat light_position[] = { sin(Angle * 3.14159 / 180.F) * LightMoving, 1, cos(Angle * 3.14159 / 180.F) * LightMoving - 2.f, 1.0f };
+		GLfloat light_position[] = { sin(Angle * 3.14159 / 180.F) * LightMoving, 1, cos(Angle * 3.14159 / 180.F) * LightMoving - 2.f, 1.0f};
 
 		glColor4f(1, 0, 0, 1);
 		glBegin(GL_QUADS);
@@ -220,14 +220,14 @@ void Game::Render()
 		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform4f("rotation", 5.F /*+ foolme*/, 1, 0, 0);
 
 		glEnable(GL_TEXTURE_2D);
-		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setTexture("textureColor",
+		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setTexture("textureColor", 
 			CTextureHolder::s_pInstance->getTextureById("brick_t.bmp"));
 		/*if (textureId != -1)
 		{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureId);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform1i("textureColor", 0);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, textureId);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+			CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform1i("textureColor", 0);
 		}*/
 		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setTexture("textureNormal",
 			CTextureHolder::s_pInstance->getTextureById("brick_n.bmp"));
@@ -235,9 +235,9 @@ void Game::Render()
 
 		/*if (textureId != -1)
 		{
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, textureId);
-		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform1i("textureNormal", 1);
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, textureId);
+			CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform1i("textureNormal", 1);
 		}*/
 
 		GLfloat mat_shininess[] = { 1.0, 0.5, 0.31 };
@@ -274,7 +274,7 @@ void Game::Render()
 	// [ TEXTURED SQUARE ]
 	glPushMatrix();
 	glEnable(GL_TEXTURE_2D);
-
+	
 	CTextureHolder::s_pInstance->Bind("brick_t.bmp");
 
 	glEnable(GL_BLEND);
@@ -302,7 +302,7 @@ void Game::Render()
 	glEnd();
 	glPopMatrix();
 	// [TEXTURED GROUND]
-
+	
 
 	glutSwapBuffers();
 }

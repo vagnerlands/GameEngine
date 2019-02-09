@@ -16,10 +16,11 @@ void EngineCore::IGame::Destroy()
 bool EngineCore::IGame::PreRendererInitialize(int argc, char * argv[])
 {
 	if (!ParseCommandLine(argc, argv))
-		return false;
+	{ }
+		
 
 	if (!SetupSubsystems(Types::EGraphicsAPI::EGraphics_OGL))
-		return false;
+	{ }
 
 	return true;
 }

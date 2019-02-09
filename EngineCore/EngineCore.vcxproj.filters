@@ -40,9 +40,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MainOGLEntry.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="IGame.cpp">
       <Filter>Src</Filter>
     </ClCompile>
@@ -105,6 +102,15 @@
     </ClCompile>
     <ClCompile Include="Input\CGameController.cpp">
       <Filter>Src\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWinOgl.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="MainOgl.cpp">
+      <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +197,12 @@
     </ClInclude>
     <ClInclude Include="Input\IEventInput.h">
       <Filter>Src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWinOgl.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="MainOgl.h">
+      <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

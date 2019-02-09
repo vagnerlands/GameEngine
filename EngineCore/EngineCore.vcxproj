@@ -164,7 +164,9 @@ copy .\Input\*.h ..\Includes
     <ClCompile Include="Loaders\Model3D\objParser\objLoader.cpp" />
     <ClCompile Include="Loaders\Model3D\objParser\obj_parser.cpp" />
     <ClCompile Include="Loaders\Model3D\objParser\string_extra.cpp" />
-    <ClCompile Include="MainOGLEntry.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainOgl.cpp" />
+    <ClCompile Include="MainWinOgl.cpp" />
     <ClCompile Include="OS\Windows\CWinMutex.cpp" />
     <ClCompile Include="OS\Windows\CWinSocket.cpp" />
     <ClCompile Include="OS\Windows\CWinThread.cpp" />
@@ -192,6 +194,8 @@ copy .\Input\*.h ..\Includes
     <ClInclude Include="Loaders\Model3D\objParser\objLoader.h" />
     <ClInclude Include="Loaders\Model3D\objParser\obj_parser.h" />
     <ClInclude Include="Loaders\Model3D\objParser\string_extra.h" />
+    <ClInclude Include="MainOgl.h" />
+    <ClInclude Include="MainWinOgl.h" />
     <ClInclude Include="OS\Abstract\IMutex.h" />
     <ClInclude Include="OS\Abstract\ISocket.h" />
     <ClInclude Include="OS\Abstract\IThread.h" />

@@ -18,15 +18,13 @@ void main(void)
     vec3 ct,cf;
     vec4 texel;
     float intensity,at,af;
-	vec4 vectorFromVectorToLightSource = vec4(gl_LightSource[0].position.xyz - gl_LightSource[0].spotDirection.xyz, 0.0);
+	vec4 vectorFromVectorToLightSource = vec4(gl_LightSource[0].spotDirection.xyz - gl_LightSource[0].position.xyz, 0.0);
     intensity = max(0.1, dot(texNormal, normalize(vectorFromVectorToLightSource)));
  
     cf = intensity * (gl_FrontMaterial.diffuse).rgb +
                   gl_FrontMaterial.ambient.rgb;
     af = gl_FrontMaterial.diffuse.a;
-    texel = texColor;
-	//texel = vec4(1, 0, 0, 1);
- 
+    texel = texColor; 
     ct = texel.rgb;
     at = texel.a;
     gl_FragColor = vec4(ct * cf, at * af);
@@ -47,7 +45,7 @@ void main(void)
     vLightVec.x = dot(lightVec, tangent);
     vLightVec.y = dot(lightVec, binormal);
     vLightVec.z = dot(lightVec, texNormal);
-	// set colored by light
+	
 	gl_FragColor = (texColor * clamp( dot( lightVec, texNormal ) ,0.0, 1.0 )) * vec4(1.0, 1.0, 1.0, 1.0) + 0.1 * texColor ;*/
 
 }

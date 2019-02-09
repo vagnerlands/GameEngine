@@ -15,6 +15,12 @@ namespace UtilitiesCore
 namespace EngineCore
 {
 
+	class IMain
+	{
+	public:
+		virtual void StartUp(int argv, char** argc) = 0;
+	};
+
 	class IGame
 	{
 	public:
