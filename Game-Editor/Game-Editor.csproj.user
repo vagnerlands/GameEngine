@@ -3,6 +3,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartArguments>WINOGL</StartArguments>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <StartWorkingDirectory>C:\DMAP\game\GameEngine-master\Game-Editor\</StartWorkingDirectory>
+    <StartWorkingDirectory>./</StartWorkingDirectory>
   </PropertyGroup>
 </Project>

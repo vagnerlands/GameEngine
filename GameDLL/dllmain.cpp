@@ -7,10 +7,16 @@
 #include <iostream>
 
 #include "Game.h"
+#include "CGameController.h"
 #include "MainWinOgl.h"
 
 static int s_WIDTH = 640;
 static int s_HEIGHT = 480;
+static int s_MOUSE_X = 320;
+static int s_MOUSE_Y = 240;
+static int s_lastState = 1;
+static int s_lastCursorX = -1;
+static int s_lastCursorY = -1;
 
 static float s_R = 1.f, s_G = 0.f, s_B = 0.f;
 
@@ -26,44 +32,125 @@ bool    fullscreen = TRUE;                            // Fullscreen Flag Set To 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);               // Declaration For WndProc
 int StartUp();
 
-extern __declspec(dllexport)  void __stdcall SetWndParams(int width, int height)
+extern __declspec(dllexport)  void 
+__stdcall SetWndParams(int width, int height)
 {
 	s_WIDTH = width;
 	s_HEIGHT = height;
 }
 
 
-extern __declspec(dllexport)  void __stdcall SetWndHnd(HWND renderWindow)
+extern __declspec(dllexport)  void 
+__stdcall SetWndHnd(HWND renderWindow)
 {
 	hWnd = renderWindow;
 	StartUp();
 }
 
-extern __declspec(dllexport)  void __stdcall SetRenderColor(float r, float g, float b)
+extern __declspec(dllexport)  void 
+__stdcall SetRenderColor(float r, float g, float b)
 {
 	s_R = r;
 	s_B = b;
 	s_G = g;
 }
 
+// TODO: Create the following interfaces
+// 1. Mouse motion (sending relative coordinate according to canvas size);
+// 2. Pressed key
+// 3. Released key
+// 4. Resize viewport
 
-GLvoid ReSizeGLScene(GLsizei width, GLsizei height)             // Resize And Initialize The GL Window
+extern __declspec(dllexport)  void
+__stdcall SetMousePosition(int x, int y)
 {
-	if (height == 0)                              // Prevent A Divide By Zero By
+	if ((s_lastCursorX != -1) && (s_lastCursorY != -1))
 	{
-		height = 1;                           // Making Height Equal One
+		Game::mGame->GetGameController()->VOnMouseMove(IvPoint(x, y));
 	}
+
+	if (s_lastCursorX == -1)
+	{
+		s_lastCursorX = x;
+	}
+
+	if (s_lastCursorY == -1)
+	{
+		s_lastCursorY = y;
+	}
+}
+
+extern __declspec(dllexport)  void
+__stdcall SetKeyPressed(int keyId)
+{
+	keys[keyId] = true;
+	Game::mGame->GetGameController()->VOnKeyDown(keyId);
+}
+
+extern __declspec(dllexport)  void
+__stdcall SetKeyReleased(int keyId)
+{
+	keys[keyId] = false;
+	Game::mGame->GetGameController()->VOnKeyUp(keyId);
+}
+
+extern __declspec(dllexport)  void
+__stdcall UpdateViewport(int width, int height)
+{
 	s_WIDTH = width;
 	s_HEIGHT = height;
-	glViewport(0, 0, width, height);                    // Reset The Current Viewport
-	glMatrixMode(GL_PROJECTION);                        // Select The Projection Matrix
 
-	glLoadIdentity();                           // Reset The Projection Matrix
-												// Calculate The Aspect Ratio Of The Window
-												//gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
-	glOrtho(-width / 2, width / 2, -height / 2, height / 2, -1, 1);
-	glMatrixMode(GL_MODELVIEW);                     // Select The Modelview Matrix
-	glLoadIdentity();                           // Reset The Modelview Matrix
+	Game::mGame->Reshape(width, height);
+}
+
+extern __declspec(dllexport)  void
+__stdcall SetMouseAction(int x, int y, int button, int state)
+{
+	if (s_lastCursorX == -1)
+	{
+		s_lastCursorX = x;
+	}
+
+	if (s_lastCursorY == -1)
+	{
+		s_lastCursorY = y;
+	}
+
+	s_lastCursorX = x;
+	s_lastCursorY = y;
+
+	// Wheel reports as button 3(scroll up) and button 4(scroll down)
+	if ((button == 3) || (button == 4)) // It's a wheel event
+	{
+		// Each wheel event reports like a button click, GLUT_DOWN then GLUT_UP
+		DEBUG_OUT("Scroll %s At %d %d\n", (button == 3) ? "Up" : "Down", x, y);
+		if (button == 3)
+		{
+			//CGameCockpit::instance()->m_camera.MoveForward(1.0f);
+		}
+		else
+		{
+			//CGameCockpit::instance()->m_camera.MoveForward(-1.0f);
+		}
+	}
+	else
+	{  // normal button event
+
+		if (button == 0) // It's a wheel event
+		{
+			if (state == GLUT_DOWN)
+				Game::mGame->GetGameController()->VOnLButtonDown(IvPoint(x, y));
+			else
+				Game::mGame->GetGameController()->VOnLButtonUp(IvPoint(x, y));
+		}
+		else if (button == 2)
+		{
+			if (state == GLUT_DOWN)
+				Game::mGame->GetGameController()->VOnRButtonDown(IvPoint(x, y));
+			else
+				Game::mGame->GetGameController()->VOnRButtonUp(IvPoint(x, y));
+		}
+	}
 
 }
 
@@ -301,7 +388,7 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 	ShowWindow(hWnd, SW_SHOW);                       // Show The Window
 	SetForegroundWindow(hWnd);                      // Slightly Higher Priority
 	SetFocus(hWnd);                             // Sets Keyboard Focus To The Window
-	ReSizeGLScene(width, height);                       // Set Up Our Perspective GL Screen
+	//ReSizeGLScene(width, height);                       // Set Up Our Perspective GL Screen
 
 	if (!InitGL())                              // Initialize Our Newly Created GL Window
 	{
@@ -404,7 +491,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,                   // Handle For This Wind
 
 	{
 
-		ReSizeGLScene(LOWORD(lParam), HIWORD(lParam));       // LoWord=Width, HiWord=Height
+		//ReSizeGLScene(LOWORD(lParam), HIWORD(lParam));       // LoWord=Width, HiWord=Height
 
 		return 0;                       // Jump Back
 
@@ -438,7 +525,7 @@ int StartUp()
 	// check for validity
 	if (obj == nullptr)
 	{
-		std::cout << "No memory available to start the Editor" << std::endl;
+		MessageBox(NULL, "No Memory available to start the Editor", "Closing Editor", MB_OK | MB_ICONINFORMATION);
 		exit(1);
 	}
 	// start-up all engine mechanisms
@@ -473,7 +560,7 @@ int StartUp()
 			// Draw The Scene.  Watch For ESC Key And Quit Messages From DrawGLScene()
 			// Program Active?
 			if (active)                     
-			{				
+			{	
 				// Was ESC Pressed?
 				if (keys[VK_ESCAPE])                
 				{

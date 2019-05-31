@@ -52,10 +52,10 @@ CGameController::VOnMouseMove(const IvPoint &mousePos)
 		// angle from center of the screen
 		m_angleFromCenter = (Int32)((atan2(mousePos.y - mCenterOfScreen_Y, mousePos.x - mCenterOfScreen_X) * s_RadiansFactor) + 450.0F) % 360;
 
-		printf("angle=%d, distCenter = %d, angleCenter = %d\n",
+		/*printf("angle=%d, distCenter = %d, angleCenter = %d\n",
 			m_movementAngle,
 			m_distanceFromCenter,
-			m_angleFromCenter);
+			m_angleFromCenter);*/
 
 		m_lastPos = mousePos;
 	}

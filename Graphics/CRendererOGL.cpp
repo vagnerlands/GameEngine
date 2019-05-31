@@ -78,7 +78,7 @@ void Graphics::CRendererOGL::PrepareCamera3D()
 	matrix(2, 3) = xlate.GetZ();
 	SetViewMatrix(matrix);
 
-	//IvVector3 viewPoint = mCamera.m_position + mCamera.m_viewDir;
+	//IvVector3 viewPoint = mCamera.m_position - mCamera.m_viewDir;
 	//gluLookAt(mCamera.m_position.GetX(), mCamera.m_position.GetY(), mCamera.m_position.GetZ(), viewPoint.GetX(), viewPoint.GetY(), viewPoint.GetZ(), mCamera.m_upVector.GetX(), mCamera.m_upVector.GetY(), mCamera.m_upVector.GetZ());
 
 }

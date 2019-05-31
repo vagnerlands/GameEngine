@@ -1,8 +1,8 @@
 #ifndef _IRENDERER_H_
 #define _IRENDERER_H_
-// includes
+
 #include "CommonTypes.h"
-#include "IvMatrix44.h"   
+#include "IvMatrix44.h"
 #include "CCamera.h"
 
 using namespace Types;

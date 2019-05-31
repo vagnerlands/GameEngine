@@ -58,28 +58,28 @@ void Game::UpdateObjects(float dt)
 		mGame->Quit();
 		return;
 	}
-	if (mpGameInput->m_bKey['w'])
+	if (mpGameInput->m_bKey['W'])
 	{
 		Graphics::IRenderer::mRenderer->GetCamera().MoveForward(dt*1.0);
 	} 
-	else if (mpGameInput->m_bKey['s'])
+	else if (mpGameInput->m_bKey['S'])
 	{
 		Graphics::IRenderer::mRenderer->GetCamera().MoveForward(-dt*1.0);
 	}
-	if (mpGameInput->m_bKey['d'])
+	if (mpGameInput->m_bKey['D'])
 	{
 		Graphics::IRenderer::mRenderer->GetCamera().MoveRight(dt*1.0);
 	}
-	else if (mpGameInput->m_bKey['a'])
+	else if (mpGameInput->m_bKey['A'])
 	{
 		Graphics::IRenderer::mRenderer->GetCamera().MoveRight(-dt*1.0);
 	}
 
-	if (mpGameInput->m_bKey['e'])
+	if (mpGameInput->m_bKey['E'])
 	{
 		Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(dt*1.0);
 	}
-	else if (mpGameInput->m_bKey['q'])
+	else if (mpGameInput->m_bKey['Q'])
 	{
 		Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(-dt*1.0);
 	}
