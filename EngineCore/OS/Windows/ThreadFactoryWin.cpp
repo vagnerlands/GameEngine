@@ -1,41 +1,26 @@
-#include "SocketFactoryWin.h"
-#include <Windows.h>
-#undef UNICODE
-#define WIN32_LEAN_AND_MEAN
+#include "ThreadFactoryWin.h"
+#include "CWinThread.h"
 
-#include "CWinSocket.h"
-
-SocketFactoryWin::~SocketFactoryWin()
+ThreadFactoryWin::~ThreadFactoryWin()
 {
 }
 
-SocketFactoryWin::SocketFactoryWin()
+ThreadFactoryWin::ThreadFactoryWin()
 {
 }
 
-void SocketFactoryWin::Initialize()
+void ThreadFactoryWin::Initialize()
 {
-    // for windows this is required to do when working with sockets
-    WSADATA wsData;
-    // uses socket version 2.2 (Big endian)
-    UInt16 version = MAKEWORD(2, 2);
-    // starts up
-    (void)WSAStartup(version, &wsData);
-
-    cout << "[Socket]" << endl;
-    cout << "  [info] Description: " << wsData.szDescription << endl;
-    cout << "  [info] System Status: " << wsData.szSystemStatus << endl;
-    cout << "  [info] Version: " << wsData.wVersion << endl;
-
-    static SocketFactoryWin instance;
-    SocketFactoryWin::s_pInstance = &instance;
+    static ThreadFactoryWin instance;
+    ThreadFactory::s_pInstance = &instance;
 }
 
-ISocket* SocketFactoryWin::Create(const Byte * mutexName)
+IThread* ThreadFactoryWin::Create(const Byte * name, void* EntryPoint)
 {
-    CWinSocket* hnd = new CWinSocket();
+    CWinThread* hnd = new CWinThread();
     if (hnd != 0)
     {
+        hnd->createThread(name, EntryPoint);
         //hnd->createMutex(mutexName);
     }
 

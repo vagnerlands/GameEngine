@@ -39,12 +39,11 @@ Make sure to check extension "GL_EXT_geometry_shader4" before using Geometry sha
 //#include "glslSettings.h"
 #include <vector>
 #include <iostream>
-//#define GLEW_STATIC 
+#include "CommonTypes.h"
+using namespace Types;
 
 #include <GL/glew.h>
-
 #include "ITexture.h"
-
 #define GLSLAPI    // static build
 
 namespace cwc

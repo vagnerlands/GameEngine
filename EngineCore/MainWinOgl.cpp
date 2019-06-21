@@ -2,14 +2,15 @@
 //
 
 #include "MainWinOgl.h"
+
+#include "gl/glew.h"
+#include "gl/glut.h"
+
 #include "CGameController.h"
 
 #include "CRendererOGL.h"
 #include "CThreadHolder.h"
 #include "IvPoint.h"
-
-#include "gl/glew.h"
-#include "gl/glut.h"
 
 
 #ifdef WIN32

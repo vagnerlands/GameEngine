@@ -32,6 +32,9 @@
     <ClInclude Include="CCamera.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="I2dImage.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRendererOGL.cpp">
@@ -53,6 +56,9 @@
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="CCamera.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="I2dImage.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>

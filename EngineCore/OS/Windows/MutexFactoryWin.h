@@ -3,7 +3,7 @@
 
 #include "CommonTypes.h"
 #include "MutexFactory.h"
-#include "CWinMutex.h"
+
 class IMutex;
 using namespace Types;
 

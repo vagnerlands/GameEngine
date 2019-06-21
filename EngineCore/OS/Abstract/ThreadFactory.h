@@ -20,7 +20,7 @@ public:
     {
 
     }
-    virtual IThread* Create(const Byte* mutexName) = 0;
+    virtual IThread* Create(const Byte* name, void* EntryPoint) = 0;
     static ThreadFactory& Instance()
     {
         // let it crash if the pointer isn't initialized

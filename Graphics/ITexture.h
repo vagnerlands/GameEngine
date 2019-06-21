@@ -2,7 +2,8 @@
 #define _ITEXTURE_H_
 
 #include "CommonTypes.h"
-#include "I2dImage.h"
+
+class I2dImage;
 
 using namespace Types;
 

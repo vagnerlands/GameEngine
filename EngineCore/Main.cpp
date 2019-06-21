@@ -2,10 +2,11 @@
 //
 
 #include "MainOgl.h"
-#include "MainWinOgl.h"
 
 #include "gl/glew.h"
 #include "gl/glut.h"
+
+#include "MainWinOgl.h"
 
 int 
 main(int argv, char** argc)

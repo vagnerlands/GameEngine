@@ -1,5 +1,5 @@
-#ifndef _SOCKETFACTORYWIN_H_
-#define _SOCKETFACTORYWIN_H_
+#ifndef _THREADFACTORYWIN_H_
+#define _THREADFACTORYWIN_H_
 
 #include "CommonTypes.h"
 #include "ThreadFactory.h"
@@ -15,8 +15,8 @@ public:
 
     static void Initialize();
 
-    virtual IThread* Create(const Byte* name) override;
+    virtual IThread* Create(const Byte* name, void* EntryPoint) override;
 };
 
 
-#endif //_SOCKETFACTORYWIN_H_
+#endif //_THREADFACTORYWIN_H_
