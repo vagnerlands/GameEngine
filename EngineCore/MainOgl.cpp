@@ -4,7 +4,6 @@
 #include "Debugger.h"
 #include "gl/glew.h"
 #include "gl/glut.h"
-#include "I2dImage.h"
 #include "CRendererOGL.h"
 #include "CThreadHolder.h"
 #include "IvPoint.h"

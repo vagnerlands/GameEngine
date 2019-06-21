@@ -43,7 +43,10 @@ Make sure to check extension "GL_EXT_geometry_shader4" before using Geometry sha
 using namespace Types;
 
 #include <GL/glew.h>
-#include "ITexture.h"
+namespace Graphics
+{
+    class ITexture;
+}
 #define GLSLAPI    // static build
 
 namespace cwc
