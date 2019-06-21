@@ -43,7 +43,7 @@ CSocketHolder::addSocket(string user, ISocket* userSocket)
 		cout << "Duplicated connection from Key:[" << checkIterator->first << "] - first connection will be closed!" << endl;
 		string quitMsg;
 		quitMsg = "\n\r\n\rDuplicated connection detected, your connection is being halted!";
-		checkIterator->second->write(quitMsg.c_str(), quitMsg.size());
+		checkIterator->second->Write(quitMsg.c_str(), quitMsg.size());
 		ISocket* condemed = checkIterator->second;
 		delete condemed;
 		condemed = NULL;
@@ -59,7 +59,7 @@ bool
 CSocketHolder::dropSocket(string user)
 {
 	// creates a pair for user/userSocket
-	m_sockedDB[user]->closeSocket();
+	m_sockedDB[user]->CloseSocket();
 	bool retVal = m_sockedDB.erase(user);
 
 	return retVal;
@@ -71,7 +71,7 @@ CSocketHolder::readIncomingMsgs()
 	for (const auto& socketItem : m_sockedDB) {
 		char tempBuf[1025];
 		int bufSize;
-		int iRes = socketItem.second->read(tempBuf, &bufSize);
+		int iRes = socketItem.second->Read(tempBuf, &bufSize);
 
 		// error code - lost connection;
 		if (iRes == 100)
@@ -147,7 +147,7 @@ CSocketHolder::onConnectionEvent()
 	welcomeMsg += "Developed by Vagner Landskron - ";
 	welcomeMsg += "vagnerlands@gmail.com \r\n";
 
-	inSocket->write(welcomeMsg.c_str(), welcomeMsg.size());
+	inSocket->Write(welcomeMsg.c_str(), welcomeMsg.size());
 
 	// invalid socket
 	if (strcmp(inSocket->getClientIP(), "205.205.205.205") != 0) 

@@ -10,7 +10,6 @@
 
 #include <iostream>
 #include <string>
-#include <queue>
 #include "CommonTypes.h"
 #include "ISocket.h"
 
@@ -20,77 +19,83 @@
 
 using namespace Types;
 
-class CWinSocket : public ISocket {
+class CWinSocket : public ISocket 
+{
 public:
 
+    // Socket constructor
 	CWinSocket();
+    // Socket destructor
 	~CWinSocket();
-	// Returns the status of a socket connection
-	// 0 succeeded;
-	// any other value is fail
-	ESocketConnectionStatus startListenSocket();
+	// create a socket based on given attributes
+    ESocketCreationStatus Create(const SSocketAttributes& socketAttributes);
+
+    Int32 Bind();
+    Int32 Bind(UInt16 port, const Byte* pIp);
+
+    Int32 Write(const Byte* pIp, UInt32 port, const Byte* buffer, Int32 const size);
 	
 	// return value 0 is okay
 	// return value isn't 0 - connection problem, delete this socket
 	//  to avoid memory leak
 	// content of buffer till it's size will be copied
-	Int32 write(const Byte* buffer, Int32 const size);
+	Int32 Write(const Byte* buffer, Int32 const size);
 
 	// return value 0 is okay
 	// return value isn't 0 - connection problem, delete this socket
 	//  to avoid memory leak
 	// the buffer will be copied to Byte* pointer
-	Int32 read(Byte* buffer, Int32* size);
+    ESocketReadStatus Read(Byte* buffer, Int32* size);
 
-	void closeSocket();
+	void CloseSocket();
 
 	void invalidateSocket();
 
 	UInt16 getClientPort();
-	Byte* getClientIP();
+	const Byte* getClientIP();
+
+    // Returns the status of a socket connection
+    // 0 succeeded;
+    // any other value is fail
+    ESocketConnectionStatus startListenSocket();
 
 private:
-	// maximum buffer size for read messages
-	static const UInt32 s_MAX_BUFFER_SIZE = 1024;
+    Int32 translateAddress(UInt16 port, const Byte* pIp, sockaddr_in& sockaddress) const;
+	// maximum buffer size for Read messages
+	static const UInt32 s_MAX_BUFFER_SIZE = 128U;
+    static const SOCKET InvalidSocket = -1;
 	// client socket 
-	SOCKET m_clientSocket;
-	// intentionally static
-	// one listener shall be allocated per Port
-	static SOCKET m_listenSocket;
-	// details about this client socket 
-	sockaddr_in m_clientInfo;
+	SOCKET m_socket;
+    // holds the parameters used to create this socket
+    SSocketAttributes m_socketAttributes;
 
-	// input buffer for commands
-	char m_readBuffer[s_MAX_BUFFER_SIZE];
-	// read buffer last index
-	Int32 m_rbli;
-
+    struct sockaddr_in m_resolvedAddress;
 };
 
 inline void
 CWinSocket::invalidateSocket()
 {
-	m_clientSocket = INVALID_SOCKET;
+	m_socket = INVALID_SOCKET;
 	WSACleanup();
 }
 
 inline void
-CWinSocket::closeSocket()
+CWinSocket::CloseSocket()
 {
-	closesocket(m_clientSocket);
-	m_clientSocket = INVALID_SOCKET;
+	closesocket(m_socket);
+	m_socket = INVALID_SOCKET;
 }
 
 inline UInt16
 CWinSocket::getClientPort()
 {
-	return ntohs(m_clientInfo.sin_port);
+	return m_socketAttributes.m_port;
 }
 
-inline Byte*
+inline const Byte*
 CWinSocket::getClientIP()
 {
-	return inet_ntoa(m_clientInfo.sin_addr);
+	return m_socketAttributes.m_ip.c_str();
 }
 
 

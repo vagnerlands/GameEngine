@@ -79,8 +79,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../Includes;../Includes/lpng1626;./OS;./OS/Abstract;./OS/Windows;./Cache;./Cache/ResourceCache;./Loaders/Model3D/objParser;./Loaders;./Loaders/Model3D;./Loaders/Images;./Holders;./Input</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>./OS;./OS/Abstract;./OS/Windows;./Cache;./Cache/ResourceCache;./Loaders/Model3D/objParser;./Loaders;./Loaders/Model3D;./Loaders/Images;./Holders;./Input;../Includes;../Includes/lpng1626</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -170,6 +170,9 @@ copy .\Input\*.h ..\Includes
     <ClCompile Include="OS\Windows\CWinMutex.cpp" />
     <ClCompile Include="OS\Windows\CWinSocket.cpp" />
     <ClCompile Include="OS\Windows\CWinThread.cpp" />
+    <ClCompile Include="OS\Windows\MutexFactoryWin.cpp" />
+    <ClCompile Include="OS\Windows\SocketFactoryWin.cpp" />
+    <ClCompile Include="OS\Windows\ThreadFactoryWin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cache\ResourceCache\CResHandle.h" />
@@ -199,9 +202,15 @@ copy .\Input\*.h ..\Includes
     <ClInclude Include="OS\Abstract\IMutex.h" />
     <ClInclude Include="OS\Abstract\ISocket.h" />
     <ClInclude Include="OS\Abstract\IThread.h" />
+    <ClInclude Include="OS\Abstract\MutexFactory.h" />
+    <ClInclude Include="OS\Abstract\SocketFactory.h" />
+    <ClInclude Include="OS\Abstract\ThreadFactory.h" />
     <ClInclude Include="OS\Windows\CWinMutex.h" />
     <ClInclude Include="OS\Windows\CWinSocket.h" />
     <ClInclude Include="OS\Windows\CWinThread.h" />
+    <ClInclude Include="OS\Windows\MutexFactoryWin.h" />
+    <ClInclude Include="OS\Windows\SocketFactoryWin.h" />
+    <ClInclude Include="OS\Windows\ThreadFactoryWin.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

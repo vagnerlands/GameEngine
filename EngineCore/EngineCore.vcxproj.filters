@@ -112,6 +112,15 @@
     <ClCompile Include="MainOgl.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="OS\Windows\MutexFactoryWin.cpp">
+      <Filter>Src\OS\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="OS\Windows\SocketFactoryWin.cpp">
+      <Filter>Src\OS\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="OS\Windows\ThreadFactoryWin.cpp">
+      <Filter>Src\OS\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IGame.h">
@@ -203,6 +212,24 @@
     </ClInclude>
     <ClInclude Include="MainOgl.h">
       <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Abstract\MutexFactory.h">
+      <Filter>Src\OS\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Windows\MutexFactoryWin.h">
+      <Filter>Src\OS\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Abstract\SocketFactory.h">
+      <Filter>Src\OS\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Abstract\ThreadFactory.h">
+      <Filter>Src\OS\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Windows\SocketFactoryWin.h">
+      <Filter>Src\OS\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Windows\ThreadFactoryWin.h">
+      <Filter>Src\OS\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

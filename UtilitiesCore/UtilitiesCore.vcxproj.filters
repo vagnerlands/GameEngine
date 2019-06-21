@@ -25,6 +25,9 @@
     <ClCompile Include="CClockOGL.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="SocketUtils.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debugger.h">
@@ -58,6 +61,9 @@
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="CClockOGL.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketUtils.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>

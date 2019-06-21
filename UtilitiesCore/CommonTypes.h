@@ -22,6 +22,8 @@ namespace Types
 	typedef unsigned char UByte;
 	typedef double Double;
 	typedef float Float;
+    typedef unsigned long ULong;
+    typedef long Long;
 
 	static const Float s_PI = 3.14159265359F;
 	static const Byte* s_GAME_CONNECTION_PORT = "1234";
@@ -138,12 +140,88 @@ namespace Types
 
 	typedef unordered_map<string, SFontAttributes> FontMap;
 
-	enum ESocketConnectionStatus
-	{
-		ESOCKETCONNECTION_OK = 0,
-		ESOCKETCONNECTION_FAIL,
-		ESOCKETCONNECTION_TOTAL,
-	};
+    enum EApplicationMode
+    {
+        EAppMode_SENDER = 0,
+        EAppMode_LISTENER,
+        EAppMode_BOTH,
+        EAppMode_INVALID
+    };
+
+    enum ESocketCreationStatus
+    {
+        ESOCKETCREATION_OK = 0,
+        ESOCKETCREATION_FAIL,
+        ESOCKETCREATION_TOTAL,
+    };
+
+    enum ESocketConnectionStatus
+    {
+        ESOCKETCONNECTION_OK = 0,
+        ESOCKETCONNECTION_FAIL,
+        ESOCKETCONNECTION_TOTAL,
+    };
+
+
+    enum ESocketReadStatus
+    {
+        ESOCKETREAD_OK = 0,
+        ESOCKETREAD_FAIL,
+        ESOCKETREAD_CONNECTION_LOST,
+        ESOCKETREAD_TOTAL,
+    };
+
+    enum ESocketProtocol
+    {
+        SocketProtocol_UDP,
+        SocketProtocol_TCP,
+        SocketProtocol_Total
+    };
+
+    enum ESocketType
+    {
+        SocketType_STREAM,
+        SocketType_DGRAM,
+        SocketType_Total
+    };
+
+    struct SMulticastAttributes
+    {
+        //!< Loopback.
+        UInt32 m_loopback;
+        //!< TTL.
+        UInt32 m_ttl;
+        //!< Reuse.
+        UInt32 m_reuse;
+    };
+
+    struct SSocketAttributes
+    {
+        // blocking type
+        ULong m_isNonBlocking;
+        // Is socket broadcasting (x.x.x.255)
+        UInt32 m_isBroadcast;
+        // timeout - in case of blocking
+        UInt32 m_timeout;
+        // Socket Type
+        ESocketType m_type;
+        // protocol
+        ESocketProtocol m_protocol;
+        // receive buffer size
+        UInt32 m_receiveBufferSize;
+        // send buffer size
+        UInt32 m_sendingBufferSize;
+        //!< IPv4 address - address from/to "where" this is being send
+        string m_ip;
+        //!< Network address.
+        string m_netmask;
+        //!< Interface IPv4 address - network adapter ip for routing purposes
+        string m_interface;
+        //!< Port (least significant byte first - host)
+        UInt32 m_port;
+        // multicast parameters
+        SMulticastAttributes m_mc;
+    };
 
 	struct SRgba
 	{

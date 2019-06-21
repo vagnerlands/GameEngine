@@ -1,4 +1,5 @@
 #include "CWinMutex.h"
+#include <iostream>
 
 CWinMutex::CWinMutex()
 {
@@ -8,14 +9,14 @@ CWinMutex::~CWinMutex()
 {
 }
 
-void CWinMutex::createMutex(string mutexName)
+void CWinMutex::createMutex(const Byte* mutexName)
 {
 	m_mutexName = mutexName;
 
 	m_mutexHandle = CreateMutex(
 		NULL,              // default security attributes
 		FALSE,             // initially not owned
-		(LPCWSTR)mutexName.data());             // unnamed mutex
+		(LPCWSTR)mutexName);             // unnamed mutex
 
 	if (m_mutexHandle == NULL)
 	{
