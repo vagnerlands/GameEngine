@@ -2,13 +2,12 @@
 //
 
 #include "Debugger.h"
+#include "gl/glew.h"
+#include "gl/glut.h"
 #include "CRendererOGL.h"
 #include "CThreadHolder.h"
 #include "IvPoint.h"
 #include "CGameController.h"
-
-#include "gl/glew.h"
-#include "gl/glut.h"
 
 #include "MainOgl.h"
 

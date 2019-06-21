@@ -3,7 +3,8 @@
 
 #include "CommonTypes.h"
 #include "ITexture.h"
-#include "I2dImage.h"
+
+class I2dImage;
 
 using namespace Types;
 

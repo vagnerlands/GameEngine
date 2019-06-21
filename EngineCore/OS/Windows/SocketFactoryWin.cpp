@@ -30,7 +30,7 @@ void SocketFactoryWin::Initialize()
     cout << "  [info] Version: " << wsData.wVersion << endl;
 
     static SocketFactoryWin instance;
-    SocketFactoryWin::s_pInstance = &instance;
+    SocketFactory::s_pInstance = &instance;
 }
 
 ISocket* SocketFactoryWin::Create(const Byte * mutexName)

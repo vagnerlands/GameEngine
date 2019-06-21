@@ -91,9 +91,6 @@
     <ClCompile Include="Loaders\Images\CFactory2dImage.cpp">
       <Filter>Src\Loaders\Images</Filter>
     </ClCompile>
-    <ClCompile Include="Loaders\Images\I2dImage.cpp">
-      <Filter>Src\Loaders\Images</Filter>
-    </ClCompile>
     <ClCompile Include="Loaders\Images\CTga.cpp">
       <Filter>Src\Loaders\Images</Filter>
     </ClCompile>
@@ -184,9 +181,6 @@
       <Filter>Src\Loaders\Images</Filter>
     </ClInclude>
     <ClInclude Include="Loaders\Images\CFactory2dImage.h">
-      <Filter>Src\Loaders\Images</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Images\I2dImage.h">
       <Filter>Src\Loaders\Images</Filter>
     </ClInclude>
     <ClInclude Include="Loaders\Images\CTga.h">

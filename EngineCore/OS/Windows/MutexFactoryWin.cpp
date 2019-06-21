@@ -1,4 +1,5 @@
 #include "MutexFactoryWin.h"
+#include "CWinMutex.h"
 
 MutexFactoryWin::~MutexFactoryWin()
 {

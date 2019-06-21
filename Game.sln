@@ -1,12 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{9ACB1789-6E86-4D18-BF31-11E4DCCDE6EA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{05AA9618-545F-4469-BC81-281B635B2E56} = {05AA9618-545F-4469-BC81-281B635B2E56}
 		{5176FB6E-7622-4A7D-9090-F3518141B00D} = {5176FB6E-7622-4A7D-9090-F3518141B00D}
+		{2EDBCE89-CBBD-4810-A056-2660A56AEB01} = {2EDBCE89-CBBD-4810-A056-2660A56AEB01}
+		{F8A5F79F-2534-4D62-88D5-023F20628C5B} = {F8A5F79F-2534-4D62-88D5-023F20628C5B}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilitiesCore", "UtilitiesCore\UtilitiesCore.vcxproj", "{5176FB6E-7622-4A7D-9090-F3518141B00D}"
@@ -24,9 +26,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Math", "Math\Math.vcxproj",
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphics", "Graphics\Graphics.vcxproj", "{F8A5F79F-2534-4D62-88D5-023F20628C5B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5176FB6E-7622-4A7D-9090-F3518141B00D} = {5176FB6E-7622-4A7D-9090-F3518141B00D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game-Editor", "Game-Editor\Game-Editor.csproj", "{8475DF63-2BFB-49F0-8110-1BCFAF3FA8C0}"
 	ProjectSection(ProjectDependencies) = postProject
+		{05AA9618-545F-4469-BC81-281B635B2E56} = {05AA9618-545F-4469-BC81-281B635B2E56}
+		{5176FB6E-7622-4A7D-9090-F3518141B00D} = {5176FB6E-7622-4A7D-9090-F3518141B00D}
+		{2EDBCE89-CBBD-4810-A056-2660A56AEB01} = {2EDBCE89-CBBD-4810-A056-2660A56AEB01}
+		{F8A5F79F-2534-4D62-88D5-023F20628C5B} = {F8A5F79F-2534-4D62-88D5-023F20628C5B}
 		{BFBC89E1-AADC-45BF-891E-217F89828FDD} = {BFBC89E1-AADC-45BF-891E-217F89828FDD}
 	EndProjectSection
 EndProject
@@ -123,5 +132,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {958EF3C5-3BB9-40FC-B417-797EABA4069B}
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,5 @@
 #include "CTextureOGL.h"
+#include "I2dImage.h"
 #include "GL/glut.h"
 
 bool Graphics::CTextureOGL::BuildTexture(const I2dImage * pData)

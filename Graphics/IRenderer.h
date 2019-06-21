@@ -113,7 +113,7 @@ namespace Graphics
 	inline void 
 	IRenderer::SetNearPlane(Float near)
 	{
-		mNear = near;
+		//mNear = near;
 	}
 
 	//-------------------------------------------------------------------------------
@@ -125,7 +125,7 @@ namespace Graphics
 	inline void 
 		IRenderer::SetFarPlane(Float far)
 	{
-		mFar = far;
+		//mFar = far;
 	}
 
 	//-------------------------------------------------------------------------------
