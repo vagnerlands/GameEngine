@@ -17,8 +17,21 @@ zlib.lib
 
 :: kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;
 
-Set LIB_PATHS=^
-%PROJECT_ROOT%\Libs;
+Set LIB_PATHS_X86_DEBUG=^
+%PROJECT_ROOT%\Libs;^
+%PROJECT_ROOT%\Libs\Win32\Debug;
+
+Set LIB_PATHS_X86_RELEASE=^
+%PROJECT_ROOT%\Libs;^
+%PROJECT_ROOT%\Libs\Win32\Release;
+
+Set LIB_PATHS_X64_DEBUG=^
+%PROJECT_ROOT%\Libs;^
+%PROJECT_ROOT%\Libs\x64\Debug;
+
+Set LIB_PATHS_X64_RELEASE=^
+%PROJECT_ROOT%\Libs;^
+%PROJECT_ROOT%\Libs\x64\Release;
 
 Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\EngineCore;^
