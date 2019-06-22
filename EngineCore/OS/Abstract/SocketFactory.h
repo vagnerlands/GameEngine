@@ -34,6 +34,5 @@ protected:
     SocketFactory& operator=(SocketFactory&);
 };
 
-SocketFactory* SocketFactory::s_pInstance = nullptr;
 
 #endif //_SOCKETFACTORY_H_

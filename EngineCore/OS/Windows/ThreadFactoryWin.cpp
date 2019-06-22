@@ -1,6 +1,8 @@
 #include "ThreadFactoryWin.h"
 #include "CWinThread.h"
 
+ThreadFactory* ThreadFactory::s_pInstance = nullptr;
+
 ThreadFactoryWin::~ThreadFactoryWin()
 {
 }

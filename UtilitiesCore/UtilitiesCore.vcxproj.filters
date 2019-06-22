@@ -33,9 +33,6 @@
     <ClInclude Include="Debugger.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="CommonTypes.h">
-      <Filter>Src</Filter>
-    </ClInclude>
     <ClInclude Include="Shaders\glsl.h">
       <Filter>Src\Shaders</Filter>
     </ClInclude>

@@ -5,4 +5,9 @@
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
     <StartWorkingDirectory>./</StartWorkingDirectory>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartArguments>WINOGL</StartArguments>
+    <StartWorkingDirectory>./</StartWorkingDirectory>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+  </PropertyGroup>
 </Project>

@@ -298,7 +298,7 @@ AffineInverse( const IvMatrix44& mat )
     if (::IsZero( det ))
     {
         ASSERT( false );
-        ERROR_OUT( "Matrix44::Inverse() -- singular matrix\n" );
+        DEBUG_OUT( "Matrix44::Inverse() -- singular matrix\n" );
         return result;
     }
 

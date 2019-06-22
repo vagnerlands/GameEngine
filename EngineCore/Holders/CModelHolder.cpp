@@ -5,8 +5,8 @@
 #include <string>
 
 #include <objParser/objLoader.h>
+#include "MutexFactory.h"
 #ifdef WIN32
-#include "CWinMutex.h"
 #include "CModelOGL.h"
 #endif
 
@@ -46,14 +46,10 @@ CModelHolder::OnRemoveEvent(string removeItem)
 CModelHolder::CModelHolder(std::string pathToResources)
 	: m_modelFiles(new CResourceZipFile(pathToResources.data(), this->OnRemoveEvent))
 {
-#ifdef WIN32
-	m_pModelContentMapMutex = new CWinMutex();
-#else
-#error "no implementation for this platform"
-#endif
-	if (m_pModelContentMapMutex != NULL)
+	m_pModelContentMapMutex = MutexFactory::Instance().Create("ModelCOntentMap");
+	if (m_pModelContentMapMutex == NULL)
 	{
-		m_pModelContentMapMutex->createMutex("ModelContentMap");
+        DEBUG_OUT("Failed to create Mutex");
 	}
 }
 

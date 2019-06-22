@@ -34,6 +34,4 @@ protected:
     MutexFactory& operator=(MutexFactory&);
 };
 
-MutexFactory* MutexFactory::s_pInstance = nullptr;
-
 #endif //_MUTEXFACTORY_H_

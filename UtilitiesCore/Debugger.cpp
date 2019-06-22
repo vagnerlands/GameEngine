@@ -79,6 +79,7 @@ UtilitiesCore::Debugger::DumpToFile( char* string )
 void
 UtilitiesCore::Debugger::Flush( void )
 {
+    static int executeFlush = 0;
     // Get the buffer    
     std::string strText =  str();
 
@@ -91,7 +92,14 @@ UtilitiesCore::Debugger::Flush( void )
 
     // Write to output file, if open
     if (mOutFile.is_open())
+    {
         mOutFile << cString;
+        if (++executeFlush > 5)
+        {
+            mOutFile.flush();
+            executeFlush = 0;
+        }
+    }
 
     // reset the buffer for the next debugging info
     str("");

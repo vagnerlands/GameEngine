@@ -34,6 +34,5 @@ protected:
     ThreadFactory& operator=(ThreadFactory&);
 };
 
-ThreadFactory* ThreadFactory::s_pInstance = nullptr;
 
 #endif //_THREADFACTORY_H_

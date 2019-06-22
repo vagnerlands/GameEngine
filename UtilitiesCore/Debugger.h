@@ -24,14 +24,14 @@
 //-- Typedefs, Structs ----------------------------------------------------------
 //-------------------------------------------------------------------------------
 
-#define ERROR_OUT( x ) \
+#define ERROR_OUT( a, b, c, x ) \
 { \
-    gDebugger << x; \
+    gDebugger << a << "::" << b << ":" << c << " Log: " << x; \
     gDebugger.Flush(); \
 }
 
 #ifdef _DEBUG
-#define DEBUG_OUT( x )  ERROR_OUT( x )
+#define DEBUG_OUT( x )  ERROR_OUT(  __FILE__, __FUNCTION__, __LINE__, x )
 #else
 #define DEBUG_OUT( x )
 #endif

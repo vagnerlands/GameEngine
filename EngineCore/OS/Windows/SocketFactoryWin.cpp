@@ -3,6 +3,9 @@
 #undef UNICODE
 #define WIN32_LEAN_AND_MEAN
 
+
+SocketFactory* SocketFactory::s_pInstance = nullptr;
+
 #include "CWinSocket.h"
 
 SocketFactoryWin::~SocketFactoryWin()

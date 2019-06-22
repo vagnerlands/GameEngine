@@ -375,7 +375,7 @@ Inverse( const IvMatrix33& mat )
     if (::IsZero( det ))
     {
         ASSERT( false );
-        ERROR_OUT( "Matrix33::Inverse() -- singular matrix\n" );
+        DEBUG_OUT( "Matrix33::Inverse() -- singular matrix\n" );
         return result;
     }
 

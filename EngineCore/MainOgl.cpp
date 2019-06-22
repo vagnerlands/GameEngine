@@ -11,6 +11,10 @@
 
 #include "MainOgl.h"
 
+#include "MutexFactoryWin.h"
+#include "SocketFactoryWin.h"
+#include "ThreadFactoryWin.h"
+
 static Int32 s_lastState = GLUT_UP;
 static Int32 s_lastCursorX = -1;
 static Int32 s_lastCursorY = -1;
@@ -138,6 +142,10 @@ void KeyboardRelease(UByte key, int x, int y)
 
 void MainOgl::StartUp(int argv, char** argc)
 {
+    // Initialize all Factories
+    MutexFactoryWin::Initialize();
+    SocketFactoryWin::Initialize();
+    ThreadFactoryWin::Initialize();
 
 	// Use a single buffered window in RGB mode (as opposed to a double-buffered
 	// window or color-index mode).

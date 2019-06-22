@@ -54,7 +54,7 @@ Solve( float* b, float* A, unsigned int n )
         // if max is zero, stop!
         if ( ::IsZero( maxelem ) )
         {
-            ERROR_OUT( "::Solve() -- singular matrix\n" );
+            DEBUG_OUT( "::Solve() -- singular matrix\n" );
             return false;
         }
 
@@ -151,7 +151,7 @@ InvertMatrix( float* A, unsigned int n )
         // if max is zero, stop!
         if ( ::IsZero( maxelem ) )
         {
-            ERROR_OUT( "::Inverse() -- singular matrix\n" );
+            DEBUG_OUT( "::Inverse() -- singular matrix\n" );
             delete [] swap;
             return false;
         }

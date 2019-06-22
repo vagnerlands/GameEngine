@@ -1,6 +1,8 @@
 #include "MutexFactoryWin.h"
 #include "CWinMutex.h"
 
+MutexFactory* MutexFactory::s_pInstance = nullptr;
+
 MutexFactoryWin::~MutexFactoryWin()
 {
 }
