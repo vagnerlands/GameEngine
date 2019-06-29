@@ -1,5 +1,5 @@
 #include "CCamera.h"
-
+#include <iostream>
 #define PI 3.1415926535897932384626433832795
 #define PIdiv180 (PI/180.0)
 
@@ -8,9 +8,9 @@ CCamera::CCamera() :
 	m_rightVector(1.0f, 0.0f, 0.0f),
 	m_upVector(0.0f, 1.0f, 0.0f),
 	m_viewDir(0.0f, 0.0f, 1.0f),
-	m_rotation(0.0f, 0.0f, 0.0f)
+	m_rotation(0.0f, 0.0f, 0.0f)	
 {
-
+	m_camRotation.Identity();
 }
 /*
 void CCamera::prepareProjection3D()
@@ -49,6 +49,7 @@ void CCamera::SetLookAtMatrix()
 
 void CCamera::RotateX(Float Angle)
 {
+	Angle *= 0.1;
 	m_rotation.SetX(m_rotation.GetX() + Angle);
 
 	//printf("[ang=%f totalangX = %f] - ", Angle, m_rotation.GetX());
@@ -61,10 +62,18 @@ void CCamera::RotateX(Float Angle)
 	m_upVector = m_viewDir.Cross(m_rightVector) * -1;
 	// try to keep the head up
 	m_upVector.SetY(1.0f);
+
+	// new approach
+	IvMatrix33 rotate;
+	rotate.RotationX(Angle);
+	m_camRotation = m_camRotation * rotate;
+	std::cout << "  X  "  << Angle << std::endl;
+	
 }
 
 void CCamera::RotateY(Float Angle)
 {
+	Angle *= 0.1;
 	m_rotation.SetY(m_rotation.GetY() + Angle);
 	//printf("[ang=%f totalangY = %f]\n\n", Angle, m_rotation.GetY());
 
@@ -74,10 +83,17 @@ void CCamera::RotateY(Float Angle)
 
 	//now compute the new RightVector (by cross product)
 	m_rightVector = m_viewDir.Cross(m_upVector);
+
+	// new approach
+	IvMatrix33 rotate;
+	rotate.RotationY(Angle);
+	m_camRotation = m_camRotation * rotate;
+	std::cout << "   Y " << Angle << std::endl;
 }
 
 void CCamera::RotateZ(Float Angle)
 {
+	Angle *= 0.1;
 	m_rotation.SetZ(m_rotation.GetZ() + Angle);
 
 	//Rotate viewdir around the right vector:
@@ -86,6 +102,13 @@ void CCamera::RotateZ(Float Angle)
 
 	//now compute the new UpVector (by cross product)
 	m_upVector = m_viewDir.Cross(m_rightVector) * -1;
+
+
+	// new approach
+	IvMatrix33 rotate;
+	rotate.RotationZ(Angle);
+	m_camRotation = m_camRotation * rotate;
+	std::cout << "    Z" << std::endl;
 }
 
 void CCamera::MoveForward(Float Distance)

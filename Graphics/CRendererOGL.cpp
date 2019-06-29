@@ -2,7 +2,7 @@
 #include "IvMath.h"
 #include "IvMatrix33.h"
 #include "GL/glut.h"
-
+#include <iostream>
 bool Graphics::CRendererOGL::Create()
 {
 	if (mRenderer == nullptr)
@@ -24,6 +24,9 @@ void Graphics::CRendererOGL::Destroy()
 
 void Graphics::CRendererOGL::PrepareCamera3D()
 {
+	// TODO: this shall change only when window changes
+	// makes another function calculate the "perspective"
+
 	// set up current viewport based on defined screen size
 	glViewport(0, 0, mWidth, mHeight);
 	// d is distance from view view position to the projection plane
@@ -42,20 +45,6 @@ void Graphics::CRendererOGL::PrepareCamera3D()
 	SetProjectionMatrix(perspective);
 
 	IvMatrix44 ident;
-/*
-	// must update the view matrix according to the UP/RIGHT and FORWARD vectors
-	IvMatrix33 rotate;
-	rotate.SetRows(mCamera.m_rightVector, mCamera.m_upVector, mCamera.m_viewDir);
-
-	// world->view translation
-	IvVector3 xlate = -(rotate* (mCamera.m_position + mCamera.m_viewDir));
-
-	// build 4x4 matrix
-	IvMatrix44 matrix(rotate);
-	matrix(0, 3) = xlate.GetX();
-	matrix(1, 3) = xlate.GetY();
-	matrix(2, 3) = xlate.GetZ();
-	*/
 	SetViewMatrix(ident);
 	SetWorldMatrix(ident);
 
@@ -64,22 +53,35 @@ void Graphics::CRendererOGL::PrepareCamera3D()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	// must update the view matrix according to the UP/RIGHT and FORWARD vectors
-	IvMatrix33 rotate;
-	rotate.SetRows(mCamera.m_rightVector, mCamera.m_upVector, mCamera.m_viewDir);
+	
+	// TODO: initOrient won't change - make this variable static and initialized
+	// somewhere else
 
-	// world->view translation
-	IvVector3 xlate = -(rotate* (mCamera.m_position + mCamera.m_viewDir));
+	IvMatrix33 initOrient;
+	initOrient.Identity();
+	/*initOrient(0, 0) = 0.0f;
 
-	// build 4x4 matrix
-	IvMatrix44 matrix(rotate);
-	matrix(0, 3) = xlate.GetX();
-	matrix(1, 3) = xlate.GetY();
-	matrix(2, 3) = xlate.GetZ();
+	initOrient(0, 2) = -1.0f;
+
+	initOrient(1, 0) = -1.0f;
+	initOrient(1, 1) = 0.0f;
+
+	initOrient(2, 1) = 1.0f;
+	initOrient(2, 2) = 0.0f;*/
+	IvMatrix33 viewToWorldRot = mCamera.m_camRotation*initOrient;
+
+	// set view matrix
+
+	// world to view rotation is transpose of view to world
+	IvMatrix44 matrix(::Transpose(viewToWorldRot));
+	// world to view translation is -eye position times world to view rotation
+	// or can multiply by transpose of view to world
+	IvVector3 eyeInverse = -mCamera.m_position*viewToWorldRot;
+	// set translation of matrix
+	matrix(0, 3) = eyeInverse.GetX();
+	matrix(1, 3) = eyeInverse.GetY();
+	matrix(2, 3) = eyeInverse.GetZ();
 	SetViewMatrix(matrix);
-
-	//IvVector3 viewPoint = mCamera.m_position - mCamera.m_viewDir;
-	//gluLookAt(mCamera.m_position.GetX(), mCamera.m_position.GetY(), mCamera.m_position.GetZ(), viewPoint.GetX(), viewPoint.GetY(), viewPoint.GetZ(), mCamera.m_upVector.GetX(), mCamera.m_upVector.GetY(), mCamera.m_upVector.GetZ());
 
 }
 

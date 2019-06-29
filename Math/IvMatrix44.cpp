@@ -1177,3 +1177,65 @@ IvMatrix44::TransformPoint( const IvVector3& other ) const
     return result;
 
 }   // End of IvMatrix44::TransformPoint()
+
+
+	//-------------------------------------------------------------------------------
+	// @ IvMatrix33::SetColumns()
+	//-------------------------------------------------------------------------------
+	// Set matrix, row by row
+	//-------------------------------------------------------------------------------
+void
+IvMatrix44::SetColumns(const IvVector4& col1, const IvVector4& col2, const IvVector4& col3, const IvVector4& col4)
+{
+	mV[0] = col1.x;
+	mV[1] = col1.y;
+	mV[2] = col1.z;
+	mV[3] = col1.w;
+
+	mV[4] = col2.x;
+	mV[5] = col2.y;
+	mV[6] = col2.z;
+	mV[7] = col1.w;
+
+	mV[8] = col3.x;
+	mV[9] = col3.y;
+	mV[10] = col3.z;
+	mV[11] = col3.w;
+
+	mV[12] = col4.x;
+	mV[13] = col4.y;
+	mV[14] = col4.z;
+	mV[15] = col4.w;
+
+}   // End of IvMatrix33::SetColumns()
+
+
+	//-------------------------------------------------------------------------------
+	// @ IvMatrix33::SetRows()
+	//-------------------------------------------------------------------------------
+	// Set matrix, row by row
+	//-------------------------------------------------------------------------------
+void
+IvMatrix44::SetRows(const IvVector4& row1, const IvVector4& row2, const IvVector4& row3, const IvVector4& row4)
+{
+	mV[0]  = row1.x;
+	mV[4]  = row1.y;
+	mV[8]  = row1.z;
+	mV[12] = row1.w;
+
+	mV[1]  = row2.x;
+	mV[5]  = row2.y;
+	mV[9]  = row2.z;
+	mV[13] = row2.w;
+
+	mV[2]  = row3.x;
+	mV[6]  = row3.y;
+	mV[10] = row3.z;
+	mV[14] = row3.w;
+
+	mV[3]  = row4.x;
+	mV[7]  = row4.y;
+	mV[11] = row4.z;
+	mV[15] = row4.w;
+
+}   // End of IvMatrix44::SetRows()

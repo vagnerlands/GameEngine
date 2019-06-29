@@ -3,7 +3,7 @@
 
 #include "CommonTypes.h"
 #include "IvVector3.h"
-
+#include "IvMatrix33.h"
 using namespace Types;
 
 class CCamera 
@@ -48,6 +48,9 @@ public:
 	IvVector3 m_position;
 	// rotation angle accumulated on xyz
 	IvVector3 m_rotation;
+
+	// new approach for camera rotation
+	IvMatrix33 m_camRotation;
 
 
 };
