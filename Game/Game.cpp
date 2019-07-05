@@ -104,6 +104,16 @@ void Game::UpdateObjects(float dt)
 		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(MovementIntensityOnY) * dt * 0.5f);
 		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(MovementIntensityOnX) * dt * 0.5f);
 	}
+
+	static int noFlood = 0;
+	if (noFlood++ > 100)
+	{
+		noFlood = 0;
+		CCamera a = Graphics::IRenderer::mRenderer->GetCamera();
+		cout << "    X [" << a.m_position.GetX()
+			<< "]   Y [" << a.m_position.GetY()
+			<< "]   Z [" << a.m_position.GetZ() << "]" << endl;
+	}
 }
 
 void Game::Render()

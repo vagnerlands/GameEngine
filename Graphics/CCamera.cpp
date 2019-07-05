@@ -67,8 +67,15 @@ void CCamera::RotateX(Float Angle)
 	IvMatrix33 rotate;
 	rotate.RotationX(Angle);
 	m_camRotation = m_camRotation * rotate;
-	std::cout << "  X  "  << Angle << std::endl;
-	
+	//m_camRotation[1] = 0.F;
+	//m_camRotation[4] = 1.F;
+	//m_camRotation[7] = 0.F;
+	for (int i = 0; i < 9; ++i)
+		if (i%3 == 0)
+			std::cout << std::endl << "  "  << m_camRotation[i] ;
+		else
+			std::cout << "  " << m_camRotation[i];
+	std::cout << std::endl;
 }
 
 void CCamera::RotateY(Float Angle)
@@ -88,6 +95,9 @@ void CCamera::RotateY(Float Angle)
 	IvMatrix33 rotate;
 	rotate.RotationY(Angle);
 	m_camRotation = m_camRotation * rotate;
+	//m_camRotation[1] = 0.F;
+	//m_camRotation[4] = 1.F;
+	//m_camRotation[7] = 0.F;
 	std::cout << "   Y " << Angle << std::endl;
 }
 
@@ -113,17 +123,23 @@ void CCamera::RotateZ(Float Angle)
 
 void CCamera::MoveForward(Float Distance)
 {
-	m_position = m_position + (m_viewDir * (-Distance));
+	IvVector3 viewDir = m_camRotation.GetColumn(2);
+	//m_position = m_position + (m_viewDir * (-Distance));
+	m_position = m_position + (viewDir * (-Distance));
 }
 
 void CCamera::MoveUpward(Float Distance)
 {
-	m_position = m_position + (m_upVector * Distance);
+	IvVector3 upVector = m_camRotation.GetColumn(1);
+	//m_position = m_position + (m_upVector * Distance);
+	m_position = m_position + (upVector * Distance);
 }
 
 void CCamera::MoveRight(Float Distance)
 {
-	m_position = m_position + (m_rightVector * Distance);
+	IvVector3 rightVector = m_camRotation.GetColumn(0);
+	//m_position = m_position + (m_rightVector * Distance);
+	m_position = m_position + (rightVector* Distance);
 }
 
 void CCamera::HoverForward(Float Distance)
