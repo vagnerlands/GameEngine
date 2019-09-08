@@ -23,6 +23,11 @@ bool CBmp::ParseStream(Byte* pData)
 		if (m_SizeInBytes == (m_Width * m_Height * 4))
 			m_NumberOfBytes = 4;
 		const Int32 totalSizeInBytes = m_Width*m_Height*m_NumberOfBytes;
+        // some image editors may not give the total size - so we have to calculate ourselves
+        if (m_SizeInBytes == 0U)
+        {
+            m_SizeInBytes = totalSizeInBytes;
+        }
 		// data must be sent in BGRA order - must swap byte order of integer
 		Byte* swapBuffer = new Byte[totalSizeInBytes];
 		for (Int32 x = 0; x < totalSizeInBytes;)

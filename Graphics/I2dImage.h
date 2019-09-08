@@ -31,7 +31,7 @@ public:
 	Int32 GetWidth() const;
 	Int32 GetHeight() const;
 	Int32 GetNumberOfBytes() const;
-	Int32 GetSizeOfImage() const;
+	Int32 GetSizeInBytes() const;
 	Byte* GetPointerToData() const;
 
 protected:
@@ -60,7 +60,7 @@ inline Int32 I2dImage::GetNumberOfBytes() const
 	return m_NumberOfBytes;
 }
 
-inline Int32 I2dImage::GetSizeOfImage() const
+inline Int32 I2dImage::GetSizeInBytes() const
 {
 	return m_SizeInBytes;
 }

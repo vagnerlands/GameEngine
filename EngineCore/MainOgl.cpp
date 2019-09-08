@@ -158,12 +158,12 @@ void MainOgl::StartUp(int argv, char** argc)
 	bool isFullScreen = false;
 	if (isFullScreen)
 	{
-		glutGameModeString("640x480:16@60");
+		glutGameModeString("640x480:32@60");
 		glutEnterGameMode();
 	}
 	else
 	{
-		glutInitWindowSize(640, 480);
+		glutInitWindowSize(1280, 720);
 		glutCreateWindow("EngineCore - Vagner Landskron");
 
 		printf(" GPU & Driver: \n # %s \n # %s\n\n",glGetString(GL_VERSION), glGetString(GL_RENDERER));
@@ -178,7 +178,7 @@ void MainOgl::StartUp(int argv, char** argc)
 		return ;
 	}
 
-	if (!Graphics::CRendererOGL::Create() || !Graphics::IRenderer::mRenderer->InitializeGraphics(640, 480, false))
+	if (!Graphics::CRendererOGL::Create() || !Graphics::IRenderer::mRenderer->InitializeGraphics(1280, 720, false))
 	{
 		Graphics::CRendererOGL::Destroy();
 		EngineCore::IGame::Destroy();

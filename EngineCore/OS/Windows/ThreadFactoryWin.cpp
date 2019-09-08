@@ -23,7 +23,6 @@ IThread* ThreadFactoryWin::Create(const Byte * name, void* EntryPoint)
     if (hnd != 0)
     {
         hnd->createThread(name, EntryPoint);
-        //hnd->createMutex(mutexName);
     }
 
     return hnd;

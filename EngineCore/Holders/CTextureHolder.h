@@ -15,17 +15,33 @@
 using namespace Types;
 using namespace std;
 
+struct STextureItem
+{
+    STextureItem() : m_name(""), m_size(0U) {}
+    STextureItem(string name, UInt32 size) : m_name(name), m_size(size) {}
+    bool operator==(const STextureItem& other)
+    {
+        if (other.m_name == this->m_name)
+            return true;
+        else
+            return false;
+    }
+    string                  m_name;
+    UInt32                  m_size;
+};
+
+typedef list<STextureItem> TextureLru;
+
 class CTextureHolder 
 {
 public:
 	typedef unordered_map<string, Graphics::ITexture*> TextureMap;
 	typedef unordered_map<string, Types::Byte*> TextureContentMap;
 
-	static bool Create(const string pathToTexturesFile);
+	static bool Create(const string pathToTexturesFile, UInt32 maxAllocSize);
 	void LoadTexture(const string textId);
 	void RemoveTexture(const string textId);
 	Graphics::ITexture* getTextureById(string textId);
-	void AddTextureContent(string textId, Types::Byte* data);
 	bool Bind(const string texId) const ;
 	CTextureHolder::~CTextureHolder();
 
@@ -37,9 +53,11 @@ public:
 
 
 private:
-	CTextureHolder(const string pathToTexturesFile);
+	CTextureHolder(const string pathToTexturesFile, UInt32 maxAllocSize);
 	// build texture, if any available
 	void BuildTexture(const string textureId, const I2dImage* pData);
+    void increaseTexturePriority(const string & textureId, UInt32 size);
+    void removeLastItem();
 	// local hashmap built textures
 	TextureMap m_textures;
 	// local hashmap for textures to be generated
@@ -48,7 +66,13 @@ private:
 	IMutex* m_textureContentMapMutex;
 
 	// resource database - TEXTURES
-	IResourceFile* m_textureFiles;
+    TextureLru              m_lru;
+	IResourceFile*          m_pResHandler;
+    // reserved size for VRAM
+    UInt32                  m_maxAllocSize;
+    // total VRAM size in usage 
+    UInt32                  m_sizeInUse;
+    
 
 };
 

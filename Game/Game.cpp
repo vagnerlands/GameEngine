@@ -20,7 +20,7 @@ EngineCore::IGame::Create()
 Game::Game() : 
 	EngineCore::IGame()
 {
-	mpGameInput = new CGameController(640, 480);
+	mpGameInput = new CGameController(1280, 720);
 }
 
 Game::~Game()
@@ -40,7 +40,8 @@ bool Game::PostRendererInitialize()
 	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
 	// create model holder
 	CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
-	CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip");
+    // 50mb allocation for VRAM textures
+	CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip", 50U*1024U*1024U);
 
 	CTextureHolder::s_pInstance->getTextureById("water.bmp");
 	CTextureHolder::s_pInstance->getTextureById("brick_t.bmp");
@@ -191,14 +192,14 @@ void Game::Render()
 	glPushMatrix();
 	if (CShaderHolder::s_pInstance->UseShaderById("textured2"))
 	{
-
+        string texName = "rock";
 		// light set-up
 		glEnable(GL_LIGHT0);
 
 		static float LightMoving = 2.F;
 		static float Angle = 0.0;
 		//LightMoving -= 0.001f;
-		Angle += 1.0f;
+		Angle += 0.025f;
 		GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
 		GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -231,16 +232,16 @@ void Game::Render()
 
 		glEnable(GL_TEXTURE_2D);
 		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setTexture("textureColor", 
-			CTextureHolder::s_pInstance->getTextureById("brick_t.bmp"));
+			CTextureHolder::s_pInstance->getTextureById(texName + "_t.bmp"));
 		/*if (textureId != -1)
 		{
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, textureId);
+			glBindTexture(GL_TEXTURE_2D, textureId);1
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 			CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform1i("textureColor", 0);
 		}*/
 		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setTexture("textureNormal",
-			CTextureHolder::s_pInstance->getTextureById("brick_n.bmp"));
+			CTextureHolder::s_pInstance->getTextureById(texName + "_n.bmp"));
 		//textureId = CTextureHolder::s_pInstance->getTextureById("brick_n.bmp");
 
 		/*if (textureId != -1)
@@ -260,7 +261,6 @@ void Game::Render()
 		{
 			for (Int32 by = 0; by > -20; by -= sizeOfBlock)
 			{
-
 				glTexCoord2f(0, 0);  glVertex3f(bx, -0.5, by);
 				glTexCoord2f(1, 0);  glVertex3f(bx + sizeOfBlock, -0.5, by);
 				glTexCoord2f(1, 1);  glVertex3f(bx + sizeOfBlock, -0.5, by + sizeOfBlock);

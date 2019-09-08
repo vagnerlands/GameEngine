@@ -1,6 +1,6 @@
 #include "CTextureOGL.h"
 #include "I2dImage.h"
-#include "GL/glut.h"
+#include <GL/glew.h>
 
 bool Graphics::CTextureOGL::BuildTexture(const I2dImage * pData)
 {
@@ -19,7 +19,9 @@ bool Graphics::CTextureOGL::BuildTexture(const I2dImage * pData)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    //glTextureParameterf(m_textureId, GL_TEXTURE_MAX_LEVEL, 6);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	// always good to get the error in case it happens
 	err = glGetError();
@@ -62,7 +64,18 @@ bool Graphics::CTextureOGL::BuildTexture(const I2dImage * pData)
 	}
 	else
 	{
-		m_status = true;
+        glGenerateMipmap(GL_TEXTURE_2D);
+        err = glGetError();
+        if (err != GL_NO_ERROR)
+        {
+            printf("Error creating mipmap - glGenerateMipMap=%d\n", err);
+            glDeleteTextures(1, &m_textureId);
+            m_status = false;
+        }
+        else
+        {
+		    m_status = true;
+        }
 	}
 
 	return m_status;
