@@ -28,6 +28,8 @@ private:
 
 	CGameController* mpGameInput;
 
+    Float m_lightAngle;
+
 	inline Float clamp(Float number1, Float number2) const
 	{
 		if (number1 > number2)

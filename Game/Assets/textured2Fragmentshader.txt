@@ -1,11 +1,15 @@
 // Normal calculated in the vertex shader
 varying vec3 N;
-// vertex position comming from vertex shader
+// vertex location after combined with projectview matrix
 varying vec3 v;
+// absolute vertex location
+varying vec3 pos;
 
 // textures
 uniform sampler2D textureColor;
 uniform sampler2D textureNormal;
+// light position
+uniform vec3 lightPos;
 
 void main(void)
 {
@@ -18,7 +22,7 @@ void main(void)
     vec3 ct,cf;
     vec4 texel;
     float intensity,at,af;
-	vec4 vectorFromVectorToLightSource = vec4(gl_LightSource[0].spotDirection.xyz - gl_LightSource[0].position.xyz, 0.0);
+	vec4 vectorFromVectorToLightSource = vec4(lightPos - pos, 0.0);
     intensity = max(0.1, dot(texNormal, normalize(vectorFromVectorToLightSource)));
  
     cf = intensity * (gl_FrontMaterial.diffuse).rgb +
@@ -29,8 +33,8 @@ void main(void)
     at = texel.a;
     gl_FragColor = vec4(ct * cf, at * af);
 
-/*	// texture normal sampled according to glTexCoord
-	vec4 texNormal = (texture2D(textureNormal,gl_TexCoord[0].xy) * 2) - 1;
+	// texture normal sampled according to glTexCoord
+	/*vec4 texNormal = (texture2D(textureNormal,gl_TexCoord[0].xy) * 2) - 1;
 	// texture color sampled according to glTexCoord
 	vec4 texColor = texture2D(textureColor,gl_TexCoord[0].xy);   	
 
@@ -40,12 +44,12 @@ void main(void)
 	// Transform light vector into tangent space
 	vec3 vLightVec;
 	
-    vec3 lightVec = v.xyz - gl_LightSource[0].position.xyz ;
+    vec3 lightVec = lightPos - pos;
 	
     vLightVec.x = dot(lightVec, tangent);
     vLightVec.y = dot(lightVec, binormal);
-    vLightVec.z = dot(lightVec, texNormal);
+    vLightVec.z = dot(lightVec, vec3(texNormal));
 	
-	gl_FragColor = (texColor * clamp( dot( lightVec, texNormal ) ,0.0, 1.0 )) * vec4(1.0, 1.0, 1.0, 1.0) + 0.1 * texColor ;*/
+	gl_FragColor = (texColor * clamp( dot( vLightVec, vec3(texNormal) ) ,0.0, 1.0 )) * vec4(1.0, 1.0, 1.0, 1.0) + 0.1 * texColor ;*/
 
 }

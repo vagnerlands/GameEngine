@@ -18,7 +18,8 @@ EngineCore::IGame::Create()
 }
 
 Game::Game() : 
-	EngineCore::IGame()
+	EngineCore::IGame(),
+    m_lightAngle(0.F)
 {
 	mpGameInput = new CGameController(1280, 720);
 }
@@ -84,6 +85,16 @@ void Game::UpdateObjects(float dt)
 	{
 		Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(-dt*1.0);
 	}
+    
+    if (mpGameInput->m_bKey['y'])
+    {
+        m_lightAngle += 1.f;
+    }
+    else if (mpGameInput->m_bKey['t'])
+    {
+        m_lightAngle -= 1.f;
+    }
+
 
 	if (mpGameInput->m_isLeftButtonPressed)
 	{		
@@ -195,16 +206,15 @@ void Game::Render()
         string texName = "rock";
 		// light set-up
 		glEnable(GL_LIGHT0);
-
-		static float LightMoving = 2.F;
-		static float Angle = 0.0;
-		//LightMoving -= 0.001f;
-		Angle += 0.025f;
+        m_lightAngle += 0.55f;
+		static float LightMoving = 2.5F;
 		GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
 		GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat light_direction[] = { 0.0, -1.0, 0.0 };
-		GLfloat light_position[] = { sin(Angle * 3.14159 / 180.F) * LightMoving, 1, cos(Angle * 3.14159 / 180.F) * LightMoving - 2.f, 1.0f};
+		GLfloat light_position[] = { sin(m_lightAngle * 3.14159 / 180.F) * LightMoving, 1.f, cos(m_lightAngle * 3.14159 / 180.F) * LightMoving , 1.0f};
+
+        CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform3f("lightPos", light_position[0], light_position[1], light_position[2]);
 
 		glColor4f(1, 0, 0, 1);
 		glBegin(GL_QUADS);
@@ -218,7 +228,7 @@ void Game::Render()
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 		glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 		glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
-		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+		//glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 		Int32 err = glGetError();
 		if (err != 0)
