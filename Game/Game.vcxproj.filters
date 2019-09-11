@@ -63,5 +63,11 @@
     <Text Include="Assets\lightFragmentshader.txt">
       <Filter>Shaders</Filter>
     </Text>
+    <Text Include="Assets\texturedtangentFragmentshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\texturedtangentVertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
   </ItemGroup>
 </Project>

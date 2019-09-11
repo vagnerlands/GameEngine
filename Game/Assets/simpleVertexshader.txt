@@ -13,7 +13,7 @@ void main()
 {
     pos = vec3(gl_Vertex);
 	
-	v = vec3(gl_ModelViewMatrix * gl_Vertex);       
+	/*v = vec3(gl_ModelViewMatrix * gl_Vertex);       
         N = normalize(gl_NormalMatrix * gl_Normal);
 	
 	float angle = radians(rotation[0]);
@@ -28,7 +28,7 @@ void main()
 
 	pos *= scale;	
 	pos *= rot;
-    pos += translate;
+    pos += translate;*/
 
 	gl_Position =  gl_ModelViewProjectionMatrix * vec4(pos, 1);
 }

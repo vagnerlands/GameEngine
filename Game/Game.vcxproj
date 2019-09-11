@@ -183,6 +183,8 @@
     <Text Include="Assets\simpleVertexshader.txt" />
     <Text Include="Assets\textured2Fragmentshader.txt" />
     <Text Include="Assets\textured2Vertexshader.txt" />
+    <Text Include="Assets\texturedtangentFragmentshader.txt" />
+    <Text Include="Assets\texturedtangentVertexshader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
