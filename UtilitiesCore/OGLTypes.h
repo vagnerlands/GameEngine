@@ -11,6 +11,8 @@
 #include "IvVector3.h"
 #include "IvVector4.h"
 
+#include <glm/glm.hpp>
+
 #include "GL/glew.h"
 #include "GL/glut.h"
 
@@ -58,6 +60,36 @@ namespace Types
 		Int32 m_vertexCount;
 		Int32 m_materialIndex;
 	};
+
+    struct SModelTexture
+    {
+        // either diffuse, normal or specular
+        std::string m_uniformName;
+        // name of the texture - may be the full path to the texture, who knows...
+        std::string m_filename;
+    };
+
+    struct SModelVertex
+    {
+        // position
+        glm::vec3 Position;
+        // normal
+        glm::vec3 Normal;
+        // texCoords
+        glm::vec2 TexCoords;
+        // tangent
+        glm::vec3 Tangent;
+        // bitangent
+        glm::vec3 Bitangent;
+    };
+
+
+    struct SModelMesh
+    {
+        vector<SModelVertex>    m_vertices;
+        vector<UInt32>          m_indices;
+        vector<SModelTexture>   m_textures;
+    };
 
 
 	struct SModelData

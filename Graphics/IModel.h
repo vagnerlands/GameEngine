@@ -3,6 +3,9 @@
 
 #include "CommonTypes.h"
 #include "ogltypes.h"
+#include <memory>
+#include "Model.h"
+#include "Shaders/glsl.h"
 
 using namespace Types;
 
@@ -14,17 +17,16 @@ namespace Graphics
 	public:
 		IModel();
 		virtual ~IModel();
-		// create based on SModelData
-		virtual bool Create(const SModelData& modelInfo) = 0;
+        virtual bool Create(const Model & modelInfo) = 0;
 		// render this object as is
-		virtual void Draw() = 0;
+		virtual void Draw(cwc::glShader* shader) = 0;
 		// allocate SModelData for custom objects
-		virtual SModelData& Allocate() = 0;
+		virtual shared_ptr<Model> Allocate() = 0;
 		// commit changes
 		virtual bool Commit() = 0;
 	protected:
 		// data to be used, this shall be released once Commit() is called
-		SModelData* m_pData;
+        shared_ptr<Model> m_pData;
 
 	private:
 		// copy operations

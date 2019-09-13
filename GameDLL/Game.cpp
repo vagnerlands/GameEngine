@@ -162,7 +162,7 @@ void Game::Render()
 		glEnable(GL_TEXTURE_2D);
 		CTextureHolder::s_pInstance->Bind("water.bmp");
 
-		CModelHolder::s_pInstance->DrawModelById("Hughes500.obj");
+		CModelHolder::s_pInstance->DrawModelById("Hughes500.obj", CShaderHolder::s_pInstance->GetShaderProgramById("model"));
 
 		glDisable(GL_TEXTURE_2D);
 		
