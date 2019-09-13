@@ -157,12 +157,12 @@ void Game::Render()
     // light set-up
     glEnable(GL_LIGHT0);
     m_lightAngle += 1.f;
-    static float MoveRadius = 8.F;
+    static float MoveRadius = 3.F;
     GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
     GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
     GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
     GLfloat light_direction[] = { 0.0, -1.0, 0.0 };
-    GLfloat light_position[] = { sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, -20.f, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius , 1.0f };
+    GLfloat light_position[] = { sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius , 1.0f };
     CShaderHolder::s_pInstance->StopShader();
     glColor4f(1.F, 0, 0, 0.5F);
     glBegin(GL_QUADS);
@@ -185,47 +185,83 @@ void Game::Render()
     
     glPopMatrix();
 
-	glPushMatrix();
-	glEnable(GL_LIGHTING);
-	glColor4f(1.0, 0.0, 1.0, 0.5);
+    glPushMatrix();
+    glEnable(GL_LIGHTING);
+    glColor4f(1.0, 0.0, 1.0, 0.5);
 
-	// enable vertices array pointer rendering	
-    CShaderHolder::s_pInstance->UseShaderById("model");
+    // enable vertices array pointer rendering	
+    CShaderHolder::s_pInstance->UseShaderById("texturedtangent");
 
-    CShaderHolder::s_pInstance->GetShaderProgramById("model")->
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
         setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
-    CShaderHolder::s_pInstance->GetShaderProgramById("model")->
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
         setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
-    CShaderHolder::s_pInstance->GetShaderProgramById("model")->
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
         setUniformMatrix4fv("model", 1, false, &model[0][0]);
 
-    CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("lightPos", light_position[0], light_position[1], light_position[2]);
-	CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 3, -200);
-	CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("scale", 1.0, 1.0, 1.0);
-	CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", 160.f, 0.f, 1.f, 0.f);
-	// attach a texture to the whole model
-	glEnable(GL_TEXTURE_2D);
-    CShaderHolder::s_pInstance->GetShaderProgramById("model")->setTexture("diffuseMap",
-        CTextureHolder::s_pInstance->getTextureById("water.bmp"));
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setUniform3f("lightPos", light_position[0], light_position[1], light_position[2]);
 
-	CModelHolder::s_pInstance->DrawModelById("Hughes500.obj");
+    model = glm::identity<glm::mat4>();
+    model = glm::translate(model, glm::vec3(0, -2, 0));
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setUniformMatrix4fv("model", 1, false, &model[0][0]);
+    // attach a texture to the whole model
+    glEnable(GL_TEXTURE_2D);
+    
+    CModelHolder::s_pInstance->DrawModelById("C:\\DMAP\\GE\\GameEngine\\Game\\Assets\\cyborg.obj", CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent"));
 
-	glDisable(GL_TEXTURE_2D);
-		
-	// deactivate this shader to not affect next rendering
-	CShaderHolder::s_pInstance->StopShader();
+    glDisable(GL_TEXTURE_2D);
 
-	err = glGetError();
-	if (err != 0)
-	{
-		printf("glError Drawing Model =%d\n", err);
-	}	
-	glPopMatrix();
+    // deactivate this shader to not affect next rendering
+    CShaderHolder::s_pInstance->StopShader();
+
+    err = glGetError();
+    if (err != 0)
+    {
+        printf("glError Drawing Model =%d\n", err);
+    }
+    glPopMatrix();
+
+	//glPushMatrix();
+	//glEnable(GL_LIGHTING);
+	//glColor4f(1.0, 0.0, 1.0, 0.5);
+
+	//// enable vertices array pointer rendering	
+ //   CShaderHolder::s_pInstance->UseShaderById("model");
+
+ //   CShaderHolder::s_pInstance->GetShaderProgramById("model")->
+ //       setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
+ //   CShaderHolder::s_pInstance->GetShaderProgramById("model")->
+ //       setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
+ //   CShaderHolder::s_pInstance->GetShaderProgramById("model")->
+ //       setUniformMatrix4fv("model", 1, false, &model[0][0]);
+
+ //   CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("lightPos", light_position[0], light_position[1], light_position[2]);
+	//CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 3, -1000);
+	//CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("scale", 0.1, 0.1, 0.1);
+	//CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", 160.f, 0.f, 1.f, 0.f);
+	//// attach a texture to the whole model
+	//glEnable(GL_TEXTURE_2D);
+ //   CShaderHolder::s_pInstance->GetShaderProgramById("model")->setTexture("diffuseMap",
+ //       CTextureHolder::s_pInstance->getTextureById("water.bmp"));
+
+	//CModelHolder::s_pInstance->DrawModelById("Hughes500.obj", CShaderHolder::s_pInstance->GetShaderProgramById("model"));
+
+	//glDisable(GL_TEXTURE_2D);
+	//	
+	//// deactivate this shader to not affect next rendering
+	//CShaderHolder::s_pInstance->StopShader();
+
+	//err = glGetError();
+	//if (err != 0)
+	//{
+	//	printf("glError Drawing Model =%d\n", err);
+	//}	
+	//glPopMatrix();
 
     glPushMatrix();
     CShaderHolder::s_pInstance->UseShaderById("texturedtangent");
 
-
+    model = glm::identity<glm::mat4>();
 	glEnable(GL_TEXTURE_2D);
 	CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setTexture("diffuseMap", 
 		CTextureHolder::s_pInstance->getTextureById(texName + "_t.bmp"));
@@ -254,10 +290,10 @@ void Game::Render()
     if (quadVAO == 0)
     {
         // positions
-        glm::vec3 pos1(-20.0f, -25.0f,  20.0f);
-        glm::vec3 pos2(-20.0f, -25.0f, -20.0f);
-        glm::vec3 pos3( 20.0f, -25.0f, -20.0f);
-        glm::vec3 pos4( 20.0f, -25.0f,  20.0f);
+        glm::vec3 pos1(-10.0f, -2.0f,  10.0f);
+        glm::vec3 pos2(-10.0f, -2.0f, -10.0f);
+        glm::vec3 pos3( 10.0f, -2.0f, -10.0f);
+        glm::vec3 pos4( 10.0f, -2.0f,  10.0f);
         // texture coordinates
         glm::vec2 uv1(0.0f, 1.0f);
         glm::vec2 uv2(0.0f, 0.0f);

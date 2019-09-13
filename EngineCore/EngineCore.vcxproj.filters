@@ -225,5 +225,8 @@
     <ClInclude Include="OS\Windows\ThreadFactoryWin.h">
       <Filter>Src\OS\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Loaders\Model3D\Model.h">
+      <Filter>Src\Loaders</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

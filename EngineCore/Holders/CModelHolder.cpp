@@ -6,9 +6,11 @@
 
 #include <objParser/objLoader.h>
 #include "MutexFactory.h"
-#ifdef WIN32
+#include "Model.h"
+// should make this configurable - there should be a factory instead
 #include "CModelOGL.h"
-#endif
+
+#include "Assimp\Importer.hpp"
 
 CModelHolder* CModelHolder::s_pInstance = NULL;
 
@@ -61,135 +63,49 @@ CModelHolder::LoadModel(const string modelId)
 
 	// cache missed - must reload it from resources db
 	CResource resModel(modelId);
-	Byte* modelStream = m_modelFiles->VAllocateAndGetResource(resModel);
+	//Byte* modelStream = m_modelFiles->VAllocateAndGetResource(resModel);
 
 	// checks if return value isn't null
-	if (modelStream != 0)
+	//if (modelStream != 0)
 	{
 		// material stream 
-		string materialId = modelId.substr(0, modelId.find_last_of('.'));
-		materialId += ".mtl";
-		CResource resMaterial(materialId);
+		//string materialId = modelId.substr(0, modelId.find_last_of('.'));
+		//materialId += ".mtl";
+		//CResource resMaterial(materialId);
 		// tries to get the material data
-		Byte* materialStream = m_modelFiles->VAllocateAndGetResource(resMaterial);
+		//Byte* materialStream = m_modelFiles->VAllocateAndGetResource(resMaterial);
+        UInt32 modelSize = m_modelFiles->VGetResourceSize(resModel);
 		// finally, perform allocation
-		AddModelContent(modelId, modelStream, materialStream);
+        AddModelContent(modelId, nullptr, modelSize);
+		//AddModelContent(modelId, modelStream, materialStream);
 
 		// release resources
-		if (materialStream != 0)
-		{
-			delete[] materialStream;
-		}
-		delete[] modelStream;
+		//if (materialStream != 0)
+		//{
+		//	delete[] materialStream;
+		//}
+		//delete[] modelStream;
 	}
-	else
+/*	else
 	{
 		DEBUG_OUT("Model %s not found in resource file!\n", modelId);
-	}	
+	}*/	
 
 	// time measurement
 	printf(" loading model [%s] %.2fms\n", modelId.data(), (float)(clock() - start));
 }
 
 void
-CModelHolder::AddModelContent(string modelId, Byte* bytesStream, Byte* materialStream)
+CModelHolder::AddModelContent(string modelId, Byte* bytesStream, UInt32 length)
 {
-	// new node to be allocated
-	SModelData newNode;
-	// will be deallocated at the end of this function
-	shared_ptr<objLoader> objData (new objLoader());
-	// parses the loaded model
-	objData->load(bytesStream, materialStream, true);
+    Graphics::IModel* pModelObj = new Graphics::CModelOGL();
 
-	printf("Number of vertices: %i\n", objData->vertexCount);
-	printf("Number of vertex normals: %i\n", objData->normalCount);
-	printf("Number of texture coordinates: %i\n", objData->textureCount);
-	printf("\n");
+    //Model modelLoader(bytesStream, length);
+    Model modelLoader(modelId);
 
-	for (int i = 0; i < objData->materialCount; i++)
-	{
-		SMaterialAttr newMaterial;
-		obj_material* m = objData->materialList[i];
+    pModelObj->Create(modelLoader);
 
-		newMaterial.m_ambient = IvVector3(m->amb[0], m->amb[1], m->amb[2]);
-		newMaterial.m_specular = IvVector3(m->spec[0], m->spec[1], m->spec[2]);
-		newMaterial.m_diffuse = IvVector3(m->diff[0], m->diff[1], m->diff[2]);
-		newMaterial.m_glossy = m->glossy;
-		newMaterial.m_reflect = m->reflect;
-		newMaterial.m_refract = m->refract;
-		newMaterial.m_shiny = m->shiny;
-		newMaterial.m_trans = m->trans;
-
-		newNode.m_material.push_back(newMaterial);
-	}
-
-	bool recalculateNormals = true;
-
-	if (objData->normalCount > 0)
-	{
-		recalculateNormals = false;
-		for (int i = 0; i < objData->normalCount; i++)
-		{
-			// temporary normal object
-			obj_vector* n = objData->normalList[i];
-			newNode.m_normals.push_back(IvVector3(n->e[0], n->e[1], n->e[2]));
-		}
-	}
-
-	for (int i = 0; i < objData->vertexCount; i++)
-	{
-		// temporary vertex object
-		obj_vector *o = objData->vertexList[i];
-
-		newNode.m_vertices.push_back(IvVector3(o->e[0], o->e[1], o->e[2]));
-
-		if (recalculateNormals)
-		{
-			//! if normals are not present - calculate them!
-			// calculate the length of the axis of the vertex
-			Float length = sqrt(pow(o->e[0], 2.0)
-				+ pow(o->e[1], 2.0)
-				+ pow(o->e[2], 2.0));
-
-			// use calculate normals 
-			// divide the vertex by the calculate length of the vertexes
-			newNode.m_normals.push_back(IvVector3(o->e[0] / length, o->e[1] / length, o->e[2] / length));
-		}
-	}
-
-	for (int i = 0; i < objData->textureCount; i++)
-	{
-		obj_vector* t = objData->textureList[i];
-		newNode.m_textures.push_back(IvVector2(t->e[0], t->e[1]));
-	}
-
-	for (int i = 0; i < objData->faceCount; i++)
-	{
-		obj_face *o = objData->faceList[i];
-
-		for (int j = 0; j < o->vertex_count; j++)
-		{
-			
-			//newNode.m_normalsIndexed.push_back(o->normal_index[j]);
-			newNode.m_indexes.push_back(o->vertex_index[j]);
-			//if (o->material_index != -1)
-			//{
-			//	newNode.m_texturesIndexed.push_back(o->texture_index[j]);
-			//}			
-		}
-	}
-
-
-
-	/*m_pModelContentMapMutex->mutexLock();
-	m_models.insert(make_pair(modelId, newNode));
-	m_pModelContentMapMutex->mutexUnlock();*/
-	Graphics::IModel* pModelObj = new Graphics::CModelOGL();
-
-	pModelObj->Create(newNode);
-
-	m_mapModels.insert(make_pair(modelId, pModelObj));
-	// objData will lose its last reference and it will be deallocated
+    m_mapModels.insert(make_pair(modelId, pModelObj));
 }
 
 void 
@@ -230,13 +146,13 @@ CModelHolder::GetModelById(const string modelId)
 	return *(Graphics::IModel*)(NULL);
 }
 
-void CModelHolder::DrawModelById(const string modelId)
+void CModelHolder::DrawModelById(const string modelId, cwc::glShader* shader)
 {
 	// then try to find it in the textures map
 	ModelObject::iterator result = m_mapModels.find(modelId);
 	if (result != m_mapModels.end())
 	{
-		result->second->Draw();
+		result->second->Draw(shader);
 	}
 	else
 	{

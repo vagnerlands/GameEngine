@@ -195,6 +195,7 @@
     <ClInclude Include="Loaders\Images\CFactory2dImage.h" />
     <ClInclude Include="Loaders\Images\CPng.h" />
     <ClInclude Include="Loaders\Images\CTga.h" />
+    <ClInclude Include="Loaders\Model3D\Model.h" />
     <ClInclude Include="Loaders\Model3D\objParser\list.h" />
     <ClInclude Include="Loaders\Model3D\objParser\objLoader.h" />
     <ClInclude Include="Loaders\Model3D\objParser\obj_parser.h" />

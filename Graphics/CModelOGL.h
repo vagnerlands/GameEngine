@@ -15,24 +15,35 @@ namespace Graphics
 	public:
 		CModelOGL();
 		virtual ~CModelOGL();
-		// create based on SModelData
-		virtual bool Create(const SModelData& modelInfo);
-		virtual void Draw();
+        
+        // create based on SModelData
+        virtual bool Create(const Model & modelInfo);
+		virtual void Draw(cwc::glShader* shader);
 		// allocate SModelData for custom objects
-		virtual SModelData& Allocate();
+		virtual shared_ptr<Model> Allocate();
 		// commit changes
 		virtual bool Commit();
 
 	private:
+        struct SDrawData
+        {
+            SDrawData() : m_vertexArrayObject(0U), m_indicesCount(0U) {}
+            SDrawData(UInt32 vao, UInt32 indCount) : m_vertexArrayObject(vao), m_indicesCount(indCount) {}
+        
+            UInt32 m_vertexArrayObject;
+            UInt32 m_indicesCount;
+        };
+
 		// copy operations
 		CModelOGL(const CModelOGL& other);
 		CModelOGL& operator=(const CModelOGL& other);
 
-		UInt32 m_elementBuffer[VertexBuffer_Max_Num];
-		bool m_vboBufferCreated;
-		UInt32 m_vertexArrayObject;
+		bool                    m_vboBufferCreated;
+        vector<UInt32>          m_vertexBufferObject;
+        vector<UInt32>          m_elementBufferObject;
+        vector<SDrawData>       m_drawAttr;
+        vector<SModelTexture>   m_textures;
 
-		UInt32 m_numberOfIndexes;
 	};
 
 

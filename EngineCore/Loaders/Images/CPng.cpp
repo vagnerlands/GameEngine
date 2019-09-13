@@ -148,8 +148,8 @@ void CPng::ReadDataFromInputStream(png_structp png_ptr, png_bytep outBytes, png_
 	if (io_ptr == NULL)
 		return;   // add custom error handling here
 
-				  // using pulsar::InputStream
-				  // -> replace with your own data source interface
+	// using pulsar::InputStream
+	// -> replace with your own data source interface
 	Byte* inputStream = reinterpret_cast<Byte*>(io_ptr);
 
 	memcpy((void*)outBytes, inputStream + cummulativeOffset, byteCountToRead);
