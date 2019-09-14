@@ -152,31 +152,27 @@ void Game::Render()
 	GLuint textureId = -1;
 
     glPushMatrix();
-    CShaderHolder::s_pInstance->UseShaderById("textured2");
+    //CShaderHolder::s_pInstance->UseShaderById("simpletexture");
     string texName = "brick";
     // light set-up
     glEnable(GL_LIGHT0);
     m_lightAngle += 1.f;
     static float MoveRadius = 3.F;
-    GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-    GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-    GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-    GLfloat light_direction[] = { 0.0, -1.0, 0.0 };
     GLfloat light_position[] = { sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius , 1.0f };
-    CShaderHolder::s_pInstance->StopShader();
+    glEnable(GL_TEXTURE_2D);
+    CTextureHolder::s_pInstance->Bind("lightbulb.bmp");
     glColor4f(1.F, 0, 0, 0.5F);
+    glColor4f(1, 0, 1, 1);
+    glEnable(GL_BLEND);
     glBegin(GL_QUADS);
-    glVertex3f(light_position[0] - 0.1f, light_position[1], light_position[2] - 0.1f);
-    glVertex3f(light_position[0] - 0.1f, light_position[1], light_position[2] + 0.1f);
-    glVertex3f(light_position[0] + 0.1f, light_position[1], light_position[2] + 0.1f);
-    glVertex3f(light_position[0] + 0.1f, light_position[1], light_position[2] - 0.1f);
+    glVertex3f(light_position[0] - 0.1f, light_position[1], light_position[2] - 0.1f); glTexCoord2f(0, 0);
+    glVertex3f(light_position[0] - 0.1f, light_position[1], light_position[2] + 0.1f); glTexCoord2f(0, 1);
+    glVertex3f(light_position[0] + 0.1f, light_position[1], light_position[2] + 0.1f); glTexCoord2f(1, 1);
+    glVertex3f(light_position[0] + 0.1f, light_position[1], light_position[2] - 0.1f); glTexCoord2f(1, 0);
     glEnd();
+    glDisable(GL_TEXTURE_2D);
 
-    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
-
+//    CShaderHolder::s_pInstance->StopShader();
     Int32 err = glGetError();
     if (err != 0)
     {
@@ -202,13 +198,19 @@ void Game::Render()
     CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setUniform3f("lightPos", light_position[0], light_position[1], light_position[2]);
 
     model = glm::identity<glm::mat4>();
-    model = glm::translate(model, glm::vec3(0, -2, 0));
+    model = glm::translate(model, glm::vec3(0, 10, 0));
+    static float rotationAngle = 0.f;
+    static float tiltAngle = 0.f;
+    static float tiltDirection = 0.00001f;
+    rotationAngle += 0.001f;
+    tiltAngle += tiltDirection;
+    if ((tiltAngle > 5.f) || (tiltAngle < -5.f)) tiltDirection *= -1.f;
+    model = glm::rotate(model, rotationAngle, glm::vec3(0, 1, 0));
+    model = glm::rotate(model, tiltAngle, glm::vec3(1, 0, 0));
     CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setUniformMatrix4fv("model", 1, false, &model[0][0]);
     // attach a texture to the whole model
     glEnable(GL_TEXTURE_2D);
-    
-    CModelHolder::s_pInstance->DrawModelById("C:\\DMAP\\GE\\GameEngine\\Game\\Assets\\cyborg.obj", CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent"));
-
+    CModelHolder::s_pInstance->DrawModelById("planet.obj", CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent"));
     glDisable(GL_TEXTURE_2D);
 
     // deactivate this shader to not affect next rendering
@@ -221,42 +223,39 @@ void Game::Render()
     }
     glPopMatrix();
 
-	//glPushMatrix();
-	//glEnable(GL_LIGHTING);
-	//glColor4f(1.0, 0.0, 1.0, 0.5);
+    glPushMatrix();
+    glEnable(GL_LIGHTING);
+    glColor4f(1.0, 0.0, 1.0, 0.5);
 
-	//// enable vertices array pointer rendering	
- //   CShaderHolder::s_pInstance->UseShaderById("model");
+    // enable vertices array pointer rendering	
+    CShaderHolder::s_pInstance->UseShaderById("texturedtangent");
 
- //   CShaderHolder::s_pInstance->GetShaderProgramById("model")->
- //       setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
- //   CShaderHolder::s_pInstance->GetShaderProgramById("model")->
- //       setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
- //   CShaderHolder::s_pInstance->GetShaderProgramById("model")->
- //       setUniformMatrix4fv("model", 1, false, &model[0][0]);
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
+        setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
+        setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
+        setUniformMatrix4fv("model", 1, false, &model[0][0]);
 
- //   CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("lightPos", light_position[0], light_position[1], light_position[2]);
-	//CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 3, -1000);
-	//CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("scale", 0.1, 0.1, 0.1);
-	//CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", 160.f, 0.f, 1.f, 0.f);
-	//// attach a texture to the whole model
-	//glEnable(GL_TEXTURE_2D);
- //   CShaderHolder::s_pInstance->GetShaderProgramById("model")->setTexture("diffuseMap",
- //       CTextureHolder::s_pInstance->getTextureById("water.bmp"));
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setUniform3f("lightPos", light_position[0], light_position[1], light_position[2]);
 
-	//CModelHolder::s_pInstance->DrawModelById("Hughes500.obj", CShaderHolder::s_pInstance->GetShaderProgramById("model"));
+    model = glm::identity<glm::mat4>();
+    model = glm::translate(model, glm::vec3(0, -2, 0));
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setUniformMatrix4fv("model", 1, false, &model[0][0]);
+    // attach a texture to the whole model
+    glEnable(GL_TEXTURE_2D);    
+    CModelHolder::s_pInstance->DrawModelById("cyborg.obj", CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent"));
+    glDisable(GL_TEXTURE_2D);
 
-	//glDisable(GL_TEXTURE_2D);
-	//	
-	//// deactivate this shader to not affect next rendering
-	//CShaderHolder::s_pInstance->StopShader();
+    // deactivate this shader to not affect next rendering
+    CShaderHolder::s_pInstance->StopShader();
 
-	//err = glGetError();
-	//if (err != 0)
-	//{
-	//	printf("glError Drawing Model =%d\n", err);
-	//}	
-	//glPopMatrix();
+    err = glGetError();
+    if (err != 0)
+    {
+        printf("glError Drawing Model =%d\n", err);
+    }
+    glPopMatrix();
 
     glPushMatrix();
     CShaderHolder::s_pInstance->UseShaderById("texturedtangent");

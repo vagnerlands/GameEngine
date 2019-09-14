@@ -24,7 +24,7 @@ CModelHolder::~CModelHolder()
 	}	
 }
 
-bool CModelHolder::Create(const string pathToModelFile)
+bool CModelHolder::Create(const string& pathToModelFile)
 {
 	if (s_pInstance == nullptr)
 	{
@@ -40,12 +40,12 @@ bool CModelHolder::Create(const string pathToModelFile)
 }
 
 void 
-CModelHolder::OnRemoveEvent(string removeItem)
+CModelHolder::OnRemoveEvent(const string& removeItem)
 {
 	s_pInstance->RemoveModel(removeItem);
 }
 
-CModelHolder::CModelHolder(std::string pathToResources)
+CModelHolder::CModelHolder(const string& pathToResources)
 	: m_modelFiles(new CResourceZipFile(pathToResources.data(), this->OnRemoveEvent))
 {
 	m_pModelContentMapMutex = MutexFactory::Instance().Create("ModelCOntentMap");
@@ -56,7 +56,7 @@ CModelHolder::CModelHolder(std::string pathToResources)
 }
 
 void 
-CModelHolder::LoadModel(const string modelId)
+CModelHolder::LoadModel(const string& modelId)
 {
 	// start loading measuring time
 	clock_t start = clock();
@@ -96,12 +96,12 @@ CModelHolder::LoadModel(const string modelId)
 }
 
 void
-CModelHolder::AddModelContent(string modelId, Byte* bytesStream, UInt32 length)
+CModelHolder::AddModelContent(const string& modelId, Byte* bytesStream, UInt32 length)
 {
     Graphics::IModel* pModelObj = new Graphics::CModelOGL();
 
     //Model modelLoader(bytesStream, length);
-    Model modelLoader(modelId);
+    Model modelLoader("../Game/Assets/" + modelId);
 
     pModelObj->Create(modelLoader);
 
@@ -109,7 +109,7 @@ CModelHolder::AddModelContent(string modelId, Byte* bytesStream, UInt32 length)
 }
 
 void 
-CModelHolder::RemoveModel(const string textId)
+CModelHolder::RemoveModel(const string& textId)
 {
 	ModelObject::iterator it = m_mapModels.find(textId);
 	if (it == m_mapModels.end())
@@ -130,7 +130,7 @@ CModelHolder::RemoveModel(const string textId)
 }
 
 Graphics::IModel&
-CModelHolder::GetModelById(const string modelId)
+CModelHolder::GetModelById(const string& modelId)
 {
 	// then try to find it in the textures map
 	ModelObject::iterator result = m_mapModels.find(modelId);
@@ -146,7 +146,7 @@ CModelHolder::GetModelById(const string modelId)
 	return *(Graphics::IModel*)(NULL);
 }
 
-void CModelHolder::DrawModelById(const string modelId, cwc::glShader* shader)
+void CModelHolder::DrawModelById(const string& modelId, cwc::glShader* shader)
 {
 	// then try to find it in the textures map
 	ModelObject::iterator result = m_mapModels.find(modelId);
