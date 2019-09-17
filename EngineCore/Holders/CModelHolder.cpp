@@ -61,8 +61,10 @@ CModelHolder::LoadModel(const string& modelId)
 	// start loading measuring time
 	clock_t start = clock();
 
+	AddModelContent(modelId, nullptr, 0U);
+
 	// cache missed - must reload it from resources db
-	CResource resModel(modelId);
+	//CResource resModel(modelId);
 	//Byte* modelStream = m_modelFiles->VAllocateAndGetResource(resModel);
 
 	// checks if return value isn't null
@@ -74,9 +76,9 @@ CModelHolder::LoadModel(const string& modelId)
 		//CResource resMaterial(materialId);
 		// tries to get the material data
 		//Byte* materialStream = m_modelFiles->VAllocateAndGetResource(resMaterial);
-        UInt32 modelSize = m_modelFiles->VGetResourceSize(resModel);
+        //UInt32 modelSize = m_modelFiles->VGetResourceSize(resModel);
 		// finally, perform allocation
-        AddModelContent(modelId, nullptr, modelSize);
+        //AddModelContent(modelId, nullptr, modelSize);
 		//AddModelContent(modelId, modelStream, materialStream);
 
 		// release resources
@@ -98,14 +100,16 @@ CModelHolder::LoadModel(const string& modelId)
 void
 CModelHolder::AddModelContent(const string& modelId, Byte* bytesStream, UInt32 length)
 {
-    Graphics::IModel* pModelObj = new Graphics::CModelOGL();
+    Graphics::IModel* pGfxModel = new Graphics::CModelOGL();
 
     //Model modelLoader(bytesStream, length);
-    Model modelLoader("../Game/Assets/" + modelId);
+    Model modelLoader;
+	// actually tries to load the model
+	modelLoader.Load("../Game/Assets/" + modelId);
+	// transfer this model data to the GPU
+	pGfxModel->Create(modelLoader);
 
-    pModelObj->Create(modelLoader);
-
-    m_mapModels.insert(make_pair(modelId, pModelObj));
+    m_mapModels.insert(make_pair(modelId, pGfxModel));
 }
 
 void 

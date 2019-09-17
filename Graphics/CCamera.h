@@ -4,6 +4,7 @@
 #include "CommonTypes.h"
 #include "IvVector3.h"
 #include "IvMatrix33.h"
+
 using namespace Types;
 
 class CCamera 
@@ -34,6 +35,8 @@ public:
 
 	void HoverRight(Float Distance);
 
+	void removeCameraRoll();
+
 	//void SetCameraAttribute(CameraAttributeType attr, Float x, Float y, Float z);
 
 	//void SetCameraAttribute(CameraAttributeType attr, IvVector3 xyz);
@@ -51,6 +54,9 @@ public:
 
 	// new approach for camera rotation
 	IvMatrix33 m_camRotation;
+
+	// Camera kind
+	ECameraType m_type;
 
 
 };

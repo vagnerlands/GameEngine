@@ -32,40 +32,16 @@ public:
     {
         // user defined mesh - let the user decide what to do with this...
     }
-    // constructor, expects a filepath to a 3D model.
-    Model(string const &path, bool gamma = false) : gammaCorrection(gamma)
-    {
-        loadModel(path);
-    }
 
-    Model(Types::Byte* pBuffer, UInt32 length) 
-    {
-        loadModel(pBuffer, length);
-    }
+	void Load(string const& path, bool gamma = false)
+	{
+		gammaCorrection = gamma;
+		loadModel(path);
+	}
 
     
 private:
     // Functions
-
-    // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
-    void loadModel(Types::Byte* pBuffer, UInt32 length)
-    {
-        // read file via ASSIMP
-        Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFileFromMemory(pBuffer, length, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-
-        // check for errors
-        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
-        {
-            cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
-            return;
-        }
-
-        // process ASSIMP's root node recursively
-        processNode(scene->mRootNode, scene);
-        // release allocated resources
-        importer.FreeScene();
-    }
 
     // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
     void loadModel(string const &path)

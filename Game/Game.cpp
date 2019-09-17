@@ -43,14 +43,12 @@ bool Game::PostRendererInitialize()
 
 	// Set the view parameters in renderer
 	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
+	// Update this camera type
+	Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Human;
 	// create model holder
 	CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
     // 50mb allocation for VRAM textures
 	CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip", 50U*1024U*1024U);
-
-	CTextureHolder::s_pInstance->getTextureById("water.bmp");
-	CTextureHolder::s_pInstance->getTextureById("brick_t.bmp");
-	CTextureHolder::s_pInstance->getTextureById("brick_n.bmp");
 
 	IGame::mGame->SetFps(60);
 
@@ -59,7 +57,8 @@ bool Game::PostRendererInitialize()
 
 void Game::UpdateObjects(float dt)
 {
-    const Float cSpeed = 30.f;
+    const Float cSpeed = 10.f;
+	const Float cMouseSensibility = 1.25f;
 	if (mpGameInput->m_bKey[27])
 	{
 		mGame->Quit();
@@ -106,8 +105,8 @@ void Game::UpdateObjects(float dt)
 		const Float cosValue = cos((mpGameInput->m_movementAngle * (3.14159 / 180.F)));
 		const Float sinValue = sin((mpGameInput->m_movementAngle * (3.14159 / 180.F)));
 		//printf(" Intensity X %d Y %d cos %f sin %f\n", mpGameInput->m_movementIntensityX, mpGameInput->m_movementIntensityY, cosValue, sinValue);
-		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(mpGameInput->m_movementIntensityY) * dt * 2.5f);
-		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(-mpGameInput->m_movementIntensityX) * dt * 2.5f);
+		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(mpGameInput->m_movementIntensityY) * dt * cMouseSensibility);
+		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(-mpGameInput->m_movementIntensityX) * dt * cMouseSensibility);
 	}
 
 	if (mpGameInput->m_isRightButtonPressed)
@@ -157,8 +156,8 @@ void Game::Render()
     // light set-up
     glEnable(GL_LIGHT0);
     m_lightAngle += 1.f;
-    static float MoveRadius = 3.F;
-    GLfloat light_position[] = { sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius , 1.0f };
+    static float MoveRadius = 4.F;
+    GLfloat light_position[] = { sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 1.5f, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius , 1.0f };
     glEnable(GL_TEXTURE_2D);
     CTextureHolder::s_pInstance->Bind("lightbulb.bmp");
     glColor4f(1.F, 0, 0, 0.5F);
@@ -263,10 +262,13 @@ void Game::Render()
     model = glm::identity<glm::mat4>();
 	glEnable(GL_TEXTURE_2D);
 	CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setTexture("diffuseMap", 
-		CTextureHolder::s_pInstance->getTextureById(texName + "_t.bmp"));
+		CTextureHolder::s_pInstance->getTextureById("wallstone-diffuse.bmp"));
 
 	CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setTexture("normalMap",
-		CTextureHolder::s_pInstance->getTextureById(texName + "_n.bmp"));
+		CTextureHolder::s_pInstance->getTextureById("wallstone-normal.bmp"));
+
+	CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setTexture("specularMap",
+		CTextureHolder::s_pInstance->getTextureById("wallstone-specular.bmp"));
 
     CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
         setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
