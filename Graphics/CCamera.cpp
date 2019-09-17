@@ -1,5 +1,8 @@
 #include "CCamera.h"
 #include <iostream>
+
+#include "glm\glm.hpp"
+
 #define PI 3.1415926535897932384626433832795
 #define PIdiv180 (PI/180.0)
 
@@ -7,38 +10,11 @@ CCamera::CCamera() :
 	m_position(0.0f, 0.0f, 0.0f),
 	m_rightVector(1.0f, 0.0f, 0.0f),
 	m_upVector(0.0f, 1.0f, 0.0f),
-	m_viewDir(0.0f, 0.0f, 1.0f),
-	m_rotation(0.0f, 0.0f, 0.0f)	
+	m_viewDir(0.0f, 0.0f, -1.0f),
+	m_rotation(0.0f, 0.0f, 0.0f)
 {
-	m_camRotation.Identity();
+	m_camRotation.SetColumns(m_rightVector, m_upVector, m_viewDir);
 }
-/*
-void CCamera::prepareProjection3D()
-{
-	// prepares PERSPECTIVE PROJECTION
-	glMatrixMode(GL_PROJECTION);
-	//Reset the drawing perspective
-	glLoadIdentity(); 
-	static GLfloat frustumParams[] = { -1.f, 1.f, -1.f, 1.f, 5.f, 10000.f };
-	// prepares perspective projection
-	glFrustum(frustumParams[0],
-		frustumParams[1],
-		frustumParams[2],
-		frustumParams[3],
-		frustumParams[4],
-		frustumParams[5]);
-}
-
-void CCamera::prepareProjection2D()
-{
-	glMatrixMode(GL_MODELVIEW);
-	// prepares ORTHO PROJECTION
-	glMatrixMode(GL_PROJECTION);
-	//Reset the drawing perspective
-	glLoadIdentity(); 
-	// prepares orthogonal projection
-	glOrtho(-(s_SCREEN_WIDTH / 2.0), (s_SCREEN_WIDTH / 2.0), -(s_SCREEN_HEIGHT / 2.0), (s_SCREEN_HEIGHT / 2.0), -600.0, 600.0);
-}*/
 
 void CCamera::SetLookAtMatrix()
 {
@@ -50,26 +26,28 @@ void CCamera::SetLookAtMatrix()
 void CCamera::RotateX(Float Angle)
 {
 	Angle *= 0.1;
-	m_rotation.SetX(m_rotation.GetX() + Angle);
 
-	//printf("[ang=%f totalangX = %f] - ", Angle, m_rotation.GetX());
+	//m_rotation.SetX(m_rotation.GetX() + Angle);
 
-	//Rotate viewdir around the right vector:
-	m_viewDir = (m_viewDir * cos(Angle*PIdiv180) + m_upVector * sin(Angle*PIdiv180));
-	m_viewDir.Normalize();
+	////printf("[ang=%f totalangX = %f] - ", Angle, m_rotation.GetX());
 
-	//now compute the new UpVector (by cross product)
-	m_upVector = m_viewDir.Cross(m_rightVector) * -1;
-	// try to keep the head up
-	m_upVector.SetY(1.0f);
+	////Rotate viewdir around the right vector:
+	//m_viewDir = (m_viewDir * cos(Angle*PIdiv180) + m_upVector * sin(Angle*PIdiv180));
+	//m_viewDir.Normalize();
+
+	////now compute the new UpVector (by cross product)
+	////m_upVector    = m_viewDir.Cross(m_rightVector) * -1;
+	//m_rightVector = m_viewDir.Cross(m_upVector) * -1;
+	//m_rightVector.Normalize();
 
 	// new approach
 	IvMatrix33 rotate;
 	rotate.RotationX(Angle);
 	m_camRotation = m_camRotation * rotate;
-	//m_camRotation[1] = 0.F;
-	//m_camRotation[4] = 1.F;
-	//m_camRotation[7] = 0.F;
+
+	// ignore the Roll of the camera
+	removeCameraRoll();
+
 	for (int i = 0; i < 9; ++i)
 		if (i%3 == 0)
 			std::cout << std::endl << "  "  << m_camRotation[i] ;
@@ -81,43 +59,50 @@ void CCamera::RotateX(Float Angle)
 void CCamera::RotateY(Float Angle)
 {
 	Angle *= 0.1;
-	m_rotation.SetY(m_rotation.GetY() + Angle);
-	//printf("[ang=%f totalangY = %f]\n\n", Angle, m_rotation.GetY());
+	//m_rotation.SetY(m_rotation.GetY() + Angle);
+	////printf("[ang=%f totalangY = %f]\n\n", Angle, m_rotation.GetY());
 
-	//Rotate viewdir around the up vector:
-	m_viewDir = (m_viewDir * cos(Angle * PIdiv180) - m_rightVector * sin(Angle * PIdiv180));
-	m_viewDir.Normalize();
+	////Rotate viewdir around the up vector:
+	//m_viewDir = (m_viewDir * cos(Angle * PIdiv180) - m_rightVector * sin(Angle * PIdiv180));
+	//m_viewDir.Normalize();
 
-	//now compute the new RightVector (by cross product)
-	m_rightVector = m_viewDir.Cross(m_upVector);
+	////now compute the new RightVector (by cross product)
+	////m_rightVector = m_viewDir.Cross(m_upVector) * -1;
+	//m_rightVector = m_viewDir.Cross(m_upVector) * -1;
+	//m_rightVector.Normalize();
+	////m_upVector    = m_viewDir.Cross(m_rightVector) * -1;
 
 	// new approach
 	IvMatrix33 rotate;
 	rotate.RotationY(Angle);
 	m_camRotation = m_camRotation * rotate;
-	//m_camRotation[1] = 0.F;
-	//m_camRotation[4] = 1.F;
-	//m_camRotation[7] = 0.F;
+	// ignore the Roll of the camera
+	removeCameraRoll();
+
 	std::cout << "   Y " << Angle << std::endl;
 }
 
 void CCamera::RotateZ(Float Angle)
 {
 	Angle *= 0.1;
-	m_rotation.SetZ(m_rotation.GetZ() + Angle);
+	//m_rotation.SetZ(m_rotation.GetZ() + Angle);
 
-	//Rotate viewdir around the right vector:
-	m_rightVector = (m_rightVector * cos(Angle * PIdiv180) + m_upVector * sin(Angle * PIdiv180));
-	m_rightVector.Normalize();
+	////Rotate viewdir around the right vector:
+	//m_rightVector = (m_rightVector * cos(Angle * PIdiv180) + m_upVector * sin(Angle * PIdiv180));
+	//m_rightVector.Normalize();
 
-	//now compute the new UpVector (by cross product)
-	m_upVector = m_viewDir.Cross(m_rightVector) * -1;
+	////now compute the new UpVector (by cross product)
+	//m_upVector = m_viewDir.Cross(m_rightVector) * -1;
 
 
 	// new approach
 	IvMatrix33 rotate;
 	rotate.RotationZ(Angle);
 	m_camRotation = m_camRotation * rotate;
+
+	// ignore the Roll of the camera
+	removeCameraRoll();
+
 	std::cout << "    Z" << std::endl;
 }
 
@@ -152,6 +137,29 @@ void CCamera::HoverRight(Float Distance)
 {
 	IvVector3 direction = m_position + (m_rightVector * Distance);
 	m_position = IvVector3(direction.GetX(), m_position.GetY(), direction.GetZ());
+}
+
+void CCamera::removeCameraRoll()
+{
+	if ((m_type == Camera_Human) 
+		|| (m_type == Camera_Spectator))
+	{
+		// temporary vectors 
+		IvVector3 right, up, forward;
+		// retrieve the 3 vectors that compose the "View Matrix"
+		m_camRotation.GetColumns(right, up, forward);
+		// ignore the Y orientation of the right vector
+		right.SetY(0);
+		// calculates the new Up vector, cross product will return a perpendicular vector to forward X right (with head-up)
+		up = forward.Cross(right) * -1.f;
+		// normalize this given vector to avoid anormalities
+		up.Normalize();
+		// now that we have the actual up vector perpendicular to forward X "pseudo"-right, we calculate
+		// the correct right vector
+		right = forward.Cross(up);
+		// update the camera rotation with the new vectors
+		m_camRotation.SetColumns(right, up, forward);
+	}
 }
 
 /*void CCamera::SetCameraAttribute(CameraAttributeType attr, TFloat x, TFloat y, TFloat z)
