@@ -1,0 +1,5 @@
+# do not track files as follows #
+
+# Compiled source #
+*.lib
+
