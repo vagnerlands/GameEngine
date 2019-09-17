@@ -4,11 +4,15 @@ EngineCore/Release/
 GameDLL/Debug/
 GameDLL/Release/
 Graphics/Debug/
+Graphics/Release/
 Math/Debug/
+Math/Release/
 UtilitiesCore/Debug/
+UtilitiesCore/Release/
 Binaries/
 Game-Editor/obj/
 Game/Debug/
+Game/Release/
 
 # Compiled source #
 Game/Debug.txt
