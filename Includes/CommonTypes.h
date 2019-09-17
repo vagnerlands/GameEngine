@@ -42,6 +42,19 @@ namespace Types
 		CameraAttribute_Forward
 	};
 
+	// kind of cameras available, each one will give a different behavior for vector calculations
+	enum ECameraType
+	{
+		// camera must be above ground and ignores roll rotation
+		Camera_Human = 0,
+		// camera may fly, but still ignores roll rotation
+		Camera_Spectator,
+		// free angle rotation
+		Camera_Flight,
+		// for iterators
+		Camera_Total
+	};
+
 	enum GameViewType
 	{
 		GameView_Undefined,
