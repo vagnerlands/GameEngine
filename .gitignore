@@ -1,5 +1,15 @@
-# do not track files as follows #
+# do not track files in these folders #
+EngineCore/Debug/
+EngineCore/Release/
+GameDLL/Debug/
+GameDLL/Release/
+Graphics/Debug/
+Math/Debug/
+UtilitiesCore/Debug/
+Binaries/
+Game-Editor/obj/
+Game/Debug/
 
 # Compiled source #
-*.lib
+Game/Debut.txt
 
