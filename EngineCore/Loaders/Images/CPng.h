@@ -14,7 +14,7 @@ class CPng : public I2dImage
 public:
 	CPng();
 
-	virtual bool ParseStream(Byte* pData) override;
+	virtual bool ParseStream(Byte* pData, UInt32 length) override;
 
 	virtual ~CPng();
 

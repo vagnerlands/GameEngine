@@ -21,7 +21,7 @@ class I2dImage
 public:
 	I2dImage();
 
-	virtual bool ParseStream(Byte* pData) = 0;
+	virtual bool ParseStream(Byte* pData, UInt32 length) = 0;
 
 	virtual ~I2dImage() 
 	{

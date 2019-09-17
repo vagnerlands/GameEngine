@@ -4,7 +4,7 @@ CBmp::CBmp()
 {
 }
 
-bool CBmp::ParseStream(Byte* pData)
+bool CBmp::ParseStream(Byte* pData, UInt32 length)
 {
 	if (pData != NULL)
 	{

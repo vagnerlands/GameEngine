@@ -51,6 +51,7 @@ Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\EngineCore\OS;^
 %PROJECT_ROOT%\EngineCore\Cache\ResourceCache;^
 %PROJECT_ROOT%\EngineCore\Loaders\Images;^
+%PROJECT_ROOT%\EngineCore\Loaders\Images\Windows;^
 %PROJECT_ROOT%\EngineCore\Loaders\Model3D;^
 %PROJECT_ROOT%\EngineCore\Loaders\Model3D\Assimp;^
 %PROJECT_ROOT%\EngineCore\Loaders\Model3D\objParser;^

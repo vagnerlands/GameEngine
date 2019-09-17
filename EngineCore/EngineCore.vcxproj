@@ -163,6 +163,8 @@
     <ClCompile Include="Loaders\Images\CFactory2dImage.cpp" />
     <ClCompile Include="Loaders\Images\CPng.cpp" />
     <ClCompile Include="Loaders\Images\CTga.cpp" />
+    <ClCompile Include="Loaders\Images\Windows\Bitmap.cpp" />
+    <ClCompile Include="Loaders\Images\Windows\CFactory2dImageWin.cpp" />
     <ClCompile Include="Loaders\Model3D\objParser\list.cpp" />
     <ClCompile Include="Loaders\Model3D\objParser\objLoader.cpp" />
     <ClCompile Include="Loaders\Model3D\objParser\obj_parser.cpp" />
@@ -195,6 +197,8 @@
     <ClInclude Include="Loaders\Images\CFactory2dImage.h" />
     <ClInclude Include="Loaders\Images\CPng.h" />
     <ClInclude Include="Loaders\Images\CTga.h" />
+    <ClInclude Include="Loaders\Images\Windows\Bitmap.h" />
+    <ClInclude Include="Loaders\Images\Windows\CFactory2dImageWin.h" />
     <ClInclude Include="Loaders\Model3D\Model.h" />
     <ClInclude Include="Loaders\Model3D\objParser\list.h" />
     <ClInclude Include="Loaders\Model3D\objParser\objLoader.h" />

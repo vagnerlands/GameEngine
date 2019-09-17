@@ -1,8 +1,8 @@
 #include "CTextureHolder.h"
 #include "gl/glut.h"
 #include <time.h>
+#include "MutexFactory.h"
 #ifdef WIN32
-#include "CWinMutex.h"
 #include "CTextureOGL.h"
 #endif
 
@@ -10,7 +10,7 @@
 
 CTextureHolder* CTextureHolder::s_pInstance = NULL;
 
-bool CTextureHolder::Create(const string pathToTexturesFile, UInt32 maxAllocSize)
+bool CTextureHolder::Create(const string& pathToTexturesFile, UInt32 maxAllocSize)
 {
 	if (s_pInstance == nullptr)
 	{
@@ -26,30 +26,28 @@ bool CTextureHolder::Create(const string pathToTexturesFile, UInt32 maxAllocSize
 	return false;
 }
 
-CTextureHolder::CTextureHolder(const string pathToTexturesFile, UInt32 maxAllocSize) :
+CTextureHolder::CTextureHolder(const string& pathToTexturesFile, UInt32 maxAllocSize) :
     m_pResHandler(new CResourceZipFile(pathToTexturesFile.data(), this->OnRemoveEvent)),
     m_maxAllocSize(maxAllocSize),
     m_sizeInUse(0U)
 {
-#ifdef WIN32
-    m_textureContentMapMutex = new CWinMutex();
-#else
-#error "no implementation for this platform"
-#endif
-    if (m_textureContentMapMutex != NULL)
+	// cross platform implementation for mutex creation
+	m_textureContentMapMutex = MutexFactory::Instance().Create("TextureMapMutex");
+
+	if (m_textureContentMapMutex != NULL)
     {
         m_textureContentMapMutex->createMutex("TextureContentMap");
     }
 }
 
 void 
-CTextureHolder::OnRemoveEvent(string removeItem)
+CTextureHolder::OnRemoveEvent(const string& removeItem)
 {
 	s_pInstance->RemoveTexture(removeItem);
 }
 
 void 
-CTextureHolder::LoadTexture(const string textId)
+CTextureHolder::LoadTexture(const string& textId)
 {
 	// start loading measuring time
 	clock_t start = clock();
@@ -57,7 +55,8 @@ CTextureHolder::LoadTexture(const string textId)
 	// cache missed - must reload it from resources db
 	CResource resourceItem(textId);
 
-	Byte* textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem);
+	Byte*  textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem);
+	UInt32 textureDataLength = m_pResHandler->VGetResourceSize(resourceItem);
 	// status OK
 	if (textureDataStream != 0)
 	{
@@ -67,8 +66,8 @@ CTextureHolder::LoadTexture(const string textId)
 		I2dImage* pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
 		if (pRawImage != NULL) // is this file a BMP?
 		{
-			pRawImage->ParseStream(textureDataStream);
-			BuildTexture(textId, pRawImage);
+			if (pRawImage->ParseStream(textureDataStream, textureDataLength))
+				BuildTexture(textId, pRawImage);
 			// free allocated data from the heap
 			// this must also free the array of bmp pixels 
 			delete pRawImage;
@@ -85,7 +84,7 @@ CTextureHolder::LoadTexture(const string textId)
 	printf(" loading tex [%s] %.2fms\n", textId.data(), (float)(clock() - start));
 }
 
-void CTextureHolder::BuildTexture(const string textureId, const I2dImage* pData)
+void CTextureHolder::BuildTexture(const string& textureId, const I2dImage* pData)
 {
 
 	Graphics::ITexture* pTextureObj = NULL;
@@ -148,7 +147,7 @@ void CTextureHolder::removeLastItem()
     m_lru.pop_back();
 }
 
-void CTextureHolder::RemoveTexture(const string textId)
+void CTextureHolder::RemoveTexture(const string& textId)
 {
 	TextureMap::iterator it = m_textures.find(textId);
 	if (it == m_textures.end())
@@ -162,7 +161,7 @@ void CTextureHolder::RemoveTexture(const string textId)
 }
 
 Graphics::ITexture*
-CTextureHolder::getTextureById(string textId)
+CTextureHolder::getTextureById(const string& textId)
 {
 	// then try to find it in the textures map
 	TextureMap::iterator result = m_textures.find(textId);
@@ -181,7 +180,7 @@ CTextureHolder::getTextureById(string textId)
 	return NULL;
 }
 
-bool CTextureHolder::Bind(const string texId) const
+bool CTextureHolder::Bind(const string& texId) const
 {
 	// then try to find it in the textures map
 	TextureMap::const_iterator result = m_textures.find(texId);

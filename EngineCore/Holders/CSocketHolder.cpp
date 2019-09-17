@@ -1,14 +1,11 @@
 #include "CSocketHolder.h"
 #include "CThreadHolder.h"
-#ifdef WIN32
-#include "CWinMutex.h"
-#endif
+#include "MutexFactory.h"
 
 CSocketHolder::CSocketHolder() : m_sockedDBMutex(NULL)
 {
-#ifdef WIN32
-	m_sockedDBMutex = new CWinMutex();
-#endif
+
+	m_sockedDBMutex = MutexFactory::Instance().Create("SocketDBMutex");
 
 	if (m_sockedDBMutex == NULL)
 	{
