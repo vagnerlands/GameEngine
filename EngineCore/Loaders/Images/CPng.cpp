@@ -4,7 +4,7 @@ CPng::CPng()
 {
 }
 
-bool CPng::ParseStream(Byte* pData)
+bool CPng::ParseStream(Byte* pData, UInt32 length)
 {
 	if (pData != NULL)
 	{

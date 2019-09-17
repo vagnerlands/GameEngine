@@ -12,6 +12,11 @@
 #include "CThreadHolder.h"
 #include "IvPoint.h"
 
+#include "MutexFactoryWin.h"
+#include "SocketFactoryWin.h"
+#include "ThreadFactoryWin.h"
+#include "CFactory2dImageWin.h"
+
 
 #ifdef WIN32
 DWORD WINAPI WinOglBackgroundLoader(LPVOID lpParameter)
@@ -42,6 +47,12 @@ void MainWinOgl::StartUp(int argv, char** argc)
 	}
 	// creates debug data file
 	gDebugger.DumpToFile("Debug.txt");
+
+	// Initialize all Factories
+	MutexFactoryWin::Initialize();
+	SocketFactoryWin::Initialize();
+	ThreadFactoryWin::Initialize();
+	CFactory2dImageWin::Initialize();
 
 	// set up game
 	if (!EngineCore::IGame::Create() || !EngineCore::IGame::mGame->PreRendererInitialize(argv, argc))

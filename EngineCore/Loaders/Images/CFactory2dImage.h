@@ -13,10 +13,9 @@ class CFactory2dImage
 public:
 	
 	static CFactory2dImage* instance();
+	virtual I2dImage* Create2dImage(Byte fileType[]);
 
-	I2dImage* Create2dImage(Byte fileType[]);
-
-private:
+protected:
 	static CFactory2dImage* s_pInstance;
 	CFactory2dImage();
 	virtual ~CFactory2dImage();

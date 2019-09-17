@@ -1,12 +1,11 @@
 #include "CShaderHolder.h"
+#include "MutexFactory.h"
 #include "gl/glut.h"
 
 #include <time.h>
 #include <iostream>
 #include <string>
-#ifdef WIN32
-#include "CWinMutex.h"
-#endif
+
 
 CShaderHolder* CShaderHolder::s_pInstance = NULL;
 
@@ -32,11 +31,7 @@ CShaderHolder::OnRemoveEvent(string removeItem)
 
 CShaderHolder::CShaderHolder()
 {
-#ifdef WIN32
-	m_pShaderContentMapMutex = new CWinMutex();
-#else
-#error "no implementation for this platform"
-#endif
+	m_pShaderContentMapMutex = MutexFactory::Instance().Create("ShaderMutex");
 	if (m_pShaderContentMapMutex != NULL)
 	{
 		m_pShaderContentMapMutex->createMutex("ShaderContentMap");

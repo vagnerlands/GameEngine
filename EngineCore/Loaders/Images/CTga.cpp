@@ -4,7 +4,7 @@ CTga::CTga()
 {
 }
 
-bool CTga::ParseStream(Byte* pData)
+bool CTga::ParseStream(Byte* pData, UInt32 length)
 {
 	if (pData != NULL)
 	{

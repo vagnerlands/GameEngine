@@ -46,7 +46,7 @@ class CTga : public I2dImage
 public:
 	CTga();
 
-	virtual bool ParseStream(Byte* pData) override;
+	virtual bool ParseStream(Byte* pData, UInt32 length) override;
 
 	virtual ~CTga();
 	

@@ -38,6 +38,9 @@
     <Filter Include="Src\Input">
       <UniqueIdentifier>{6f08bf17-c58c-4416-910a-d710de29be51}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Loaders\Images\Windows">
+      <UniqueIdentifier>{fd0f5ff5-36f7-4e60-8924-3123ac367127}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IGame.cpp">
@@ -117,6 +120,12 @@
     </ClCompile>
     <ClCompile Include="OS\Windows\ThreadFactoryWin.cpp">
       <Filter>Src\OS\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Images\Windows\Bitmap.cpp">
+      <Filter>Src\Loaders\Images\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Images\Windows\CFactory2dImageWin.cpp">
+      <Filter>Src\Loaders\Images\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +236,12 @@
     </ClInclude>
     <ClInclude Include="Loaders\Model3D\Model.h">
       <Filter>Src\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Images\Windows\Bitmap.h">
+      <Filter>Src\Loaders\Images\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Images\Windows\CFactory2dImageWin.h">
+      <Filter>Src\Loaders\Images\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

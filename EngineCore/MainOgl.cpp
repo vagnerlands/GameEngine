@@ -14,6 +14,7 @@
 #include "MutexFactoryWin.h"
 #include "SocketFactoryWin.h"
 #include "ThreadFactoryWin.h"
+#include "CFactory2dImageWin.h"
 
 static Int32 s_lastState = GLUT_UP;
 static Int32 s_lastCursorX = -1;
@@ -146,6 +147,7 @@ void MainOgl::StartUp(int argv, char** argc)
     MutexFactoryWin::Initialize();
     SocketFactoryWin::Initialize();
     ThreadFactoryWin::Initialize();
+	CFactory2dImage::instance();
 
 	// Use a single buffered window in RGB mode (as opposed to a double-buffered
 	// window or color-index mode).

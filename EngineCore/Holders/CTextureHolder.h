@@ -38,24 +38,24 @@ public:
 	typedef unordered_map<string, Graphics::ITexture*> TextureMap;
 	typedef unordered_map<string, Types::Byte*> TextureContentMap;
 
-	static bool Create(const string pathToTexturesFile, UInt32 maxAllocSize);
-	void LoadTexture(const string textId);
-	void RemoveTexture(const string textId);
-	Graphics::ITexture* getTextureById(string textId);
-	bool Bind(const string texId) const ;
+	static bool Create(const string& pathToTexturesFile, UInt32 maxAllocSize);
+	void LoadTexture(const string& textId);
+	void RemoveTexture(const string& textId);
+	Graphics::ITexture* getTextureById(const string& textId);
+	bool Bind(const string& texId) const ;
 	CTextureHolder::~CTextureHolder();
 
 	// external callback event in case a resource is deallocated
-	static void OnRemoveEvent(string removeItem);
+	static void OnRemoveEvent(const string& removeItem);
 
 	// local instance
 	static CTextureHolder* s_pInstance;
 
 
 private:
-	CTextureHolder(const string pathToTexturesFile, UInt32 maxAllocSize);
+	CTextureHolder(const string& pathToTexturesFile, UInt32 maxAllocSize);
 	// build texture, if any available
-	void BuildTexture(const string textureId, const I2dImage* pData);
+	void BuildTexture(const string& textureId, const I2dImage* pData);
     void increaseTexturePriority(const string & textureId, UInt32 size);
     void removeLastItem();
 	// local hashmap built textures
