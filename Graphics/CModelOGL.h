@@ -28,10 +28,11 @@ namespace Graphics
         struct SDrawData
         {
             SDrawData() : m_vertexArrayObject(0U), m_indicesCount(0U) {}
-            SDrawData(UInt32 vao, UInt32 indCount) : m_vertexArrayObject(vao), m_indicesCount(indCount) {}
+            SDrawData(UInt32 vao, UInt32 indCount, vector<SModelTexture> vTextures) : m_vertexArrayObject(vao), m_indicesCount(indCount), m_textures(vTextures) {}
         
-            UInt32 m_vertexArrayObject;
-            UInt32 m_indicesCount;
+			vector<SModelTexture>   m_textures;
+            UInt32					m_vertexArrayObject;
+            UInt32					m_indicesCount;
         };
 
 		// copy operations
@@ -41,8 +42,7 @@ namespace Graphics
 		bool                    m_vboBufferCreated;
         vector<UInt32>          m_vertexBufferObject;
         vector<UInt32>          m_elementBufferObject;
-        vector<SDrawData>       m_drawAttr;
-        vector<SModelTexture>   m_textures;
+        vector<SDrawData>       m_drawAttr;        
 
 	};
 

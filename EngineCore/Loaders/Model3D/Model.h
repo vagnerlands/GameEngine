@@ -21,8 +21,9 @@ using namespace Types;
 class Model 
 {
 public:
-    // Model Data
+    // Keep track of already loaded textures in order to not load the same texture twice in the VRAM
     vector<Types::SModelTexture> textures_loaded;
+	// meshes contain also list of textures
     vector<Types::SModelMesh> meshes;
     string directory;
     bool gammaCorrection;
@@ -97,10 +98,17 @@ private:
             vector.z = mesh->mVertices[i].z;
             vertex.Position = vector;
             // normals
-            vector.x = mesh->mNormals[i].x;
-            vector.y = mesh->mNormals[i].y;
-            vector.z = mesh->mNormals[i].z;
-            vertex.Normal = vector;
+			if (mesh->mNormals) // does the mesh contain normal coordinates
+			{
+				vector.x = mesh->mNormals[i].x;
+				vector.y = mesh->mNormals[i].y;
+				vector.z = mesh->mNormals[i].z;
+				vertex.Normal = vector;
+			}
+			else
+			{
+				vertex.Normal = glm::vec3(0.f, 1.f, 0.f);
+			}
             // texture coordinates
             if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
             {

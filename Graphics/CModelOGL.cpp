@@ -10,7 +10,6 @@ Graphics::CModelOGL::CModelOGL() :
     m_elementBufferObject.clear();
     m_drawAttr.clear();
     m_vertexBufferObject.clear();
-    m_textures.clear();
 }
 
 Graphics::CModelOGL::~CModelOGL()
@@ -73,7 +72,7 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
 
             m_vertexBufferObject.push_back(VBO);
             m_elementBufferObject.push_back(EBO);
-            m_drawAttr.push_back(SDrawData(VAO, modelInfo.meshes[i].m_indices.size()));
+            m_drawAttr.push_back(SDrawData(VAO, modelInfo.meshes[i].m_indices.size(), modelInfo.meshes[i].m_textures));
 
             glBindVertexArray(VAO);
             // load data into vertex buffers
@@ -113,13 +112,6 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
             }
         }
 
-        m_textures.reserve(modelInfo.textures_loaded.size());
-        // now copy the textures locally
-        for (UInt32 i = 0; i < modelInfo.textures_loaded.size(); ++i)
-        {
-            m_textures.push_back(modelInfo.textures_loaded[i]);
-        }
-
         m_vboBufferCreated = true;
 
     }
@@ -135,18 +127,18 @@ void Graphics::CModelOGL::Draw(cwc::glShader* shader)
     unsigned int specularNr = 1;
     unsigned int normalNr = 1;
     unsigned int heightNr = 1;
-    for (unsigned int i = 0; i < m_textures.size(); i++)
-    {
-        glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
-        // retrieve texture number (the N in diffuse_textureN)
-        string number;
-        string name = m_textures[i].m_uniformName;
-        // now set the sampler to the correct texture unit
-        shader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_textures[i].m_filename));
-    }
 
     for (UInt32 i = 0 ; i < m_drawAttr.size(); ++i)
     {
+		for (unsigned int ti = 0; ti < m_drawAttr[i].m_textures.size(); ti++)
+		{
+			glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
+											  // retrieve texture number (the N in diffuse_textureN)
+			string number;
+			string name = m_drawAttr[i].m_textures[ti].m_uniformName;
+			// now set the sampler to the correct texture unit
+			shader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
+		}
         // draw all meshes mesh
         glBindVertexArray(m_drawAttr[i].m_vertexArrayObject);
         glDrawElements(GL_TRIANGLES, m_drawAttr[i].m_indicesCount, GL_UNSIGNED_INT, 0);
