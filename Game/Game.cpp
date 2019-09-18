@@ -229,21 +229,21 @@ void Game::Render()
     // enable vertices array pointer rendering	
     CShaderHolder::s_pInstance->UseShaderById("texturedtangent");
 
+	model = glm::identity<glm::mat4>();
+	model = glm::translate(model, glm::vec3(0, -2, 0));
+
     CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
         setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
     CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
         setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
     CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
-        setUniformMatrix4fv("model", 1, false, &model[0][0]);
-
-    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setUniform3f("lightPos", light_position[0], light_position[1], light_position[2]);
-
-    model = glm::identity<glm::mat4>();
-    model = glm::translate(model, glm::vec3(0, -2, 0));
-    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->setUniformMatrix4fv("model", 1, false, &model[0][0]);
+		setUniform3f("lightPos", light_position[0], light_position[1], light_position[2]);
+    CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent")->
+		setUniformMatrix4fv("model", 1, false, &model[0][0]);
     // attach a texture to the whole model
     glEnable(GL_TEXTURE_2D);    
-    CModelHolder::s_pInstance->DrawModelById("cyborg.obj", CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent"));
+	CModelHolder::s_pInstance->DrawModelById("cyborg.obj", CShaderHolder::s_pInstance->GetShaderProgramById("texturedtangent"));
+    //CModelHolder::s_pInstance->DrawModelById("boblampclean.md5mesh", CShaderHolder::s_pInstance->GetShaderProgramById("model"));
     glDisable(GL_TEXTURE_2D);
 
     // deactivate this shader to not affect next rendering
