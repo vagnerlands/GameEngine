@@ -9,6 +9,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Src\Scene">
+      <UniqueIdentifier>{6ccc465b-75aa-46f0-83e5-3ea9b7e57203}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderer.h">
@@ -35,6 +38,18 @@
     <ClInclude Include="I2dImage.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="IDrawable.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Ilumination.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\RenderScene.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\IluminationItem.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRendererOGL.cpp">
@@ -60,6 +75,15 @@
     </ClCompile>
     <ClCompile Include="I2dImage.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Ilumination.cpp">
+      <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\RenderScene.cpp">
+      <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\IluminationItem.cpp">
+      <Filter>Src\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -26,18 +26,24 @@ public:
 	// meshes contain also list of textures
     vector<Types::SModelMesh> meshes;
     string directory;
+	string m_shaderName;
     bool gammaCorrection;
 
     /*  Functions   */
     Model() : gammaCorrection(false)
     {
-        // user defined mesh - let the user decide what to do with this...
+		m_shaderName = "model";
     }
 
 	void Load(string const& path, bool gamma = false)
 	{
 		gammaCorrection = gamma;
 		loadModel(path);
+	}
+
+	const string& GetShaderSuggestion() const
+	{
+		return m_shaderName;
 	}
 
     
@@ -178,6 +184,20 @@ private:
         // 4. height maps
         std::vector<SModelTexture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
         processedMesh.m_textures.insert(processedMesh.m_textures.end(), heightMaps.begin(), heightMaps.end());
+
+		// TODO: make this look nicer - quick and dirty implementation
+		if ((diffuseMaps.size() > 0) 
+			&& (specularMaps.size()) 
+			&& (normalMaps.size()))
+		{
+			m_shaderName = "texturedtangent";
+		}
+		else if ((diffuseMaps.size() > 0)
+			&& (specularMaps.size() > 0))
+		{
+			m_shaderName = "textured2";
+		}
+
         
         // return a mesh object created from the extracted mesh data
         return processedMesh;
@@ -185,7 +205,7 @@ private:
 
     // checks all material textures of a given type and loads the textures if they're not loaded yet.
     // the required info is returned as a Texture struct.
-    vector<SModelTexture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName)
+    vector<SModelTexture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const string& typeName)
     {
         vector<SModelTexture> textures;
         for(UInt32 i = 0; i < mat->GetTextureCount(type); i++)

@@ -4,6 +4,7 @@
 #include "CommonTypes.h"
 #include "ogltypes.h"
 #include "IModel.h"
+#include "Shaders\glsl.h"
 
 using namespace Types;
 
@@ -13,12 +14,13 @@ namespace Graphics
 	class CModelOGL : public IModel
 	{
 	public:
-		CModelOGL();
+		CModelOGL(string id);
 		virtual ~CModelOGL();
         
         // create based on SModelData
         virtual bool Create(const Model & modelInfo);
-		virtual void Draw(cwc::glShader* shader);
+		bool SetShader(const string& shaderName);
+		virtual void Draw();
 		// allocate SModelData for custom objects
 		virtual shared_ptr<Model> Allocate();
 		// commit changes
@@ -28,7 +30,13 @@ namespace Graphics
         struct SDrawData
         {
             SDrawData() : m_vertexArrayObject(0U), m_indicesCount(0U) {}
-            SDrawData(UInt32 vao, UInt32 indCount, vector<SModelTexture> vTextures) : m_vertexArrayObject(vao), m_indicesCount(indCount), m_textures(vTextures) {}
+            SDrawData(UInt32 vao, UInt32 indCount, vector<SModelTexture> vTextures) : 
+				m_vertexArrayObject(vao), 
+				m_indicesCount(indCount), 
+				m_textures(vTextures)
+			{
+				// empty
+			}
         
 			vector<SModelTexture>   m_textures;
             UInt32					m_vertexArrayObject;
@@ -43,6 +51,8 @@ namespace Graphics
         vector<UInt32>          m_vertexBufferObject;
         vector<UInt32>          m_elementBufferObject;
         vector<SDrawData>       m_drawAttr;        
+		// TODO: think about making one shader per mesh
+		cwc::glShader*			m_pShader;
 
 	};
 
