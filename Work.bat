@@ -40,6 +40,7 @@ Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\GameDLL;^
 %PROJECT_ROOT%\Game-Editor;^
 %PROJECT_ROOT%\Graphics;^
+%PROJECT_ROOT%\Graphics\Scene;^
 %PROJECT_ROOT%\Includes;^
 %PROJECT_ROOT%\Math;^
 %PROJECT_ROOT%\UtilitiesCore;^

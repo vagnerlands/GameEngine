@@ -121,65 +121,6 @@ void Game::Render()
 	GLuint textureId = -1;
 
 	glPushMatrix();
-	glEnable(GL_LIGHTING);
-	glColor4f(1.0, 0.0, 1.0, 0.5);
-	static float rotate = 0.0f;
-	rotate += 0.1f;
-	static float foolme = 0.0F;
-	static bool direction = false;
-	if (direction)
-	{
-		foolme += 0.5F;
-	}
-	else
-	{
-		foolme -= 0.5F;
-	}
-	if (foolme > 10) direction = false;
-	if (foolme < -40) direction = true;
-	// enable vertices array pointer rendering	
-	static SModelData m_data;
-	if (CShaderHolder::s_pInstance->UseShaderById("model"))
-	{
-		// light set-up
-		glEnable(GL_LIGHT0);
-
-		GLfloat lightColor0[] = { 0.8f, 0.8f, 0.0f, 1.0f }; //Color (0.5, 0.5, 0.5)
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
-		GLfloat lightPos[] = { 0, 0.5, 0.8, 1.0f };
-		glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-		Int32 err = glGetError();
-		if (err != 0)
-		{
-			printf("preparing matrix error = %d\n", err);
-		}
-
-		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("translate", 0, 3, -200);
-		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform3f("scale", 1, 1, 1);
-		CShaderHolder::s_pInstance->GetShaderProgramById("model")->setUniform4f("rotation", 160.0 + foolme, 0, 1, 0);
-
-		// attach a texture to the whole model
-		glEnable(GL_TEXTURE_2D);
-		CTextureHolder::s_pInstance->Bind("water.bmp");
-
-		CModelHolder::s_pInstance->DrawModelById("Hughes500.obj", CShaderHolder::s_pInstance->GetShaderProgramById("model"));
-
-		glDisable(GL_TEXTURE_2D);
-		
-		// deactivate this shader to not affect next rendering
-		CShaderHolder::s_pInstance->StopShader();
-
-		err = glGetError();
-		if (err != 0)
-		{
-			printf("glError Drawing Model =%d\n", err);
-		}
-		
-	}
-	
-	glPopMatrix();
-
-	glPushMatrix();
 	if (CShaderHolder::s_pInstance->UseShaderById("textured2"))
 	{
 
@@ -278,18 +219,6 @@ void Game::Render()
 	glDisable(GL_BLEND);
 	glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
-
-
-	// [ ROTATING TRIANGLE ]
-	glPushMatrix();
-	glRotatef(rotate, 0, 0, 1);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(0, 0, -1000);
-	glVertex3f(100, 50, -1000);
-	glVertex3f(640 / 2, 0, -1000);
-	glEnd();
-	glPopMatrix();
-	// [TEXTURED GROUND]
 	
 
 	//glutSwapBuffers();

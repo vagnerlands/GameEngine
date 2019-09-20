@@ -160,15 +160,22 @@
     <ClCompile Include="I2dImage.cpp" />
     <ClCompile Include="IModel.cpp" />
     <ClCompile Include="ITexture.cpp" />
+    <ClCompile Include="Scene\Ilumination.cpp" />
+    <ClCompile Include="Scene\IluminationItem.cpp" />
+    <ClCompile Include="Scene\RenderScene.cpp" />
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CModelOGL.h" />
     <ClInclude Include="CRendererOGL.h" />
     <ClCompile Include="IRenderer.cpp" />
     <ClInclude Include="CTextureOGL.h" />
     <ClInclude Include="I2dImage.h" />
+    <ClInclude Include="IDrawable.h" />
     <ClInclude Include="IModel.h" />
     <ClInclude Include="IRenderer.h" />
     <ClInclude Include="ITexture.h" />
+    <ClInclude Include="Scene\Ilumination.h" />
+    <ClInclude Include="Scene\IluminationItem.h" />
+    <ClInclude Include="Scene\RenderScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

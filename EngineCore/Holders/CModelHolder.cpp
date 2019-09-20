@@ -48,69 +48,41 @@ CModelHolder::OnRemoveEvent(const string& removeItem)
 CModelHolder::CModelHolder(const string& pathToResources)
 	: m_modelFiles(new CResourceZipFile(pathToResources.data(), this->OnRemoveEvent))
 {
-	m_pModelContentMapMutex = MutexFactory::Instance().Create("ModelCOntentMap");
+	m_pModelContentMapMutex = MutexFactory::Instance().Create("ModelContentMap");
 	if (m_pModelContentMapMutex == NULL)
 	{
         DEBUG_OUT("Failed to create Mutex");
 	}
 }
 
-void 
+Graphics::IModel*
 CModelHolder::LoadModel(const string& modelId)
 {
 	// start loading measuring time
 	clock_t start = clock();
 
-	AddModelContent(modelId, nullptr, 0U);
+	// must manipulate this object using specific CModelHolder
+	// in the future, this should be a #define or a strategy
+	Graphics::CModelOGL* pGfxModel = new Graphics::CModelOGL(modelId);
 
-	// cache missed - must reload it from resources db
-	//CResource resModel(modelId);
-	//Byte* modelStream = m_modelFiles->VAllocateAndGetResource(resModel);
-
-	// checks if return value isn't null
-	//if (modelStream != 0)
-	{
-		// material stream 
-		//string materialId = modelId.substr(0, modelId.find_last_of('.'));
-		//materialId += ".mtl";
-		//CResource resMaterial(materialId);
-		// tries to get the material data
-		//Byte* materialStream = m_modelFiles->VAllocateAndGetResource(resMaterial);
-        //UInt32 modelSize = m_modelFiles->VGetResourceSize(resModel);
-		// finally, perform allocation
-        //AddModelContent(modelId, nullptr, modelSize);
-		//AddModelContent(modelId, modelStream, materialStream);
-
-		// release resources
-		//if (materialStream != 0)
-		//{
-		//	delete[] materialStream;
-		//}
-		//delete[] modelStream;
-	}
-/*	else
-	{
-		DEBUG_OUT("Model %s not found in resource file!\n", modelId);
-	}*/	
-
-	// time measurement
-	printf(" loading model [%s] %.2fms\n", modelId.data(), (float)(clock() - start));
-}
-
-void
-CModelHolder::AddModelContent(const string& modelId, Byte* bytesStream, UInt32 length)
-{
-    Graphics::IModel* pGfxModel = new Graphics::CModelOGL();
-
-    //Model modelLoader(bytesStream, length);
-    Model modelLoader;
+	//Model modelLoader(bytesStream, length);
+	Model modelLoader;
 	// actually tries to load the model
 	modelLoader.Load("../Game/Assets/" + modelId);
+	// set shader according to model loader results
+	pGfxModel->SetShader(modelLoader.GetShaderSuggestion());
+
 	// transfer this model data to the GPU
 	pGfxModel->Create(modelLoader);
 
-    m_mapModels.insert(make_pair(modelId, pGfxModel));
+	m_mapModels.insert(make_pair(modelId, pGfxModel));
+
+	// time measurement
+	printf(" loading model [%s] %.2fms\n", modelId.data(), (float)(clock() - start));
+
+	return pGfxModel;
 }
+
 
 void 
 CModelHolder::RemoveModel(const string& textId)
@@ -133,30 +105,33 @@ CModelHolder::RemoveModel(const string& textId)
 	//_CrtDumpMemoryLeaks();
 }
 
-Graphics::IModel&
+Graphics::IModel*
 CModelHolder::GetModelById(const string& modelId)
 {
+	Graphics::IModel* pRet = (Graphics::IModel*)(NULL);
 	// then try to find it in the textures map
 	ModelObject::iterator result = m_mapModels.find(modelId);
 	if (result != m_mapModels.end())
 	{
-		return *result->second;
+		pRet = result->second;
+	}
+	else
+	{
+		// cache miss - then add this texture to the process list
+		pRet = LoadModel(modelId);
 	}
 
-	// cache miss - then add this texture to the process list
-	LoadModel(modelId);
-	
 	// if it somehow failed, returns -1
-	return *(Graphics::IModel*)(NULL);
+	return pRet;
 }
 
-void CModelHolder::DrawModelById(const string& modelId, cwc::glShader* shader)
+void CModelHolder::DrawModelById(const string& modelId)
 {
 	// then try to find it in the textures map
 	ModelObject::iterator result = m_mapModels.find(modelId);
 	if (result != m_mapModels.end())
 	{
-		result->second->Draw(shader);
+		result->second->Draw();
 	}
 	else
 	{

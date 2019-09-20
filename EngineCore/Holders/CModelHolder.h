@@ -24,11 +24,11 @@ public:
 	static bool Create(const string& pathToModelFile);
 	virtual ~CModelHolder();
 	
-	void LoadModel(const string& modelId);
+	Graphics::IModel* LoadModel(const string& modelId);
     
 	void RemoveModel(const string& modelId);
-	Graphics::IModel& GetModelById(const string& modelId);
-	void DrawModelById(const string& modelId, cwc::glShader* shader);
+	Graphics::IModel* GetModelById(const string& modelId);
+	void DrawModelById(const string& modelId);
 
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(const string& removeItem);
@@ -37,7 +37,7 @@ public:
 
 private:
 	CModelHolder(const string& pathToResources);
-    void AddModelContent(const string& modelId, Byte * bytesStream, UInt32 length);
+
 	// hash map for the raw data models (vertexes, normals, material, etc)
 	//ModelMap m_models;
 	// hash map for the IModels* - containing what you need to render this model

@@ -2,11 +2,15 @@
 #include <iostream>
 #include "Model.h"
 #include "CTextureHolder.h"
+#include "IRenderer.h"
+#include "Ilumination.h"
+#include "IvMatrix44.h"
+#include <time.h>
 
-
-Graphics::CModelOGL::CModelOGL() : 
+Graphics::CModelOGL::CModelOGL(string id) :
 	m_vboBufferCreated(false)
 {
+	m_id = id;
     m_elementBufferObject.clear();
     m_drawAttr.clear();
     m_vertexBufferObject.clear();
@@ -58,10 +62,11 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
             std::cout << "OpenGL Error: " << error << std::endl;
         }
 
-        m_vertexBufferObject.reserve(modelInfo.meshes.size());
-        m_drawAttr.reserve(modelInfo.meshes.size());
-        m_elementBufferObject.reserve(modelInfo.meshes.size());
-
+		// improves performance by avoiding resizing the vector during the operation
+        m_drawAttr.resize(modelInfo.meshes.size());
+		m_vertexBufferObject.resize(modelInfo.meshes.size());
+        m_elementBufferObject.resize(modelInfo.meshes.size());
+		// iterates on each mesh, creating VAO, VBO and Textures
         for (UInt32 i = 0; i < modelInfo.meshes.size(); ++i)
         {
             UInt32 VAO, VBO, EBO = 0;
@@ -72,6 +77,7 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
 
             m_vertexBufferObject.push_back(VBO);
             m_elementBufferObject.push_back(EBO);
+			// copy the texture vector into m_drawAttr.m_textures
             m_drawAttr.push_back(SDrawData(VAO, modelInfo.meshes[i].m_indices.size(), modelInfo.meshes[i].m_textures));
 
             glBindVertexArray(VAO);
@@ -82,6 +88,7 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
             // again translates to 3/2 floats which translates to a byte array.
             glBufferData(GL_ARRAY_BUFFER, modelInfo.meshes[i].m_vertices.size() * sizeof(SModelVertex), &modelInfo.meshes[i].m_vertices[0], GL_STATIC_DRAW);
 
+			// element buffer object allocation
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, modelInfo.meshes[i].m_indices.size() * sizeof(UInt32), &modelInfo.meshes[i].m_indices[0], GL_STATIC_DRAW);
 
@@ -119,25 +126,70 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
     return m_vboBufferCreated;
 }
 
-
-void Graphics::CModelOGL::Draw(cwc::glShader* shader)
+bool Graphics::CModelOGL::SetShader(const string & shaderName)
 {
-    // bind appropriate textures
-    unsigned int diffuseNr = 1;
-    unsigned int specularNr = 1;
-    unsigned int normalNr = 1;
-    unsigned int heightNr = 1;
+	// return value
+	bool status = true;
+	// start loading measuring time
+	clock_t start = clock();
 
+	// read data from file
+	cwc::glShader* obj = 0;
+	char vertexFilename[200], fragmentFilename[200];
+	sprintf(vertexFilename, "../Game/Assets/%sVertexshader.txt", shaderName.data());
+	sprintf(fragmentFilename, "../Game/Assets/%sFragmentshader.txt", shaderName.data());
+	// there should be a specialized class for this whole thing
+	cwc::glShaderManager shaderLoader;
+	m_pShader = shaderLoader.loadfromFile(vertexFilename, fragmentFilename);
+
+	if (m_pShader == 0)
+	{
+		printf("<!> Failed to parse shader files [%s]\n", shaderName);
+		status = false;
+	}
+
+	// time measurement
+	printf(" loading shader [%s] %.2fms\n", shaderName.data(), (float)(clock() - start));
+
+	return status;
+}
+
+
+void Graphics::CModelOGL::Draw()
+{
+	GLuint programId = m_pShader->GetProgramObject();
+	glUseProgram(programId);
+	Int32 glErr = glGetError();
+	if (glErr != 0)
+		DEBUG_OUT("Failed to apply shader ");
+
+	// Apply attributes known for this shader
+	IvMatrix44 projMatrix = Graphics::IRenderer::mRenderer->GetProjectionMatrix();
+	IvMatrix44 viewMatrix = Graphics::IRenderer::mRenderer->GetViewMatrix();
+	// identity
+	//glm::mat4 model = glm::mat4(1.0f);
+	IvMatrix44 model;
+	model.Identity();
+	model.Translation(m_location);
+	Float lightLocation[4] = { 0 };
+	Graphics::Ilumination::Instance().GetIluminationItemLocationPtr("main", lightLocation);
+
+	m_pShader->setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
+	m_pShader->setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
+	m_pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)model.GetFloatPtr());
+	m_pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
+
+	// indexer
     for (UInt32 i = 0 ; i < m_drawAttr.size(); ++i)
     {
-		for (unsigned int ti = 0; ti < m_drawAttr[i].m_textures.size(); ti++)
+		// texture indexer
+		for (UInt32 ti = 0; ti < m_drawAttr[i].m_textures.size(); ti++)
 		{
 			glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
 											  // retrieve texture number (the N in diffuse_textureN)
-			string number;
 			string name = m_drawAttr[i].m_textures[ti].m_uniformName;
 			// now set the sampler to the correct texture unit
-			shader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
+			m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
 		}
         // draw all meshes mesh
         glBindVertexArray(m_drawAttr[i].m_vertexArrayObject);
@@ -147,7 +199,10 @@ void Graphics::CModelOGL::Draw(cwc::glShader* shader)
     // always good practice to set everything back to defaults once configured.
     glBindVertexArray(0);
     glActiveTexture(GL_TEXTURE0);
-
+	glUseProgram(0);
+	glErr = glGetError();
+	if (glErr != 0)
+		DEBUG_OUT("Failed halting shader");
 }
 
 shared_ptr<Model> Graphics::CModelOGL::Allocate()

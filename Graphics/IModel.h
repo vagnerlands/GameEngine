@@ -2,24 +2,26 @@
 #define _IMODEL_H_
 
 #include "CommonTypes.h"
-#include "ogltypes.h"
 #include <memory>
 #include "Model.h"
-#include "Shaders/glsl.h"
+#include "IDrawable.h"
 
 using namespace Types;
 
 namespace Graphics
 {
-
-	class IModel
+	// Specific API for model rendering
+	class IModel : public IDrawable
 	{
 	public:
 		IModel();
-		virtual ~IModel();
+		virtual ~IModel()
+		{
+
+		}
         virtual bool Create(const Model & modelInfo) = 0;
 		// render this object as is
-		virtual void Draw(cwc::glShader* shader) = 0;
+		virtual void Draw() = 0;
 		// allocate SModelData for custom objects
 		virtual shared_ptr<Model> Allocate() = 0;
 		// commit changes
