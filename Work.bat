@@ -12,6 +12,9 @@ EngineCore.lib;^
 UtilitiesCore.lib;^
 libpng16.lib;^
 assimp.lib;^
+DevIL.lib;^
+ILU.lib;^
+ILUT.lib;^
 zlib.lib
 
 
@@ -49,6 +52,8 @@ Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\EngineCore\Holders;^
 %PROJECT_ROOT%\EngineCore\Input;^
 %PROJECT_ROOT%\EngineCore\Loaders;^
+%PROJECT_ROOT%\EngineCore\Loaders\Assimp;^
+%PROJECT_ROOT%\EngineCore\Loaders\Assimp\Compiler;^
 %PROJECT_ROOT%\EngineCore\OS;^
 %PROJECT_ROOT%\EngineCore\Cache\ResourceCache;^
 %PROJECT_ROOT%\EngineCore\Loaders\Images;^

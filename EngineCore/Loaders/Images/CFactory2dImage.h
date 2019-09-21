@@ -14,11 +14,12 @@ public:
 	
 	static CFactory2dImage* instance();
 	virtual I2dImage* Create2dImage(Byte fileType[]);
+	virtual ~CFactory2dImage();
 
 protected:
 	static CFactory2dImage* s_pInstance;
 	CFactory2dImage();
-	virtual ~CFactory2dImage();
+
 	
 };
 

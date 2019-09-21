@@ -89,7 +89,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>STBI_NO_DDS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(INCLUDE_PATHS);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
@@ -164,11 +164,10 @@
     <ClCompile Include="Loaders\Images\CPng.cpp" />
     <ClCompile Include="Loaders\Images\CTga.cpp" />
     <ClCompile Include="Loaders\Images\Windows\Bitmap.cpp" />
+    <ClCompile Include="Loaders\Images\Windows\DevILLoader.cpp" />
     <ClCompile Include="Loaders\Images\Windows\CFactory2dImageWin.cpp" />
-    <ClCompile Include="Loaders\Model3D\objParser\list.cpp" />
-    <ClCompile Include="Loaders\Model3D\objParser\objLoader.cpp" />
-    <ClCompile Include="Loaders\Model3D\objParser\obj_parser.cpp" />
-    <ClCompile Include="Loaders\Model3D\objParser\string_extra.cpp" />
+    <ClCompile Include="Loaders\Images\Windows\stb_image.cpp" />
+    <ClCompile Include="Loaders\Images\Windows\stb_image_aug.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainOgl.cpp" />
     <ClCompile Include="MainWinOgl.cpp" />
@@ -198,12 +197,45 @@
     <ClInclude Include="Loaders\Images\CPng.h" />
     <ClInclude Include="Loaders\Images\CTga.h" />
     <ClInclude Include="Loaders\Images\Windows\Bitmap.h" />
+    <ClInclude Include="Loaders\Images\Windows\DevILLoader.h" />
     <ClInclude Include="Loaders\Images\Windows\CFactory2dImageWin.h" />
+    <ClInclude Include="Loaders\Images\Windows\stb_image.h" />
+    <ClInclude Include="Loaders\Images\Windows\stb_image_aug.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\ai_assert.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\anim.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\camera.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\cexport.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\cfileio.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\cimport.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\color4.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\Compiler\poppack1.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\Compiler\pushpack1.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\config.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\DefaultLogger.hpp" />
+    <ClInclude Include="Loaders\Model3D\Assimp\defs.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\Exporter.hpp" />
+    <ClInclude Include="Loaders\Model3D\Assimp\Importer.hpp" />
+    <ClInclude Include="Loaders\Model3D\Assimp\importerdesc.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\IOStream.hpp" />
+    <ClInclude Include="Loaders\Model3D\Assimp\IOSystem.hpp" />
+    <ClInclude Include="Loaders\Model3D\Assimp\light.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\Logger.hpp" />
+    <ClInclude Include="Loaders\Model3D\Assimp\LogStream.hpp" />
+    <ClInclude Include="Loaders\Model3D\Assimp\material.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\matrix3x3.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\matrix4x4.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\mesh.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\NullLogger.hpp" />
+    <ClInclude Include="Loaders\Model3D\Assimp\postprocess.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\ProgressHandler.hpp" />
+    <ClInclude Include="Loaders\Model3D\Assimp\quaternion.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\scene.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\texture.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\types.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\vector2.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\vector3.h" />
+    <ClInclude Include="Loaders\Model3D\Assimp\version.h" />
     <ClInclude Include="Loaders\Model3D\Model.h" />
-    <ClInclude Include="Loaders\Model3D\objParser\list.h" />
-    <ClInclude Include="Loaders\Model3D\objParser\objLoader.h" />
-    <ClInclude Include="Loaders\Model3D\objParser\obj_parser.h" />
-    <ClInclude Include="Loaders\Model3D\objParser\string_extra.h" />
     <ClInclude Include="MainOgl.h" />
     <ClInclude Include="MainWinOgl.h" />
     <ClInclude Include="OS\Abstract\IMutex.h" />
@@ -218,6 +250,15 @@
     <ClInclude Include="OS\Windows\MutexFactoryWin.h" />
     <ClInclude Include="OS\Windows\SocketFactoryWin.h" />
     <ClInclude Include="OS\Windows\ThreadFactoryWin.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Loaders\Model3D\Assimp\color4.inl" />
+    <None Include="Loaders\Model3D\Assimp\material.inl" />
+    <None Include="Loaders\Model3D\Assimp\matrix3x3.inl" />
+    <None Include="Loaders\Model3D\Assimp\matrix4x4.inl" />
+    <None Include="Loaders\Model3D\Assimp\quaternion.inl" />
+    <None Include="Loaders\Model3D\Assimp\vector2.inl" />
+    <None Include="Loaders\Model3D\Assimp\vector3.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

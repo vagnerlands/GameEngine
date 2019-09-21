@@ -154,9 +154,9 @@ bool Bitmap::ParseStream(Byte* pData, UInt32 length)
 	}
 
 	FILE* tFile;
-	if (fopen_s(&tFile, "./rem.bin", "w+") != 0)
+	if (fopen_s(&tFile, "./rem.bin", "wb+") != 0)
 		return false;
-	fwrite(pData, length, 1, tFile);
+	fwrite(&*pData, length, 1, tFile);
 	fclose(tFile);
 
 	hFile = CreateFile(L"./rem.bin", FILE_READ_DATA, FILE_SHARE_READ, 0,
@@ -224,9 +224,9 @@ bool Bitmap::ParseStream(Byte* pData, UInt32 length)
 		return false;
 	}
 
-	//selectObject();
-	//hr = pIPicture->Render(dc, 0, 0, m_Width, m_Height, 0, lHeight, lWidth, -lHeight, 0);
-	//deselectObject();
+	selectObject();
+	hr = pIPicture->Render(dc, 0, 0, m_Width, m_Height, 0, lHeight, lWidth, -lHeight, 0);
+	deselectObject();
 
 	pIPicture->Release();
 	return (SUCCEEDED(hr)) ? true : false;

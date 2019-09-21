@@ -147,7 +147,7 @@ void MainOgl::StartUp(int argv, char** argc)
     MutexFactoryWin::Initialize();
     SocketFactoryWin::Initialize();
     ThreadFactoryWin::Initialize();
-	CFactory2dImage::instance();
+	//CFactory2dImageWin::Initialize();
 
 	// Use a single buffered window in RGB mode (as opposed to a double-buffered
 	// window or color-index mode).
