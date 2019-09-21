@@ -65,6 +65,8 @@ bool Game::PostRendererInitialize()
 	// [Models]
 	Graphics::RenderScene::Instance().Add(CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
 	Graphics::RenderScene::Instance().Add(CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
+	Graphics::RenderScene::Instance().Add(CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
+	Graphics::RenderScene::Instance().Update("OgreOBJ.obj", IvVector3(4, 1, 0));
 	// [Landscape]
 
 
