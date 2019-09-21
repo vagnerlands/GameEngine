@@ -7,10 +7,11 @@
 #include "IvMatrix44.h"
 #include <time.h>
 
-Graphics::CModelOGL::CModelOGL(string id) :
+Graphics::CModelOGL::CModelOGL(string modelName) :
 	m_vboBufferCreated(false)
 {
-	m_id = id;
+	// only for debug purposes
+	m_modelName = modelName;
     m_elementBufferObject.clear();
     m_drawAttr.clear();
     m_vertexBufferObject.clear();
@@ -41,6 +42,12 @@ Graphics::CModelOGL::~CModelOGL()
         m_vertexBufferObject.clear();
         m_elementBufferObject.clear();
         m_drawAttr.clear();
+
+		if (m_pShader != nullptr)
+		{
+			delete m_pShader;
+			m_pShader = nullptr;
+		}
 
 		// unmark it as "created", cause now it no longer exists
 		m_vboBufferCreated = false;

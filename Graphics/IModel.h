@@ -28,7 +28,9 @@ namespace Graphics
 		virtual bool Commit() = 0;
 	protected:
 		// data to be used, this shall be released once Commit() is called
-        shared_ptr<Model> m_pData;
+        shared_ptr<Model>	m_pData;
+		// for debug purposes
+		std::string			m_modelName;
 
 	private:
 		// copy operations

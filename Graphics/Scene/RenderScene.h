@@ -22,7 +22,7 @@ namespace Graphics
 
 		static RenderScene& Instance();
 
-		virtual void Add(IDrawable* pDrawable);
+		virtual void Add(const std::string& id, IDrawable* pDrawable);
 
 		// Update ilumination location
 		virtual void Update(const std::string& id, const IvVector3& newLocation);
