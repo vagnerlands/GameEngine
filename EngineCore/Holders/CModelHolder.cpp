@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 
-#include <objParser/objLoader.h>
 #include "MutexFactory.h"
 #include "Model.h"
 // should make this configurable - there should be a factory instead

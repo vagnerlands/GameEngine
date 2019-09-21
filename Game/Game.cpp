@@ -51,7 +51,7 @@ bool Game::PostRendererInitialize()
 	// Set the view parameters in renderer
 	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
 	// Update this camera type
-	Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Human;
+	Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Spectator;
 	// create model holder
 	CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
     // 50mb allocation for VRAM textures

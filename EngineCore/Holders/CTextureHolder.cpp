@@ -2,6 +2,7 @@
 #include "gl/glut.h"
 #include <time.h>
 #include "MutexFactory.h"
+#include <iostream>
 #ifdef WIN32
 #include "CTextureOGL.h"
 #endif
@@ -68,6 +69,8 @@ CTextureHolder::LoadTexture(const string& textId)
 		{
 			if (pRawImage->ParseStream(textureDataStream, textureDataLength))
 				BuildTexture(textId, pRawImage);
+			else
+				std::cout << " Bad input stream, failed to load texture [" << textId << "]" << std::endl;
 			// free allocated data from the heap
 			// this must also free the array of bmp pixels 
 			delete pRawImage;
