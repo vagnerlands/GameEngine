@@ -9,7 +9,9 @@ void Graphics::Ilumination::Update(const std::string & id, const IvVector3 & new
 {
 	for (std::list<Graphics::IluminationItem*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
 	{
+		// de-reference the iterator to the list type
 		Graphics::IluminationItem* pLightObj = *it;
+		// calls overloaded operator==() for comparisson
 		if (*pLightObj == id)
 		{
 			pLightObj->SetLocation(newLocation);
@@ -22,7 +24,9 @@ void Graphics::Ilumination::Remove(const std::string & id)
 {
 	for (std::list<Graphics::IluminationItem*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
 	{
+		// de-reference the iterator to the list type
 		Graphics::IluminationItem* pLightObj = *it;
+		// calls overloaded operator==() for comparisson
 		if (*pLightObj == id)
 		{
 			m_lights.remove(pLightObj);
