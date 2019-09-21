@@ -63,12 +63,13 @@ bool Game::PostRendererInitialize()
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
-	Graphics::RenderScene::Instance().Add(CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
-	Graphics::RenderScene::Instance().Add(CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
-	Graphics::RenderScene::Instance().Add(CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
-	Graphics::RenderScene::Instance().Update("OgreOBJ.obj", IvVector3(4, 1, 0));
+	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
+	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
+	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
+	// update models location
+	Graphics::RenderScene::Instance().Update("ogre1",	IvVector3(4, 1, 0));
+	Graphics::RenderScene::Instance().Update("cyborg1",	IvVector3(0, 1, 0));
 	// [Landscape]
-
 
 
 	return true;
@@ -152,12 +153,11 @@ void Game::UpdateObjects(float dt)
 
 	// Update Debug objects
 	// [Light]
-	m_lightAngle += 0.3f;
+	m_lightAngle += 1.115f;
 	static float MoveRadius = 4.F;
 	Graphics::Ilumination::Instance().Update("main", IvVector3(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 8.5f, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius));
 
 	// [Model]
-	//
 
 	// [Landscape]
 

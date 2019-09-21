@@ -6,8 +6,12 @@ Graphics::RenderScene & Graphics::RenderScene::Instance()
 	return instance;
 }
 
-void Graphics::RenderScene::Add(IDrawable* pDrawable)
+void Graphics::RenderScene::Add(const std::string& id, IDrawable* pDrawable)
 {
+	// update the identification
+	pDrawable->SetId(id);
+
+	// add to the current rendering database
 	m_items.push_back(pDrawable);
 }
 

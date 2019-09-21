@@ -254,6 +254,7 @@ glShader::~glShader()
     if (linker_log!=0) free(linker_log);
     if (useGLSL)
     {
+
        for (unsigned int i=0;i<ShaderList.size();i++)
        {
             glDetachShader(ProgramObject, ShaderList[i]->ShaderObject);
@@ -263,10 +264,11 @@ glShader::~glShader()
        }                      
 
        glDeleteShader(ProgramObject);
-
-	   m_samplerInShaderMap = unordered_map<string, Int32>();
 	    
        CHECK_GL_ERROR();
+
+	   m_samplerInShaderMap = unordered_map<string, Int32>();
+
     }
 
 }

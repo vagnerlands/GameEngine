@@ -32,6 +32,11 @@ namespace Graphics
 			m_location = newLocation;
 		}
 
+		virtual void SetId(const std::string& id)
+		{
+			m_id = id;
+		}
+
 		// for comparison
 		virtual bool operator==(const IDrawable& other)
 		{
@@ -45,8 +50,9 @@ namespace Graphics
 
 
 	protected:
-		// identification
+		// identification of this drawable, user must set it
 		std::string		m_id;
+		// world location of this drawable
 		IvVector3		m_location;
 
 	private:
