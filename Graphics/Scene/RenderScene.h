@@ -4,6 +4,7 @@
 #include "CommonTypes.h"
 #include "IDrawable.h"
 #include "IvVector3.h"
+#include "IvQuat.h"
 #include <list>
 
 using namespace Types;
@@ -25,7 +26,13 @@ namespace Graphics
 		virtual void Add(const std::string& id, IDrawable* pDrawable);
 
 		// Update ilumination location
-		virtual void Update(const std::string& id, const IvVector3& newLocation);
+		virtual void Translate(const std::string& id, const IvVector3& newLocation);
+
+		// Update ilumination location
+		virtual void Rotate(const std::string& id, const IvQuat& newLocation);
+
+		// Update ilumination location
+		virtual void Scale(const std::string& id, const IvVector3& newScale);
 
 		// Update ilumination location
 		virtual void Remove(const std::string& id);
@@ -39,6 +46,8 @@ namespace Graphics
 		{
 
 		}
+
+		Graphics::IDrawable* find(const std::string& id);
 
 	private:
 		// copy operations

@@ -174,10 +174,23 @@ void Graphics::CModelOGL::Draw()
 	IvMatrix44 projMatrix = Graphics::IRenderer::mRenderer->GetProjectionMatrix();
 	IvMatrix44 viewMatrix = Graphics::IRenderer::mRenderer->GetViewMatrix();
 	// identity
-	//glm::mat4 model = glm::mat4(1.0f);
+	// final model for the shader - each transformation should be calculated
+	// alone and then combined
 	IvMatrix44 model;
-	model.Identity();
-	model.Translation(m_location);
+	// translate model
+	IvMatrix44 translateModel;
+	translateModel.Identity();
+	// scale model
+	IvMatrix44 scaleModel;	
+	scaleModel.Identity();
+	// calculates idependently each transformation
+
+	// scale transformation
+	scaleModel.Scaling(m_scale);
+	// translation transformation
+	translateModel.Translation(m_location);
+	// combine both transformations
+	model = scaleModel * translateModel;
 	Float lightLocation[4] = { 0 };
 	Graphics::Ilumination::Instance().GetIluminationItemLocationPtr("main", lightLocation);
 
