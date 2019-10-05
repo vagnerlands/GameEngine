@@ -3,6 +3,7 @@
 
 #include "CommonTypes.h"
 #include "IvVector3.h"
+#include "IvQuat.h"
 #include "Shaders/glsl.h"
 
 using namespace Types;
@@ -16,8 +17,9 @@ namespace Graphics
 		IDrawable() : 
 			//m_id(itoa(rand(),)),  // tries, vaguely, to create unique ids
 			m_location(0.f, 0.f, 0.f) // default location
+			, m_scale(1.f, 1.f, 1.f) // default scale (original size from editor)
 		{
-
+			m_rotation.Identity();
 		}
 		// virtual destructor
 		virtual ~IDrawable()
@@ -30,6 +32,16 @@ namespace Graphics
 		virtual void SetLocation(const IvVector3 & newLocation)
 		{
 			m_location = newLocation;
+		}
+
+		virtual void SetScale(const IvVector3 & newDimension)
+		{
+			m_scale = newDimension;
+		}
+
+		virtual void SetRotation(const IvQuat & newRotation)
+		{
+			m_rotation = newRotation;
 		}
 
 		virtual void SetId(const std::string& id)
@@ -54,6 +66,10 @@ namespace Graphics
 		std::string		m_id;
 		// world location of this drawable
 		IvVector3		m_location;
+		// scale resize for the model
+		IvVector3		m_scale;
+		// rotation matrix for the model
+		IvQuat			m_rotation;
 
 	private:
 		// copy operations

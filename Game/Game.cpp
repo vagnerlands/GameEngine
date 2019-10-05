@@ -66,9 +66,11 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
 	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
 	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
+	Graphics::RenderScene::Instance().Add("SKY1",		CModelHolder::s_pInstance->GetModelById("skysphere.obj"));
 	// update models location
-	Graphics::RenderScene::Instance().Update("ogre1",	IvVector3(4, 1, 0));
-	Graphics::RenderScene::Instance().Update("cyborg1",	IvVector3(0, 1, 0));
+	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4, 1, 0));
+	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0, 1, 0));
+	Graphics::RenderScene::Instance().Scale("SKY1", IvVector3(50,50,50));
 	// [Landscape]
 
 
