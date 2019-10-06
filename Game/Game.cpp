@@ -13,6 +13,7 @@
 #include "Scene\Ilumination.h"
 // debug
 #include "CModelOGL.h"
+#include "Rendered/Skybox.h"
 
 #include "GL/glut.h"
 #include "CGameController.h"
@@ -55,7 +56,7 @@ bool Game::PostRendererInitialize()
 	// create model holder
 	CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
     // 50mb allocation for VRAM textures
-	CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip", 100U*1024U*1024U);
+	CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip", 200U*1024U*1024U);
 
 	IGame::mGame->SetFps(60);
 
@@ -66,7 +67,15 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
 	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
 	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
-	Graphics::RenderScene::Instance().Add("SKY1",		CModelHolder::s_pInstance->GetModelById("skysphere.obj"));
+	// 6 faces of the sky
+	vector<std::string> faces;
+	faces.push_back("skytop.bmp");
+	faces.push_back("skybottom.bmp");
+	faces.push_back("skyleft.bmp");
+	faces.push_back("skyright.bmp");
+	faces.push_back("skyback.bmp");
+	faces.push_back("skyfront.bmp");
+	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces));
 	// update models location
 	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4, 1, 0));
 	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0, 1, 0));

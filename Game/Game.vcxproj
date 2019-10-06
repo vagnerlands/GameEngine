@@ -181,6 +181,8 @@
     <Text Include="Assets\simpletextureFragmentshader.txt" />
     <Text Include="Assets\simpletextureVertexshader.txt" />
     <Text Include="Assets\simpleVertexshader.txt" />
+    <Text Include="Assets\skyFragmentshader.txt" />
+    <Text Include="Assets\skyVertexshader.txt" />
     <Text Include="Assets\textured2Fragmentshader.txt" />
     <Text Include="Assets\textured2Vertexshader.txt" />
     <Text Include="Assets\texturedtangentFragmentshader.txt" />

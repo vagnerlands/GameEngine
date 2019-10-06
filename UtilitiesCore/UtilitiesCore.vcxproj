@@ -153,6 +153,7 @@
     <ClCompile Include="CClockOGL.cpp" />
     <ClCompile Include="Debugger.cpp" />
     <ClCompile Include="IClock.cpp" />
+    <ClCompile Include="Rendered\Skybox.cpp" />
     <ClCompile Include="Shaders\glsl.cpp" />
     <ClCompile Include="SocketUtils.cpp" />
   </ItemGroup>
@@ -161,6 +162,7 @@
     <ClInclude Include="Debugger.h" />
     <ClInclude Include="IClock.h" />
     <ClInclude Include="OGLTypes.h" />
+    <ClInclude Include="Rendered\Skybox.h" />
     <ClInclude Include="Shaders\glsl.h" />
     <ClInclude Include="SocketUtils.h" />
     <ClInclude Include="zlib\ioapi.h" />
