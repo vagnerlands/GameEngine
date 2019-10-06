@@ -16,46 +16,46 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 
 	// [TOP]
 	Types::SModelMesh cubeTop = buildMesh(
-		glm::vec3( 50.f,  50.f,  50.f),
-		glm::vec3( 50.f,  50.f, -50.f),
+		glm::vec3(-50.f,  50.f,  50.f),
 		glm::vec3(-50.f,  50.f, -50.f),
-		glm::vec3(-50.f,  50.f,  50.f), 
-		glm::vec2(1, 1),
-		glm::vec2(1, 0),
+		glm::vec3( 50.f,  50.f, -50.f),
+		glm::vec3( 50.f,  50.f,  50.f), 
 		glm::vec2(0, 0),
 		glm::vec2(0, 1),
+		glm::vec2(1, 1),
+		glm::vec2(1, 0),
 		faces[0]);
 
 	// [BOTTOM]
 	Types::SModelMesh cubeBottom = buildMesh(
-		glm::vec3( 50.f, -50.f,  50.f),
-		glm::vec3( 50.f, -50.f, -50.f),
 		glm::vec3(-50.f, -50.f, -50.f),
 		glm::vec3(-50.f, -50.f,  50.f),
+		glm::vec3( 50.f, -50.f,  50.f),
+		glm::vec3( 50.f, -50.f, -50.f),
+		glm::vec2(0, 0),
 		glm::vec2(0, 1),
 		glm::vec2(1, 1),
 		glm::vec2(1, 0),
-		glm::vec2(0, 0),
 		faces[1]);
 
 	// [LEFT]
 	Types::SModelMesh cubeLeft = buildMesh(
-		glm::vec3(-50.f,  50.f,  50.f),
-		glm::vec3(-50.f,  50.f, -50.f),
 		glm::vec3(-50.f, -50.f, -50.f),
+		glm::vec3(-50.f,  50.f, -50.f),
+		glm::vec3(-50.f,  50.f,  50.f),
 		glm::vec3(-50.f, -50.f,  50.f),
-		glm::vec2(1, 0),
 		glm::vec2(0, 0),
 		glm::vec2(0, 1),
 		glm::vec2(1, 1),
+		glm::vec2(1, 0),
 		faces[2]);
 
 	// [RIGHT] .5f, .5f, .5f,   .5f,-.5f, .5f,   .5f,-.5f,-.5f,  .5f, .5f,-.5f
 	Types::SModelMesh cubeRight = buildMesh(
-		glm::vec3( 50.f,  50.f,  50.f),
 		glm::vec3( 50.f, -50.f,  50.f),
-		glm::vec3( 50.f, -50.f, -50.f),
+		glm::vec3( 50.f,  50.f,  50.f),
 		glm::vec3( 50.f,  50.f, -50.f),
+		glm::vec3( 50.f, -50.f, -50.f),
 		glm::vec2(0, 0),
 		glm::vec2(0, 1),
 		glm::vec2(1, 1),
@@ -64,26 +64,26 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 
 	// [BACK] .5f,-.5f,-.5f,  -.5f,-.5f,-.5f,  -.5f, .5f,-.5f,  .5f, .5f,-.5f
 	Types::SModelMesh cubeBack = buildMesh(
-		glm::vec3(50.f, -50.f, -50.f),
+		glm::vec3( 50.f, -50.f, -50.f),
+		glm::vec3( 50.f,  50.f, -50.f),
+		glm::vec3(-50.f,  50.f, -50.f),
 		glm::vec3(-50.f, -50.f, -50.f),
-		glm::vec3(-50.f, 50.f, -50.f),
-		glm::vec3(50.f, 50.f, -50.f),
+		glm::vec2(0, 0),
 		glm::vec2(0, 1),
 		glm::vec2(1, 1),
 		glm::vec2(1, 0),
-		glm::vec2(0, 0),
 		faces[4]);
 
 	// [FRONT] .5f, .5f, .5f,  -.5f, .5f, .5f,  -.5f,-.5f, .5f,  .5f,-.5f, .5f
 	Types::SModelMesh cubeFront = buildMesh(
-		glm::vec3( 50.f,  50.f,  50.f),
-		glm::vec3(-50.f,  50.f,  50.f),
 		glm::vec3(-50.f, -50.f,  50.f),
+		glm::vec3(-50.f,  50.f,  50.f),
+		glm::vec3( 50.f,  50.f,  50.f),
 		glm::vec3( 50.f, -50.f,  50.f),
-		glm::vec2(1, 0),
 		glm::vec2(0, 0),
 		glm::vec2(0, 1),
 		glm::vec2(1, 1),
+		glm::vec2(1, 0),
 		faces[5]);
 
 	pModel->meshes.push_back(cubeTop);
@@ -98,6 +98,8 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 
 	// finally, assign it to the sky model
 	m_skyModel = pSkyModel;
+	// resize this
+	m_skyModel->SetScale(IvVector3(3, 3, 3));
 }
 
 UtilitiesCore::Skybox::~Skybox()
