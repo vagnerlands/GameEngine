@@ -67,6 +67,7 @@ Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\Includes\lpng1626;^
 %PROJECT_ROOT%\UtilitiesCore\Shaders;^
 %PROJECT_ROOT%\UtilitiesCore\zlib;
+%PROJECT_ROOT%\UtilitiesCore\Rendered;
 
 
 start "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe" "%PROJECT_ROOT%\Game.sln"

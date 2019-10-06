@@ -11,6 +11,9 @@
     <Filter Include="Src\ZLib">
       <UniqueIdentifier>{01eb319c-2451-481c-988e-c44df43d9136}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Rendered">
+      <UniqueIdentifier>{a23ccd03-0031-4034-9210-de6d58619c1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Debugger.cpp">
@@ -27,6 +30,9 @@
     </ClCompile>
     <ClCompile Include="SocketUtils.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendered\Skybox.cpp">
+      <Filter>Src\Rendered</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +68,9 @@
     </ClInclude>
     <ClInclude Include="SocketUtils.h">
       <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendered\Skybox.h">
+      <Filter>Src\Rendered</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
