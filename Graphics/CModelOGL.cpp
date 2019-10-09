@@ -202,14 +202,30 @@ void Graphics::CModelOGL::Draw()
 	// indexer
     for (UInt32 i = 0 ; i < m_drawAttr.size(); ++i)
     {
-		// texture indexer
-		for (UInt32 ti = 0; ti < m_drawAttr[i].m_textures.size(); ti++)
+		const UInt32 cTexturesCount = m_drawAttr[i].m_textures.size();
+		if (cTexturesCount > 0)
 		{
-			glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
-											  // retrieve texture number (the N in diffuse_textureN)
-			string name = m_drawAttr[i].m_textures[ti].m_uniformName;
-			// now set the sampler to the correct texture unit
-			m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
+			// checks whether is a cubemap - in this case, there will be a texture id for the 6 cube faces
+			if (m_drawAttr[i].m_textures[0].m_isCubeMap)
+			{
+				// who cares, set the first one as the active one
+				glActiveTexture(GL_TEXTURE0); 
+				string name = m_drawAttr[i].m_textures[0].m_uniformName;
+				// now set the sampler to the correct texture unit
+				m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureVector(m_drawAttr[i].m_textures));
+			}
+			else
+			{
+				// texture indexer
+				for (UInt32 ti = 0; ti < cTexturesCount; ti++)
+				{
+					glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
+													  // retrieve texture number (the N in diffuse_textureN)
+					string name = m_drawAttr[i].m_textures[ti].m_uniformName;
+					// now set the sampler to the correct texture unit
+					m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
+				}
+			}
 		}
         // draw all meshes mesh
         glBindVertexArray(m_drawAttr[i].m_vertexArrayObject);

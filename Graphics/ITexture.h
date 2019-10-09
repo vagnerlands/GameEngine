@@ -17,7 +17,18 @@ namespace Graphics
 		{
 
 		}
-		virtual bool BuildTexture(const I2dImage* pData) = 0;
+		virtual bool BuildTexture(const I2dImage* pData)
+		{
+			// must be implemented
+			return false;
+		}
+		virtual bool BuildVectorTexture(const I2dImage** pData)
+		{
+			// no real implementation
+			return false;
+		}
+
+
 		virtual bool Bind() = 0;
 		virtual bool BindTextureToSampler(UInt32 samplerId) = 0;
 		bool ProcessStatus()

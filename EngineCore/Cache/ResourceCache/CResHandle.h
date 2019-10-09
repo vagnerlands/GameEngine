@@ -19,8 +19,17 @@ class CResource
 	
 public:
 	string m_name;
+	CResource() 
+	{
+		m_name = "";
+	}
 
 	CResource(string name) {
+		m_name = name;
+	}
+
+	void SetName(string name)
+	{
 		m_name = name;
 	}
 

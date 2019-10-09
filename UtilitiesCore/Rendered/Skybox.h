@@ -27,7 +27,7 @@ namespace UtilitiesCore
 		virtual void Draw();
 
 	protected:
-		Types::SModelMesh buildMesh(
+		/*Types::SModelMesh buildMesh(
 			const glm::vec3& v1, 
 			const glm::vec3& v2,
 			const glm::vec3& v3, 
@@ -36,7 +36,7 @@ namespace UtilitiesCore
 			const glm::vec2& uv2,
 			const glm::vec2& uv3,
 			const glm::vec2& uv4,
-			const std::string& texture);
+			const std::string& texture);*/
 		// generated sky model
 		Graphics::IDrawable* m_skyModel;
 

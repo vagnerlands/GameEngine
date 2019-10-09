@@ -42,6 +42,7 @@ public:
 	void LoadTexture(const string& textId);
 	void RemoveTexture(const string& textId);
 	Graphics::ITexture* getTextureById(const string& textId);
+	Graphics::ITexture* getTextureVector(const vector<SModelTexture>& attr);
 	bool Bind(const string& texId) const ;
 	CTextureHolder::~CTextureHolder();
 
