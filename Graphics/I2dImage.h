@@ -28,6 +28,11 @@ public:
 		//empty implementation
 	}
 
+	virtual void SetCubeMap(bool isCubeMap)
+	{
+		m_isCubeMap = isCubeMap;
+	}
+
 	Int32 GetWidth() const;
 	Int32 GetHeight() const;
 	Int32 GetNumberOfBytes() const;
@@ -35,11 +40,12 @@ public:
 	Byte* GetPointerToData() const;
 
 protected:
-	Int32 m_Width;
-	Int32 m_Height;
-	Int32 m_NumberOfBytes;
-	Int32 m_SizeInBytes;
-	Byte* m_pContent;
+	Int32				m_Width;
+	Int32				m_Height;
+	Int32				m_NumberOfBytes;
+	Int32				m_SizeInBytes;
+	bool				m_isCubeMap;
+	Byte*				m_pContent;
 	
 };
 

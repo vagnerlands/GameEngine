@@ -63,10 +63,17 @@ namespace Types
 
     struct SModelTexture
     {
+		SModelTexture() 
+			: m_isCubeMap(false)
+		{
+
+		}
         // either diffuse, normal or specular
         std::string m_uniformName;
         // name of the texture - may be the full path to the texture, who knows...
         std::string m_filename;
+		// should this texture be binded as a CUBE_MAP?
+		bool		m_isCubeMap;
     };
 
     struct SModelVertex

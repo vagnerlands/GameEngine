@@ -50,6 +50,9 @@
     <ClInclude Include="Scene\IluminationItem.h">
       <Filter>Src\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="CCubeTextureOGL.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRendererOGL.cpp">
@@ -84,6 +87,9 @@
     </ClCompile>
     <ClCompile Include="Scene\IluminationItem.cpp">
       <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CCubeTextureOGL.cpp">
+      <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@
 #include <iostream>
 #ifdef WIN32
 #include "CTextureOGL.h"
+#include "CCubeTextureOGL.h"
 #endif
 
 #include "CFactory2dImage.h"
@@ -68,9 +69,13 @@ CTextureHolder::LoadTexture(const string& textId)
 		if (pRawImage != NULL) // is this file a BMP?
 		{
 			if (pRawImage->ParseStream(textureDataStream, textureDataLength))
+			{
 				BuildTexture(textId, pRawImage);
+			}
 			else
+			{
 				std::cout << " Bad input stream, failed to load texture [" << textId << "]" << std::endl;
+			}
 			// free allocated data from the heap
 			// this must also free the array of bmp pixels 
 			delete pRawImage;
@@ -180,7 +185,79 @@ CTextureHolder::getTextureById(const string& textId)
 	LoadTexture(textId);
 
 	// if it somehow failed, returns -1
-	return NULL;
+	return nullptr;
+}
+
+Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture>& attr)
+{
+	// for every purpose, texture vectors are indexed by the first element
+	// then try to find it in the textures map
+	std::string textureId = attr[0].m_filename;
+	TextureMap::iterator result = m_textures.find(textureId);
+	if (result != m_textures.end())
+	{
+		// take the record from the lru and push on front
+		increaseTexturePriority(textureId);
+		return result->second;
+	}
+
+	// start loading measuring time
+	clock_t start = clock();
+
+	const UInt32 arrLen = attr.size();
+
+	// cache missed - must reload it from resources db
+	CResource* resourceItem = new CResource[arrLen];
+	I2dImage** pRawImageArray = new I2dImage*[arrLen];
+	for (UInt32 i = 0; i < arrLen; ++i)
+	{
+		resourceItem[i].SetName(attr[i].m_filename);
+		Byte*  textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem[i]);
+		UInt32 textureDataLength = m_pResHandler->VGetResourceSize(resourceItem[i]);
+		// checks the first 2 bytes of the stream to know if we know how to parse it
+		Byte fileType[3];
+		memcpy(&fileType, textureDataStream, 3);
+		pRawImageArray[i] = CFactory2dImage::instance()->Create2dImage(fileType);
+
+		if (pRawImageArray[i]->ParseStream(textureDataStream, textureDataLength))
+		{
+
+		}
+		// free file content buffer
+		delete[] textureDataStream;
+	}
+
+	// build 3D Cube texture data
+	Graphics::ITexture* pTextureObj = NULL;
+	//if (pData != NULL)
+	{
+		pTextureObj = new Graphics::CCubeTextureOGL();
+		pTextureObj->BuildVectorTexture((const I2dImage**)pRawImageArray);
+		if (pTextureObj->ProcessStatus())
+		{
+			m_textures.insert(make_pair(textureId, pTextureObj));
+			// TODO: make sure that the texture is unique in the lru database
+			increaseTexturePriority(textureId/*, pData->GetSizeInBytes()*/);
+		}
+	}
+
+	
+
+
+	// release allocated data
+	for (UInt32 i = 0; i < arrLen; ++i)
+	{
+		delete pRawImageArray[i];
+	}
+
+	delete[] pRawImageArray;
+	delete[] resourceItem;
+
+	// time measurement
+	printf(" loading cube tex [%s] %.2fms\n", textureId.data(), (float)(clock() - start));
+
+	// if it somehow failed, returns -1
+	return nullptr;
 }
 
 bool CTextureHolder::Bind(const string& texId) const

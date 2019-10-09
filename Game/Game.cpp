@@ -67,14 +67,14 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
 	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
 	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
-	// 6 faces of the sky
+	// 6 faces of the sky - external interface must provide these
 	vector<std::string> faces;
-	faces.push_back("skytop.bmp");
-	faces.push_back("skybottom.bmp");
-	faces.push_back("skyleft.bmp");
 	faces.push_back("skyright.bmp");
-	faces.push_back("skyback.bmp");
+	faces.push_back("skyleft.bmp");
+	faces.push_back("skybottom.bmp");	
+	faces.push_back("skytop.bmp");
 	faces.push_back("skyfront.bmp");
+	faces.push_back("skyback.bmp");
 	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces));
 	// update models location
 	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4, 1, 0));

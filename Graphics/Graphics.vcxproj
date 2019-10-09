@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CCubeTextureOGL.cpp" />
     <ClCompile Include="CModelOGL.cpp" />
     <ClCompile Include="CRendererOGL.cpp" />
     <ClCompile Include="CTextureOGL.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Scene\IluminationItem.cpp" />
     <ClCompile Include="Scene\RenderScene.cpp" />
     <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CCubeTextureOGL.h" />
     <ClInclude Include="CModelOGL.h" />
     <ClInclude Include="CRendererOGL.h" />
     <ClCompile Include="IRenderer.cpp" />
