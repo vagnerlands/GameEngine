@@ -213,10 +213,8 @@ void MainOgl::StartUp(int argv, char** argc)
 	// mouse motion input
 	glutPassiveMotionFunc(MouseMotion);
 
-#ifdef WIN32
 	// creates a thread for loading resources purpose
 	CThreadHolder::instance()->registerThread("thBackgroundLoader", BackgroundLoader);
-#endif
 
 	// initialize the opengl main loop
 	// this will handle the whole displaying states of our game...

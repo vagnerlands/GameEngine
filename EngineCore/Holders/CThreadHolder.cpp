@@ -1,5 +1,5 @@
 #include "CThreadHolder.h"
-#include "CWinThread.h"
+#include "ThreadFactory.h"
 
 CThreadHolder* CThreadHolder::s_pInstance = NULL;
 
@@ -28,22 +28,34 @@ CThreadHolder::destroyThread(string threadId)
 
 void CThreadHolder::registerThread(string thName, void * thEntry)
 {
-#ifdef WIN32
-	IThread* thObj = new CWinThread();
-#else
-	// not implemented for other platforms
-#endif
-	if (thObj != NULL)
-	{
-		thObj->createThread(thName, thEntry);
-	}
-	else
+
+	// creates a thread using the abstract factory
+	IThread* thObj = ThreadFactory::Instance().Create(thName.data(), thEntry);
+
+	if (thObj == nullptr)
 	{
 		cout << "Unable to allocate memory!" << endl;
 	}
+	else
+	{
+		m_threadMap.insert(make_pair(thName, thObj));
+	}
+}
 
-	m_threadMap.insert(make_pair(thName, thObj));
-
+void 
+CThreadHolder::DestroyAll()
+{
+	// iterates through all objects and destroy one by one
+	unordered_map<string, IThread*>::iterator threadObj = m_threadMap.begin();
+	while (threadObj != m_threadMap.end())
+	{
+		threadObj->second->destroy();
+		IThread* condemned = threadObj->second;
+		delete condemned;
+		threadObj++;
+	}
+	// clear
+	m_threadMap = unordered_map<string, IThread*>();
 }
 
 CThreadHolder::~CThreadHolder()

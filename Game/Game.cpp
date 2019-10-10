@@ -50,7 +50,9 @@ bool Game::PostRendererInitialize()
 	CShaderHolder::Create();
 
 	// Set the view parameters in renderer
-	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
+	Graphics::IRenderer::mRenderer->SetFOV(90.0F);
+	// Update camera to be above ground
+	Graphics::IRenderer::mRenderer->GetCamera().m_position.SetY(1.f);
 	// Update this camera type
 	Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Spectator;
 	// create model holder
