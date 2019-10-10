@@ -3,6 +3,7 @@
 #include "IRenderer.h"
 #include "IClock.h"
 #include "CClockOGL.h"
+#include "CThreadHolder.h"
 #include "GL/glut.h"
 
 EngineCore::IGame* EngineCore::IGame::mGame = nullptr;
@@ -61,9 +62,14 @@ void EngineCore::IGame::Display()
 		if (mQuit)
 		{
 			gDebugger.Flush();
+			// kill all background threads
+			CThreadHolder::instance()->DestroyAll();
+			// release the rendering resources
 			Graphics::IRenderer::Destroy();
+			// release other game related resources
 			EngineCore::IGame::Destroy();
-			exit(1);
+			// exit with no error if get to this point
+			exit(0);
 		}
 	}
 }

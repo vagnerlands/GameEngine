@@ -164,8 +164,11 @@ bool Graphics::CModelOGL::SetShader(const string & shaderName)
 
 void Graphics::CModelOGL::Draw()
 {
+	// get shader program id 
 	GLuint programId = m_pShader->GetProgramObject();
+	// enable it
 	glUseProgram(programId);
+	// check for errors
 	Int32 glErr = glGetError();
 	if (glErr != 0)
 		DEBUG_OUT("Failed to apply shader ");

@@ -17,6 +17,7 @@ public:
 	static CThreadHolder* instance();
 	void destroyThread(string threadId);
 	void registerThread(string thName, void* thEntry);
+	void DestroyAll();
 private:
 	CThreadHolder();
 	~CThreadHolder();
