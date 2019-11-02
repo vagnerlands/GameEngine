@@ -1,0 +1,3 @@
+[submodule "TicTacToe_Python"]
+	path = TicTacToe_Python
+	url = https://github.com/vagnerlands/TicTacToe_Python
