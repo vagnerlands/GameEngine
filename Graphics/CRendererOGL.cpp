@@ -22,19 +22,71 @@ void Graphics::CRendererOGL::Destroy()
 	mRenderer = 0;
 }
 
-void Graphics::CRendererOGL::PrepareCamera2D()
-{
-	// TODO: implement orthographic projection
-}
-
-void Graphics::CRendererOGL::PrepareCamera3D()
+void Graphics::CRendererOGL::PrepareFrame()
 {
 	// prepares MODEL VIEW
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	// Set background (clear) color to black
 	glClearColor(0.0, 0.0, 0.0, 1.0);
+}
 
+void Graphics::CRendererOGL::PrepareCamera2D()
+{
+	IvMatrix44 ortho;
+
+	Float recipX = 1.0f / (mRight - mLeft);
+	Float recipY = 1.0f / (mTop - mBottom);
+	Float recipZ = 1.0f / (mNear - mFar);
+
+	ortho(0, 0) = 2.0f*recipX;
+	ortho(0, 3) = -(mRight + mLeft)*recipX;
+
+	ortho(1, 1) = 2.0f*recipY;
+	ortho(1, 3) = -(mTop + mBottom)*recipY;
+
+	ortho(2, 2) = 2.0f*recipZ;
+	ortho(2, 3) = (mNear + mFar)*recipZ;
+
+	// send to renderer
+	//SetViewMatrix(ortho);
+
+	//SetProjectionMatrix(ortho);
+
+	IvMatrix44 ident;
+	SetViewMatrix(ident);
+	SetWorldMatrix(ident);
+
+
+	// set default modelview matrix
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+
+	// TODO: initOrient won't change - make this variable static and initialized
+	// somewhere else
+
+	IvMatrix33 initOrient;
+	initOrient.Identity();
+
+	IvMatrix33 viewToWorldRot = mCamera.m_camRotation*initOrient;
+
+	// set view matrix
+
+	// world to view rotation is transpose of view to world
+	IvMatrix44 matrix(::Transpose(viewToWorldRot));
+	// world to view translation is -eye position times world to view rotation
+	// or can multiply by transpose of view to world
+	IvVector3 eyeInverse = -mCamera.m_position*viewToWorldRot;
+	// set translation of matrix
+	matrix(0, 3) = eyeInverse.GetX();
+	matrix(1, 3) = eyeInverse.GetY();
+	matrix(2, 3) = eyeInverse.GetZ();
+	SetViewMatrix(matrix*ortho);
+}
+
+void Graphics::CRendererOGL::PrepareCamera3D()
+{
 	// TODO: this shall change only when window changes
 	// makes another function calculate the "perspective"
 
