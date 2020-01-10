@@ -16,6 +16,8 @@ namespace Graphics
 
 		static void Destroy();
 
+		virtual void PrepareFrame() override;
+
 		virtual void PrepareCamera2D() override;
 
 		virtual void PrepareCamera3D() override;

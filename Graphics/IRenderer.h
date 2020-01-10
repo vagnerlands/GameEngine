@@ -17,15 +17,24 @@ namespace Graphics
 		static bool Create();
 		// Should delete objects in the inverse order of their creation
 		static void Destroy();
+		// Procedures prior first rendering such as clearing previous buffer
+		// defining what buffers, if it's double buffered and more...
+		virtual void PrepareFrame() = 0;
 		virtual void PrepareCamera2D() = 0;
 		virtual void PrepareCamera3D() = 0;
 		virtual void Resize(UInt32 width, UInt32 height) = 0;
 
+		// getters
+		virtual Float GetWidth();
+		virtual Float GetHeight();
+		virtual Float GetAspect();
+		// setters
 		virtual void SetDisplayWidth(UInt32 width);
 		virtual void SetDisplayHeight(UInt32 height);
 		virtual void SetNearPlane(Float near);
 		virtual void SetFarPlane(Float far);
 		virtual void SetFOV(Float fov);
+		virtual void SetOrtho(Float l, Float r, Float t, Float b, Float n, Float f);
 		virtual CCamera& GetCamera()
 		{
 			return mCamera;
@@ -54,12 +63,18 @@ namespace Graphics
 		UInt32 mWidth;        // current width, height
 		UInt32 mHeight;
 
+		// Parameters for Perspective rendering
 		Float mFOV;
 		Float mNear;
 		Float mFar;
 
-		//IvResourceManager*  mResourceManager;
+		// Parameters for Orthographic rendering
+		Float mRight;
+		Float mLeft;
+		Float mTop;
+		Float mBottom;
 
+		// Matrices 
 		IvMatrix44        mWorldMat;
 		IvMatrix44        mViewMat;
 		IvMatrix44        mProjectionMat;
@@ -79,6 +94,25 @@ namespace Graphics
 		IRenderer(const IRenderer& other);
 		IRenderer& operator=(const IRenderer& other);
 	};
+
+
+	inline Float 
+		IRenderer::GetWidth()
+	{
+		return mWidth;
+	}
+
+	inline Float 
+		IRenderer::GetHeight()
+	{
+		return mHeight;
+	}
+
+	inline Float 
+		IRenderer::GetAspect()
+	{
+		return mWidth / mHeight;
+	}
 
 	//-------------------------------------------------------------------------------
 	// @ IRendererOGL::SetDisplayWidth()
@@ -137,6 +171,17 @@ namespace Graphics
 	IRenderer::SetFOV(Float fov)
 	{
 		mFOV = fov;
+	}
+
+	inline void 
+	IRenderer::SetOrtho(Float l, Float r, Float t, Float b, Float n, Float f)
+	{
+		mLeft	= l;
+		mRight	= r;
+		mTop	= t;
+		mBottom = b;
+		mNear	= n;
+		mFar	= f;
 	}
 
 }
