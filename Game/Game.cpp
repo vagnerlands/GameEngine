@@ -178,11 +178,6 @@ void Game::UpdateObjects(float dt)
 
 void Game::Render()
 {
-	// prepares MODEL VIEW
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	// Set background (clear) color to black
-	glClearColor(0.0, 0.0, 0.0, 1.0);
 	// adjust camera projection and view according to the current 
 	// frustum parameters (3d - perspective mode)
 	Graphics::IRenderer::mRenderer->PrepareCamera3D();

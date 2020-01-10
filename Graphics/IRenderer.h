@@ -17,7 +17,7 @@ namespace Graphics
 		static bool Create();
 		// Should delete objects in the inverse order of their creation
 		static void Destroy();
-
+		virtual void PrepareCamera2D() = 0;
 		virtual void PrepareCamera3D() = 0;
 		virtual void Resize(UInt32 width, UInt32 height) = 0;
 
