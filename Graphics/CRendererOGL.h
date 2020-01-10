@@ -16,6 +16,8 @@ namespace Graphics
 
 		static void Destroy();
 
+		virtual void PrepareCamera2D() override;
+
 		virtual void PrepareCamera3D() override;
 
 		virtual void Resize(UInt32 width, UInt32 height) override;

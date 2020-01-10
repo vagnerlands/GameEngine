@@ -22,8 +22,19 @@ void Graphics::CRendererOGL::Destroy()
 	mRenderer = 0;
 }
 
+void Graphics::CRendererOGL::PrepareCamera2D()
+{
+	// TODO: implement orthographic projection
+}
+
 void Graphics::CRendererOGL::PrepareCamera3D()
 {
+	// prepares MODEL VIEW
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	// Set background (clear) color to black
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+
 	// TODO: this shall change only when window changes
 	// makes another function calculate the "perspective"
 
