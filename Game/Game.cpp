@@ -170,6 +170,10 @@ void Game::UpdateObjects(float dt)
 	static float MoveRadius = 4.F;
 	Graphics::Ilumination::Instance().Update("main", IvVector3(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 8.5f, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius));
 
+	Graphics::RenderScene::Instance().Rotate("ogre1", IvQuat(IvVector3(0, 1, 0), -15));
+
+	Graphics::RenderScene::Instance().Rotate("cyborg1", IvQuat(IvVector3(0, 1, 0),	45));
+
 	// [Model]
 
 	// [Landscape]
@@ -199,7 +203,7 @@ void Game::Render()
 	Graphics::IRenderer::mRenderer->PrepareCamera3D();
 	
 	// Render everything in the scene database
-	Graphics::RenderScene::Instance().Render();
+	Graphics::RenderScene::Instance().Render(true);
 
 	glutSwapBuffers();
 }

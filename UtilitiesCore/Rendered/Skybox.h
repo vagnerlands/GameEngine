@@ -24,7 +24,7 @@ namespace UtilitiesCore
 		Skybox(const std::string& id, const vector<std::string>& faces);
 		virtual ~Skybox();
 
-		virtual void Draw();
+		virtual void Draw(bool isRenderingShadows);
 
 	protected:
 		/*Types::SModelMesh buildMesh(

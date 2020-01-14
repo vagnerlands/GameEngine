@@ -37,7 +37,7 @@ namespace Graphics
 		// Update ilumination location
 		virtual void Remove(const std::string& id);
 
-		virtual void Render() const;
+		virtual void Render(bool isRenderingShadows = false) const;
 
 	protected:
 		list<Graphics::IDrawable*> m_items;

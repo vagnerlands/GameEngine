@@ -5,7 +5,9 @@
 #include "IRenderer.h"
 #include "Ilumination.h"
 #include "IvMatrix44.h"
-#include <time.h>
+#include <time.h> // put this somewhere else, create a lib for time
+#include <WinBase.h> // put this somewhere else
+
 
 Graphics::CModelOGL::CModelOGL(string modelName) :
 	m_vboBufferCreated(false)
@@ -15,6 +17,8 @@ Graphics::CModelOGL::CModelOGL(string modelName) :
     m_elementBufferObject.clear();
     m_drawAttr.clear();
     m_vertexBufferObject.clear();
+	// safe initialization of rotation
+	m_rotation.Identity();
 }
 
 Graphics::CModelOGL::~CModelOGL()
@@ -142,12 +146,23 @@ bool Graphics::CModelOGL::SetShader(const string & shaderName)
 
 	// read data from file
 	cwc::glShader* obj = 0;
-	char vertexFilename[200], fragmentFilename[200];
+	char vertexFilename[128], fragmentFilename[128], geometryFilename[128];
 	sprintf(vertexFilename, "../Game/Assets/%sVertexshader.txt", shaderName.data());
 	sprintf(fragmentFilename, "../Game/Assets/%sFragmentshader.txt", shaderName.data());
+	sprintf(geometryFilename, "../Game/Assets/%sGeometryshader.txt", shaderName.data());
 	// there should be a specialized class for this whole thing
 	cwc::glShaderManager shaderLoader;
-	m_pShader = shaderLoader.loadfromFile(vertexFilename, fragmentFilename);
+	// checks if the geometry shader actually is required
+	if (INVALID_FILE_ATTRIBUTES == GetFileAttributes((LPCWSTR)geometryFilename) && GetLastError() == ERROR_FILE_NOT_FOUND)
+	{
+		//File not found
+		m_pShader = shaderLoader.loadfromFile(vertexFilename, fragmentFilename);
+	}
+	else
+	{
+		m_pShader = shaderLoader.loadfromFile(vertexFilename, geometryFilename, fragmentFilename);
+	}
+
 
 	if (m_pShader == 0)
 	{
@@ -162,20 +177,33 @@ bool Graphics::CModelOGL::SetShader(const string & shaderName)
 }
 
 
-void Graphics::CModelOGL::Draw()
+void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 {
-	// get shader program id 
-	GLuint programId = m_pShader->GetProgramObject();
-	// enable it
-	glUseProgram(programId);
-	// check for errors
+	// clear any non-treated Gl errors
 	Int32 glErr = glGetError();
-	if (glErr != 0)
-		DEBUG_OUT("Failed to apply shader ");
+	// when rendering shadows, we must not enable other shaders or activate textures
+	if (!isRenderingShadows)
+	{
+		// get shader program id 
+		GLuint programId = m_pShader->GetProgramObject();
+		// enable it
+		glUseProgram(programId);
+		// check for errors
+		Int32 glErr = glGetError();
+		if (glErr != 0)
+			DEBUG_OUT("Failed to apply shader ");
 
-	// Apply attributes known for this shader
-	IvMatrix44 projMatrix = Graphics::IRenderer::mRenderer->GetProjectionMatrix();
-	IvMatrix44 viewMatrix = Graphics::IRenderer::mRenderer->GetViewMatrix();
+		// Apply attributes known for this shader
+		IvMatrix44 projMatrix = Graphics::IRenderer::mRenderer->GetProjectionMatrix();
+		IvMatrix44 viewMatrix = Graphics::IRenderer::mRenderer->GetViewMatrix();
+
+		Float lightLocation[4] = { 0 };
+		Graphics::Ilumination::Instance().GetIluminationItemLocationPtr("main", lightLocation);
+
+		m_pShader->setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
+		m_pShader->setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
+		m_pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
+	}
 	// identity
 	// final model for the shader - each transformation should be calculated
 	// alone and then combined
@@ -183,50 +211,53 @@ void Graphics::CModelOGL::Draw()
 	// translate model
 	IvMatrix44 translateModel;
 	translateModel.Identity();
+	// rotate model
+	IvMatrix44 rotateModel;
+	rotateModel.Identity();
 	// scale model
 	IvMatrix44 scaleModel;	
 	scaleModel.Identity();
 	// calculates idependently each transformation
-
+	// rotate transformation
+	rotateModel.Rotation(m_rotation);
 	// scale transformation
 	scaleModel.Scaling(m_scale);
 	// translation transformation
 	translateModel.Translation(m_location);
 	// combine both transformations
-	model = scaleModel * translateModel;
-	Float lightLocation[4] = { 0 };
-	Graphics::Ilumination::Instance().GetIluminationItemLocationPtr("main", lightLocation);
+	model = scaleModel * translateModel * rotateModel;
 
-	m_pShader->setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
-	m_pShader->setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
 	m_pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)model.GetFloatPtr());
-	m_pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
 
 	// indexer
     for (UInt32 i = 0 ; i < m_drawAttr.size(); ++i)
     {
-		const UInt32 cTexturesCount = m_drawAttr[i].m_textures.size();
-		if (cTexturesCount > 0)
+		// when rendering shadows, we must not enable other shaders or activate textures
+		if (!isRenderingShadows)
 		{
-			// checks whether is a cubemap - in this case, there will be a texture id for the 6 cube faces
-			if (m_drawAttr[i].m_textures[0].m_isCubeMap)
+			const UInt32 cTexturesCount = m_drawAttr[i].m_textures.size();
+			if (cTexturesCount > 0)
 			{
-				// who cares, set the first one as the active one
-				glActiveTexture(GL_TEXTURE0); 
-				string name = m_drawAttr[i].m_textures[0].m_uniformName;
-				// now set the sampler to the correct texture unit
-				m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureVector(m_drawAttr[i].m_textures));
-			}
-			else
-			{
-				// texture indexer
-				for (UInt32 ti = 0; ti < cTexturesCount; ti++)
+				// checks whether is a cubemap - in this case, there will be a texture id for the 6 cube faces
+				if (m_drawAttr[i].m_textures[0].m_isCubeMap)
 				{
-					glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
-													  // retrieve texture number (the N in diffuse_textureN)
-					string name = m_drawAttr[i].m_textures[ti].m_uniformName;
+					// who cares, set the first one as the active one
+					glActiveTexture(GL_TEXTURE0); 
+					string name = m_drawAttr[i].m_textures[0].m_uniformName;
 					// now set the sampler to the correct texture unit
-					m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
+					m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureVector(m_drawAttr[i].m_textures));
+				}
+				else
+				{
+					// texture indexer
+					for (UInt32 ti = 0; ti < cTexturesCount; ti++)
+					{
+						glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
+														  // retrieve texture number (the N in diffuse_textureN)
+						string name = m_drawAttr[i].m_textures[ti].m_uniformName;
+						// now set the sampler to the correct texture unit
+						m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
+					}
 				}
 			}
 		}
@@ -237,11 +268,15 @@ void Graphics::CModelOGL::Draw()
 
     // always good practice to set everything back to defaults once configured.
     glBindVertexArray(0);
-    glActiveTexture(GL_TEXTURE0);
-	glUseProgram(0);
-	glErr = glGetError();
-	if (glErr != 0)
-		DEBUG_OUT("Failed halting shader");
+	// when rendering shadows, we must not enable other shaders or activate textures
+	if (!isRenderingShadows)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glUseProgram(0);
+		glErr = glGetError();
+		if (glErr != 0)
+			DEBUG_OUT("Failed halting shader");
+	}
 }
 
 shared_ptr<Model> Graphics::CModelOGL::Allocate()
