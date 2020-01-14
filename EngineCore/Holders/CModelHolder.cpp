@@ -130,7 +130,7 @@ void CModelHolder::DrawModelById(const string& modelId)
 	ModelObject::iterator result = m_mapModels.find(modelId);
 	if (result != m_mapModels.end())
 	{
-		result->second->Draw();
+		result->second->Draw(false);
 	}
 	else
 	{

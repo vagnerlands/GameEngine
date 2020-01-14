@@ -149,10 +149,13 @@ UtilitiesCore::Skybox::~Skybox()
 	}
 }
 
-void UtilitiesCore::Skybox::Draw()
+void UtilitiesCore::Skybox::Draw(bool isRenderingShadows)
 {
+	// in case we're currently rendering shadows, the skybox shouldn't affect it
+	if (isRenderingShadows) return;
+	// otherwise, proceed regularly
 	if (m_skyModel != nullptr)
 	{
-		m_skyModel->Draw();
+		m_skyModel->Draw(false);
 	}
 }

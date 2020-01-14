@@ -75,5 +75,14 @@
     <Text Include="Assets\skyVertexshader.txt">
       <Filter>Shaders</Filter>
     </Text>
+    <Text Include="Assets\shadowsFragmentshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\shadowsGeometryshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\shadowsVertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
   </ItemGroup>
 </Project>

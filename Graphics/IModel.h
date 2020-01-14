@@ -20,8 +20,6 @@ namespace Graphics
 
 		}
         virtual bool Create(const Model & modelInfo) = 0;
-		// render this object as is
-		virtual void Draw() = 0;
 		// allocate SModelData for custom objects
 		virtual shared_ptr<Model> Allocate() = 0;
 		// commit changes

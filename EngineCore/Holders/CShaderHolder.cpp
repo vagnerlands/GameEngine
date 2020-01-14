@@ -47,11 +47,21 @@ CShaderHolder::LoadShader(const string shaderId)
 
 	// read data from file
 	cwc::glShader* obj = 0;
-	char vertexFilename[200], fragmentFilename[200];
+	char vertexFilename[128], fragmentFilename[128], geometryFilename[128];
 	sprintf(vertexFilename, "../Game/Assets/%sVertexshader.txt", shaderId.data());
 	sprintf(fragmentFilename, "../Game/Assets/%sFragmentshader.txt", shaderId.data());
+	sprintf(geometryFilename, "../Game/Assets/%sGeometryshader.txt", shaderId.data());
 
-	obj = m_shaderManager.loadfromFile(vertexFilename, fragmentFilename);
+	// checks if the geometry shader actually is required
+	if (INVALID_FILE_ATTRIBUTES == GetFileAttributes((LPCWSTR)geometryFilename) && GetLastError() == ERROR_FILE_NOT_FOUND)
+	{
+		//File not found
+		obj = m_shaderManager.loadfromFile(vertexFilename, fragmentFilename);
+	}
+	else
+	{
+		obj = m_shaderManager.loadfromFile(vertexFilename, geometryFilename, fragmentFilename);
+	}
 
 	if (obj != 0)
 	{

@@ -20,7 +20,7 @@ namespace Graphics
         // create based on SModelData
         virtual bool Create(const Model & modelInfo);
 		bool SetShader(const string& shaderName);
-		virtual void Draw();
+		virtual void Draw(bool isRenderingShadows);
 		// allocate SModelData for custom objects
 		virtual shared_ptr<Model> Allocate();
 		// commit changes
