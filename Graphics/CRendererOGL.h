@@ -22,6 +22,8 @@ namespace Graphics
 
 		virtual void PrepareCamera3D() override;
 
+		virtual void PrepareShadows3D() override;
+
 		virtual void Resize(UInt32 width, UInt32 height) override;
 
 		virtual void SetProjectionMatrix(const IvMatrix44& matrix) override;

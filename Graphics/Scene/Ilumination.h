@@ -3,6 +3,8 @@
 
 #include "CommonTypes.h"
 #include "IluminationItem.h"
+#include "Shadows.h"
+
 
 using namespace Types;
 
@@ -15,12 +17,19 @@ namespace Graphics
 		Ilumination()
 		{
 
+
 		}
 		// virtual destructor
 		virtual ~Ilumination()
 		{
 
 		}
+
+		void Initialize(Shadows* pShadows);
+
+		void StartShadowsDepth();
+		void FinishShadowsDepth();
+
 		// render this object as is
 		virtual void Add(IluminationItem* pLightSource);
 
@@ -32,12 +41,15 @@ namespace Graphics
 
 		// Update ilumination location
 		virtual void GetIluminationItemLocationPtr(const std::string& id, Float* location);
+		virtual void GetIluminationItemLocation(const std::string& id, IvVector3& location);
 
 		static Ilumination& Instance();
 
 	protected:
 
 		std::list<IluminationItem*> m_lights;
+
+		Shadows* m_pShadows;
 
 	private:
 

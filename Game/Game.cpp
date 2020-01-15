@@ -20,7 +20,7 @@
 #include "glm/glm.hpp"
 #include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtc/type_ptr.hpp>
-
+#include "ShadowsOGL.h"
 
 bool 
 EngineCore::IGame::Create()
@@ -61,6 +61,8 @@ bool Game::PostRendererInitialize()
 	CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip", 200U*1024U*1024U);
 
 	IGame::mGame->SetFps(60);
+
+	Graphics::Ilumination::Instance().Initialize(new Graphics::ShadowsOGL);
 
 	// Build a debug scenario
 	// [Light]
@@ -198,12 +200,17 @@ void Game::Render()
 		10);
 	Graphics::IRenderer::mRenderer->PrepareCamera2D();*/
 
+	
+	Graphics::IRenderer::mRenderer->PrepareShadows3D();
+	Graphics::Ilumination::Instance().StartShadowsDepth();
+	Graphics::RenderScene::Instance().Render(true);
+	Graphics::Ilumination::Instance().FinishShadowsDepth();
 	// adjust camera projection and view according to the current 
 	// frustum parameters (3d - perspective mode)
 	Graphics::IRenderer::mRenderer->PrepareCamera3D();
 	
 	// Render everything in the scene database
-	Graphics::RenderScene::Instance().Render(true);
+	Graphics::RenderScene::Instance().Render(false);
 
 	glutSwapBuffers();
 }

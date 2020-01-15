@@ -433,7 +433,7 @@ if (!_noshader) return;
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform1f(GLcharARB* varname, GLfloat v0, GLint index)
+bool glShader::setUniform1f(const GLcharARB* varname, GLfloat v0, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -455,7 +455,7 @@ bool glShader::setUniform1f(GLcharARB* varname, GLfloat v0, GLint index)
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform2f(GLcharARB* varname, GLfloat v0, GLfloat v1, GLint index)
+bool glShader::setUniform2f(const GLcharARB* varname, GLfloat v0, GLfloat v1, GLint index)
 {
    if (!useGLSL) return false; // GLSL not available
    if (!_noshader) return true;
@@ -476,7 +476,7 @@ bool glShader::setUniform2f(GLcharARB* varname, GLfloat v0, GLfloat v1, GLint in
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform3f(GLcharARB* varname, GLfloat v0, GLfloat v1, GLfloat v2, GLint index)
+bool glShader::setUniform3f(const GLcharARB* varname, GLfloat v0, GLfloat v1, GLfloat v2, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -497,7 +497,7 @@ bool glShader::setUniform3f(GLcharARB* varname, GLfloat v0, GLfloat v1, GLfloat 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform4f(GLcharARB* varname, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3, GLint index)
+bool glShader::setUniform4f(const GLcharARB* varname, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -518,7 +518,7 @@ bool glShader::setUniform4f(GLcharARB* varname, GLfloat v0, GLfloat v1, GLfloat 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform1i(GLcharARB* varname, GLint v0, GLint index)
+bool glShader::setUniform1i(const GLcharARB* varname, GLint v0, GLint index)
 { 
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -539,7 +539,7 @@ bool glShader::setUniform1i(GLcharARB* varname, GLint v0, GLint index)
 
 //-----------------------------------------------------------------------------
 
-bool glShader::setUniform2i(GLcharARB* varname, GLint v0, GLint v1, GLint index)
+bool glShader::setUniform2i(const GLcharARB* varname, GLint v0, GLint v1, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -561,7 +561,7 @@ bool glShader::setUniform2i(GLcharARB* varname, GLint v0, GLint v1, GLint index)
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform3i(GLcharARB* varname, GLint v0, GLint v1, GLint v2, GLint index)
+bool glShader::setUniform3i(const GLcharARB* varname, GLint v0, GLint v1, GLint v2, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -582,7 +582,7 @@ bool glShader::setUniform3i(GLcharARB* varname, GLint v0, GLint v1, GLint v2, GL
 
 //-----------------------------------------------------------------------------
 
-bool glShader::setUniform4i(GLcharARB* varname, GLint v0, GLint v1, GLint v2, GLint v3, GLint index)
+bool glShader::setUniform4i(const GLcharARB* varname, GLint v0, GLint v1, GLint v2, GLint v3, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -602,7 +602,7 @@ bool glShader::setUniform4i(GLcharARB* varname, GLint v0, GLint v1, GLint v2, GL
 }
 //-----------------------------------------------------------------------------
 
-bool glShader::setTexture(GLcharARB* varname, Graphics::ITexture* pTexture)
+bool glShader::setTexture(const GLcharARB* varname, Graphics::ITexture* pTexture)
 {
 	if (!useGLSL) return false; // GLSL not available
 	if (!bGPUShader4) return false;
@@ -653,7 +653,7 @@ bool glShader::setTexture(GLcharARB* varname, Graphics::ITexture* pTexture)
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform1ui(GLcharARB* varname, GLuint v0, GLint index)
+bool glShader::setUniform1ui(const GLcharARB* varname, GLuint v0, GLint index)
 { 
     if (!useGLSL) return false; // GLSL not available
     if (!bGPUShader4) return false;
@@ -675,7 +675,7 @@ bool glShader::setUniform1ui(GLcharARB* varname, GLuint v0, GLint index)
 
 //-----------------------------------------------------------------------------
 
-bool glShader::setUniform2ui(GLcharARB* varname, GLuint v0, GLuint v1, GLint index)
+bool glShader::setUniform2ui(const GLcharARB* varname, GLuint v0, GLuint v1, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!bGPUShader4) return false;
@@ -698,7 +698,7 @@ bool glShader::setUniform2ui(GLcharARB* varname, GLuint v0, GLuint v1, GLint ind
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform3ui(GLcharARB* varname, GLuint v0, GLuint v1, GLuint v2, GLint index)
+bool glShader::setUniform3ui(const GLcharARB* varname, GLuint v0, GLuint v1, GLuint v2, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!bGPUShader4) return false;
@@ -720,7 +720,7 @@ bool glShader::setUniform3ui(GLcharARB* varname, GLuint v0, GLuint v1, GLuint v2
 
 //-----------------------------------------------------------------------------
 
-bool glShader::setUniform4ui(GLcharARB* varname, GLuint v0, GLuint v1, GLuint v2, GLuint v3, GLint index)
+bool glShader::setUniform4ui(const GLcharARB* varname, GLuint v0, GLuint v1, GLuint v2, GLuint v3, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!bGPUShader4) return false;
@@ -741,7 +741,7 @@ bool glShader::setUniform4ui(GLcharARB* varname, GLuint v0, GLuint v1, GLuint v2
 }
 //-----------------------------------------------------------------------------
 
-bool glShader::setUniform1fv(GLcharARB* varname, GLsizei count, GLfloat *value, GLint index)
+bool glShader::setUniform1fv(const GLcharARB* varname, GLsizei count, GLfloat *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -759,7 +759,7 @@ bool glShader::setUniform1fv(GLcharARB* varname, GLsizei count, GLfloat *value, 
 
     return true;
 }
-bool glShader::setUniform2fv(GLcharARB* varname, GLsizei count, GLfloat *value, GLint index)
+bool glShader::setUniform2fv(const GLcharARB* varname, GLsizei count, GLfloat *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -780,7 +780,7 @@ bool glShader::setUniform2fv(GLcharARB* varname, GLsizei count, GLfloat *value, 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform3fv(GLcharARB* varname, GLsizei count, GLfloat *value, GLint index)
+bool glShader::setUniform3fv(const GLcharARB* varname, GLsizei count, GLfloat *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -801,7 +801,7 @@ bool glShader::setUniform3fv(GLcharARB* varname, GLsizei count, GLfloat *value, 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform4fv(GLcharARB* varname, GLsizei count, GLfloat *value, GLint index)
+bool glShader::setUniform4fv(const GLcharARB* varname, GLsizei count, GLfloat *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -822,7 +822,7 @@ bool glShader::setUniform4fv(GLcharARB* varname, GLsizei count, GLfloat *value, 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform1iv(GLcharARB* varname, GLsizei count, GLint *value, GLint index)
+bool glShader::setUniform1iv(const GLcharARB* varname, GLsizei count, GLint *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -843,7 +843,7 @@ bool glShader::setUniform1iv(GLcharARB* varname, GLsizei count, GLint *value, GL
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform2iv(GLcharARB* varname, GLsizei count, GLint *value, GLint index)
+bool glShader::setUniform2iv(const GLcharARB* varname, GLsizei count, GLint *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -864,7 +864,7 @@ bool glShader::setUniform2iv(GLcharARB* varname, GLsizei count, GLint *value, GL
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform3iv(GLcharARB* varname, GLsizei count, GLint *value, GLint index)
+bool glShader::setUniform3iv(const GLcharARB* varname, GLsizei count, GLint *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -885,7 +885,7 @@ bool glShader::setUniform3iv(GLcharARB* varname, GLsizei count, GLint *value, GL
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform4iv(GLcharARB* varname, GLsizei count, GLint *value, GLint index)
+bool glShader::setUniform4iv(const GLcharARB* varname, GLsizei count, GLint *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -906,7 +906,7 @@ bool glShader::setUniform4iv(GLcharARB* varname, GLsizei count, GLint *value, GL
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform1uiv(GLcharARB* varname, GLsizei count, GLuint *value, GLint index)
+bool glShader::setUniform1uiv(const GLcharARB* varname, GLsizei count, GLuint *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!bGPUShader4) return false;
@@ -928,7 +928,7 @@ bool glShader::setUniform1uiv(GLcharARB* varname, GLsizei count, GLuint *value, 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform2uiv(GLcharARB* varname, GLsizei count, GLuint *value, GLint index)
+bool glShader::setUniform2uiv(const GLcharARB* varname, GLsizei count, GLuint *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!bGPUShader4) return false;
@@ -950,7 +950,7 @@ bool glShader::setUniform2uiv(GLcharARB* varname, GLsizei count, GLuint *value, 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform3uiv(GLcharARB* varname, GLsizei count, GLuint *value, GLint index)
+bool glShader::setUniform3uiv(const GLcharARB* varname, GLsizei count, GLuint *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!bGPUShader4) return false;
@@ -972,7 +972,7 @@ bool glShader::setUniform3uiv(GLcharARB* varname, GLsizei count, GLuint *value, 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniform4uiv(GLcharARB* varname, GLsizei count, GLuint *value, GLint index)
+bool glShader::setUniform4uiv(const GLcharARB* varname, GLsizei count, GLuint *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!bGPUShader4) return false;
@@ -994,7 +994,7 @@ bool glShader::setUniform4uiv(GLcharARB* varname, GLsizei count, GLuint *value, 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniformMatrix2fv(GLcharARB* varname, GLsizei count, GLboolean transpose, GLfloat *value, GLint index)
+bool glShader::setUniformMatrix2fv(const GLcharARB* varname, GLsizei count, GLboolean transpose, GLfloat *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -1015,7 +1015,7 @@ bool glShader::setUniformMatrix2fv(GLcharARB* varname, GLsizei count, GLboolean 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniformMatrix3fv(GLcharARB* varname, GLsizei count, GLboolean transpose, GLfloat *value, GLint index)
+bool glShader::setUniformMatrix3fv(const GLcharARB* varname, GLsizei count, GLboolean transpose, GLfloat *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;
@@ -1036,7 +1036,7 @@ bool glShader::setUniformMatrix3fv(GLcharARB* varname, GLsizei count, GLboolean 
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniformMatrix4fv(GLcharARB* varname, GLsizei count, GLboolean transpose, GLfloat *value, GLint index)
+bool glShader::setUniformMatrix4fv(const GLcharARB* varname, GLsizei count, GLboolean transpose, GLfloat *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;

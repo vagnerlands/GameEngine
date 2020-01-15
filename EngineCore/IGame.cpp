@@ -28,8 +28,7 @@ bool EngineCore::IGame::PreRendererInitialize(int argc, char * argv[])
 
 bool EngineCore::IGame::PostRendererInitialize() 
 {
-	// TODO: threads, semaphores, sockets and other features that are better to be initialized
-	// at the end of the initialization process...
+
 	return true;
 }
 

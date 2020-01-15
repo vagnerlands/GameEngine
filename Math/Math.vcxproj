@@ -168,6 +168,7 @@
     <ClCompile Include="IvVector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommonMath.h" />
     <ClInclude Include="IvGaussianElim.h" />
     <ClInclude Include="IvLine3.h" />
     <ClInclude Include="IvLineSegment3.h" />

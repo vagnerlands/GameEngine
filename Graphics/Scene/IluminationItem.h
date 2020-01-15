@@ -33,9 +33,9 @@ namespace Graphics
 		}
 
 		// for comparison
-		virtual bool operator==(const std::string& other)
+		virtual bool operator==(const std::string& otherid)
 		{
-			return other == m_id;
+			return otherid == m_id;
 		}
 
 		virtual void SetLocation(const IvVector3& location);
