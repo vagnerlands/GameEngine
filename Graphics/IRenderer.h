@@ -22,12 +22,17 @@ namespace Graphics
 		virtual void PrepareFrame() = 0;
 		virtual void PrepareCamera2D() = 0;
 		virtual void PrepareCamera3D() = 0;
+		// when rendering shadowed areas
+		virtual void PrepareShadows3D() = 0;
+
 		virtual void Resize(UInt32 width, UInt32 height) = 0;
 
 		// getters
 		virtual Float GetWidth();
 		virtual Float GetHeight();
 		virtual Float GetAspect();
+		virtual Float GetFar();
+		virtual Float GetNear();
 		// setters
 		virtual void SetDisplayWidth(UInt32 width);
 		virtual void SetDisplayHeight(UInt32 height);
@@ -112,6 +117,18 @@ namespace Graphics
 		IRenderer::GetAspect()
 	{
 		return mWidth / mHeight;
+	}
+
+	inline Float
+		IRenderer::GetFar()
+	{
+		return mFar;
+	}
+
+	inline Float
+		IRenderer::GetNear()
+	{
+		return mNear;
 	}
 
 	//-------------------------------------------------------------------------------

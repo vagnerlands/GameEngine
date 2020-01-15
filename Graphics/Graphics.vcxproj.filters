@@ -53,6 +53,12 @@
     <ClInclude Include="CCubeTextureOGL.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Shadows.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ShadowsOGL.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRendererOGL.cpp">
@@ -90,6 +96,12 @@
     </ClCompile>
     <ClCompile Include="CCubeTextureOGL.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Shadows.cpp">
+      <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ShadowsOGL.cpp">
+      <Filter>Src\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

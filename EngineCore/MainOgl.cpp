@@ -15,6 +15,8 @@
 #include "SocketFactoryWin.h"
 #include "ThreadFactoryWin.h"
 #include "CFactory2dImageWin.h"
+#include "Ilumination.h"
+#include "ShadowsOGL.h"
 
 static Int32 s_lastState = GLUT_UP;
 static Int32 s_lastCursorX = -1;
@@ -186,7 +188,6 @@ void MainOgl::StartUp(int argv, char** argc)
 		EngineCore::IGame::Destroy();
 		return ;
 	}
-
 
 	// Do post-renderer creation initialization
 	if (!EngineCore::IGame::mGame->PostRendererInitialize())
