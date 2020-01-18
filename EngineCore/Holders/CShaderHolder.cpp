@@ -69,7 +69,7 @@ CShaderHolder::LoadShader(const string shaderId)
 	}
 	else
 	{
-		printf("<!> Failed to parse shader files [%s]\n", shaderId);
+		printf("<!> Failed to parse shader files [%s]\n", shaderId.data());
 	}
 
 	// time measurement

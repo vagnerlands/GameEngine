@@ -18,6 +18,7 @@ namespace Graphics
 			//m_id(itoa(rand(),)),  // tries, vaguely, to create unique ids
 			m_location(0.f, 0.f, 0.f) // default location
 			, m_scale(1.f, 1.f, 1.f) // default scale (original size from editor)
+            , m_hasShadow(true)
 		{
 			m_rotation.Identity();
 		}
@@ -59,7 +60,8 @@ namespace Graphics
 		{
 			return other == m_id;
 		}
-
+        // casts shadow
+        bool            m_hasShadow;
 
 	protected:
 		// identification of this drawable, user must set it

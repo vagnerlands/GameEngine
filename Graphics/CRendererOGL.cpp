@@ -153,55 +153,6 @@ void Graphics::CRendererOGL::PrepareCamera3D()
 
 void Graphics::CRendererOGL::PrepareShadows3D()
 {
-	// clear the depth buffer and the color buffer
-	glClear(GL_DEPTH_BUFFER_BIT);
-	// set up current viewport based on defined screen size
-	glViewport(0, 0, 1280, 1280);
-	// d is distance from view view position to the projection plane
-	float d = 1.0f / IvTan(mFOV / 180.0f * Types::s_PI * 0.5f);
-	// a normalized 
-	float recip = 1.0f / (mNear - mFar);
-	IvMatrix44 perspective;
-
-	perspective(0, 0) = d / ((GLfloat)mWidth / (GLfloat)mHeight);
-	perspective(1, 1) = d;
-	perspective(2, 2) = (mNear + mFar)*recip;
-	perspective(2, 3) = 2 * mNear*mFar*recip;
-	perspective(3, 2) = -1.0f;
-	perspective(3, 3) = 0.0f;
-
-	SetProjectionMatrix(perspective);
-
-	IvMatrix44 ident;
-	SetViewMatrix(ident);
-	SetWorldMatrix(ident);
-
-
-	// set default modelview matrix
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-
-	// TODO: initOrient won't change - make this variable static and initialized
-	// somewhere else
-
-	IvMatrix33 initOrient;
-	initOrient.Identity();
-
-	IvMatrix33 viewToWorldRot = mCamera.m_camRotation*initOrient;
-
-	// set view matrix
-
-	// world to view rotation is transpose of view to world
-	IvMatrix44 matrix(::Transpose(viewToWorldRot));
-	// world to view translation is -eye position times world to view rotation
-	// or can multiply by transpose of view to world
-	IvVector3 eyeInverse = -mCamera.m_position*viewToWorldRot;
-	// set translation of matrix
-	matrix(0, 3) = eyeInverse.GetX();
-	matrix(1, 3) = eyeInverse.GetY();
-	matrix(2, 3) = eyeInverse.GetZ();
-	SetViewMatrix(matrix);
 
 }
 

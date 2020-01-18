@@ -15,7 +15,6 @@ void main()
 {           
 	vec3 ignoreme = lightPos * 3.0;
 	// Activate to DEBUG
-    //gl_FragColor = vec4(fs_in.TexCoords,1.0);
     gl_FragColor = texture(diffuseMap, fs_in.TexCoords);
 }
 

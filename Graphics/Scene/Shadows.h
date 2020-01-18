@@ -7,6 +7,7 @@ using namespace Types;
 
 // forward declaration
 class IvVector3;
+class IvMatrix44;
 
 namespace Graphics
 {
@@ -31,6 +32,10 @@ namespace Graphics
 		virtual void Stop() = 0;
 
 		virtual UInt32 GetDepthMapId() const = 0;
+
+        virtual void SetModel(IvMatrix44& model) = 0;
+
+        virtual void BindShadowTexture() = 0;
 
 
 	protected:

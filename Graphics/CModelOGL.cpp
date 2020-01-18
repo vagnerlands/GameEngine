@@ -10,7 +10,7 @@
 
 
 Graphics::CModelOGL::CModelOGL(string modelName) :
-	m_vboBufferCreated(false)
+    m_vboBufferCreated(false)
 {
 	// only for debug purposes
 	m_modelName = modelName;
@@ -166,7 +166,7 @@ bool Graphics::CModelOGL::SetShader(const string & shaderName)
 
 	if (m_pShader == 0)
 	{
-		printf("<!> Failed to parse shader files [%s]\n", shaderName);
+		printf("<!> Failed to parse shader files [%s]\n", shaderName.data());
 		status = false;
 	}
 
@@ -181,6 +181,8 @@ void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 {
 	// clear any non-treated Gl errors
 	Int32 glErr = glGetError();
+    if (glErr != 0)
+        DEBUG_OUT("Untreated error has been found");
 	// when rendering shadows, we must not enable other shaders or activate textures
 	if (!isRenderingShadows)
 	{
@@ -203,6 +205,18 @@ void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 		m_pShader->setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
 		m_pShader->setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
 		m_pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
+
+        if (m_hasShadow)
+        {
+            m_pShader->setUniform3f("viewPos", 
+                Graphics::IRenderer::mRenderer->GetCamera().m_position.GetX(),
+                Graphics::IRenderer::mRenderer->GetCamera().m_position.GetY(),
+                Graphics::IRenderer::mRenderer->GetCamera().m_position.GetZ());
+            m_pShader->setUniform1f("far_plane", Graphics::IRenderer::mRenderer->GetFar());
+            glErr = glGetError();            
+            m_pShader->setUniform1i("depthMap", 2);
+            glErr = glGetError();
+        }
 	}
 	// identity
 	// final model for the shader - each transformation should be calculated
@@ -225,9 +239,16 @@ void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 	// translation transformation
 	translateModel.Translation(m_location);
 	// combine both transformations
-	model = scaleModel * translateModel * rotateModel;
-
-	m_pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)model.GetFloatPtr());
+	model = translateModel * scaleModel * rotateModel;
+    glErr = glGetError();
+    if (isRenderingShadows)
+    {
+        Graphics::Ilumination::Instance().UpdateModel(model);
+    }
+    else
+    {
+	    m_pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)model.GetFloatPtr());
+    }
 
 	// indexer
     for (UInt32 i = 0 ; i < m_drawAttr.size(); ++i)
@@ -250,7 +271,8 @@ void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 				else
 				{
 					// texture indexer
-					for (UInt32 ti = 0; ti < cTexturesCount; ti++)
+                    UInt32 ti = 0;
+					for (; ti < cTexturesCount; ti++)
 					{
 						glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
 														  // retrieve texture number (the N in diffuse_textureN)
@@ -258,6 +280,10 @@ void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 						// now set the sampler to the correct texture unit
 						m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
 					}
+
+                    glActiveTexture(GL_TEXTURE0 + ti);
+                    glBindTexture(GL_TEXTURE_CUBE_MAP, Graphics::Ilumination::Instance().GetShadowTexture());
+                    
 				}
 			}
 		}

@@ -31,6 +31,10 @@ namespace Graphics
 
 		UInt32 GetDepthMapId() const override;
 
+        void SetModel(IvMatrix44& model) override;
+
+        void BindShadowTexture() override;
+
 
 	protected:
 
@@ -41,8 +45,8 @@ namespace Graphics
 		UInt32 m_depthMapFBO;
 		//! shader for shadows
 		cwc::glShader* m_pShader;
-		static const UInt32 SHADOW_WIDTH = 1280;
-		static const UInt32 SHADOW_HEIGHT = 1280;
+		static const UInt32 SHADOW_WIDTH = 1024;
+		static const UInt32 SHADOW_HEIGHT = 1024;
 
 		// copy operations
 		ShadowsOGL(const ShadowsOGL& other);

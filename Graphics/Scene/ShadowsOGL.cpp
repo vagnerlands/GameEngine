@@ -6,6 +6,7 @@
 #include "Ilumination.h"
 #include <time.h>
 #include "CommonMath.h"
+#include "IvMath.h"
 
 using namespace Graphics;
 
@@ -62,16 +63,40 @@ void Graphics::ShadowsOGL::Start(const IvVector3& lightPos)
 {
 	// 0. create depth cubemap transformation matrices
 	// -----------------------------------------------
-	float near_plane = 1.0f;
-	float far_plane = 25.0f;
-	IvMatrix44 shadowProj = Graphics::IRenderer::mRenderer->GetProjectionMatrix();
+    // clear the depth buffer and the color buffer
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    const Float near_plane = 0.1f;
+	const Float far_plane = 25.f;
+
+    // d is distance from view view position to the projection plane
+    float d = 1.0f / IvTan(90.f / 180.0f * Types::s_PI * 0.5f);
+    // a normalized 
+    float recip = 1.0f / (near_plane - far_plane);
+    IvMatrix44 perspective;
+
+    perspective(0, 0) = d / ((GLfloat)1024 / (GLfloat)1024);
+    perspective(1, 1) = d;
+    perspective(2, 2) = (near_plane + far_plane)*recip;
+    perspective(2, 3) = 2 * near_plane*far_plane*recip;
+    perspective(3, 2) = -1.0f;
+    perspective(3, 3) = 0.0f;
+
+	//IvMatrix44 shadowProj = Graphics::IRenderer::mRenderer->GetProjectionMatrix();
+    IvMatrix44 lookAtMatrix;
 	std::vector<IvMatrix44> shadowTransforms;
-	shadowTransforms.push_back(shadowProj * CommonMath::LookAt(lightPos, lightPos + IvVector3(1.0f, 0.0f, 0.0f), IvVector3(0.0f, -1.0f, 0.0f)));
-	shadowTransforms.push_back(shadowProj * CommonMath::LookAt(lightPos, lightPos + IvVector3(-1.0f, 0.0f, 0.0f), IvVector3(0.0f, -1.0f, 0.0f)));
-	shadowTransforms.push_back(shadowProj * CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 1.0f, 0.0f), IvVector3(0.0f, 0.0f, 1.0f)));
-	shadowTransforms.push_back(shadowProj * CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, -1.0f, 0.0f), IvVector3(0.0f, 0.0f, -1.0f)));
-	shadowTransforms.push_back(shadowProj * CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 0.0f, 1.0f), IvVector3(0.0f, -1.0f, 0.0f)));
-	shadowTransforms.push_back(shadowProj * CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 0.0f, -1.0f), IvVector3(0.0f, -1.0f, 0.0f)));
+    CommonMath::LookAt(lightPos, lightPos + IvVector3(1.0f, 0.0f, 0.0f), IvVector3(0.0f, -1.0f, 0.0f), lookAtMatrix);
+	shadowTransforms.push_back(perspective * lookAtMatrix);
+    CommonMath::LookAt(lightPos, lightPos + IvVector3(-1.0f, 0.0f, 0.0f), IvVector3(0.0f, -1.0f, 0.0f), lookAtMatrix);
+	shadowTransforms.push_back(perspective * lookAtMatrix);
+    CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 1.0f, 0.0f), IvVector3(0.0f, 0.0f, 1.0f), lookAtMatrix);
+	shadowTransforms.push_back(perspective * lookAtMatrix);
+    CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, -1.0f, 0.0f), IvVector3(0.0f, 0.0f, -1.0f), lookAtMatrix);
+	shadowTransforms.push_back(perspective * lookAtMatrix);
+    CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 0.0f, 1.0f), IvVector3(0.0f, -1.0f, 0.0f), lookAtMatrix);
+	shadowTransforms.push_back(perspective * lookAtMatrix);
+    CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 0.0f, -1.0f), IvVector3(0.0f, -1.0f, 0.0f), lookAtMatrix);
+	shadowTransforms.push_back(perspective * lookAtMatrix);
 
 	// 1. render scene to depth cubemap
 	// --------------------------------
@@ -97,14 +122,36 @@ void Graphics::ShadowsOGL::Start(const IvVector3& lightPos)
 
 	m_pShader->setUniform1f("far_plane", Graphics::IRenderer::mRenderer->GetFar());
 	m_pShader->setUniform3f("lightPos", lightPos.GetX(), lightPos.GetY(), lightPos.GetZ());
+
+    glErr = glGetError();
+    if (glErr != 0)
+        DEBUG_OUT("Failed Binding shadows");
 }
 
 void Graphics::ShadowsOGL::Stop()
 {
+    // unbind the depth map fbo 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // stop using shader
+    glUseProgram(0);
 }
 
 UInt32 Graphics::ShadowsOGL::GetDepthMapId() const
 {
 	return m_depthCubemap;
+}
+
+void Graphics::ShadowsOGL::SetModel(IvMatrix44 & model)
+{
+    m_pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)model.GetFloatPtr());
+}
+
+void Graphics::ShadowsOGL::BindShadowTexture()
+{
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m_depthCubemap);
+
+    // check for errors
+    Int32 glErr = glGetError();
+    if (glErr != 0)
+        DEBUG_OUT("Failed to bind Shadow Cube Texture ");
 }

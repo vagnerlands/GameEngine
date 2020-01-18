@@ -3,7 +3,7 @@
 #include "CModelOGL.h"
 #include "glm/glm.hpp"
 
-UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& faces)
+UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& faces) : IDrawable()
 {
 	// constant normalized box size - shall be used for texture mapping too
 	const Float cBoxSize = 1.f;
@@ -13,6 +13,8 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 	shared_ptr<Model> pModel = pSkyModel->Allocate();
 
 	pSkyModel->SetShader("sky");
+
+    m_hasShadow = false;
 
 	// mesh
 	Types::SModelMesh meshValue;
@@ -137,6 +139,7 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 
 	// finally, assign it to the sky model
 	m_skyModel = pSkyModel;
+    m_skyModel->m_hasShadow = false;
 	// resize this
 	m_skyModel->SetScale(IvVector3(150, 150, 150));
 }

@@ -660,7 +660,7 @@ bool glShader::setUniform1ui(const GLcharARB* varname, GLuint v0, GLint index)
     if (!_noshader) return true;
     
     GLint loc;
-    if (varname)
+    if (varname)    
        loc = GetUniformLocation(varname);
     else
        loc = index;

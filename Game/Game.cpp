@@ -20,7 +20,6 @@
 #include "glm/glm.hpp"
 #include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtc/type_ptr.hpp>
-#include "ShadowsOGL.h"
 
 bool 
 EngineCore::IGame::Create()
@@ -62,14 +61,12 @@ bool Game::PostRendererInitialize()
 
 	IGame::mGame->SetFps(60);
 
-	Graphics::Ilumination::Instance().Initialize(new Graphics::ShadowsOGL);
-
 	// Build a debug scenario
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
 	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
-	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
+	//Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
 	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
 	// 6 faces of the sky - external interface must provide these
 	vector<std::string> faces;
@@ -82,7 +79,7 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces));
 	// update models location
 	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4, 1, 0));
-	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0, 1, 0));
+	//Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0, 1, 0));
 	Graphics::RenderScene::Instance().Scale("SKY1", IvVector3(50,50,50));
 	// [Landscape]
 
@@ -169,12 +166,12 @@ void Game::UpdateObjects(float dt)
 	// Update Debug objects
 	// [Light]
 	m_lightAngle += 1.115f;
-	static float MoveRadius = 4.F;
-	Graphics::Ilumination::Instance().Update("main", IvVector3(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 8.5f, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius));
+	static float MoveRadius = 3.F;
+	Graphics::Ilumination::Instance().Update("main", IvVector3(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) + 10.f));
 
 	Graphics::RenderScene::Instance().Rotate("ogre1", IvQuat(IvVector3(0, 1, 0), -15));
 
-	Graphics::RenderScene::Instance().Rotate("cyborg1", IvQuat(IvVector3(0, 1, 0),	45));
+	//Graphics::RenderScene::Instance().Rotate("cyborg1", IvQuat(IvVector3(0, 1, 0),	45));
 
 	// [Model]
 
@@ -205,10 +202,11 @@ void Game::Render()
 	Graphics::Ilumination::Instance().StartShadowsDepth();
 	Graphics::RenderScene::Instance().Render(true);
 	Graphics::Ilumination::Instance().FinishShadowsDepth();
+
+
 	// adjust camera projection and view according to the current 
 	// frustum parameters (3d - perspective mode)
-	Graphics::IRenderer::mRenderer->PrepareCamera3D();
-	
+	Graphics::IRenderer::mRenderer->PrepareCamera3D();	
 	// Render everything in the scene database
 	Graphics::RenderScene::Instance().Render(false);
 

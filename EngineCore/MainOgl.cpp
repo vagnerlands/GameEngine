@@ -197,6 +197,8 @@ void MainOgl::StartUp(int argv, char** argc)
 		return ;
 	}
 
+    Graphics::Ilumination::Instance().Initialize(new Graphics::ShadowsOGL);
+
 	// Attach callback functions to rendering functions
 	// declares the drawing function to opengl state machine
 	glutDisplayFunc(RunWrap);

@@ -43,6 +43,12 @@ namespace Graphics
 		virtual void GetIluminationItemLocationPtr(const std::string& id, Float* location);
 		virtual void GetIluminationItemLocation(const std::string& id, IvVector3& location);
 
+        void UpdateModel(IvMatrix44& model);
+
+        void BindShadowTexture();
+
+        UInt32 GetShadowTexture();
+
 		static Ilumination& Instance();
 
 	protected:
