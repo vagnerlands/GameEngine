@@ -82,6 +82,22 @@ void Graphics::Ilumination::GetIluminationItemLocation(const std::string & id, I
 	}
 }
 
+void Graphics::Ilumination::UpdateModel(IvMatrix44 & model)
+{
+    m_pShadows->SetModel(model);
+}
+
+void Graphics::Ilumination::BindShadowTexture()
+{
+    m_pShadows->BindShadowTexture();
+}
+
+UInt32 Graphics::Ilumination::GetShadowTexture()
+{
+    return m_pShadows->GetDepthMapId();
+}
+
+
 Graphics::Ilumination& Graphics::Ilumination::Instance()
 {
 	static Graphics::Ilumination instance;
