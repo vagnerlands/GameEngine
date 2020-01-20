@@ -54,7 +54,7 @@ bool ShadowsOGL::Initialize()
 	}
 
 	// time measurement
-	printf(" loading shader [%s] %.2fms\n", shaderName, (float)(clock() - start));
+	printf(" [*] loading shader [%s] %.2fms\n", shaderName, (float)(clock() - start));
 
 	return retVal;
 }
@@ -75,7 +75,7 @@ void Graphics::ShadowsOGL::Start(const IvVector3& lightPos)
     float recip = 1.0f / (near_plane - far_plane);
     IvMatrix44 perspective;
 
-    perspective(0, 0) = d / ((GLfloat)1024 / (GLfloat)1024);
+    perspective(0, 0) = d / ((GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT);
     perspective(1, 1) = d;
     perspective(2, 2) = (near_plane + far_plane)*recip;
     perspective(2, 3) = 2 * near_plane*far_plane*recip;
@@ -85,18 +85,12 @@ void Graphics::ShadowsOGL::Start(const IvVector3& lightPos)
 	//IvMatrix44 shadowProj = Graphics::IRenderer::mRenderer->GetProjectionMatrix();
     IvMatrix44 lookAtMatrix;
 	std::vector<IvMatrix44> shadowTransforms;
-    CommonMath::LookAt(lightPos, lightPos + IvVector3(1.0f, 0.0f, 0.0f), IvVector3(0.0f, -1.0f, 0.0f), lookAtMatrix);
-	shadowTransforms.push_back(perspective * lookAtMatrix);
-    CommonMath::LookAt(lightPos, lightPos + IvVector3(-1.0f, 0.0f, 0.0f), IvVector3(0.0f, -1.0f, 0.0f), lookAtMatrix);
-	shadowTransforms.push_back(perspective * lookAtMatrix);
-    CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 1.0f, 0.0f), IvVector3(0.0f, 0.0f, 1.0f), lookAtMatrix);
-	shadowTransforms.push_back(perspective * lookAtMatrix);
-    CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, -1.0f, 0.0f), IvVector3(0.0f, 0.0f, -1.0f), lookAtMatrix);
-	shadowTransforms.push_back(perspective * lookAtMatrix);
-    CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 0.0f, 1.0f), IvVector3(0.0f, -1.0f, 0.0f), lookAtMatrix);
-	shadowTransforms.push_back(perspective * lookAtMatrix);
-    CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 0.0f, -1.0f), IvVector3(0.0f, -1.0f, 0.0f), lookAtMatrix);
-	shadowTransforms.push_back(perspective * lookAtMatrix);
+	shadowTransforms.push_back(perspective * CommonMath::LookAt(lightPos, lightPos + IvVector3(1.0f, 0.0f, 0.0f), IvVector3(0.0f, -1.0f, 0.0f)));
+	shadowTransforms.push_back(perspective * CommonMath::LookAt(lightPos, lightPos + IvVector3(-1.0f, 0.0f, 0.0f), IvVector3(0.0f, -1.0f, 0.0f)));
+	shadowTransforms.push_back(perspective * CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 1.0f, 0.0f), IvVector3(0.0f, 0.0f, 1.0f)));
+	shadowTransforms.push_back(perspective * CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, -1.0f, 0.0f), IvVector3(0.0f, 0.0f, -1.0f)));
+	shadowTransforms.push_back(perspective * CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 0.0f, 1.0f), IvVector3(0.0f, -1.0f, 0.0f)));
+	shadowTransforms.push_back(perspective * CommonMath::LookAt(lightPos, lightPos + IvVector3(0.0f, 0.0f, -1.0f), IvVector3(0.0f, -1.0f, 0.0f)));
 
 	// 1. render scene to depth cubemap
 	// --------------------------------

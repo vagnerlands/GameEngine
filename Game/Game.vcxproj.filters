@@ -54,19 +54,7 @@
     <Text Include="Assets\simpleVertexshader.txt">
       <Filter>Shaders</Filter>
     </Text>
-    <Text Include="Assets\textured2Fragmentshader.txt">
-      <Filter>Shaders</Filter>
-    </Text>
-    <Text Include="Assets\textured2Vertexshader.txt">
-      <Filter>Shaders</Filter>
-    </Text>
     <Text Include="Assets\lightFragmentshader.txt">
-      <Filter>Shaders</Filter>
-    </Text>
-    <Text Include="Assets\texturedtangentFragmentshader.txt">
-      <Filter>Shaders</Filter>
-    </Text>
-    <Text Include="Assets\texturedtangentVertexshader.txt">
       <Filter>Shaders</Filter>
     </Text>
     <Text Include="Assets\skyFragmentshader.txt">
@@ -82,6 +70,24 @@
       <Filter>Shaders</Filter>
     </Text>
     <Text Include="Assets\shadowsVertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\model_dnsFragmentshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\model_dnsVertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\model_dsFragmentshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\model_dsVertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\model_dnVertexshader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Assets\model_dnFragmentshader.txt">
       <Filter>Shaders</Filter>
     </Text>
   </ItemGroup>

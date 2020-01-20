@@ -17,7 +17,7 @@
 class CommonMath
 {
 public:
-	static void LookAt(const IvVector3& eye, const IvVector3& lookAt, const IvVector3& up, IvMatrix44& lookAtMat)
+	static IvMatrix44 LookAt(const IvVector3& eye, const IvVector3& lookAt, const IvVector3& up)
 	{
 		// compute view vectors
 		IvVector3 view = lookAt - eye;
@@ -46,11 +46,12 @@ public:
 
 		// build 4x4 matrix
         
-        lookAtMat = IvMatrix44(rotate);
+		IvMatrix44 lookAtMat = IvMatrix44(rotate);
         lookAtMat(0, 3) = xlate.GetX();
         lookAtMat(1, 3) = xlate.GetY();
         lookAtMat(2, 3) = xlate.GetZ();
 
+		return lookAtMat;
 	}
 
 };

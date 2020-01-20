@@ -151,11 +151,6 @@ void Graphics::CRendererOGL::PrepareCamera3D()
 
 }
 
-void Graphics::CRendererOGL::PrepareShadows3D()
-{
-
-}
-
 //-------------------------------------------------------------------------------
 // @ CRendererOGL::Resize()
 //-------------------------------------------------------------------------------

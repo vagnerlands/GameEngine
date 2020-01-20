@@ -73,7 +73,7 @@ CShaderHolder::LoadShader(const string shaderId)
 	}
 
 	// time measurement
-	printf(" loading shader [%s] %.2fms\n", shaderId.data(), (float)(clock() - start));
+	printf(" [*] loading shader [%s] %.2fms\n", shaderId.data(), (float)(clock() - start));
 }
 
 void 

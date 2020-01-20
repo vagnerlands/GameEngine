@@ -171,7 +171,7 @@ bool Graphics::CModelOGL::SetShader(const string & shaderName)
 	}
 
 	// time measurement
-	printf(" loading shader [%s] %.2fms\n", shaderName.data(), (float)(clock() - start));
+	printf(" [*] loading shader [%s] %.2fms\n", shaderName.data(), (float)(clock() - start));
 
 	return status;
 }
@@ -179,6 +179,13 @@ bool Graphics::CModelOGL::SetShader(const string & shaderName)
 
 void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 {
+	// nothing to do here in case we're currently preparing the shadow map
+	// and this object doesn't block light
+	if ((isRenderingShadows) && (!m_hasShadow))
+	{
+		return;
+	}
+
 	// clear any non-treated Gl errors
 	Int32 glErr = glGetError();
     if (glErr != 0)
@@ -206,17 +213,18 @@ void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 		m_pShader->setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
 		m_pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
 
-        if (m_hasShadow)
-        {
-            m_pShader->setUniform3f("viewPos", 
-                Graphics::IRenderer::mRenderer->GetCamera().m_position.GetX(),
-                Graphics::IRenderer::mRenderer->GetCamera().m_position.GetY(),
-                Graphics::IRenderer::mRenderer->GetCamera().m_position.GetZ());
-            m_pShader->setUniform1f("far_plane", Graphics::IRenderer::mRenderer->GetFar());
-            glErr = glGetError();            
-            m_pShader->setUniform1i("depthMap", 2);
-            glErr = glGetError();
-        }
+		if (m_hasShadow)
+		{
+			// these parameters are important for the depth shadow map 
+			m_pShader->setUniform3f("viewPos", 
+				Graphics::IRenderer::mRenderer->GetCamera().m_position.GetX(),
+				Graphics::IRenderer::mRenderer->GetCamera().m_position.GetY(),
+				Graphics::IRenderer::mRenderer->GetCamera().m_position.GetZ());
+			m_pShader->setUniform1f("far_plane", Graphics::IRenderer::mRenderer->GetFar());
+			glErr = glGetError();            
+			m_pShader->setUniform1i("depthMap", 2);
+			glErr = glGetError();
+		}
 	}
 	// identity
 	// final model for the shader - each transformation should be calculated
@@ -281,6 +289,8 @@ void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 						m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
 					}
 
+					// assumes all objects wants to render shadows
+					// TODO: make these 2 lines under condition
                     glActiveTexture(GL_TEXTURE0 + ti);
                     glBindTexture(GL_TEXTURE_CUBE_MAP, Graphics::Ilumination::Instance().GetShadowTexture());
                     
