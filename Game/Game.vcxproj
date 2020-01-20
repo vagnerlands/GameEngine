@@ -177,6 +177,8 @@
     <Text Include="Assets\lightVertexshader.txt" />
     <Text Include="Assets\modelFragmentshader.txt" />
     <Text Include="Assets\modelVertexshader.txt" />
+    <Text Include="Assets\model_dnFragmentshader.txt" />
+    <Text Include="Assets\model_dnVertexshader.txt" />
     <Text Include="Assets\shadowsFragmentshader.txt" />
     <Text Include="Assets\shadowsGeometryshader.txt" />
     <Text Include="Assets\shadowsVertexshader.txt" />
@@ -186,10 +188,10 @@
     <Text Include="Assets\simpleVertexshader.txt" />
     <Text Include="Assets\skyFragmentshader.txt" />
     <Text Include="Assets\skyVertexshader.txt" />
-    <Text Include="Assets\textured2Fragmentshader.txt" />
-    <Text Include="Assets\textured2Vertexshader.txt" />
-    <Text Include="Assets\texturedtangentFragmentshader.txt" />
-    <Text Include="Assets\texturedtangentVertexshader.txt" />
+    <Text Include="Assets\model_dsFragmentshader.txt" />
+    <Text Include="Assets\model_dsVertexshader.txt" />
+    <Text Include="Assets\model_dnsFragmentshader.txt" />
+    <Text Include="Assets\model_dnsVertexshader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

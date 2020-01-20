@@ -22,8 +22,6 @@ namespace Graphics
 		virtual void PrepareFrame() = 0;
 		virtual void PrepareCamera2D() = 0;
 		virtual void PrepareCamera3D() = 0;
-		// when rendering shadowed areas
-		virtual void PrepareShadows3D() = 0;
 
 		virtual void Resize(UInt32 width, UInt32 height) = 0;
 

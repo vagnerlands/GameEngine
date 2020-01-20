@@ -50,6 +50,11 @@ namespace Graphics
 			m_id = id;
 		}
 
+		virtual void SetHasShadow(bool hasShadow)
+		{
+			m_hasShadow = hasShadow;
+		}
+
 		// for comparison
 		virtual bool operator==(const IDrawable& other)
 		{
@@ -60,8 +65,6 @@ namespace Graphics
 		{
 			return other == m_id;
 		}
-        // casts shadow
-        bool            m_hasShadow;
 
 	protected:
 		// identification of this drawable, user must set it
@@ -72,6 +75,8 @@ namespace Graphics
 		IvVector3		m_scale;
 		// rotation matrix for the model
 		IvQuat			m_rotation;
+		// this object blocks light?
+		bool            m_hasShadow;
 
 	private:
 		// copy operations

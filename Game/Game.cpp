@@ -66,8 +66,17 @@ bool Game::PostRendererInitialize()
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
 	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
-	//Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
+	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
 	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
+
+	Graphics::RenderScene::Instance().Add("bob", CModelHolder::s_pInstance->GetModelById("boblampclean.md5mesh"));
+	Graphics::RenderScene::Instance().Scale("bob", IvVector3(0.05, 0.05, 0.05));
+	Graphics::RenderScene::Instance().Rotate("bob", IvQuat(IvVector3(1, 0, 0), -90));
+	// debug
+	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
+	Graphics::RenderScene::Instance().HasShadow("lightDebug", false);
+	Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.1, 0.1, 0.1));
+
 	// 6 faces of the sky - external interface must provide these
 	vector<std::string> faces;
 	faces.push_back("skyright.bmp");
@@ -78,8 +87,13 @@ bool Game::PostRendererInitialize()
 	faces.push_back("skyback.bmp");
 	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces));
 	// update models location
-	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4, 1, 0));
-	//Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0, 1, 0));
+	Graphics::RenderScene::Instance().Translate("bob", IvVector3(-4, 0.5f, -20));
+	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4, 0.5f, -20));
+	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0, 0.5f, -20));
+
+
+	Graphics::RenderScene::Instance().Rotate("ogre1", IvQuat(IvVector3(0, 1, 0), -15));
+	Graphics::RenderScene::Instance().Rotate("cyborg1", IvQuat(IvVector3(0, 1, 0), 45));
 	Graphics::RenderScene::Instance().Scale("SKY1", IvVector3(50,50,50));
 	// [Landscape]
 
@@ -165,13 +179,13 @@ void Game::UpdateObjects(float dt)
 
 	// Update Debug objects
 	// [Light]
-	m_lightAngle += 1.115f;
-	static float MoveRadius = 3.F;
-	Graphics::Ilumination::Instance().Update("main", IvVector3(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) + 10.f));
+	m_lightAngle += 0.115f;
+	static float MoveRadius = 5.F;
+	IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) - 20.f);
+	Graphics::Ilumination::Instance().Update("main", lightLocation);
 
-	Graphics::RenderScene::Instance().Rotate("ogre1", IvQuat(IvVector3(0, 1, 0), -15));
+	Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
 
-	//Graphics::RenderScene::Instance().Rotate("cyborg1", IvQuat(IvVector3(0, 1, 0),	45));
 
 	// [Model]
 
@@ -197,8 +211,7 @@ void Game::Render()
 		10);
 	Graphics::IRenderer::mRenderer->PrepareCamera2D();*/
 
-	
-	Graphics::IRenderer::mRenderer->PrepareShadows3D();
+	// first pass, using the shadows depth shader
 	Graphics::Ilumination::Instance().StartShadowsDepth();
 	Graphics::RenderScene::Instance().Render(true);
 	Graphics::Ilumination::Instance().FinishShadowsDepth();

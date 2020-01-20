@@ -190,14 +190,18 @@ private:
 			&& (specularMaps.size()) 
 			&& (normalMaps.size()))
 		{
-			m_shaderName = "texturedtangent";
+			m_shaderName = "model_dns";
 		}
 		else if ((diffuseMaps.size() > 0)
 			&& (specularMaps.size() > 0))
 		{
-			m_shaderName = "textured2";
+			m_shaderName = "model_ds";
 		}
-
+		else if ((diffuseMaps.size() > 0)
+			&& (normalMaps.size() > 0))
+		{
+			m_shaderName = "model_dn";
+		}
         
         // return a mesh object created from the extracted mesh data
         return processedMesh;

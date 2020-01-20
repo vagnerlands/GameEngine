@@ -35,6 +35,9 @@ namespace Graphics
 		virtual void Scale(const std::string& id, const IvVector3& newScale);
 
 		// Update ilumination location
+		virtual void HasShadow(const std::string& id, bool hasShadow);
+
+		// Update ilumination location
 		virtual void Remove(const std::string& id);
 
 		virtual void Render(bool isRenderingShadows = false) const;

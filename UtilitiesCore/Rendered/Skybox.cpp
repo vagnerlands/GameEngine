@@ -139,7 +139,7 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 
 	// finally, assign it to the sky model
 	m_skyModel = pSkyModel;
-    m_skyModel->m_hasShadow = false;
+    m_skyModel->SetHasShadow(false);
 	// resize this
 	m_skyModel->SetScale(IvVector3(150, 150, 150));
 }
