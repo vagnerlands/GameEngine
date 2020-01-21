@@ -76,6 +76,7 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
 	Graphics::RenderScene::Instance().HasShadow("lightDebug", false);
 	Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.1, 0.1, 0.1));
+	Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
 
 	// 6 faces of the sky - external interface must provide these
 	vector<std::string> faces;
@@ -179,7 +180,7 @@ void Game::UpdateObjects(float dt)
 
 	// Update Debug objects
 	// [Light]
-	m_lightAngle += 0.115f;
+	m_lightAngle += 0.515f;
 	static float MoveRadius = 5.F;
 	IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) - 20.f);
 	Graphics::Ilumination::Instance().Update("main", lightLocation);
