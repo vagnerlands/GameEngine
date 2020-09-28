@@ -9,6 +9,8 @@
 #include "Game.h"
 #include "CGameController.h"
 #include "MainWinOgl.h"
+#include "OS/Abstract/ThreadFactory.h"
+#include "OS/Abstract/IThread.h"
 
 static int s_WIDTH = 640;
 static int s_HEIGHT = 480;
@@ -32,7 +34,7 @@ bool    fullscreen = TRUE;                            // Fullscreen Flag Set To 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);               // Declaration For WndProc
 int StartUp();
 
-extern __declspec(dllexport)  void 
+extern "C" __declspec(dllexport)  void
 __stdcall SetWndParams(int width, int height)
 {
 	s_WIDTH = width;
@@ -40,14 +42,20 @@ __stdcall SetWndParams(int width, int height)
 }
 
 
-extern __declspec(dllexport)  void 
+extern "C" __declspec(dllexport)  void
 __stdcall SetWndHnd(HWND renderWindow)
 {
 	hWnd = renderWindow;
-	StartUp();
+    // creates a thread, since this StartUp is a forever running blocking operation
+    DWORD thId;
+    HANDLE thHnd = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)StartUp, 0, 0x00000000, &thId);
+    if (thHnd == NULL)
+    {
+        cout << "CreateThread error: " << GetLastError() << " on creating <GameEditorTh>" << endl;
+    }
 }
 
-extern __declspec(dllexport)  void 
+extern "C" __declspec(dllexport)  void
 __stdcall SetRenderColor(float r, float g, float b)
 {
 	s_R = r;
@@ -61,7 +69,7 @@ __stdcall SetRenderColor(float r, float g, float b)
 // 3. Released key
 // 4. Resize viewport
 
-extern __declspec(dllexport)  void
+extern "C" __declspec(dllexport)  void
 __stdcall SetMousePosition(int x, int y)
 {
 	if ((s_lastCursorX != -1) && (s_lastCursorY != -1))
@@ -80,21 +88,21 @@ __stdcall SetMousePosition(int x, int y)
 	}
 }
 
-extern __declspec(dllexport)  void
+extern "C" __declspec(dllexport)  void
 __stdcall SetKeyPressed(int keyId)
 {
 	keys[keyId] = true;
 	Game::mGame->GetGameController()->VOnKeyDown(keyId);
 }
 
-extern __declspec(dllexport)  void
+extern "C" __declspec(dllexport)  void
 __stdcall SetKeyReleased(int keyId)
 {
 	keys[keyId] = false;
 	Game::mGame->GetGameController()->VOnKeyUp(keyId);
 }
 
-extern __declspec(dllexport)  void
+extern "C" __declspec(dllexport)  void
 __stdcall UpdateViewport(int width, int height)
 {
 	s_WIDTH = width;
@@ -103,7 +111,7 @@ __stdcall UpdateViewport(int width, int height)
 	Game::mGame->Reshape(width, height);
 }
 
-extern __declspec(dllexport)  void
+extern "C" __declspec(dllexport)  void
 __stdcall SetMouseAction(int x, int y, int button, int state)
 {
 	if (s_lastCursorX == -1)
@@ -151,7 +159,7 @@ __stdcall SetMouseAction(int x, int y, int button, int state)
 				Game::mGame->GetGameController()->VOnRButtonUp(IvPoint(x, y));
 		}
 	}
-
+    
 }
 
 
@@ -342,8 +350,8 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 		0,                              // Shift Bit Ignored
 		0,                              // No Accumulation Buffer
 		0, 0, 0, 0,                         // Accumulation Bits Ignored
-		16,                             // 16Bit Z-Buffer (Depth Buffer)
-		0,                              // No Stencil Buffer
+		24,                             // 16Bit Z-Buffer (Depth Buffer)
+		8,                              // No Stencil Buffer
 		0,                              // No Auxiliary Buffer
 		PFD_MAIN_PLANE,                         // Main Drawing Layer
 		0,                              // Reserved
@@ -515,7 +523,7 @@ int StartUp()
 											  
 												  
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("Game-Editor", s_WIDTH, s_HEIGHT, 16, fullscreen))
+	if (!CreateGLWindow("Game-Editor", s_WIDTH, s_HEIGHT, 32, fullscreen))
 	{
 		return 0;                           // Quit If Window Was Not Created
 	}
@@ -530,6 +538,8 @@ int StartUp()
 	}
 	// start-up all engine mechanisms
 	obj->StartUp(0, 0);
+
+    Game::mGame->Reshape(s_WIDTH, s_HEIGHT);
 
 	// Loop That Runs Until done=TRUE
 	while (!done)                                

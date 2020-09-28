@@ -9,6 +9,13 @@
 #include "CThreadHolder.h"
 #include "GL/glut.h"
 #include "CGameController.h"
+// Rendering Scene
+#include "Scene\RenderScene.h"
+#include "Scene\Ilumination.h"
+#include "Rendered/Skybox.h"
+// TODO: this should be abstract
+#include "Scene/ShadowsOGL.h"
+
 
 bool 
 EngineCore::IGame::Create()
@@ -33,21 +40,61 @@ Game::~Game()
 
 bool Game::PostRendererInitialize()
 {
-	//TODO: initialize lighting default values (some basic light somewhere)
-	CShaderHolder::Create();
+    //TODO: initialize lighting default values (some basic light somewhere)
+    CShaderHolder::Create();
 
-	// Set the view parameters in renderer
-	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
-	// create model holder
-	CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
-    // 50MB of VRAM allocation
-	CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip", 50U*1024U*1024U);
+    // TODO: make this cross-platform
+    Graphics::Ilumination::Instance().Initialize(new Graphics::ShadowsOGL);
 
-	CTextureHolder::s_pInstance->getTextureById("water.bmp");
-	CTextureHolder::s_pInstance->getTextureById("brick_t.bmp");
-	CTextureHolder::s_pInstance->getTextureById("brick_n.bmp");
+    // Set the view parameters in renderer
+    Graphics::IRenderer::mRenderer->SetFOV(60.0F);
+    // Update camera to be above ground
+    Graphics::IRenderer::mRenderer->GetCamera().m_position.SetY(1.f);
+    // Update this camera type
+    Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Spectator;
+    // create model holder
+    CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
+    // 50mb allocation for VRAM textures
+    CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip", 200U * 1024U * 1024U);
 
-	IGame::mGame->SetFps(60);
+    IGame::mGame->SetFps(60);
+
+    // Build a debug scenario
+    // [Light]
+    Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
+    // [Models]
+    Graphics::RenderScene::Instance().Add("castle1", CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
+    Graphics::RenderScene::Instance().Add("cyborg1", CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
+    Graphics::RenderScene::Instance().Add("ogre1", CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));    
+
+    Graphics::RenderScene::Instance().Add("bob", CModelHolder::s_pInstance->GetModelById("boblampclean.md5mesh"));
+    Graphics::RenderScene::Instance().Scale("bob", IvVector3(0.05, 0.05, 0.05));
+    Graphics::RenderScene::Instance().Rotate("bob", IvQuat(IvVector3(1, 0, 0), -90));
+    // debug
+    Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
+    Graphics::RenderScene::Instance().HasShadow("lightDebug", false);
+    Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.1, 0.1, 0.1));
+    Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
+
+    // 6 faces of the sky - external interface must provide these
+    //vector<std::string> faces;
+    //faces.push_back("skyright.bmp");
+    //faces.push_back("skyleft.bmp");
+    //faces.push_back("skybottom.bmp");
+    //faces.push_back("skytop.bmp");
+    //faces.push_back("skyfront.bmp");
+    //faces.push_back("skyback.bmp");
+    //Graphics::RenderScene::Instance().Add("SKY1", new UtilitiesCore::Skybox("sky1", faces));
+    // update models location
+    Graphics::RenderScene::Instance().Translate("bob", IvVector3(-4, 0.5f, 15));
+    Graphics::RenderScene::Instance().Translate("ogre1", IvVector3(4, 0.5f, 15));
+    Graphics::RenderScene::Instance().Translate("cyborg1", IvVector3(0, 0.5f, 15));
+
+
+    Graphics::RenderScene::Instance().Rotate("ogre1", IvQuat(IvVector3(0, 1, 0), -15));
+    Graphics::RenderScene::Instance().Rotate("cyborg1", IvQuat(IvVector3(0, 1, 0), 45));
+    Graphics::RenderScene::Instance().Scale("SKY1", IvVector3(50, 50, 50));
+    // [Landscape]
 
 	return true;
 }
@@ -105,122 +152,39 @@ void Game::UpdateObjects(float dt)
 		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(MovementIntensityOnY) * dt * 0.5f);
 		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(MovementIntensityOnX) * dt * 0.5f);
 	}
+
+    /*Graphics::IRenderer::mRenderer->GetCamera().RotateX(0 * dt * 0.5f);
+    Graphics::IRenderer::mRenderer->GetCamera().RotateY(5 * dt * 0.5f);*/
 }
 
 void Game::Render()
 {
-	// prepares MODEL VIEW
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	// Set background (clear) color to black
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	// adjust camera projection and view according to the current 
-	// frustum parameters (3d - perspective mode)
-	Graphics::IRenderer::mRenderer->PrepareCamera3D();
-	
-	GLuint textureId = -1;
+    // set which buffers are used, set the modelview matrix and more
+    Graphics::IRenderer::mRenderer->PrepareFrame();
 
-	glPushMatrix();
-	if (CShaderHolder::s_pInstance->UseShaderById("textured2"))
-	{
+    /*const Float aspect = Graphics::IRenderer::mRenderer->GetAspect();
 
-		// light set-up
-		glEnable(GL_LIGHT0);
+    const CCamera& camera = Graphics::IRenderer::mRenderer->GetCamera();
 
-		static float LightMoving = 2.F;
-		static float Angle = 0.0;
-		//LightMoving -= 0.001f;
-		Angle += 1.0f;
-		GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-		GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat light_direction[] = { 0.0, -1.0, 0.0 };
-		GLfloat light_position[] = { sin(Angle * 3.14159 / 180.F) * LightMoving, 1, cos(Angle * 3.14159 / 180.F) * LightMoving - 2.f, 1.0f};
+    Graphics::IRenderer::mRenderer->SetOrtho(
+        aspect * 3.0f + camera.m_position.GetX(),
+        -aspect*3.0f + camera.m_position.GetX(),
+        3.0f + camera.m_position.GetY(),
+        -3.0f + camera.m_position.GetY(),
+        1,
+        10);
+    Graphics::IRenderer::mRenderer->PrepareCamera2D();*/
 
-		glColor4f(1, 0, 0, 1);
-		glBegin(GL_QUADS);
-		glVertex3f(light_position[0] - 0.1f, light_position[1], light_position[2] - 0.1f);
-		glVertex3f(light_position[0] - 0.1f, light_position[1], light_position[2] + 0.1f);
-		glVertex3f(light_position[0] + 0.1f, light_position[1], light_position[2] + 0.1f);
-		glVertex3f(light_position[0] + 0.1f, light_position[1], light_position[2] - 0.1f);
-		glEnd();
-
-		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-		glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-		glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
-		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
-		Int32 err = glGetError();
-		if (err != 0)
-		{
-			printf("preparing matrix error = %d\n", err);
-		}
-
-		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform3f("translate", 0, 0.25, 0);
-		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform3f("scale", 1, 1, 1);
-		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setUniform4f("rotation", 5.F /*+ foolme*/, 1, 0, 0);
-
-		glEnable(GL_TEXTURE_2D);
-
-		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setTexture("textureColor", 
-			CTextureHolder::s_pInstance->getTextureById("brick_t.bmp"));
-
-		CShaderHolder::s_pInstance->GetShaderProgramById("textured2")->setTexture("textureNormal",
-			CTextureHolder::s_pInstance->getTextureById("brick_n.bmp"));
-
-		GLfloat mat_shininess[] = { 1.0, 0.5, 0.31 };
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_shininess);
-
-		// draw blocks of 1 meter^2 and apply texture
-		glBegin(GL_QUADS);
-		const Int32 sizeOfBlock = 2;
-		for (Int32 bx = -10; bx < 10; bx += sizeOfBlock)
-		{
-			for (Int32 by = 0; by > -20; by -= sizeOfBlock)
-			{
-
-				glTexCoord2f(0, 0);  glVertex3f(bx, -0.5, by);
-				glTexCoord2f(1, 0);  glVertex3f(bx + sizeOfBlock, -0.5, by);
-				glTexCoord2f(1, 1);  glVertex3f(bx + sizeOfBlock, -0.5, by + sizeOfBlock);
-				glTexCoord2f(0, 1);  glVertex3f(bx, -0.5, by + sizeOfBlock);
-
-			}
-		}
-		glEnd();
-
-		CShaderHolder::s_pInstance->StopShader();
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glActiveTexture(GL_TEXTURE0);
-	}
-	glPopMatrix();
-
-	glDisable(GL_LIGHTING);
+    // first pass, using the shadows depth shader
+    //Graphics::Ilumination::Instance().StartShadowsDepth();
+    //Graphics::RenderScene::Instance().Render(true);
+    //Graphics::Ilumination::Instance().FinishShadowsDepth();
 
 
-	// [ TEXTURED SQUARE ]
-	glPushMatrix();
-	glEnable(GL_TEXTURE_2D);
-	
-	CTextureHolder::s_pInstance->Bind("brick_t.bmp");
-
-	glEnable(GL_BLEND);
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.5f);
-	glBegin(GL_QUADS);
-	glVertex3f(-200, -100, -1000); glTexCoord2f(0, 0);
-	glVertex3f(100, -100, -1000); glTexCoord2f(0, 1);
-	glVertex3f(100, 100, -1000); glTexCoord2f(1, 1);
-	glVertex3f(-200, 100, -1000); glTexCoord2f(1, 0);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
-	glDisable(GL_ALPHA_TEST);
-	glPopMatrix();
-	
-
-	//glutSwapBuffers();
+    // adjust camera projection and view according to the current 
+    // frustum parameters (3d - perspective mode)
+    Graphics::IRenderer::mRenderer->PrepareCamera3D();
+    // Render everything in the scene database
+    Graphics::RenderScene::Instance().Render(false);
 }
 
