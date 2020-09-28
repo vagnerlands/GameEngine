@@ -30,16 +30,26 @@ const UINT uiFirstUserToolBarId = AFX_IDW_CONTROLBAR_FIRST + 40;
 const UINT uiLastUserToolBarId = uiFirstUserToolBarId + iMaxUserToolbars - 1;
 
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
-	ON_WM_CREATE()
-	ON_COMMAND(ID_WINDOW_MANAGER, &CMainFrame::OnWindowManager)
-	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnApplicationLook)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
-	ON_COMMAND(ID_VIEW_CAPTION_BAR, &CMainFrame::OnViewCaptionBar)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_CAPTION_BAR, &CMainFrame::OnUpdateViewCaptionBar)
-	ON_COMMAND(ID_TOOLS_OPTIONS, &CMainFrame::OnOptions)
+    ON_WM_CREATE()
+    ON_COMMAND(ID_WINDOW_MANAGER, &CMainFrame::OnWindowManager)
+    ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnApplicationLook)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
+    ON_COMMAND(ID_VIEW_CAPTION_BAR, &CMainFrame::OnViewCaptionBar)
+    ON_UPDATE_COMMAND_UI(ID_VIEW_CAPTION_BAR, &CMainFrame::OnUpdateViewCaptionBar)
+    ON_COMMAND(ID_TOOLS_OPTIONS, &CMainFrame::OnOptions)
+
+    ON_WM_KEYDOWN(/*&CMainFrame::OnKeyDown*/)
+    ON_WM_KEYUP(/*&CMainFrame::OnKeyUp*/ )
+    ON_WM_RBUTTONDOWN(/*&CMainFrame::OnRButtonDown*/ )
+    ON_WM_RBUTTONUP(/*&CMainFrame::OnRButtonUp*/ )
 END_MESSAGE_MAP()
 
 // CMainFrame construction/destruction
+typedef void (__stdcall *SetWndParamsFunc)(int , int );
+typedef void (__stdcall *SetWndHndFunc)   (HWND );
+
+SetWndParamsFunc SetWindowParametersFunction;
+SetWndHndFunc SetWindowHandlerFunction;
 
 CMainFrame::CMainFrame()
 {
@@ -49,6 +59,10 @@ CMainFrame::CMainFrame()
 
 CMainFrame::~CMainFrame()
 {
+    if (!hGetProcIDDLL)
+    {
+        FreeLibrary(hGetProcIDDLL);
+    }
 }
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -74,6 +88,32 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("Failed to create status bar\n");
 		return -1;      // fail to create
 	}
+
+    /***********************************************************************/ 
+    /* Loads the gamedll */
+    /***********************************************************************/
+    hGetProcIDDLL = LoadLibraryA((LPCSTR)"../Binaries/GameDLL.dll");
+    if (!hGetProcIDDLL)
+    {
+        MessageBoxA(m_hWnd, (LPCSTR) "could not load the dynamic library", (LPCSTR)"Game Editor", 0);
+        return EXIT_FAILURE;
+    }
+    SetWindowParametersFunction = (SetWndParamsFunc)GetProcAddress(hGetProcIDDLL, (LPCSTR)"_SetWndParams@8");
+    if (!SetWindowParametersFunction)
+    {
+        MessageBoxA(m_hWnd, (LPCSTR) "Couldn't locate the function SetWndParams", (LPCSTR)"Game Editor", 0);
+        return EXIT_FAILURE;
+    }
+    SetWindowHandlerFunction = (SetWndHndFunc)GetProcAddress(hGetProcIDDLL, (LPCSTR)"_SetWndHnd@4");
+    if (!SetWindowHandlerFunction)
+    {
+        MessageBoxA(m_hWnd, (LPCSTR) "Couldn't locate the function SetWndHnd", (LPCSTR)"Game Editor", 0);
+        return EXIT_FAILURE;
+    }
+
+    /***********************************************************************/
+    /* END */
+    /***********************************************************************/
 
 	CString strTitlePane1;
 	CString strTitlePane2;
@@ -118,6 +158,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// Switch the order of document name and application name on the window title bar. This
 	// improves the usability of the taskbar because the document name is visible with the thumbnail.
 	ModifyStyle(0, FWS_PREFIXTITLE);
+
+    /*CMFCTabCtrl* pTab = DYNAMIC_DOWNCAST(CMFCTabCtrl, &m_wndClientArea.GetMDITabs());
+    RECT rect;
+    CRect r[2];*/
+    //pTab->GetTabArea(r[0], r[1]);
+    //SetWindowParametersFunction(r[0].right, r[1].bottom);
+    //SetWindowHandlerFunction(pTab->GetSafeHwnd());
 
 	return 0;
 }
@@ -333,6 +380,23 @@ void CMainFrame::OnViewCaptionBar()
 void CMainFrame::OnUpdateViewCaptionBar(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_wndCaptionBar.IsVisible());
+
+    static bool isFirst = true;
+    if (isFirst)
+    {
+        isFirst = false;
+        const CObList& pTab = m_wndClientArea.GetMDITabGroups();
+        for (POSITION pos = pTab.GetHeadPosition(); pos != 0;)
+        {
+            CMFCTabCtrl* pNextWnd = DYNAMIC_DOWNCAST(CMFCTabCtrl, pTab.GetNext(pos));
+            RECT rect;
+            pNextWnd->GetTabWnd(0)->GetClientRect(&rect);
+            SetWindowParametersFunction(rect.right, rect.bottom);
+            SetWindowHandlerFunction(pNextWnd->GetTabWnd(0)->GetSafeHwnd());
+        }
+
+        
+    }
 }
 
 void CMainFrame::OnOptions()
@@ -344,3 +408,18 @@ void CMainFrame::OnOptions()
 	delete pOptionsDlg;
 }
 
+void CMainFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+}
+
+void CMainFrame::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+}
+
+void CMainFrame::OnRButtonDown(UINT nFlags, CPoint point)
+{
+}
+
+void CMainFrame::OnRButtonUp(UINT nFlags, CPoint point)
+{
+}

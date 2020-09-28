@@ -56,6 +56,8 @@ protected:  // control bar embedded members
 	CCalendarBar      m_wndCalendar;
 	CMFCCaptionBar    m_wndCaptionBar;
 
+    HINSTANCE hGetProcIDDLL;
+
 // Generated message map functions
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -65,6 +67,12 @@ protected:
 	afx_msg void OnViewCaptionBar();
 	afx_msg void OnUpdateViewCaptionBar(CCmdUI* pCmdUI);
 	afx_msg void OnOptions();
+    afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+    afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+    afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+    afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+
+
 	DECLARE_MESSAGE_MAP()
 
 	BOOL CreateOutlookBar(CMFCOutlookBar& bar, UINT uiID, CMFCShellTreeCtrl& tree, CCalendarBar& calendar, int nInitialWidth);

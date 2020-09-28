@@ -48,6 +48,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameDLL", "GameDLL\GameDLL.
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ged", "ged\ged.vcxproj", "{160E8C18-85B6-4121-9134-ACB5E127CDC1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BFBC89E1-AADC-45BF-891E-217F89828FDD} = {BFBC89E1-AADC-45BF-891E-217F89828FDD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
