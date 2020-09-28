@@ -77,14 +77,14 @@ bool Game::PostRendererInitialize()
     Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
 
     // 6 faces of the sky - external interface must provide these
-    //vector<std::string> faces;
-    //faces.push_back("skyright.bmp");
-    //faces.push_back("skyleft.bmp");
-    //faces.push_back("skybottom.bmp");
-    //faces.push_back("skytop.bmp");
-    //faces.push_back("skyfront.bmp");
-    //faces.push_back("skyback.bmp");
-    //Graphics::RenderScene::Instance().Add("SKY1", new UtilitiesCore::Skybox("sky1", faces));
+    vector<std::string> faces;
+    faces.push_back("skyright.bmp");
+    faces.push_back("skyleft.bmp");
+    faces.push_back("skybottom.bmp");
+    faces.push_back("skytop.bmp");
+    faces.push_back("skyfront.bmp");
+    faces.push_back("skyback.bmp");
+    Graphics::RenderScene::Instance().Add("SKY1", new UtilitiesCore::Skybox("sky1", faces));
     // update models location
     Graphics::RenderScene::Instance().Translate("bob", IvVector3(-4, 0.5f, 15));
     Graphics::RenderScene::Instance().Translate("ogre1", IvVector3(4, 0.5f, 15));
@@ -155,6 +155,16 @@ void Game::UpdateObjects(float dt)
 
     /*Graphics::IRenderer::mRenderer->GetCamera().RotateX(0 * dt * 0.5f);
     Graphics::IRenderer::mRenderer->GetCamera().RotateY(5 * dt * 0.5f);*/
+
+    // Update Debug objects
+// [Light]
+    static float m_lightAngle = 0.f;
+    m_lightAngle += 0.515f;
+    static float MoveRadius = 5.F;
+    IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) + 12.f);
+    Graphics::Ilumination::Instance().Update("main", lightLocation);
+
+    Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
 }
 
 void Game::Render()
@@ -176,9 +186,9 @@ void Game::Render()
     Graphics::IRenderer::mRenderer->PrepareCamera2D();*/
 
     // first pass, using the shadows depth shader
-    //Graphics::Ilumination::Instance().StartShadowsDepth();
-    //Graphics::RenderScene::Instance().Render(true);
-    //Graphics::Ilumination::Instance().FinishShadowsDepth();
+    Graphics::Ilumination::Instance().StartShadowsDepth();
+    Graphics::RenderScene::Instance().Render(true);
+    Graphics::Ilumination::Instance().FinishShadowsDepth();
 
 
     // adjust camera projection and view according to the current 
