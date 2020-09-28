@@ -52,7 +52,7 @@ void MainWinOgl::StartUp(int argv, char** argc)
 	MutexFactoryWin::Initialize();
 	SocketFactoryWin::Initialize();
 	ThreadFactoryWin::Initialize();
-	CFactory2dImageWin::Initialize();
+	//CFactory2dImageWin::Initialize();
 
 	// set up game
 	if (!EngineCore::IGame::Create() || !EngineCore::IGame::mGame->PreRendererInitialize(argv, argc))

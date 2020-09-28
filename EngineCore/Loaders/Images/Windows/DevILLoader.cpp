@@ -14,13 +14,14 @@ bool DevILLoader::ParseStream(Byte * pData, UInt32 length)
 {
 	bool status = false;
 	FILE* tFile;
-	if (fopen_s(&tFile, "./rem.bin", "wb+") != 0)
+	if (fopen_s(&tFile, "./rem.bmp", "wb+") != 0)
 		return false;
-	fwrite(&*pData, length, 1, tFile);
+	fwrite(pData, length, 1, tFile);
+    fflush(tFile);
 	fclose(tFile);
 
 	Int32 width, height, nrComponents;
-	m_pContent = (Byte*)stbi_load("./rem.bin", &width, &height, &nrComponents, 0);
+	m_pContent = (Byte*)stbi_load("./rem.bmp", &width, &height, &nrComponents, 0);
 	if (m_pContent)
 	{
 		m_NumberOfBytes = nrComponents;

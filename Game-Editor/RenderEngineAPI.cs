@@ -8,43 +8,43 @@ namespace Game_Editor
         [DllImport(@"..\Binaries\GameDLL.dll",
             CallingConvention = CallingConvention.StdCall,
             CharSet = CharSet.Ansi,
-            EntryPoint = "?SetWndHnd@@YGXPAUHWND__@@@Z")]
+            EntryPoint = "_SetWndHnd@4")]
         public extern static unsafe void SetWndHandler(IntPtr wndHandler);
 
         [DllImport(@"..\Binaries\GameDLL.dll",
             CallingConvention = CallingConvention.StdCall,
             CharSet = CharSet.Ansi,
-            EntryPoint = "?SetWndParams@@YGXHH@Z")]
+            EntryPoint = "_SetWndParams@8")]
         public extern static unsafe void SetWndParameters(int width, int height);
 
         [DllImport(@"..\Binaries\GameDLL.dll",
             CallingConvention = CallingConvention.StdCall,
             CharSet = CharSet.Ansi,
-            EntryPoint = "?SetKeyPressed@@YGXH@Z")]
+            EntryPoint = "_SetKeyPressed@4")]
         public extern static unsafe void SetKeyPressed(int keyId);
 
         [DllImport(@"..\Binaries\GameDLL.dll",
             CallingConvention = CallingConvention.StdCall,
             CharSet = CharSet.Ansi,
-            EntryPoint = "?SetKeyReleased@@YGXH@Z")]
+            EntryPoint = "_SetKeyReleased@4")]
         public extern static unsafe void SetKeyReleased(int keyId);
 
         [DllImport(@"..\Binaries\GameDLL.dll",
             CallingConvention = CallingConvention.StdCall,
             CharSet = CharSet.Ansi,
-            EntryPoint = "?SetMousePosition@@YGXHH@Z")]
+            EntryPoint = "_SetMousePosition@8")]
         public extern static unsafe void SetMousePosition(int x, int y);
 
         [DllImport(@"..\Binaries\GameDLL.dll",
             CallingConvention = CallingConvention.StdCall,
             CharSet = CharSet.Ansi,
-            EntryPoint = "?UpdateViewport@@YGXHH@Z")]
+            EntryPoint = "_UpdateViewport@8")]
         public extern static unsafe void UpdateViewport(int width, int height);
 
         [DllImport(@"..\Binaries\GameDLL.dll",
             CallingConvention = CallingConvention.StdCall,
             CharSet = CharSet.Ansi,
-            EntryPoint = "?SetMouseAction@@YGXHHHH@Z")]
+            EntryPoint = "_SetMouseAction@16")]
         public extern static unsafe void SetMouseAction(int x, int y, int button, int state);
 
     }
