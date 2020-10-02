@@ -10,7 +10,7 @@ in VS_OUT {
     vec3 TangentFragPos;
 } fs_in;
 
-uniform sampler2D diffuseMap;
+//uniform sampler2D diffuseMap;
 uniform samplerCube depthMap;
 
 uniform vec3 lightPos;
@@ -57,11 +57,11 @@ void main()
 {           
      // this normal is in tangent space
     vec3 normal = normalize(fs_in.Normal);  
-    vec3 lightColor = vec3(0.85, 0.85, 0.85);
+
     // get diffuse color
-    vec3 color = texture(diffuseMap, fs_in.TexCoords).rgb;
+    vec3 lightColor = vec3(0.85, 0.85, 0.85);
     // ambient
-    vec3 ambient = 0.5 * color;
+    vec3 ambient = vec3(0.5,0.5,0.5);
     // diffuse
     // vagner: vec3 lightDir = normalize(fs_in.TangentLightPos - fs_in.TangentFragPos);
     vec3 lightDir = normalize(lightPos - fs_in.FragPos);
