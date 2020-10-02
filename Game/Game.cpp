@@ -66,6 +66,7 @@ bool Game::PostRendererInitialize()
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
 	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
+    //Graphics::RenderScene::Instance().Add("church", CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
 	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
 	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
 
@@ -76,7 +77,8 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
 	Graphics::RenderScene::Instance().HasShadow("lightDebug", false);
 	Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.1, 0.1, 0.1));
-	Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
+	//Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
+    Graphics::RenderScene::Instance().Translate("lightDebug", IvVector3(-22.1136, 14.17, 6.65836));
 
 	// 6 faces of the sky - external interface must provide these
 	vector<std::string> faces;
@@ -171,20 +173,19 @@ void Game::UpdateObjects(float dt)
 	static int noFlood = 0;
 	if (noFlood++ > 100)
 	{
+        CCamera& a = Graphics::IRenderer::mRenderer->GetCamera();
 		noFlood = 0;
-		CCamera a = Graphics::IRenderer::mRenderer->GetCamera();
 		cout << "    X [" << a.m_position.GetX()
 			<< "]   Y [" << a.m_position.GetY()
 			<< "]   Z [" << a.m_position.GetZ() << "]" << endl;
 	}
-
 	// Update Debug objects
 	// [Light]
 	m_lightAngle += 0.515f;
 	static float MoveRadius = 5.F;
-	IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) - 20.f);
+    IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius + -22.1136, 14.17, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius+6.65836);
+	//IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) - 20.f);
 	Graphics::Ilumination::Instance().Update("main", lightLocation);
-
 	Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
 
 

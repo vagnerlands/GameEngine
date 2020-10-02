@@ -187,8 +187,8 @@ private:
 
 		// TODO: make this look nicer - quick and dirty implementation
 		if ((diffuseMaps.size() > 0) 
-			&& (specularMaps.size()) 
-			&& (normalMaps.size()))
+			&& (specularMaps.size() > 0) 
+			&& (normalMaps.size()) > 0)
 		{
 			m_shaderName = "model_dns";
 		}
@@ -202,6 +202,15 @@ private:
 		{
 			m_shaderName = "model_dn";
 		}
+        else if (!((diffuseMaps.size() > 0)
+            || (specularMaps.size() > 0)
+            || (normalMaps.size() > 0)))
+        {
+            // in this mesh, there are no materials associated
+            // so use solid color for rendering
+            m_shaderName = "solidModel";
+        }
+
         
         // return a mesh object created from the extracted mesh data
         return processedMesh;
