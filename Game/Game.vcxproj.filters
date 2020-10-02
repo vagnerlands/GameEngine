@@ -9,7 +9,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Shaders">
+    <Filter Include="Assets\shaders">
       <UniqueIdentifier>{e269fa3a-9ea2-481b-a453-1d917b423515}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -34,61 +34,67 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Assets\lightVertexshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\modelFragmentshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\modelVertexshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\simpleFragmentshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\simpletextureFragmentshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\simpletextureVertexshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\simpleVertexshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\lightFragmentshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\skyFragmentshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\skyVertexshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\shadowsFragmentshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\shadowsGeometryshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\shadowsVertexshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\model_dnsFragmentshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\model_dnsVertexshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\model_dsFragmentshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\model_dsVertexshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\model_dnVertexshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
     </Text>
     <Text Include="Assets\model_dnFragmentshader.txt">
-      <Filter>Shaders</Filter>
+      <Filter>Assets\shaders</Filter>
+    </Text>
+    <Text Include="Assets\solidModelFragmentshader.txt">
+      <Filter>Assets\shaders</Filter>
+    </Text>
+    <Text Include="Assets\solidModelVertexshader.txt">
+      <Filter>Assets\shaders</Filter>
     </Text>
   </ItemGroup>
 </Project>

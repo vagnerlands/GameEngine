@@ -192,6 +192,8 @@
     <Text Include="Assets\model_dsVertexshader.txt" />
     <Text Include="Assets\model_dnsFragmentshader.txt" />
     <Text Include="Assets\model_dnsVertexshader.txt" />
+    <Text Include="Assets\solidModelFragmentshader.txt" />
+    <Text Include="Assets\solidModelVertexshader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
