@@ -46,9 +46,9 @@ namespace Graphics
 
 		const IvMatrix44& GetWorldMatrix();
 		virtual void SetWorldMatrix(const IvMatrix44& matrix);
-		const IvMatrix44& GetViewMatrix();
+		IvMatrix44& GetViewMatrix();
 		virtual void SetViewMatrix(const IvMatrix44& matrix);
-		const IvMatrix44& GetProjectionMatrix();
+		IvMatrix44& GetProjectionMatrix();
 		virtual void SetProjectionMatrix(const IvMatrix44& matrix);
 
 		virtual Int32 InitializeGraphics(Int32 width, Int32 height, bool isFullScreen);

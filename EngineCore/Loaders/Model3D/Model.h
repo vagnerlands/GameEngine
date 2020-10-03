@@ -26,13 +26,12 @@ public:
 	// meshes contain also list of textures
     vector<Types::SModelMesh> meshes;
     string directory;
-	string m_shaderName;
     bool gammaCorrection;
 
     /*  Functions   */
     Model() : gammaCorrection(false)
     {
-		m_shaderName = "model";
+		
     }
 
 	void Load(string const& path, bool gamma = false)
@@ -41,10 +40,10 @@ public:
 		loadModel(path);
 	}
 
-	const string& GetShaderSuggestion() const
+	/*const string& GetShaderSuggestion() const
 	{
 		return m_shaderName;
-	}
+	}*/
 
     
 private:
@@ -190,17 +189,17 @@ private:
 			&& (specularMaps.size() > 0) 
 			&& (normalMaps.size()) > 0)
 		{
-			m_shaderName = "model_dns";
+            processedMesh.m_shaderName = "model_dns";
 		}
 		else if ((diffuseMaps.size() > 0)
 			&& (specularMaps.size() > 0))
 		{
-			m_shaderName = "model_ds";
+            processedMesh.m_shaderName = "model_ds";
 		}
 		else if ((diffuseMaps.size() > 0)
 			&& (normalMaps.size() > 0))
 		{
-			m_shaderName = "model_dn";
+            processedMesh.m_shaderName = "model_dn";
 		}
         else if (!((diffuseMaps.size() > 0)
             || (specularMaps.size() > 0)
@@ -208,10 +207,9 @@ private:
         {
             // in this mesh, there are no materials associated
             // so use solid color for rendering
-            m_shaderName = "solidModel";
+            processedMesh.m_shaderName = "solidModel";
         }
 
-        
         // return a mesh object created from the extracted mesh data
         return processedMesh;
     }
