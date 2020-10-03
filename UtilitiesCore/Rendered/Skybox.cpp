@@ -12,12 +12,11 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 	// allocates a temporary buffer to create the cube
 	shared_ptr<Model> pModel = pSkyModel->Allocate();
 
-	pSkyModel->SetShader("sky");
-
     m_hasShadow = false;
 
 	// mesh
 	Types::SModelMesh meshValue;
+	meshValue.m_shaderName = "sky";
 	// straight forward
 	/*meshValue.m_indices.push_back(0);
 	meshValue.m_indices.push_back(1);

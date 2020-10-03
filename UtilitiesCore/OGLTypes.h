@@ -96,6 +96,8 @@ namespace Types
         vector<SModelVertex>    m_vertices;
         vector<UInt32>          m_indices;
         vector<SModelTexture>   m_textures;
+		// shader name (Model.h suggests a name)
+		string					m_shaderName = "model";
     };
 
 

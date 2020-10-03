@@ -19,7 +19,7 @@ namespace Graphics
         
         // create based on SModelData
         virtual bool Create(const Model & modelInfo);
-		bool SetShader(const string& shaderName);
+		//bool SetShader(const string& shaderName);
 		virtual void Draw(bool isRenderingShadows);
 		// allocate SModelData for custom objects
 		virtual shared_ptr<Model> Allocate();
@@ -27,13 +27,17 @@ namespace Graphics
 		virtual bool Commit();
 
 	private:
+
+		cwc::glShader* generateShader(const string& shaderName);
+
         struct SDrawData
         {
             SDrawData() : m_vertexArrayObject(0U), m_indicesCount(0U) {}
-            SDrawData(UInt32 vao, UInt32 indCount, vector<SModelTexture> vTextures) : 
+            SDrawData(UInt32 vao, UInt32 indCount, vector<SModelTexture> vTextures, cwc::glShader* pShader) : 
 				m_vertexArrayObject(vao), 
 				m_indicesCount(indCount), 
-				m_textures(vTextures)
+				m_textures(vTextures),
+				m_pShader(pShader)
 			{
 				// empty
 			}
@@ -41,6 +45,8 @@ namespace Graphics
 			vector<SModelTexture>   m_textures;
             UInt32					m_vertexArrayObject;
             UInt32					m_indicesCount;
+
+			cwc::glShader*			m_pShader;
         };
 
 		// copy operations
@@ -52,7 +58,7 @@ namespace Graphics
         vector<UInt32>          m_elementBufferObject;
         vector<SDrawData>       m_drawAttr;        
 		// TODO: think about making one shader per mesh
-		cwc::glShader*			m_pShader;
+		//cwc::glShader*			m_pShader;
 
 	};
 

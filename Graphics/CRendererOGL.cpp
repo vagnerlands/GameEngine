@@ -139,16 +139,6 @@ void Graphics::CRendererOGL::PrepareCamera3D()
 	matrix(1, 3) = eyeInverse.GetY();
 	matrix(2, 3) = eyeInverse.GetZ();
 	SetViewMatrix(matrix);
-
-    static int noover = 0;
-    if (noover++ > 100)
-    { 
-    std::cout << "  Pos X[" << mCamera.m_position.GetX() << "] "
-        << "      Y[" << mCamera.m_position.GetY() << "] "
-        << "      Z[" << mCamera.m_position.GetZ() << "] " << std::endl;
-    noover = 0;
-    }
-
 }
 
 //-------------------------------------------------------------------------------

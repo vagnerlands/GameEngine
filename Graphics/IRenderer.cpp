@@ -95,7 +95,7 @@ void Graphics::IRenderer::SetWorldMatrix(const IvMatrix44& matrix)
 //-------------------------------------------------------------------------------
 // Gets the camera matrix for the renderer
 //-------------------------------------------------------------------------------
-const IvMatrix44& Graphics::IRenderer::GetViewMatrix()
+IvMatrix44& Graphics::IRenderer::GetViewMatrix()
 {
 	return mViewMat;
 }
@@ -116,7 +116,7 @@ void Graphics::IRenderer::SetViewMatrix(const IvMatrix44& matrix)
 //-------------------------------------------------------------------------------
 // Gets the projection matrix for the renderer
 //-------------------------------------------------------------------------------
-const IvMatrix44& Graphics::IRenderer::GetProjectionMatrix()
+IvMatrix44& Graphics::IRenderer::GetProjectionMatrix()
 {
 	return mProjectionMat;
 }
