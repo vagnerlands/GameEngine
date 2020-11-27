@@ -22,13 +22,13 @@
     <ProjectGuid>{05AA9618-545F-4469-BC81-281B635B2E56}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>EngineCore</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -124,7 +124,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(INCLUDE_PATHS);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -199,6 +199,8 @@
     <ClInclude Include="Loaders\Images\Windows\Bitmap.h" />
     <ClInclude Include="Loaders\Images\Windows\DevILLoader.h" />
     <ClInclude Include="Loaders\Images\Windows\CFactory2dImageWin.h" />
+    <ClInclude Include="Loaders\Images\Windows\stbi_DDS_aug.h" />
+    <ClInclude Include="Loaders\Images\Windows\stbi_DDS_aug_c.h" />
     <ClInclude Include="Loaders\Images\Windows\stb_image.h" />
     <ClInclude Include="Loaders\Images\Windows\stb_image_aug.h" />
     <ClInclude Include="Loaders\Model3D\Assimp\ai_assert.h" />

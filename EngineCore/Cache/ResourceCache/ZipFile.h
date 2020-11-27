@@ -51,6 +51,7 @@
 
 #include <map>
 #include <stdio.h>
+#include <string>
 
 typedef std::map<std::string, int> ZipContentsMap;		// maps path to a zip content id
 

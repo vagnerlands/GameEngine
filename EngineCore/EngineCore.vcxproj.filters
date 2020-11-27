@@ -342,6 +342,12 @@
     <ClInclude Include="Loaders\Images\Windows\stb_image_aug.h">
       <Filter>Src\Loaders\Images\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Loaders\Images\Windows\stbi_DDS_aug.h">
+      <Filter>Src\Loaders\Images\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Images\Windows\stbi_DDS_aug_c.h">
+      <Filter>Src\Loaders\Images\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Loaders\Model3D\Assimp\color4.inl">

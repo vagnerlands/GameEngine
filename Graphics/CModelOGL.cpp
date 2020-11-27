@@ -83,7 +83,7 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
 		for (UInt32 i = 0; i < modelInfo.meshes.size(); ++i)
 		{
 			// first, try to compile the shader
-			cwc::glShader* pShader = generateShader(modelInfo.meshes[i].m_shaderName);
+ 			cwc::glShader* pShader = generateShader(modelInfo.meshes[i].m_shaderName);
 
 			UInt32 VAO, VBO, EBO = 0;
 			// create buffers/arrays
