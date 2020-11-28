@@ -65,17 +65,19 @@ bool Game::PostRendererInitialize()
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
+	Graphics::RenderScene::Instance().Add("fortress1",	CModelHolder::s_pInstance->GetModelById("fortress.obj"));
 	//Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
-    Graphics::RenderScene::Instance().Add("church", CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
+    //Graphics::RenderScene::Instance().Add("church", CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
 	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
 	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
 	Graphics::RenderScene::Instance().Add("bob", CModelHolder::s_pInstance->GetModelById("boblampclean.md5mesh"));
 
 	Graphics::RenderScene::Instance().Scale("bob", IvVector3(0.05, 0.05, 0.05));
+	Graphics::RenderScene::Instance().Scale("fortress1", IvVector3(10.f, 10.f, 10.f));
 	Graphics::RenderScene::Instance().Rotate("bob", IvQuat(IvVector3(1, 0, 0), -90));
 	// debug
 	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
-	Graphics::RenderScene::Instance().HasShadow("lightDebug", false);
+	Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
 	Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.1, 0.1, 0.1));
 	//Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
     //Graphics::RenderScene::Instance().Translate("lightDebug", IvVector3(-22.1136, 14.17, 6.65836));
@@ -90,9 +92,10 @@ bool Game::PostRendererInitialize()
 	faces.push_back("skyback.bmp");
 	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces));
 	// update models location
-	Graphics::RenderScene::Instance().Translate("bob", IvVector3(-4, 0.0f, 5));
-	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4, 0.0f, 5));
-	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0, 0.0f, 5));
+	//Graphics::RenderScene::Instance().Translate("church",	IvVector3(0.f, 0.0f, -2.f));
+	Graphics::RenderScene::Instance().Translate("bob",      IvVector3(-4.f, 0.0f, 5.f));
+	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4.f, 0.0f, 5.f));
+	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0.f, 0.0f, 5.f));
 
 
 	Graphics::RenderScene::Instance().Rotate("ogre1", IvQuat(IvVector3(0, 1, 0), -15));

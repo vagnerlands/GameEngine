@@ -42,7 +42,7 @@ void Graphics::RenderScene::Scale(const std::string & id, const IvVector3 & newS
 	}
 }
 
-void Graphics::RenderScene::HasShadow(const std::string & id, bool hasShadow)
+void Graphics::RenderScene::CastShadow(const std::string & id, bool hasShadow)
 {
 	Graphics::IDrawable* pObj = find(id);
 	if (pObj != nullptr)

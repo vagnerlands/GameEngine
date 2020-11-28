@@ -105,8 +105,11 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
 			glBufferData(GL_ARRAY_BUFFER, modelInfo.meshes[i].m_vertices.size() * sizeof(SModelVertex), &modelInfo.meshes[i].m_vertices[0], GL_STATIC_DRAW);
 
 			// element buffer object allocation
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, modelInfo.meshes[i].m_indices.size() * sizeof(UInt32), &modelInfo.meshes[i].m_indices[0], GL_STATIC_DRAW);
+			if (modelInfo.meshes[i].m_indices.size() > 0)
+			{
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, modelInfo.meshes[i].m_indices.size() * sizeof(UInt32), &modelInfo.meshes[i].m_indices[0], GL_STATIC_DRAW);
+			}
 
 			// set the vertex attribute pointers
 			// vertex Positions
@@ -260,10 +263,12 @@ void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 						m_drawAttr[i].m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
 					}
 
-					// assumes all objects wants to render shadows
-					// TODO: make these 2 lines under condition
-					glActiveTexture(GL_TEXTURE0 + ti);
-					glBindTexture(GL_TEXTURE_CUBE_MAP, Graphics::Ilumination::Instance().GetShadowTexture());
+					// if this object casts shadow, then apply the fbo shadow texture
+					//if (m_hasShadow)
+					{
+						glActiveTexture(GL_TEXTURE0 + ti);
+						glBindTexture(GL_TEXTURE_CUBE_MAP, Graphics::Ilumination::Instance().GetShadowTexture());
+					}
 
 				}
 			}
