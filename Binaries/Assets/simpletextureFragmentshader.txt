@@ -1,0 +1,21 @@
+
+varying vec3 N;
+varying vec3 v;
+
+varying vec2 vTexCoord;
+
+// Values that stay constant for the whole mesh.
+uniform sampler2D myTextureSampler;
+// gl_FrontLightProduct[0].ambient * gl_FrontLightProduct[0].diffuse
+void main(void)
+{
+   //gl_FragColor = vec4(normalize(gl_LightSource[0].position.xyz - v), 1);
+   //vec3 L = normalize(gl_LightSource[0].position.xyz - v);   
+   //vec4 Idiff = (gl_FrontLightProduct[0].diffuse) * max(dot(N,L), 0.0);  
+   //Idiff = clamp(Idiff * texture( myTextureSampler, vec2(v) ), 0.0, 1.0); 
+
+   //gl_FragColor = Idiff;
+   gl_FragColor = texture2D(myTextureSampler, vTexCoord).bgra;
+   
+      
+}

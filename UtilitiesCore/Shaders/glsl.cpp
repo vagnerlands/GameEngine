@@ -1736,7 +1736,7 @@ glShader* glShaderManager::loadfromFile(char* vertexFile, char* geometryFile, ch
    if (vertexFile!=0)
       if (tVertexShader->load(vertexFile) != 0)
       { 
-        cout << "error: can't load vertex shader!\n"; 
+        cout << "error: can't load vertex shader [" << vertexFile << "]!\n";
         delete o;
         delete tVertexShader;
         delete tFragmentShader;
@@ -1748,7 +1748,7 @@ glShader* glShaderManager::loadfromFile(char* vertexFile, char* geometryFile, ch
   if (geometryFile!=0)
      if (tGeometryShader->load(geometryFile) != 0)
      {
-        cout << "error: can't load geometry shader!\n";
+        cout << "error: can't load geometry shader [" << geometryFile << "]!\n";
         delete o;
         delete tVertexShader;
         delete tFragmentShader;
@@ -1760,7 +1760,7 @@ glShader* glShaderManager::loadfromFile(char* vertexFile, char* geometryFile, ch
   if (fragmentFile!=0)
      if (tFragmentShader->load(fragmentFile) != 0)
      {
-        cout << "error: can't load fragment shader!\n";
+        cout << "error: can't load fragment shader [" << fragmentFile << "]!\n";
         delete o;
         delete tVertexShader;
         delete tFragmentShader;

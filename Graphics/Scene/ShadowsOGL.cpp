@@ -40,9 +40,9 @@ bool ShadowsOGL::Initialize()
 	// read data from file
 	const char shaderName[64] = "shadows";
 	char vertexFilename[128], fragmentFilename[128], geometryFilename[128];
-	sprintf(vertexFilename, "../Game/Assets/%sVertexshader.txt", shaderName);
-	sprintf(fragmentFilename, "../Game/Assets/%sFragmentshader.txt", shaderName);
-	sprintf(geometryFilename, "../Game/Assets/%sGeometryshader.txt", shaderName);
+	sprintf(vertexFilename, "./Assets/%sVertexshader.txt", shaderName);
+	sprintf(fragmentFilename, "./Assets/%sFragmentshader.txt", shaderName);
+	sprintf(geometryFilename, "./Assets/%sGeometryshader.txt", shaderName);
 	// there should be a specialized class for this whole thing
 	cwc::glShaderManager shaderLoader;
 	m_pShader = shaderLoader.loadfromFile(vertexFilename, geometryFilename, fragmentFilename);

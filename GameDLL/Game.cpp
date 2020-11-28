@@ -46,19 +46,19 @@ bool Game::PostRendererInitialize()
     // TODO: make this cross-platform
     Graphics::Ilumination::Instance().Initialize(new Graphics::ShadowsOGL);
 
+    // top frame rate limit
+    IGame::mGame->SetFps(120);
     // Set the view parameters in renderer
-    Graphics::IRenderer::mRenderer->SetFOV(60.0F);
+    Graphics::IRenderer::mRenderer->SetFOV(90.F);
     // Update camera to be above ground
     Graphics::IRenderer::mRenderer->GetCamera().m_position.SetY(1.f);
     // Update this camera type
     Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Spectator;
     // create model holder
-    CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
+    CModelHolder::s_pInstance->Create(".\\Assets\\model.zip");
     // 50mb allocation for VRAM textures
-    CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip", 200U * 1024U * 1024U);
-
-    IGame::mGame->SetFps(60);
-
+    CTextureHolder::s_pInstance->Create(".\\Assets\\textures.zip", 200U * 1024U * 1024U);
+    
     // Build a debug scenario
     // [Light]
     Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
