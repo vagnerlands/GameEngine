@@ -142,46 +142,6 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
 	return m_vboBufferCreated;
 }
 
-//bool Graphics::CModelOGL::SetShader(const string & shaderName)
-//{
-//	// return value
-//	bool status = true;
-//	// start loading measuring time
-//	clock_t start = clock();
-//
-//	// read data from file
-//	cwc::glShader* obj = 0;
-//	char vertexFilename[128], fragmentFilename[128], geometryFilename[128];
-//	sprintf(vertexFilename, "../Game/Assets/%sVertexshader.txt", shaderName.data());
-//	sprintf(fragmentFilename, "../Game/Assets/%sFragmentshader.txt", shaderName.data());
-//	sprintf(geometryFilename, "../Game/Assets/%sGeometryshader.txt", shaderName.data());
-//	// there should be a specialized class for this whole thing
-//	cwc::glShaderManager shaderLoader;
-//	// checks if the geometry shader actually is required
-//	if (INVALID_FILE_ATTRIBUTES == GetFileAttributes((LPCWSTR)geometryFilename) && GetLastError() == ERROR_FILE_NOT_FOUND)
-//	{
-//		//File not found
-//		m_pShader = shaderLoader.loadfromFile(vertexFilename, fragmentFilename);
-//	}
-//	else
-//	{
-//		m_pShader = shaderLoader.loadfromFile(vertexFilename, geometryFilename, fragmentFilename);
-//	}
-//
-//
-//	if (m_pShader == 0)
-//	{
-//		printf("<!> Failed to parse shader files [%s]\n", shaderName.data());
-//		status = false;
-//	}
-//
-//	// time measurement
-//	printf(" [*] loading shader [%s] %.2fms\n", shaderName.data(), (float)(clock() - start));
-//
-//	return status;
-//}
-
-
 void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 {
 	// nothing to do here in case we're currently preparing the shadow map
@@ -346,6 +306,7 @@ bool Graphics::CModelOGL::Commit()
 	return retVal;
 }
 
+#pragma optimize( "", off )
 cwc::glShader* Graphics::CModelOGL::generateShader(const string& shaderName)
 {
 	// return value
@@ -356,13 +317,18 @@ cwc::glShader* Graphics::CModelOGL::generateShader(const string& shaderName)
 	// read data from file
 	cwc::glShader* pShader = nullptr;
 	char vertexFilename[128], fragmentFilename[128], geometryFilename[128];
-	sprintf(vertexFilename, "../Game/Assets/%sVertexshader.txt", shaderName.data());
-	sprintf(fragmentFilename, "../Game/Assets/%sFragmentshader.txt", shaderName.data());
-	sprintf(geometryFilename, "../Game/Assets/%sGeometryshader.txt", shaderName.data());
+	sprintf(vertexFilename, "./Assets/%sVertexshader.txt", shaderName.data());
+	sprintf(fragmentFilename, "./Assets/%sFragmentshader.txt", shaderName.data());
+	sprintf(geometryFilename, "./Assets/%sGeometryshader.txt", shaderName.data());
 	// there should be a specialized class for this whole thing
 	cwc::glShaderManager shaderLoader;
+
+	DWORD ret1 = GetFileAttributes((LPCWSTR)geometryFilename);
+	int ret2 = GetLastError();
+	bool isGeometryFileNotFound = (ret1 == INVALID_FILE_ATTRIBUTES) && (ret2== ERROR_FILE_NOT_FOUND);
+
 	// checks if the geometry shader actually is required
-	if (INVALID_FILE_ATTRIBUTES == GetFileAttributes((LPCWSTR)geometryFilename) && GetLastError() == ERROR_FILE_NOT_FOUND)
+	if (isGeometryFileNotFound)
 	{
 		//File not found
 		pShader = shaderLoader.loadfromFile(vertexFilename, fragmentFilename);
@@ -384,3 +350,4 @@ cwc::glShader* Graphics::CModelOGL::generateShader(const string& shaderName)
 
 	return pShader;
 }
+#pragma optimize( "", on )

@@ -67,7 +67,7 @@ CModelHolder::LoadModel(const string& modelId)
 	//Model modelLoader(bytesStream, length);
 	Model modelLoader;
 	// actually tries to load the model
-	modelLoader.Load("../Game/Assets/" + modelId);
+	modelLoader.Load("./Assets/" + modelId);
 	// set shader according to model loader results
 	//pGfxModel->SetShader(modelLoader.GetShaderSuggestion());
 

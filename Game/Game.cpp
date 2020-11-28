@@ -55,9 +55,9 @@ bool Game::PostRendererInitialize()
 	// Update this camera type
 	Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Spectator;
 	// create model holder
-	CModelHolder::s_pInstance->Create("..\\Game\\Assets\\model.zip");
+	CModelHolder::s_pInstance->Create(".\\Assets\\model.zip");
     // 50mb allocation for VRAM textures
-	CTextureHolder::s_pInstance->Create("..\\Game\\Assets\\textures.zip", 200U*1024U*1024U);
+	CTextureHolder::s_pInstance->Create(".\\Assets\\textures.zip", 200U*1024U*1024U);
 
 	IGame::mGame->SetFps(120);
 
