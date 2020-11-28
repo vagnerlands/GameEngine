@@ -52,7 +52,7 @@ bool Game::PostRendererInitialize()
     Graphics::IRenderer::mRenderer->SetFOV(90.F);
     // Update camera to be above ground
     Graphics::IRenderer::mRenderer->GetCamera().m_position.SetY(1.f);
-    // Update this camera type
+        // Update this camera type
     Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Spectator;
     // create model holder
     CModelHolder::s_pInstance->Create(".\\Assets\\model.zip");
@@ -72,7 +72,7 @@ bool Game::PostRendererInitialize()
     Graphics::RenderScene::Instance().Rotate("bob", IvQuat(IvVector3(1, 0, 0), -90));
     // debug
     Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
-    Graphics::RenderScene::Instance().HasShadow("lightDebug", false);
+    Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
     Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.1, 0.1, 0.1));
     Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
 

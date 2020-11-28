@@ -39,12 +39,6 @@ public:
 		gammaCorrection = gamma;
 		loadModel(path);
 	}
-
-	/*const string& GetShaderSuggestion() const
-	{
-		return m_shaderName;
-	}*/
-
     
 private:
     // Functions
@@ -178,7 +172,7 @@ private:
         vector<SModelTexture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "specularMap");
         processedMesh.m_textures.insert(processedMesh.m_textures.end(), specularMaps.begin(), specularMaps.end());
         // 3. normal maps
-        std::vector<SModelTexture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "normalMap");
+        std::vector<SModelTexture> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, "normalMap");
         processedMesh.m_textures.insert(processedMesh.m_textures.end(), normalMaps.begin(), normalMaps.end());
         // 4. height maps
         std::vector<SModelTexture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");

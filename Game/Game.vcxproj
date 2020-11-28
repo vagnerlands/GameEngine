@@ -165,35 +165,10 @@
     <ClCompile Include="Game.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\model.zip" />
-    <None Include="Assets\textures.zip" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Assets\lightFragmentshader.txt" />
-    <Text Include="Assets\lightVertexshader.txt" />
-    <Text Include="Assets\modelFragmentshader.txt" />
-    <Text Include="Assets\modelVertexshader.txt" />
-    <Text Include="Assets\model_dnFragmentshader.txt" />
-    <Text Include="Assets\model_dnVertexshader.txt" />
-    <Text Include="Assets\shadowsFragmentshader.txt" />
-    <Text Include="Assets\shadowsGeometryshader.txt" />
-    <Text Include="Assets\shadowsVertexshader.txt" />
-    <Text Include="Assets\simpleFragmentshader.txt" />
-    <Text Include="Assets\simpletextureFragmentshader.txt" />
-    <Text Include="Assets\simpletextureVertexshader.txt" />
-    <Text Include="Assets\simpleVertexshader.txt" />
-    <Text Include="Assets\skyFragmentshader.txt" />
-    <Text Include="Assets\skyVertexshader.txt" />
-    <Text Include="Assets\model_dsFragmentshader.txt" />
-    <Text Include="Assets\model_dsVertexshader.txt" />
-    <Text Include="Assets\model_dnsFragmentshader.txt" />
-    <Text Include="Assets\model_dnsVertexshader.txt" />
-    <Text Include="Assets\solidModelFragmentshader.txt" />
-    <Text Include="Assets\solidModelVertexshader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

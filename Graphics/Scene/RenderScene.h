@@ -35,7 +35,7 @@ namespace Graphics
 		virtual void Scale(const std::string& id, const IvVector3& newScale);
 
 		// Update ilumination location
-		virtual void HasShadow(const std::string& id, bool hasShadow);
+		virtual void CastShadow(const std::string& id, bool hasShadow);
 
 		// Update ilumination location
 		virtual void Remove(const std::string& id);
@@ -54,8 +54,8 @@ namespace Graphics
 
 	private:
 		// copy operations
-		RenderScene(const RenderScene& other);
-		RenderScene& operator=(const RenderScene& other);
+		RenderScene(const RenderScene& other) = delete;
+		RenderScene& operator=(const RenderScene& other) = delete;
 	};
 
 
