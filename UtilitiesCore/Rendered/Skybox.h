@@ -24,7 +24,8 @@ namespace UtilitiesCore
 		Skybox(const std::string& id, const vector<std::string>& faces);
 		virtual ~Skybox();
 
-		virtual void Draw(bool isRenderingShadows);
+		virtual void Draw(float dt, bool isRenderingShadows);
+		virtual void Tick(float delta_time);
 
 	protected:
 		// generated sky model

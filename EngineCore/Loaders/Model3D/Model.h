@@ -1,4 +1,4 @@
-#ifndef MODEL_H
+﻿#ifndef MODEL_H
 #define MODEL_H
 
 #include "OGLTypes.h"
@@ -21,15 +21,20 @@ using namespace Types;
 class Model 
 {
 public:
+    
     // Keep track of already loaded textures in order to not load the same texture twice in the VRAM
     vector<Types::SModelTexture> textures_loaded;
 	// meshes contain also list of textures
     vector<Types::SModelMesh> meshes;
-    string directory;
     bool gammaCorrection;
+    bool hasAnimations;
+    Assimp::Importer* m_importer;
+    SBoneInformation* m_pBoneInformation;
+
+    Model() : gammaCorrection(false), hasAnimations(false), m_importer(nullptr) {}
 
     /*  Functions   */
-    Model() : gammaCorrection(false)
+    Model(Assimp::Importer& importer) : gammaCorrection(false), hasAnimations(false), m_importer(&importer)
     {
 		
     }
@@ -37,8 +42,13 @@ public:
 	void Load(string const& path, bool gamma = false)
 	{
 		gammaCorrection = gamma;
-		loadModel(path);
+		loadModel(path);        
 	}
+
+    void SetBoneInformation(SBoneInformation* pBoneInf)
+    {
+        m_pBoneInformation = pBoneInf;
+    }
     
 private:
     // Functions
@@ -46,17 +56,13 @@ private:
     // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
     void loadModel(string const &path)
     {
-        // read file via ASSIMP
-        Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace);
+        const aiScene* scene = m_importer->ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace);
         // check for errors
         if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
         {
-            cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+            cout << "ERROR::ASSIMP:: " << m_importer->GetErrorString() << endl;
             return;
         }
-        // retrieve the directory path of the filepath
-        directory = path.substr(0, path.find_last_of('/'));
 
         // process ASSIMP's root node recursively
         processNode(scene->mRootNode, scene);
@@ -79,6 +85,7 @@ private:
             processNode(node->mChildren[i], scene);
         }
 
+        //hasAnimations = scene->HasAnimations();
     }
 
     SModelMesh processMesh(aiMesh *mesh, const aiScene *scene)
@@ -178,8 +185,51 @@ private:
         std::vector<SModelTexture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
         processedMesh.m_textures.insert(processedMesh.m_textures.end(), heightMaps.begin(), heightMaps.end());
 
+        if ((mesh->mNumBones > 0) && (m_pBoneInformation))
+        {
+            hasAnimations = true;
+            processedMesh.bones_id_weights_for_each_vertex.resize(mesh->mNumVertices);
+            // load bones
+            for (UInt32 i = 0; i < mesh->mNumBones; i++)
+            {
+                UInt32 bone_index = 0;
+                string bone_name(mesh->mBones[i]->mName.data);
+
+                cout << mesh->mBones[i]->mName.data << endl;
+
+                if (m_pBoneInformation->m_bone_mapping.find(bone_name) == m_pBoneInformation->m_bone_mapping.end())
+                {
+                    // Allocate an index for a new bone
+                    bone_index = m_pBoneInformation->m_num_bones;
+                    m_pBoneInformation->m_num_bones++;
+                    BoneMatrix bi;
+                    m_pBoneInformation->m_bone_matrices.push_back(bi);
+                    m_pBoneInformation->m_bone_matrices[bone_index].offset_matrix = mesh->mBones[i]->mOffsetMatrix;
+                    m_pBoneInformation->m_bone_mapping[bone_name] = bone_index;
+
+                    //cout << "bone_name: " << bone_name << "			 bone_index: " << bone_index << endl;
+                }
+                else
+                {
+                    bone_index = m_pBoneInformation->m_bone_mapping[bone_name];
+                }
+
+                for (UInt32 j = 0; j < mesh->mBones[i]->mNumWeights; j++)
+                {
+                    UInt32 vertex_id = mesh->mBones[i]->mWeights[j].mVertexId;
+                    float weight = mesh->mBones[i]->mWeights[j].mWeight;
+                    processedMesh.bones_id_weights_for_each_vertex[vertex_id].addBoneData(bone_index, weight);
+                }
+            }
+        }
+
+        
 		// TODO: make this look nicer - quick and dirty implementation
-		if ((diffuseMaps.size() > 0) 
+        if (hasAnimations)
+        {
+            processedMesh.m_shaderName = "animatedModel";
+        } 
+        else if ((diffuseMaps.size() > 0) 
 			&& (specularMaps.size() > 0) 
 			&& (normalMaps.size()) > 0)
 		{

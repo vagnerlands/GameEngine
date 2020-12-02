@@ -151,13 +151,18 @@ UtilitiesCore::Skybox::~Skybox()
 	}
 }
 
-void UtilitiesCore::Skybox::Draw(bool isRenderingShadows)
+void UtilitiesCore::Skybox::Draw(float dt, bool isRenderingShadows)
 {
 	// in case we're currently rendering shadows, the skybox shouldn't affect it
 	if (isRenderingShadows) return;
 	// otherwise, proceed regularly
 	if (m_skyModel != nullptr)
 	{
-		m_skyModel->Draw(false);
+		m_skyModel->Draw(dt, false);
 	}
+}
+
+void UtilitiesCore::Skybox::Tick(float delta_time)
+{
+	// TODO: maybe animate the sky by playing a bit with the textures
 }

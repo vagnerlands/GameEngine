@@ -15,8 +15,7 @@
 #include "Rendered/Skybox.h"
 // TODO: this should be abstract
 #include "Scene/ShadowsOGL.h"
-
-
+ 
 bool 
 EngineCore::IGame::Create()
 {
@@ -49,7 +48,7 @@ bool Game::PostRendererInitialize()
     // top frame rate limit
     IGame::mGame->SetFps(120);
     // Set the view parameters in renderer
-    Graphics::IRenderer::mRenderer->SetFOV(90.F);
+    Graphics::IRenderer::mRenderer->SetFOV(60.F);
     // Update camera to be above ground
     Graphics::IRenderer::mRenderer->GetCamera().m_position.SetY(1.f);
         // Update this camera type
@@ -152,12 +151,9 @@ void Game::UpdateObjects(float dt)
 		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(MovementIntensityOnY) * dt * 0.5f);
 		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(MovementIntensityOnX) * dt * 0.5f);
 	}
-
-    /*Graphics::IRenderer::mRenderer->GetCamera().RotateX(0 * dt * 0.5f);
-    Graphics::IRenderer::mRenderer->GetCamera().RotateY(5 * dt * 0.5f);*/
-
+    
     // Update Debug objects
-// [Light]
+    // [Light]
     static float m_lightAngle = 0.f;
     m_lightAngle += 0.515f;
     static float MoveRadius = 5.F;
@@ -167,7 +163,7 @@ void Game::UpdateObjects(float dt)
     Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
 }
 
-void Game::Render()
+void Game::Render(float dt)
 {
     // set which buffers are used, set the modelview matrix and more
     Graphics::IRenderer::mRenderer->PrepareFrame();

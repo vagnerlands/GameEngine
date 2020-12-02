@@ -54,7 +54,7 @@ void EngineCore::IGame::Display()
 		// if a few frames were lost - making the movements flow
 		UpdateObjects(mClock->GetElapsedTime());
 		// render a scene according to current position of objects
-		Render();
+		Render(mClock->GetTimeInMili());
 
 		mClock->Hold(mGame->GetFps());
 

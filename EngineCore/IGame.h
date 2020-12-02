@@ -64,7 +64,7 @@ namespace EngineCore
 		bool SetupSubsystems(Types::EGraphicsAPI gfxApi);
 
 		virtual void UpdateObjects(float dt) = 0;
-		virtual void Render() = 0;
+		virtual void Render(float dt) = 0;
 
 		bool mQuit;
 		bool mPaused;
