@@ -49,7 +49,7 @@ bool Game::PostRendererInitialize()
 	CShaderHolder::Create();
 
 	// Set the view parameters in renderer
-	Graphics::IRenderer::mRenderer->SetFOV(90.0F);
+	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
 	// Update camera to be above ground
 	Graphics::IRenderer::mRenderer->GetCamera().m_position.SetY(1.f);
 	// Update this camera type
@@ -65,16 +65,19 @@ bool Game::PostRendererInitialize()
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
-	Graphics::RenderScene::Instance().Add("fortress1",	CModelHolder::s_pInstance->GetModelById("fortress.obj"));
-	//Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
+	Graphics::RenderScene::Instance().Add("astro", CModelHolder::s_pInstance->GetModelById("astroBoy_walk_Max.dae"));
+	//Graphics::RenderScene::Instance().Add("fortress1",	CModelHolder::s_pInstance->GetModelById("fortress.obj"));
+	//Graphics::RenderScene::Instance().Add("bob", CModelHolder::s_pInstance->GetModelById("boblampclean.md5mesh"));
+	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
     //Graphics::RenderScene::Instance().Add("church", CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
 	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
-	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));
-	Graphics::RenderScene::Instance().Add("bob", CModelHolder::s_pInstance->GetModelById("boblampclean.md5mesh"));
+	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));	
 
-	Graphics::RenderScene::Instance().Scale("bob", IvVector3(0.05, 0.05, 0.05));
-	Graphics::RenderScene::Instance().Scale("fortress1", IvVector3(10.f, 10.f, 10.f));
-	Graphics::RenderScene::Instance().Rotate("bob", IvQuat(IvVector3(1, 0, 0), -90));
+	//Graphics::RenderScene::Instance().Scale("bob", IvVector3(0.05, 0.05, 0.05));
+	//Graphics::RenderScene::Instance().Scale("fortress1", IvVector3(10.f, 10.f, 10.f));
+	//Graphics::RenderScene::Instance().Rotate("bob", IvQuat(IvVector3(1, 0, 0), -90));
+	Graphics::RenderScene::Instance().Rotate("astro", IvQuat(IvVector3(1, 0, 0), -90));
+	Graphics::RenderScene::Instance().Scale("astro", IvVector3(0.5, 0.5, 0.5));
 	// debug
 	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
 	Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
@@ -184,9 +187,9 @@ void Game::UpdateObjects(float dt)
 	}
 	// Update Debug objects
 	// [Light]
-	m_lightAngle += 0.515f;
+	m_lightAngle += 0.215f;
 	static float MoveRadius = 5.F;
-    IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius + -15.1136, 10, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius+6.65836);
+    IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius + -10.1136, 5, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius+5.65836);
 	//IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) - 20.f);
 	Graphics::Ilumination::Instance().Update("main", lightLocation);
 	Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
@@ -198,7 +201,7 @@ void Game::UpdateObjects(float dt)
 
 }
 
-void Game::Render()
+void Game::Render(float dt)
 {
 	// set which buffers are used, set the modelview matrix and more
 	Graphics::IRenderer::mRenderer->PrepareFrame();
@@ -218,7 +221,7 @@ void Game::Render()
 
 	// first pass, using the shadows depth shader
 	Graphics::Ilumination::Instance().StartShadowsDepth();
-	Graphics::RenderScene::Instance().Render(true);
+	Graphics::RenderScene::Instance().Render(dt, true);
 	Graphics::Ilumination::Instance().FinishShadowsDepth();
 
 
@@ -226,7 +229,7 @@ void Game::Render()
 	// frustum parameters (3d - perspective mode)
 	Graphics::IRenderer::mRenderer->PrepareCamera3D();	
 	// Render everything in the scene database
-	Graphics::RenderScene::Instance().Render(false);
+	Graphics::RenderScene::Instance().Render(dt, false);
 
 	glutSwapBuffers();
 }

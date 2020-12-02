@@ -28,7 +28,7 @@ namespace Graphics
 
 		}
 		// render this object as is
-		virtual void Draw(bool isRenderingShadows) = 0;
+		virtual void Draw(float dt, bool isRenderingShadows) = 0;
 
 		virtual void SetLocation(const IvVector3 & newLocation)
 		{

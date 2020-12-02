@@ -61,14 +61,12 @@ void Graphics::RenderScene::Remove(const std::string & id)
 	}
 }
 
-void Graphics::RenderScene::Render(bool isRenderingShadows) const
+void Graphics::RenderScene::Render(float dt, bool isRenderingShadows) const
 {
-	// TODO: in case the shadows are activated, then this pass has to happen twice
-	//  but first pass should render on a FBO Cubemap 
 	for (list<Graphics::IDrawable*>::const_iterator it = m_items.begin(); it != m_items.end(); it++)
 	{
 		Graphics::IDrawable* pObj = *it;
-		pObj->Draw(isRenderingShadows);
+		pObj->Draw(dt, isRenderingShadows);
 	}
 }
 

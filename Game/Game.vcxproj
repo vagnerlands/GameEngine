@@ -117,7 +117,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(LIB_DEPENDENCY)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LIB_PATHS_X64_DEBUG);</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\projects\gameengine\packages\glew.v140.1.12.0\build\native\lib\x64\Debug;$(LIB_PATHS_X64_DEBUG);</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -165,12 +165,8 @@
     <ClCompile Include="Game.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

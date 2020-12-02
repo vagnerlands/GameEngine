@@ -62,17 +62,9 @@ CModelHolder::LoadModel(const string& modelId)
 
 	// must manipulate this object using specific CModelHolder
 	// in the future, this should be a #define or a strategy
-	Graphics::CModelOGL* pGfxModel = new Graphics::CModelOGL(modelId);
-
-	//Model modelLoader(bytesStream, length);
-	Model modelLoader;
-	// actually tries to load the model
-	modelLoader.Load("./Assets/" + modelId);
-	// set shader according to model loader results
-	//pGfxModel->SetShader(modelLoader.GetShaderSuggestion());
-
-	// transfer this model data to the GPU
-	pGfxModel->Create(modelLoader);
+	Graphics::CModelOGL* pGfxModel = nullptr;
+	pGfxModel = new Graphics::CModelOGL(modelId);
+	pGfxModel->Create();
 
 	m_mapModels.insert(make_pair(modelId, pGfxModel));
 
@@ -130,7 +122,7 @@ void CModelHolder::DrawModelById(const string& modelId)
 	ModelObject::iterator result = m_mapModels.find(modelId);
 	if (result != m_mapModels.end())
 	{
-		result->second->Draw(false);
+		result->second->Draw(0.f, false);
 	}
 	else
 	{

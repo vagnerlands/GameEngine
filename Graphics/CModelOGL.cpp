@@ -1,4 +1,4 @@
-#include "CModelOGL.h"
+﻿#include "CModelOGL.h"
 #include <iostream>
 #include "Model.h"
 #include "CTextureHolder.h"
@@ -10,7 +10,7 @@
 
 
 Graphics::CModelOGL::CModelOGL(string modelName) :
-	m_vboBufferCreated(false)
+	m_vboBufferCreated(false), m_hasAnimations(false)
 {
 	// only for debug purposes
 	m_modelName = modelName;
@@ -51,9 +51,22 @@ Graphics::CModelOGL::~CModelOGL()
 			glDeleteBuffers(1, &m_vertexBufferObject[i]);
 		}
 
+		if (m_hasAnimations)
+		{
+			for (UInt32 i = 0; i < m_bonesBufferObject.size(); ++i)
+			{
+				// delete VBO
+				glDeleteBuffers(1, &m_bonesBufferObject[i]);
+			}
+		}
+
+		m_bonesBufferObject.clear();
 		m_vertexBufferObject.clear();
 		m_elementBufferObject.clear();
 		m_drawAttr.clear();
+
+		// release last loaded scene
+		m_Importer.FreeScene();
 
 		// unmark it as "created", cause now it no longer exists
 		m_vboBufferCreated = false;
@@ -62,7 +75,33 @@ Graphics::CModelOGL::~CModelOGL()
 
 
 
-bool Graphics::CModelOGL::Create(const Model& modelInfo)
+bool Graphics::CModelOGL::Create()
+{
+	//Model modelLoader(bytesStream, length);
+	Model modelImporter(m_Importer);
+	modelImporter.SetBoneInformation(&m_boneInformation);
+	// actually tries to load the model
+	modelImporter.Load("./Assets/" + m_modelName);
+
+	m_global_inverse_transform = m_Importer.GetScene()->mRootNode->mTransformation;
+	m_global_inverse_transform.Inverse();
+	const aiScene* scene = m_Importer.GetScene();
+
+	if (scene->mAnimations != nullptr)
+	{
+		ticks_per_second = scene->mAnimations[0]->mTicksPerSecond;
+		m_hasAnimations = true;
+	}
+	else
+	{
+		ticks_per_second = 25.0f;
+	}
+
+	return Apply(modelImporter);
+	
+}
+
+bool Graphics::CModelOGL::Apply(const Model& modelInfo)
 {
 	if (!m_vboBufferCreated)
 	{
@@ -77,19 +116,38 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
 
 		// improves performance by avoiding resizing the vector during the operation
 		m_drawAttr.reserve(modelInfo.meshes.size());
+		if (m_hasAnimations)
+		{
+			m_bonesBufferObject.reserve(modelInfo.meshes.size());
+		}
 		m_vertexBufferObject.reserve(modelInfo.meshes.size());
 		m_elementBufferObject.reserve(modelInfo.meshes.size());
 		// iterates on each mesh, creating VAO, VBO and Textures
 		for (UInt32 i = 0; i < modelInfo.meshes.size(); ++i)
 		{
 			// first, try to compile the shader
- 			cwc::glShader* pShader = generateShader(modelInfo.meshes[i].m_shaderName);
+			cwc::glShader* pShader = generateShader(modelInfo.meshes[i].m_shaderName);
 
-			UInt32 VAO, VBO, EBO = 0;
+			UInt32 VAO, VBO, EBO, VBO_bones = 0;
 			// create buffers/arrays
 			glGenVertexArrays(1, &VAO);
 			glGenBuffers(1, &VBO);
 			glGenBuffers(1, &EBO);
+			// bones data
+			if (m_hasAnimations)
+			{
+				// prepare the animated bones				
+				for (UInt32 i = 0; i < MAX_BONES; i++) // get location all matrices of bones
+				{
+					string name = "bones[" + to_string(i) + "]";// name like in shader
+					m_bone_location[i] = pShader->GetUniformLocation(name.c_str());
+				}
+				glGenBuffers(1, &VBO_bones);
+				glBindBuffer(GL_ARRAY_BUFFER, VBO_bones);
+				glBufferData(GL_ARRAY_BUFFER, modelInfo.meshes[i].bones_id_weights_for_each_vertex.size() * sizeof(modelInfo.meshes[i].bones_id_weights_for_each_vertex[0]), &modelInfo.meshes[i].bones_id_weights_for_each_vertex[0], GL_STATIC_DRAW);
+ 				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				m_bonesBufferObject.push_back(VBO_bones);
+			}
 
 			m_vertexBufferObject.push_back(VBO);
 			m_elementBufferObject.push_back(EBO);
@@ -128,6 +186,17 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
 			glEnableVertexAttribArray(4);
 			glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(SModelVertex), (void*)offsetof(SModelVertex, Bitangent));
 
+			//bones
+			if (m_hasAnimations)
+			{
+				glBindBuffer(GL_ARRAY_BUFFER, VBO_bones);
+				glEnableVertexAttribArray(5);
+				glVertexAttribIPointer(5, 4, GL_INT, sizeof(SVertexBoneData), (GLvoid*)0); // for INT Ipointer
+				glEnableVertexAttribArray(6);
+				glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(SVertexBoneData), (GLvoid*)offsetof(SVertexBoneData, weights));
+				glBindBuffer(GL_ARRAY_BUFFER, 0);				
+			}
+
 			glBindVertexArray(0);
 
 			// check for GL errors
@@ -145,7 +214,7 @@ bool Graphics::CModelOGL::Create(const Model& modelInfo)
 	return m_vboBufferCreated;
 }
 
-void Graphics::CModelOGL::Draw(bool isRenderingShadows)
+void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 {
 	// nothing to do here in case we're currently preparing the shadow map
 	// and this object doesn't block light
@@ -233,6 +302,17 @@ void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 		else
 		{
 			m_drawAttr[i].m_pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)model.GetFloatPtr());
+
+			if (m_hasAnimations)
+			{
+				vector<aiMatrix4x4> transforms;
+				boneTransform((double)dt, transforms);
+
+				for (UInt32 s = 0; s < transforms.size(); s++) // move all matrices for actual model position to shader
+				{
+					m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&transforms[s], m_bone_location[s]);
+				}
+			}
 		}
 
 		// when rendering shadows, we must not enable other shaders or activate textures
@@ -269,7 +349,6 @@ void Graphics::CModelOGL::Draw(bool isRenderingShadows)
 						glActiveTexture(GL_TEXTURE0 + ti);
 						glBindTexture(GL_TEXTURE_CUBE_MAP, Graphics::Ilumination::Instance().GetShadowTexture());
 					}
-
 				}
 			}
 		}
@@ -302,7 +381,7 @@ shared_ptr<Model> Graphics::CModelOGL::Allocate()
 bool Graphics::CModelOGL::Commit()
 {
 	// create in the regular way - no duplicated code here
-	bool retVal = Create(*m_pData);
+	bool retVal = Apply(*m_pData);
 
 	// release this data (let the shared_ptr destructor take care)
 	m_pData = nullptr;
@@ -330,7 +409,7 @@ cwc::glShader* Graphics::CModelOGL::generateShader(const string& shaderName)
 
 	DWORD ret1 = GetFileAttributes((LPCWSTR)geometryFilename);
 	int ret2 = GetLastError();
-	bool isGeometryFileNotFound = (ret1 == INVALID_FILE_ATTRIBUTES) && (ret2== ERROR_FILE_NOT_FOUND);
+	bool isGeometryFileNotFound = (ret1 == INVALID_FILE_ATTRIBUTES) && (ret2 == ERROR_FILE_NOT_FOUND);
 
 	// checks if the geometry shader actually is required
 	if (isGeometryFileNotFound)
@@ -356,3 +435,261 @@ cwc::glShader* Graphics::CModelOGL::generateShader(const string& shaderName)
 	return pShader;
 }
 #pragma optimize( "", on )
+
+
+
+UInt32 Graphics::CModelOGL::findPosition(float p_animation_time, const aiNodeAnim* p_node_anim)
+{
+	// ����� ���� ������� ����� ����� ����� ������� ���������� ����� ������ ��������
+	for (UInt32 i = 0; i < p_node_anim->mNumPositionKeys - 1; i++) // �������� ����� ��������
+	{
+		if (p_animation_time < (float)p_node_anim->mPositionKeys[i + 1].mTime) // �������� �� �������� ��������� !!!
+		{
+			return i; // �� ������� ������ �������� !!!!!!!!!!!!!!!!!! ����������������������������
+		}
+	}
+
+	assert(0);
+	return 0;
+}
+
+UInt32 Graphics::CModelOGL::findRotation(float p_animation_time, const aiNodeAnim* p_node_anim)
+{
+	for (UInt32 i = 0; i < p_node_anim->mNumRotationKeys - 1; i++) 
+	{
+		if (p_animation_time < (float)p_node_anim->mRotationKeys[i + 1].mTime) 
+		{
+			return i; 
+		}
+	}
+
+	assert(0);
+	return 0;
+}
+
+UInt32 Graphics::CModelOGL::findScaling(float p_animation_time, const aiNodeAnim* p_node_anim)
+{
+	for (UInt32 i = 0; i < p_node_anim->mNumScalingKeys - 1; i++) 
+	{
+		if (p_animation_time < (float)p_node_anim->mScalingKeys[i + 1].mTime) 
+		{
+			return i; 
+		}
+	}
+
+	assert(0);
+	return 0;
+}
+
+aiVector3D Graphics::CModelOGL::calcInterpolatedPosition(float p_animation_time, const aiNodeAnim* p_node_anim)
+{
+	if (p_node_anim->mNumPositionKeys == 1)
+	{
+		return p_node_anim->mPositionKeys[0].mValue;
+	}
+
+	UInt32 position_index = findPosition(p_animation_time, p_node_anim); 
+	UInt32 next_position_index = position_index + 1; 
+	assert(next_position_index < p_node_anim->mNumPositionKeys);
+	
+	float delta_time = (float)(p_node_anim->mPositionKeys[next_position_index].mTime - p_node_anim->mPositionKeys[position_index].mTime);
+	
+	float factor = (p_animation_time - (float)p_node_anim->mPositionKeys[position_index].mTime) / delta_time;
+	//assert(factor >= 0.0f && factor <= 1.0f);
+	if (!(factor >= 0.0f && factor <= 1.0f))
+	{
+		factor = 0.01f;
+	}
+	aiVector3D start = p_node_anim->mPositionKeys[position_index].mValue;
+	aiVector3D end = p_node_anim->mPositionKeys[next_position_index].mValue;
+	aiVector3D delta = end - start;
+
+	return start + factor * delta;
+}
+
+aiQuaternion Graphics::CModelOGL::calcInterpolatedRotation(float p_animation_time, const aiNodeAnim* p_node_anim)
+{
+	if (p_node_anim->mNumRotationKeys == 1) // Keys ��� ������� �����
+	{
+		return p_node_anim->mRotationKeys[0].mValue;
+	}
+
+	UInt32 rotation_index = findRotation(p_animation_time, p_node_anim); // ������ ������ �������� ����� ������� ������
+	UInt32 next_rotation_index = rotation_index + 1; // ������ ��������� �������� �����
+	assert(next_rotation_index < p_node_anim->mNumRotationKeys);
+	// ���� ����� �������
+	float delta_time = (float)(p_node_anim->mRotationKeys[next_rotation_index].mTime - p_node_anim->mRotationKeys[rotation_index].mTime);
+	// ������ = (���� ������� ������ �� ������ �������� ��������� �����) / �� ���� ����� �������
+	float factor = (p_animation_time - (float)p_node_anim->mRotationKeys[rotation_index].mTime) / delta_time;
+
+	//assert(factor >= 0.0f && factor <= 1.0f);
+	if (!(factor >= 0.0f && factor <= 1.0f))
+	{
+		factor = 0.01f;
+	}
+	aiQuaternion start_quat = p_node_anim->mRotationKeys[rotation_index].mValue;
+	aiQuaternion end_quat = p_node_anim->mRotationKeys[next_rotation_index].mValue;
+
+	return nlerp(start_quat, end_quat, factor);
+}
+
+aiVector3D Graphics::CModelOGL::calcInterpolatedScaling(float p_animation_time, const aiNodeAnim* p_node_anim)
+{
+	if (p_node_anim->mNumScalingKeys == 1) // Keys ��� ������� �����
+	{
+		return p_node_anim->mScalingKeys[0].mValue;
+	}
+
+	UInt32 scaling_index = findScaling(p_animation_time, p_node_anim); // ������ ������ �������� ����� ������� ������
+	UInt32 next_scaling_index = scaling_index + 1; // ������ ��������� �������� �����
+	assert(next_scaling_index < p_node_anim->mNumScalingKeys);
+	// ���� ����� �������
+	float delta_time = (float)(p_node_anim->mScalingKeys[next_scaling_index].mTime - p_node_anim->mScalingKeys[scaling_index].mTime);
+	// ������ = (���� ������� ������ �� ������ �������� ��������� �����) / �� ���� ����� �������
+	float  factor = (p_animation_time - (float)p_node_anim->mScalingKeys[scaling_index].mTime) / delta_time;
+	//assert(factor >= 0.0f && factor <= 1.0f);
+	if (!(factor >= 0.0f && factor <= 1.0f))
+	{
+		factor = 0.01f;
+	}
+	aiVector3D start = p_node_anim->mScalingKeys[scaling_index].mValue;
+	aiVector3D end = p_node_anim->mScalingKeys[next_scaling_index].mValue;
+	aiVector3D delta = end - start;
+
+	return start + factor * delta;
+}
+
+const aiNodeAnim* Graphics::CModelOGL::findNodeAnim(const aiAnimation* p_animation, const string p_node_name)
+{
+	// channel in animation contains aiNodeAnim (aiNodeAnim its transformation for bones)
+	// numChannels == numBones
+	for (UInt32 i = 0; i < p_animation->mNumChannels; i++)
+	{
+		const aiNodeAnim* node_anim = p_animation->mChannels[i]; // ��������� ������� ������ node
+		if (string(node_anim->mNodeName.data) == p_node_name)
+		{
+			return node_anim;// ���� ����� �������� �� ������� ����� (� ������� ����������� node) ������������ ���� node_anim
+		}
+	}
+
+	return nullptr;
+}
+// start from RootNode
+void Graphics::CModelOGL::readNodeHierarchy(float p_animation_time, const aiNode* p_node, const aiMatrix4x4 parent_transform)
+{
+
+	string node_name(p_node->mName.data);
+
+	//������� node, �� ������� ������������ �������, ������������� �������� ���� ������(aiNodeAnim).
+	const aiAnimation* animation = m_Importer.GetScene()->mAnimations[0];
+	aiMatrix4x4 node_transform = p_node->mTransformation;
+
+	const aiNodeAnim* node_anim = findNodeAnim(animation, node_name); // ����� ������� �� ����� ����
+
+	if (node_anim)
+	{
+
+		//scaling
+		//aiVector3D scaling_vector = node_anim->mScalingKeys[2].mValue;
+		aiVector3D scaling_vector = calcInterpolatedScaling(p_animation_time, node_anim);
+		aiMatrix4x4 scaling_matr;
+		aiMatrix4x4::Scaling(scaling_vector, scaling_matr);
+
+		//rotation
+		//aiQuaternion rotate_quat = node_anim->mRotationKeys[2].mValue;
+		aiQuaternion rotate_quat = calcInterpolatedRotation(p_animation_time, node_anim);
+		aiMatrix4x4 rotate_matr = aiMatrix4x4(rotate_quat.GetMatrix());
+
+		//translation
+		//aiVector3D translate_vector = node_anim->mPositionKeys[2].mValue;
+		aiVector3D translate_vector = calcInterpolatedPosition(p_animation_time, node_anim);
+		aiMatrix4x4 translate_matr;
+		aiMatrix4x4::Translation(translate_vector, translate_matr);
+
+		node_transform = translate_matr * rotate_matr * scaling_matr;
+	}
+
+	aiMatrix4x4 global_transform = parent_transform * node_transform;
+
+	// ���� � node �� �������� ����������� bone, �� �� node ������ ��������� � ������ bone !!!
+	if (m_boneInformation.m_bone_mapping.find(node_name) != m_boneInformation.m_bone_mapping.end()) // true if node_name exist in bone_mapping
+	{
+		UInt32 bone_index = m_boneInformation.m_bone_mapping[node_name];
+		m_boneInformation.m_bone_matrices[bone_index].final_world_transform = m_global_inverse_transform * global_transform * m_boneInformation.m_bone_matrices[bone_index].offset_matrix;
+	}
+
+	for (UInt32 i = 0; i < p_node->mNumChildren; i++)
+	{
+		readNodeHierarchy(p_animation_time, p_node->mChildren[i], global_transform);
+	}
+
+}
+
+void Graphics::CModelOGL::boneTransform(double time_in_sec, vector<aiMatrix4x4>& transforms)
+{
+	aiMatrix4x4 identity_matrix; // = mat4(1.0f);
+
+	double time_in_ticks = time_in_sec * ticks_per_second;
+	float animation_time = fmod(time_in_ticks, m_Importer.GetScene()->mAnimations[0]->mDuration); //������� �� ����� (������� �� ������)
+	// animation_time - ���� ������� ������ � ���� ������ �� ������ �������� (�� ������� �������� ����� � �������� )
+
+	readNodeHierarchy(animation_time, m_Importer.GetScene()->mRootNode, identity_matrix);
+
+	transforms.resize(m_boneInformation.m_num_bones);
+
+	for (UInt32 i = 0; i < m_boneInformation.m_num_bones; i++)
+	{
+		transforms[i] = m_boneInformation.m_bone_matrices[i].final_world_transform;
+	}
+}
+
+glm::mat4 Graphics::CModelOGL::aiToGlm(aiMatrix4x4 ai_matr)
+{
+	glm::mat4 result;
+	result[0].x = ai_matr.a1; result[0].y = ai_matr.b1; result[0].z = ai_matr.c1; result[0].w = ai_matr.d1;
+	result[1].x = ai_matr.a2; result[1].y = ai_matr.b2; result[1].z = ai_matr.c2; result[1].w = ai_matr.d2;
+	result[2].x = ai_matr.a3; result[2].y = ai_matr.b3; result[2].z = ai_matr.c3; result[2].w = ai_matr.d3;
+	result[3].x = ai_matr.a4; result[3].y = ai_matr.b4; result[3].z = ai_matr.c4; result[3].w = ai_matr.d4;
+
+	//cout << " " << result[0].x << "		 " << result[0].y << "		 " << result[0].z << "		 " << result[0].w << endl;
+	//cout << " " << result[1].x << "		 " << result[1].y << "		 " << result[1].z << "		 " << result[1].w << endl;
+	//cout << " " << result[2].x << "		 " << result[2].y << "		 " << result[2].z << "		 " << result[2].w << endl;
+	//cout << " " << result[3].x << "		 " << result[3].y << "		 " << result[3].z << "		 " << result[3].w << endl;
+	//cout << endl;
+
+	//cout << " " << ai_matr.a1 << "		 " << ai_matr.b1 << "		 " << ai_matr.c1 << "		 " << ai_matr.d1 << endl;
+	//cout << " " << ai_matr.a2 << "		 " << ai_matr.b2 << "		 " << ai_matr.c2 << "		 " << ai_matr.d2 << endl;
+	//cout << " " << ai_matr.a3 << "		 " << ai_matr.b3 << "		 " << ai_matr.c3 << "		 " << ai_matr.d3 << endl;
+	//cout << " " << ai_matr.a4 << "		 " << ai_matr.b4 << "		 " << ai_matr.c4 << "		 " << ai_matr.d4 << endl;
+	//cout << endl;
+
+	return result;
+}
+
+aiQuaternion Graphics::CModelOGL::nlerp(aiQuaternion a, aiQuaternion b, float blend)
+{
+	//cout << a.w + a.x + a.y + a.z << endl;
+	a.Normalize();
+	b.Normalize();
+
+	aiQuaternion result;
+	float dot_product = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+	float one_minus_blend = 1.0f - blend;
+
+	if (dot_product < 0.0f)
+	{
+		result.x = a.x * one_minus_blend + blend * -b.x;
+		result.y = a.y * one_minus_blend + blend * -b.y;
+		result.z = a.z * one_minus_blend + blend * -b.z;
+		result.w = a.w * one_minus_blend + blend * -b.w;
+	}
+	else
+	{
+		result.x = a.x * one_minus_blend + blend * b.x;
+		result.y = a.y * one_minus_blend + blend * b.y;
+		result.z = a.z * one_minus_blend + blend * b.z;
+		result.w = a.w * one_minus_blend + blend * b.w;
+	}
+
+	return result.Normalize();
+}

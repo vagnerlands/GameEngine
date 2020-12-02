@@ -20,7 +20,7 @@ public:
 protected:
 
 	virtual void UpdateObjects(float dt);
-	virtual void Render();
+	virtual void Render(float dt);
 
 private:
 	Game(const Game& other);

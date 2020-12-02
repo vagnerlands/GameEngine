@@ -38,12 +38,6 @@
     <Filter Include="Src\Loaders\Images\Windows">
       <UniqueIdentifier>{fd0f5ff5-36f7-4e60-8924-3123ac367127}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Loaders\Model3D\Assimp">
-      <UniqueIdentifier>{3526449b-fdbd-4eb2-b8a9-8c60bb24c489}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Loaders\Model3D\Assimp\Compiler">
-      <UniqueIdentifier>{11790aa5-8e85-4cb3-aa51-e5be7e9ba3c5}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IGame.cpp">
@@ -228,108 +222,6 @@
     <ClInclude Include="Loaders\Images\Windows\CFactory2dImageWin.h">
       <Filter>Src\Loaders\Images\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\Compiler\poppack1.h">
-      <Filter>Src\Loaders\Model3D\Assimp\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\Compiler\pushpack1.h">
-      <Filter>Src\Loaders\Model3D\Assimp\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\ai_assert.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\anim.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\camera.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\cexport.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\cfileio.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\cimport.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\color4.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\config.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\DefaultLogger.hpp">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\defs.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\Exporter.hpp">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\Importer.hpp">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\importerdesc.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\IOStream.hpp">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\IOSystem.hpp">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\light.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\Logger.hpp">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\LogStream.hpp">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\material.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\matrix3x3.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\matrix4x4.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\mesh.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\NullLogger.hpp">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\postprocess.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\ProgressHandler.hpp">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\quaternion.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\scene.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\texture.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\types.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\vector2.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\vector3.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Assimp\version.h">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </ClInclude>
     <ClInclude Include="Loaders\Images\Windows\DevILLoader.h">
       <Filter>Src\Loaders\Images\Windows</Filter>
     </ClInclude>
@@ -348,28 +240,5 @@
     <ClInclude Include="Loaders\Images\Windows\stbi_DDS_aug_c.h">
       <Filter>Src\Loaders\Images\Windows</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Loaders\Model3D\Assimp\color4.inl">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </None>
-    <None Include="Loaders\Model3D\Assimp\material.inl">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </None>
-    <None Include="Loaders\Model3D\Assimp\matrix3x3.inl">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </None>
-    <None Include="Loaders\Model3D\Assimp\matrix4x4.inl">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </None>
-    <None Include="Loaders\Model3D\Assimp\quaternion.inl">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </None>
-    <None Include="Loaders\Model3D\Assimp\vector2.inl">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </None>
-    <None Include="Loaders\Model3D\Assimp\vector3.inl">
-      <Filter>Src\Loaders\Model3D\Assimp</Filter>
-    </None>
   </ItemGroup>
 </Project>

@@ -10,12 +10,12 @@ Graphics.lib;^
 Math.lib;^
 EngineCore.lib;^
 UtilitiesCore.lib;^
-libpng16.lib;^
-assimp.lib;^
+libpngd.lib;^
+assimp-vc140-mt.lib;^
 DevIL.lib;^
 ILU.lib;^
 ILUT.lib;^
-zlib.lib
+zlibd.lib
 
 
 
@@ -45,6 +45,7 @@ Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\Graphics;^
 %PROJECT_ROOT%\Graphics\Scene;^
 %PROJECT_ROOT%\Includes;^
+%PROJECT_ROOT%\Includes\assimp;^
 %PROJECT_ROOT%\Math;^
 %PROJECT_ROOT%\UtilitiesCore;^
 %PROJECT_ROOT%\EngineCore\Cache;^

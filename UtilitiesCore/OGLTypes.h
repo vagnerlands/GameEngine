@@ -4,6 +4,7 @@
 #include <memory>
 #include <list>
 #include <vector>
+#include <map>
 #include <unordered_map>
 #include "CommonTypes.h"
 
@@ -15,6 +16,10 @@
 
 #include "GL/glew.h"
 #include "GL/glut.h"
+
+#include <Assimp/Importer.hpp>
+
+#define NUM_BONES_PER_VERTEX 4
 
 using namespace std;
 
@@ -89,13 +94,54 @@ namespace Types
         // bitangent
         glm::vec3 Bitangent;
     };
+	
+	struct SVertexBoneData
+	{
+		UInt32 ids[NUM_BONES_PER_VERTEX] = {};   // we have 4 bone ids for EACH vertex & 4 weights for EACH vertex
+		float weights[NUM_BONES_PER_VERTEX] = {};
 
+		SVertexBoneData()
+		{
+			memset(ids, 0, sizeof(ids));    // init all values in array = 0
+			memset(weights, 0, sizeof(weights));
+		}
+
+		void addBoneData(UInt32 bone_id, float weight) 
+		{
+			for (UInt32 i = 0; i < NUM_BONES_PER_VERTEX; i++)
+			{
+				if (weights[i] == 0.0)
+				{
+					ids[i] = bone_id;
+					weights[i] = weight;
+					return;
+				}
+			}
+		}
+	};
+
+	struct BoneMatrix
+	{
+		aiMatrix4x4 offset_matrix;
+		aiMatrix4x4 final_world_transform;
+	};
+
+	struct SBoneInformation
+	{
+		// bones data
+		map<string, UInt32>		m_bone_mapping; // maps a bone name and their index
+		UInt32					m_num_bones = 0;
+		vector<BoneMatrix>		m_bone_matrices;
+		aiMatrix4x4				m_global_inverse_transform;
+	};
 
     struct SModelMesh
     {
         vector<SModelVertex>    m_vertices;
         vector<UInt32>          m_indices;
         vector<SModelTexture>   m_textures;
+		// bone information
+		vector<SVertexBoneData>	bones_id_weights_for_each_vertex;
 		// shader name (Model.h suggests a name)
 		string					m_shaderName = "model";
     };
