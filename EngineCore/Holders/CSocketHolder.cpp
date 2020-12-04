@@ -32,7 +32,7 @@ void
 CSocketHolder::addSocket(string user, ISocket* userSocket)
 {
 	// protects with MUTEX
-	m_sockedDBMutex->mutexLock();
+	LockGuard lock(m_sockedDBMutex);
 	// check if this ip is already registered
 	unordered_map<string, ISocket*>::const_iterator checkIterator = m_sockedDB.find(user);
 	if (checkIterator != m_sockedDB.end())
@@ -48,8 +48,6 @@ CSocketHolder::addSocket(string user, ISocket* userSocket)
 	}
 	// creates a pair for user/userSocket
 	m_sockedDB.insert({ user, userSocket });
-	// Releases MUTEX
-	m_sockedDBMutex->mutexUnlock();
 }
 
 bool
@@ -91,7 +89,7 @@ CSocketHolder::removeCondemedSockets()
 	Int32 retVal = 0;
 
 	// protects with MUTEX
-	m_sockedDBMutex->mutexLock();
+	LockGuard lock(m_sockedDBMutex);
 
 	for (auto socketItem = m_sockedDB.begin(); socketItem != m_sockedDB.end(); )
 	{
@@ -112,9 +110,6 @@ CSocketHolder::removeCondemedSockets()
 			}
 		}
 	}
-
-	// release MUTEX
-	m_sockedDBMutex->mutexUnlock();
 
 	return retVal;
 }

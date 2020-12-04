@@ -111,9 +111,7 @@ void CTextureHolder::BuildTexture(const string& textureId, const I2dImage* pData
 
 void CTextureHolder::increaseTexturePriority(const string& textureId, UInt32 size = 0U)
 {
-    bool itemFound = false;
-
-    m_textureContentMapMutex->mutexLock();
+	LockGuard lock(m_textureContentMapMutex);
     for (TextureLru::iterator it = m_lru.begin(); it != m_lru.end(); it++)
     {
         if ((*it).m_name == textureId)
@@ -124,14 +122,10 @@ void CTextureHolder::increaseTexturePriority(const string& textureId, UInt32 siz
             m_lru.remove(*it);
             // and re-insert on top
             m_lru.push_front(copyItem);
-            // mark this item as found
-            itemFound = true;
-            break;
+            
+			return;
         }
     }
-    // record already existed, only increased priority
-    if (itemFound)
-        return;
 
     // create new record in LRU
     if (size > 0U)
@@ -143,7 +137,6 @@ void CTextureHolder::increaseTexturePriority(const string& textureId, UInt32 siz
         m_sizeInUse += size;
         m_lru.push_front(STextureItem(textureId, size));
     }
-    m_textureContentMapMutex->mutexUnlock();
 }
 
 void CTextureHolder::removeLastItem()

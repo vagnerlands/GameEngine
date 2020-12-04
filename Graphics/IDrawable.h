@@ -27,6 +27,7 @@ namespace Graphics
 		{
 
 		}
+		virtual void Update(float dt) = 0;
 		// render this object as is
 		virtual void Draw(float dt, bool isRenderingShadows) = 0;
 

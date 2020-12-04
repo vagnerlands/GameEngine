@@ -12,7 +12,7 @@ using namespace Types;
 namespace Graphics
 {
 	// Everything that can be rendered shall be a "IDrawable"
-	class RenderScene
+	class RenderScene 
 	{
 	public:
 		// virtual destructor
@@ -40,6 +40,9 @@ namespace Graphics
 		// Update ilumination location
 		virtual void Remove(const std::string& id);
 		
+
+		virtual void Update(float dt) const;
+
 		virtual void Render(float dt, bool isRenderingShadows = false) const;
 
 	protected:

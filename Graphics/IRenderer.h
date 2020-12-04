@@ -102,19 +102,19 @@ namespace Graphics
 	inline Float 
 		IRenderer::GetWidth()
 	{
-		return mWidth;
+		return static_cast<Float>(mWidth);
 	}
 
 	inline Float 
 		IRenderer::GetHeight()
 	{
-		return mHeight;
+		return static_cast<Float>(mHeight);
 	}
 
 	inline Float 
 		IRenderer::GetAspect()
 	{
-		return mWidth / mHeight;
+		return static_cast<Float>(mWidth) / static_cast<Float>(mHeight);
 	}
 
 	inline Float

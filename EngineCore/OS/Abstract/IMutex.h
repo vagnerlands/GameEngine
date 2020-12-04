@@ -18,4 +18,13 @@ public:
 	virtual void destroy() = 0;
 };
 
+class LockGuard
+{
+public:
+	explicit LockGuard(class IMutex* pMutex) : m_pMutex(pMutex) { m_pMutex->mutexLock(); }
+	~LockGuard() { m_pMutex->mutexUnlock(); }
+private:
+	mutable class IMutex* m_pMutex;
+};
+
 #endif //_IMUTEX_H_

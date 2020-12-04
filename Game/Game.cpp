@@ -70,10 +70,10 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("astro", CModelHolder::s_pInstance->GetModelById("astroBoy_walk_Max.dae"));
 	//Graphics::RenderScene::Instance().Add("fortress1",	CModelHolder::s_pInstance->GetModelById("fortress.obj"));
 	//Graphics::RenderScene::Instance().Add("bob", CModelHolder::s_pInstance->GetModelById("boblampclean.md5mesh"));
-	//Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
+	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
     //Graphics::RenderScene::Instance().Add("church", CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
-	//Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
-	//Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));	
+	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
+	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));	
 
 	//Graphics::RenderScene::Instance().Scale("bob", IvVector3(0.05, 0.05, 0.05));
 	//Graphics::RenderScene::Instance().Scale("fortress1", IvVector3(10.f, 10.f, 10.f));
@@ -86,7 +86,7 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
 	Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
 	Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.1, 0.1, 0.1));
-	//Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
+	Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
     //Graphics::RenderScene::Instance().Translate("lightDebug", IvVector3(-22.1136, 14.17, 6.65836));
 
 	// 6 faces of the sky - external interface must provide these
@@ -116,8 +116,8 @@ bool Game::PostRendererInitialize()
 
 void Game::UpdateObjects(float dt)
 {
-    const Float cSpeed = 10.f;
-	const Float cMouseSensibility = 1.25f;
+    const Float cSpeed = .005f;
+	const Float cMouseSensibility = .001f;
 	if (mpGameInput->m_bKey[27])
 	{
 		mGame->Quit();
@@ -198,10 +198,8 @@ void Game::UpdateObjects(float dt)
 	Graphics::Ilumination::Instance().Update("main", lightLocation);
 	Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
 
-
-	// [Model]
-
-	// [Landscape]
+	// Update objects based on current timestamp
+	Graphics::RenderScene::Instance().Update(dt);
 
 }
 
