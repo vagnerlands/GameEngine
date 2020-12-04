@@ -51,7 +51,9 @@ bool Game::PostRendererInitialize()
 	// Set the view parameters in renderer
 	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
 	// Update camera to be above ground
-	Graphics::IRenderer::mRenderer->GetCamera().m_position.SetY(1.f);
+	Graphics::IRenderer::mRenderer->GetCamera().m_position.SetY(5.f);
+	Graphics::IRenderer::mRenderer->GetCamera().m_position.SetZ(10.f);
+	Graphics::IRenderer::mRenderer->GetCamera().m_rotation.SetY(90.);
 	// Update this camera type
 	Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Spectator;
 	// create model holder
@@ -68,16 +70,18 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("astro", CModelHolder::s_pInstance->GetModelById("astroBoy_walk_Max.dae"));
 	//Graphics::RenderScene::Instance().Add("fortress1",	CModelHolder::s_pInstance->GetModelById("fortress.obj"));
 	//Graphics::RenderScene::Instance().Add("bob", CModelHolder::s_pInstance->GetModelById("boblampclean.md5mesh"));
-	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
+	//Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
     //Graphics::RenderScene::Instance().Add("church", CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
-	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
-	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));	
+	//Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
+	//Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));	
 
 	//Graphics::RenderScene::Instance().Scale("bob", IvVector3(0.05, 0.05, 0.05));
 	//Graphics::RenderScene::Instance().Scale("fortress1", IvVector3(10.f, 10.f, 10.f));
 	//Graphics::RenderScene::Instance().Rotate("bob", IvQuat(IvVector3(1, 0, 0), -90));
 	Graphics::RenderScene::Instance().Rotate("astro", IvQuat(IvVector3(1, 0, 0), -90));
 	Graphics::RenderScene::Instance().Scale("astro", IvVector3(0.5, 0.5, 0.5));
+	Graphics::RenderScene::Instance().Translate("astro", IvVector3(0.0, 3., 0.5));
+	Graphics::RenderScene::Instance().CastShadow("astro", false);
 	// debug
 	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
 	Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
