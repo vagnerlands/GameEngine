@@ -71,6 +71,7 @@ namespace Graphics
 		// assimp importer, keep a reference for the scene
 		Assimp::Importer		m_Importer;
 		bool m_hasAnimations;
+		bool m_isWireMode;
 
 	private:
 		UInt32 findPosition(float p_animation_time, const aiNodeAnim* p_node_anim);

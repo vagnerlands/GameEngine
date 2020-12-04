@@ -10,7 +10,7 @@
 
 
 Graphics::CModelOGL::CModelOGL(string modelName) :
-	m_vboBufferCreated(false), m_hasAnimations(false)
+	m_vboBufferCreated(false), m_hasAnimations(false), m_isWireMode(false)
 {
 	// only for debug purposes
 	m_modelName = modelName;
@@ -251,6 +251,14 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 	// combine both transformations
 	model = translateModel * scaleModel * rotateModel;
 
+	// placeholder for animations purposes
+	vector<aiMatrix4x4> transforms;
+	// if this has 
+	if (m_hasAnimations)
+	{		
+		boneTransform((double)dt, transforms);
+	}
+
 	// indexer
 	for (UInt32 i = 0; i < m_drawAttr.size(); ++i)
 	{
@@ -292,6 +300,14 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 				m_drawAttr[i].m_pShader->setUniform1i("depthMap", 2);
 				glErr = glGetError();
 			}
+
+			if (m_hasAnimations)
+			{
+				for (UInt32 s = 0; s < transforms.size(); s++) // move all matrices for actual model position to shader
+				{
+					m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&transforms[s], m_bone_location[s]);
+				}
+			}
 		}
 
 		glErr = glGetError();
@@ -302,18 +318,7 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 		else
 		{
 			m_drawAttr[i].m_pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)model.GetFloatPtr());
-
-			if (m_hasAnimations)
-			{
-				vector<aiMatrix4x4> transforms;
-				boneTransform((double)dt, transforms);
-
-				for (UInt32 s = 0; s < transforms.size(); s++) // move all matrices for actual model position to shader
-				{
-					m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&transforms[s], m_bone_location[s]);
-				}
-			}
-		}
+    	}
 
 		// when rendering shadows, we must not enable other shaders or activate textures
 		if (!isRenderingShadows)
@@ -352,9 +357,23 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 				}
 			}
 		}
+
+		if (m_isWireMode)
+		{ 
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glLineWidth(2);
+		}
+
 		// draw all meshes mesh
 		glBindVertexArray(m_drawAttr[i].m_vertexArrayObject);
 		glDrawElements(GL_TRIANGLES, m_drawAttr[i].m_indicesCount, GL_UNSIGNED_INT, 0);
+
+		// set back the opengl directives back to what it was
+		if (m_isWireMode)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glLineWidth(2);
+		}
 
 		// always good practice to set everything back to defaults once configured.
 		glBindVertexArray(0);
