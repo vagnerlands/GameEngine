@@ -214,6 +214,16 @@ bool Graphics::CModelOGL::Apply(const Model& modelInfo)
 	return m_vboBufferCreated;
 }
 
+void Graphics::CModelOGL::Update(float dt)
+{
+	// if this has 
+	if (m_hasAnimations)
+	{
+		m_boneTransforms = vector<aiMatrix4x4>();
+		boneTransform((double)dt, m_boneTransforms);
+	}
+}
+
 void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 {
 	// nothing to do here in case we're currently preparing the shadow map
@@ -250,14 +260,6 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 	translateModel.Translation(m_location);
 	// combine both transformations
 	model = translateModel * scaleModel * rotateModel;
-
-	// placeholder for animations purposes
-	vector<aiMatrix4x4> transforms;
-	// if this has 
-	if (m_hasAnimations)
-	{		
-		boneTransform((double)dt, transforms);
-	}
 
 	// indexer
 	for (UInt32 i = 0; i < m_drawAttr.size(); ++i)
@@ -303,9 +305,9 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 
 			if (m_hasAnimations)
 			{
-				for (UInt32 s = 0; s < transforms.size(); s++) // move all matrices for actual model position to shader
+				for (UInt32 s = 0; s < m_boneTransforms.size(); s++) // move all matrices for actual model position to shader
 				{
-					m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&transforms[s], m_bone_location[s]);
+					m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&m_boneTransforms[s], m_bone_location[s]);
 				}
 			}
 		}
@@ -372,7 +374,6 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 		if (m_isWireMode)
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			glLineWidth(2);
 		}
 
 		// always good practice to set everything back to defaults once configured.

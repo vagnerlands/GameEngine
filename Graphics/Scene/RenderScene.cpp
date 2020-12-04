@@ -61,6 +61,15 @@ void Graphics::RenderScene::Remove(const std::string & id)
 	}
 }
 
+void Graphics::RenderScene::Update(float dt) const
+{
+	for (list<Graphics::IDrawable*>::const_iterator it = m_items.begin(); it != m_items.end(); it++)
+	{
+		Graphics::IDrawable* pObj = *it;
+		pObj->Update(dt);
+	}
+}
+
 void Graphics::RenderScene::Render(float dt, bool isRenderingShadows) const
 {
 	for (list<Graphics::IDrawable*>::const_iterator it = m_items.begin(); it != m_items.end(); it++)

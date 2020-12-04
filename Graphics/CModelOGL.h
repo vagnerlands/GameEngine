@@ -22,6 +22,8 @@ namespace Graphics
         // create based on SModelData
         virtual bool Create() override;
 		virtual bool Apply(const Model& modelInfo) override;
+		// periodic call to update
+		virtual void Update(float dt) override;
 		//bool SetShader(const string& shaderName);
 		virtual void Draw(float dt, bool isRenderingShadows);
 		// allocate SModelData for custom objects
@@ -87,6 +89,8 @@ namespace Graphics
 		void readNodeHierarchy(float p_animation_time, const aiNode* p_node, const aiMatrix4x4 parent_transform);
 		void boneTransform(double time_in_sec, vector<aiMatrix4x4>& transforms);
 		SBoneInformation m_boneInformation;
+		// placeholder for animations purposes
+		vector<aiMatrix4x4> m_boneTransforms;
 
 	};
 

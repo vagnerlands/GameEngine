@@ -52,7 +52,7 @@ void EngineCore::IGame::Display()
 		// update all objects - the delta time (elapsed time)
 		// is a good feature to increase intensity of movement 
 		// if a few frames were lost - making the movements flow
-		UpdateObjects(mClock->GetElapsedTime());
+		UpdateObjects(mClock->GetTimeInMili());
 		// render a scene according to current position of objects
 		Render(mClock->GetTimeInMili());
 

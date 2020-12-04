@@ -151,6 +151,11 @@ UtilitiesCore::Skybox::~Skybox()
 	}
 }
 
+void UtilitiesCore::Skybox::Update(float dt)
+{
+	// perhaps if we wanted to make some real time effects on the sky, here is the place for this...
+}
+
 void UtilitiesCore::Skybox::Draw(float dt, bool isRenderingShadows)
 {
 	// in case we're currently rendering shadows, the skybox shouldn't affect it
