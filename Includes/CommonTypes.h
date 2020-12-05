@@ -47,6 +47,8 @@ namespace Types
 	{
 		// camera must be above ground and ignores roll rotation
 		Camera_Human = 0,
+		// good for third view games, camera is relative to a player position
+		Camera_SpringArm,
 		// camera may fly, but still ignores roll rotation
 		Camera_Spectator,
 		// free angle rotation

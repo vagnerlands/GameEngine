@@ -6,6 +6,8 @@
 #include "IModel.h"
 #include "Shaders\glsl.h"
 
+#include "IvMatrix44.h"
+
 using namespace Types;
 
 namespace Graphics
@@ -67,7 +69,7 @@ namespace Graphics
         vector<UInt32>          m_elementBufferObject;
         vector<SDrawData>       m_drawAttr;   
 		// bones (if applicable)
-		GLuint m_bone_location[MAX_BONES];
+		UInt32 m_bone_location[MAX_BONES];
 		float ticks_per_second = 0.0f;
 		aiMatrix4x4 m_global_inverse_transform;
 		// assimp importer, keep a reference for the scene
@@ -91,9 +93,21 @@ namespace Graphics
 		SBoneInformation m_boneInformation;
 		// placeholder for animations purposes
 		vector<aiMatrix4x4> m_boneTransforms;
-
+		IvMatrix44 castToIvMatrix44(const aiMatrix4x4& input) const;
 	};
 
+
+	inline IvMatrix44 CModelOGL::castToIvMatrix44(const aiMatrix4x4& input) const
+	{
+		IvMatrix44 ret;
+
+		ret.SetRows(IvVector4(m_Importer.GetScene()->mRootNode->mTransformation.a1, m_Importer.GetScene()->mRootNode->mTransformation.a2, m_Importer.GetScene()->mRootNode->mTransformation.a3, m_Importer.GetScene()->mRootNode->mTransformation.a4),
+			IvVector4(m_Importer.GetScene()->mRootNode->mTransformation.b1, m_Importer.GetScene()->mRootNode->mTransformation.b2, m_Importer.GetScene()->mRootNode->mTransformation.b3, m_Importer.GetScene()->mRootNode->mTransformation.b4),
+			IvVector4(m_Importer.GetScene()->mRootNode->mTransformation.c1, m_Importer.GetScene()->mRootNode->mTransformation.c2, m_Importer.GetScene()->mRootNode->mTransformation.c3, m_Importer.GetScene()->mRootNode->mTransformation.c4),
+			IvVector4(m_Importer.GetScene()->mRootNode->mTransformation.d1, m_Importer.GetScene()->mRootNode->mTransformation.d2, m_Importer.GetScene()->mRootNode->mTransformation.d3, m_Importer.GetScene()->mRootNode->mTransformation.d4));
+
+		return ret;
+	}
 
 }
 #endif // _CMODELOGL_H_

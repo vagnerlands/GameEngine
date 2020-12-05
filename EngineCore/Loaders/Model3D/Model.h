@@ -227,7 +227,26 @@ private:
 		// TODO: make this look nicer - quick and dirty implementation
         if (hasAnimations)
         {
-            processedMesh.m_shaderName = "animatedModel";
+            if ((diffuseMaps.size() > 0)
+                && (specularMaps.size() > 0)
+                && (normalMaps.size()) > 0)
+            {
+                processedMesh.m_shaderName = "animatedModel_dns";
+            }
+            else if ((diffuseMaps.size() > 0)
+                && (specularMaps.size() > 0))
+            {
+                processedMesh.m_shaderName = "animatedModel_ds";
+            }
+            else if ((diffuseMaps.size() > 0)
+                && (normalMaps.size() > 0))
+            {
+                processedMesh.m_shaderName = "animatedModel_dn";
+            }
+            else
+            {
+                processedMesh.m_shaderName = "animatedModel";
+            }
         } 
         else if ((diffuseMaps.size() > 0) 
 			&& (specularMaps.size() > 0) 
