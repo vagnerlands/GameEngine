@@ -51,9 +51,10 @@ bool Game::PostRendererInitialize()
 	// Set the view parameters in renderer
 	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
 	// Update camera to be above ground
-	Graphics::IRenderer::mRenderer->GetCamera().m_position.SetY(5.f);
-	Graphics::IRenderer::mRenderer->GetCamera().m_position.SetZ(10.f);
-	Graphics::IRenderer::mRenderer->GetCamera().m_rotation.SetY(90.);
+	Graphics::IRenderer::mRenderer->GetCamera().MoveRight(5.f);
+	Graphics::IRenderer::mRenderer->GetCamera().MoveForward(10.f);
+	Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(5.f);
+	Graphics::IRenderer::mRenderer->GetCamera().RotateY(90.f);
 	// Update this camera type
 	Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Spectator;
 	// create model holder
@@ -67,20 +68,14 @@ bool Game::PostRendererInitialize()
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
-	Graphics::RenderScene::Instance().Add("astro", CModelHolder::s_pInstance->GetModelById("astroBoy_walk_Max.dae"));
-	//Graphics::RenderScene::Instance().Add("fortress1",	CModelHolder::s_pInstance->GetModelById("fortress.obj"));
-	//Graphics::RenderScene::Instance().Add("bob", CModelHolder::s_pInstance->GetModelById("boblampclean.md5mesh"));
+	Graphics::RenderScene::Instance().Add("warrior",	CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
-    //Graphics::RenderScene::Instance().Add("church", CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
+    //Graphics::RenderScene::Instance().Add("church",	CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
 	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
-	Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));	
+	//Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));	
 
-	//Graphics::RenderScene::Instance().Scale("bob", IvVector3(0.05, 0.05, 0.05));
-	//Graphics::RenderScene::Instance().Scale("fortress1", IvVector3(10.f, 10.f, 10.f));
-	//Graphics::RenderScene::Instance().Rotate("bob", IvQuat(IvVector3(1, 0, 0), -90));
-	Graphics::RenderScene::Instance().Rotate("astro", IvQuat(IvVector3(1, 0, 0), -90));
-	Graphics::RenderScene::Instance().Scale("astro", IvVector3(0.5, 0.5, 0.5));
-	Graphics::RenderScene::Instance().Translate("astro", IvVector3(0.0, 3., 0.5));
+	Graphics::RenderScene::Instance().Scale("warrior", IvVector3(.025f, .025f, .025f));
+	Graphics::RenderScene::Instance().Translate("warrior", IvVector3(0.0, 1., 0.5));
 	Graphics::RenderScene::Instance().CastShadow("astro", false);
 	// debug
 	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
@@ -100,9 +95,9 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces));
 	// update models location
 	//Graphics::RenderScene::Instance().Translate("church",	IvVector3(0.f, 0.0f, -2.f));
-	Graphics::RenderScene::Instance().Translate("bob",      IvVector3(-4.f, 0.0f, 5.f));
-	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4.f, 0.0f, 5.f));
-	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0.f, 0.0f, 5.f));
+	Graphics::RenderScene::Instance().Translate("bob",      IvVector3(-4.f, 0.2f, 5.f));
+	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4.f, 0.2f, 5.f));
+	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0.f, 0.2f, 5.f));
 
 
 	Graphics::RenderScene::Instance().Rotate("ogre1", IvQuat(IvVector3(0, 1, 0), -15));
@@ -192,8 +187,8 @@ void Game::UpdateObjects(float dt)
 	// Update Debug objects
 	// [Light]
 	m_lightAngle += 0.215f;
-	static float MoveRadius = 5.F;
-    IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius + -10.1136, 5, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius+5.65836);
+	static float MoveRadius = 7.F;
+    IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius + -10.1136, 7, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius+5.65836);
 	//IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) - 20.f);
 	Graphics::Ilumination::Instance().Update("main", lightLocation);
 	Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
