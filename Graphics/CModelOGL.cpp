@@ -101,6 +101,7 @@ bool Graphics::CModelOGL::Create()
 	
 }
 
+
 bool Graphics::CModelOGL::Apply(const Model& modelInfo)
 {
 	if (!m_vboBufferCreated)
@@ -292,6 +293,9 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 
 			if (m_hasShadow)
 			{
+				// update the boolean flag for "has shadows"
+				m_drawAttr[i].m_pShader->setUniform1i("cast_shadows", m_hasShadow);
+
 				// these parameters are important for the depth shadow map 
 				m_drawAttr[i].m_pShader->setUniform3f("viewPos",
 					Graphics::IRenderer::mRenderer->GetCamera().m_position.GetX(),
@@ -302,10 +306,19 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 				m_drawAttr[i].m_pShader->setUniform1i("depthMap", 2);
 				glErr = glGetError();
 			}
+        }		
 
-			if (m_hasAnimations)
+		glErr = glGetError();
+
+		if (m_hasAnimations)
+		{
+			for (UInt32 s = 0; s < m_boneTransforms.size(); s++) // move all matrices for actual model position to shader
 			{
-				for (UInt32 s = 0; s < m_boneTransforms.size(); s++) // move all matrices for actual model position to shader
+				if (isRenderingShadows)
+				{
+					Graphics::Ilumination::Instance().UpdateBoneTransformations((Float*)&m_boneTransforms[s], s);
+				}
+				else
 				{
 					m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&m_boneTransforms[s], m_bone_location[s]);
 				}
@@ -313,8 +326,10 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 		}
 
 		glErr = glGetError();
+
 		if (isRenderingShadows)
 		{
+			Graphics::Ilumination::Instance().HasAnimations(m_hasAnimations);
 			Graphics::Ilumination::Instance().UpdateModel(model);
 		}
 		else

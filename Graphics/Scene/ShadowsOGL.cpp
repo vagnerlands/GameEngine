@@ -53,6 +53,13 @@ bool ShadowsOGL::Initialize()
 		retVal = false;
 	}
 
+	// finding bones uniform location index
+	for (UInt32 i = 0; i < MAX_BONES; i++) // get location all matrices of bones
+	{
+		string name = "bones[" + to_string(i) + "]";// name like in shader
+		m_bone_location[i] = m_pShader->GetUniformLocation(name.c_str());
+	}
+
 	// time measurement
 	printf(" [*] loading shader [%s] %.2fms\n", shaderName, (float)(clock() - start));
 
@@ -138,6 +145,16 @@ UInt32 Graphics::ShadowsOGL::GetDepthMapId() const
 void Graphics::ShadowsOGL::SetModel(IvMatrix44 & model)
 {
     m_pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)model.GetFloatPtr());
+}
+
+void Graphics::ShadowsOGL::HasAnimations(bool value)
+{
+	m_pShader->setUniform1i("HasAnimations", value);
+}
+
+void Graphics::ShadowsOGL::UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex)
+{
+	m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, boneTransformMat44, m_bone_location[boneIndex]);
 }
 
 void Graphics::ShadowsOGL::BindShadowTexture()

@@ -87,6 +87,17 @@ void Graphics::Ilumination::UpdateModel(IvMatrix44 & model)
     m_pShadows->SetModel(model);
 }
 
+void Graphics::Ilumination::HasAnimations(bool value)
+{
+	// update the boolean flag for "has shadows"
+	m_pShadows->HasAnimations(value);
+}
+
+void Graphics::Ilumination::UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex)
+{
+	m_pShadows->UpdateBoneTransformations(boneTransformMat44, boneIndex);
+}
+
 void Graphics::Ilumination::BindShadowTexture()
 {
     m_pShadows->BindShadowTexture();
