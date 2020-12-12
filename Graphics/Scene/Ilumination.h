@@ -45,6 +45,10 @@ namespace Graphics
 
         void UpdateModel(IvMatrix44& model);
 
+		void HasAnimations(bool value);
+
+		void UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex);
+
         void BindShadowTexture();
 
         UInt32 GetShadowTexture();

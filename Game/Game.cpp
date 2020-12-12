@@ -64,25 +64,27 @@ bool Game::PostRendererInitialize()
 
 	IGame::mGame->SetFps(120);
 
+	
 	// Build a debug scenario
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
-	Graphics::RenderScene::Instance().Add("warrior",	CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
-	Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
+
+	Graphics::RenderScene::Instance().Add("Yoni1",CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	//Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+
+	Graphics::IModel* p = CModelHolder::s_pInstance->GetModelById("Cube.obj");
+	//p->AppendTexture("brick_n.bmp", "normalMap");
+	//p->AppendTexture("brick_n.bmp", "normalMap");
+	Graphics::RenderScene::Instance().Add("Ground1", p);
+	//Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
     //Graphics::RenderScene::Instance().Add("church",	CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
 	Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
-	//Graphics::RenderScene::Instance().Add("ogre1",		CModelHolder::s_pInstance->GetModelById("OgreOBJ.obj"));	
-
-	Graphics::RenderScene::Instance().Scale("warrior", IvVector3(.025f, .025f, .025f));
-	Graphics::RenderScene::Instance().Translate("warrior", IvVector3(0.0, 1., 0.5));
-	Graphics::RenderScene::Instance().CastShadow("astro", false);
+	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("cube.obj"));
 	// debug
-	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("planet.obj"));
-	Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
-	Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.1, 0.1, 0.1));
-	Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
-    //Graphics::RenderScene::Instance().Translate("lightDebug", IvVector3(-22.1136, 14.17, 6.65836));
+
 
 	// 6 faces of the sky - external interface must provide these
 	vector<std::string> faces;
@@ -94,15 +96,28 @@ bool Game::PostRendererInitialize()
 	faces.push_back("skyback.bmp");
 	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces));
 	// update models location
+
 	//Graphics::RenderScene::Instance().Translate("church",	IvVector3(0.f, 0.0f, -2.f));
-	Graphics::RenderScene::Instance().Translate("bob",      IvVector3(-4.f, 0.2f, 5.f));
-	Graphics::RenderScene::Instance().Translate("ogre1",	IvVector3(4.f, 0.2f, 5.f));
-	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0.f, 0.2f, 5.f));
+	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0.f, 0.5f, 5.f));
+	Graphics::RenderScene::Instance().Rotate("cyborg1", IvQuat(IvVector3(0, 1, 0), 125));	
+	Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
+	Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.3, 0.3, 0.3));
+	//Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
+	Graphics::RenderScene::Instance().Scale("Ground1", IvVector3(100.0, 1.0, 100.0 ));
 
+	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
+	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0.f, 0.5f, 0.f));
+	//Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
+	//Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
+	//Graphics::RenderScene::Instance().Scale("Yoni4", IvVector3(.020f, .020f, .020f));
 
-	Graphics::RenderScene::Instance().Rotate("ogre1", IvQuat(IvVector3(0, 1, 0), -15));
-	Graphics::RenderScene::Instance().Rotate("cyborg1", IvQuat(IvVector3(0, 1, 0), 125));
+	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0.0, 1., 0.5));
+	//Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(3.0, 1., 3.5));
+	//Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(-3.0, 1., 3.5));
+	//Graphics::RenderScene::Instance().Translate("Yoni4", IvVector3(2.0, 1., 2.5));
+
 	Graphics::RenderScene::Instance().Scale("SKY1", IvVector3(50,50,50));
+
 	// [Landscape]
 
 
@@ -111,8 +126,8 @@ bool Game::PostRendererInitialize()
 
 void Game::UpdateObjects(float dt)
 {
-    const Float cSpeed = .005f;
-	const Float cMouseSensibility = .001f;
+    const Float cSpeed = 15.0f;
+	const Float cMouseSensibility = 5.f;
 	if (mpGameInput->m_bKey[27])
 	{
 		mGame->Quit();
@@ -186,15 +201,12 @@ void Game::UpdateObjects(float dt)
 	}
 	// Update Debug objects
 	// [Light]
-	m_lightAngle += 0.215f;
+	m_lightAngle += 0.35f;
 	static float MoveRadius = 7.F;
     IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius + -10.1136, 7, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius+5.65836);
 	//IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) - 20.f);
 	Graphics::Ilumination::Instance().Update("main", lightLocation);
 	Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
-
-	// Update objects based on current timestamp
-	Graphics::RenderScene::Instance().Update(dt);
 
 }
 
@@ -202,6 +214,8 @@ void Game::Render(float dt)
 {
 	// set which buffers are used, set the modelview matrix and more
 	Graphics::IRenderer::mRenderer->PrepareFrame();
+	// Update objects based on current timestamp
+	Graphics::RenderScene::Instance().Update(dt);
 
 	/*const Float aspect = Graphics::IRenderer::mRenderer->GetAspect();
 

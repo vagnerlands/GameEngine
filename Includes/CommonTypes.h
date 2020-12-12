@@ -273,6 +273,8 @@ namespace Types
 
 #endif
 
+
+	static const UInt32 MAX_BONES = 100;
 	
 }
 

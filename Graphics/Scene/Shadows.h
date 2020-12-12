@@ -35,8 +35,11 @@ namespace Graphics
 
         virtual void SetModel(IvMatrix44& model) = 0;
 
-        virtual void BindShadowTexture() = 0;
+		virtual void HasAnimations(bool value) = 0;
 
+		virtual void UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex) = 0;
+
+        virtual void BindShadowTexture() = 0;
 
 	protected:
 

@@ -33,6 +33,10 @@ namespace Graphics
 
         void SetModel(IvMatrix44& model) override;
 
+		void HasAnimations(bool value) override;
+
+		void UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex) override;
+
         void BindShadowTexture() override;
 
 
@@ -47,6 +51,7 @@ namespace Graphics
 		cwc::glShader* m_pShader;
 		static const UInt32 SHADOW_WIDTH = 1024;
 		static const UInt32 SHADOW_HEIGHT = 1024;
+		UInt32 m_bone_location[MAX_BONES];
 
 		// copy operations
 		ShadowsOGL(const ShadowsOGL& other);

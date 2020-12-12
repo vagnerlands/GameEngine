@@ -18,8 +18,6 @@ namespace Graphics
 	public:
 		CModelOGL(string id);
 		virtual ~CModelOGL();
-
-		static const UInt32 MAX_BONES = 100;
         
         // create based on SModelData
         virtual bool Create() override;
