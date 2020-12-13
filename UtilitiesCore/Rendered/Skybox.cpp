@@ -3,7 +3,9 @@
 #include "CModelOGL.h"
 #include "glm/glm.hpp"
 
-UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& faces) : IDrawable()
+UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& faces) : 
+	Graphics::IDrawable(), 
+	m_skyModel(id, this)
 {
 	// constant normalized box size - shall be used for texture mapping too
 	const Float cBoxSize = 1.f;
@@ -12,36 +14,9 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 	// allocates a temporary buffer to create the cube
 	shared_ptr<Model> pModel = pSkyModel->Allocate();
 
-    m_hasShadow = false;
-
 	// mesh
 	Types::SModelMesh meshValue;
 	meshValue.m_shaderName = "sky";
-	// straight forward
-	/*meshValue.m_indices.push_back(0);
-	meshValue.m_indices.push_back(1);
-	meshValue.m_indices.push_back(2);
-	meshValue.m_indices.push_back(3);
-	meshValue.m_indices.push_back(3);
-	meshValue.m_indices.push_back(2);
-	meshValue.m_indices.push_back(6);
-	meshValue.m_indices.push_back(7);
-	meshValue.m_indices.push_back(7);
-	meshValue.m_indices.push_back(6);
-	meshValue.m_indices.push_back(5);
-	meshValue.m_indices.push_back(4);
-	meshValue.m_indices.push_back(4);
-	meshValue.m_indices.push_back(5);
-	meshValue.m_indices.push_back(1);
-	meshValue.m_indices.push_back(0);
-	meshValue.m_indices.push_back(0);
-	meshValue.m_indices.push_back(3);
-	meshValue.m_indices.push_back(7);
-	meshValue.m_indices.push_back(4);
-	meshValue.m_indices.push_back(1);
-	meshValue.m_indices.push_back(2);
-	meshValue.m_indices.push_back(6);
-	meshValue.m_indices.push_back(5);*/
 	meshValue.m_indices.push_back(0);
 	meshValue.m_indices.push_back(1);
 	meshValue.m_indices.push_back(2);
@@ -137,18 +112,15 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 	pSkyModel->Commit();
 
 	// finally, assign it to the sky model
-	m_skyModel = pSkyModel;
-    m_skyModel->SetHasShadow(false);
+	m_skyModel.ReplaceDrawable(pSkyModel);
+    m_skyModel.SetCastShadows(false);
 	// resize this
-	m_skyModel->SetScale(IvVector3(150, 150, 150));
+	m_skyModel.SetScale(IvVector3(150, 150, 150));
 }
 
 UtilitiesCore::Skybox::~Skybox()
 {
-	if (m_skyModel != nullptr)
-	{
-		delete m_skyModel;
-	}
+	m_skyModel.Release();
 }
 
 void UtilitiesCore::Skybox::Update(float dt)
@@ -156,15 +128,12 @@ void UtilitiesCore::Skybox::Update(float dt)
 	// perhaps if we wanted to make some real time effects on the sky, here is the place for this...
 }
 
-void UtilitiesCore::Skybox::Draw(float dt, bool isRenderingShadows)
+void UtilitiesCore::Skybox::Draw(const Graphics::SceneItem& , float dt, bool isRenderingShadows)
 {
 	// in case we're currently rendering shadows, the skybox shouldn't affect it
 	if (isRenderingShadows) return;
 	// otherwise, proceed regularly
-	if (m_skyModel != nullptr)
-	{
-		m_skyModel->Draw(dt, false);
-	}
+	m_skyModel.Render(dt, isRenderingShadows);
 }
 
 void UtilitiesCore::Skybox::Tick(float delta_time)

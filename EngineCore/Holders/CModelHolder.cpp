@@ -116,17 +116,12 @@ CModelHolder::GetModelById(const string& modelId)
 	return pRet;
 }
 
-void CModelHolder::DrawModelById(const string& modelId)
+void CModelHolder::Update(float dt)
 {
-	// then try to find it in the textures map
-	ModelObject::iterator result = m_mapModels.find(modelId);
-	if (result != m_mapModels.end())
-	{
-		result->second->Draw(0.f, false);
-	}
-	else
-	{
-		// cache miss - then add this texture to the process list
-		LoadModel(modelId);
+	// update all animations related to each model
+	for (auto& it : m_mapModels) 
+	{		
+		it.second->Update(dt);
 	}
 }
+

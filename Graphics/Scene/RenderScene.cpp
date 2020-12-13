@@ -7,17 +7,14 @@ Graphics::RenderScene & Graphics::RenderScene::Instance()
 }
 
 void Graphics::RenderScene::Add(const std::string& id, IDrawable* pDrawable)
-{
-	// update the identification
-	pDrawable->SetId(id);
-
+{	
 	// add to the current rendering database
-	m_items.push_back(pDrawable);
+	m_items.push_back(new SceneItem(id, pDrawable));
 }
 
 void Graphics::RenderScene::Translate(const std::string & id, const IvVector3 & newLocation)
 {
-	Graphics::IDrawable* pObj = find(id);
+	Graphics::SceneItem* pObj = find(id);
 	if (pObj != nullptr)
 	{
 		pObj->SetLocation(newLocation);
@@ -26,7 +23,7 @@ void Graphics::RenderScene::Translate(const std::string & id, const IvVector3 & 
 
 void Graphics::RenderScene::Rotate(const std::string & id, const IvQuat & newLocation)
 {
-	Graphics::IDrawable* pObj = find(id);
+	Graphics::SceneItem* pObj = find(id);
 	if (pObj != nullptr)
 	{
 		pObj->SetRotation(newLocation);
@@ -35,7 +32,7 @@ void Graphics::RenderScene::Rotate(const std::string & id, const IvQuat & newLoc
 
 void Graphics::RenderScene::Scale(const std::string & id, const IvVector3 & newScale)
 {
-	Graphics::IDrawable* pObj = find(id);
+	Graphics::SceneItem* pObj = find(id);
 	if (pObj != nullptr)
 	{
 		pObj->SetScale(newScale);
@@ -44,16 +41,16 @@ void Graphics::RenderScene::Scale(const std::string & id, const IvVector3 & newS
 
 void Graphics::RenderScene::CastShadow(const std::string & id, bool hasShadow)
 {
-	Graphics::IDrawable* pObj = find(id);
+	Graphics::SceneItem* pObj = find(id);
 	if (pObj != nullptr)
 	{
-		pObj->SetHasShadow(hasShadow);
+		pObj->SetCastShadows(hasShadow);
 	}
 }
 
 void Graphics::RenderScene::Remove(const std::string & id)
 {
-	Graphics::IDrawable* pObj = find(id);
+	Graphics::SceneItem* pObj = find(id);
 	if (pObj != nullptr)
 	{
 		m_items.remove(pObj);
@@ -61,31 +58,31 @@ void Graphics::RenderScene::Remove(const std::string & id)
 	}
 }
 
-void Graphics::RenderScene::Update(float dt) const
-{
-	for (list<Graphics::IDrawable*>::const_iterator it = m_items.begin(); it != m_items.end(); it++)
-	{
-		Graphics::IDrawable* pObj = *it;
-		pObj->Update(dt);
-	}
-}
+//void Graphics::RenderScene::Update(float dt) const
+//{
+//	for (const auto& it = m_items.begin(); it != m_items.end(); it++)
+//	{
+//		Graphics::SceneItem* pObj = *it;
+//		pObj->Update(dt);
+//	}
+//}
 
 void Graphics::RenderScene::Render(float dt, bool isRenderingShadows) const
 {
-	for (list<Graphics::IDrawable*>::const_iterator it = m_items.begin(); it != m_items.end(); it++)
+	for (auto& it = m_items.begin(); it != m_items.end(); it++)
 	{
-		Graphics::IDrawable* pObj = *it;
-		pObj->Draw(dt, isRenderingShadows);
+		Graphics::SceneItem* pObj = *it;
+		pObj->Render(dt, isRenderingShadows);
 	}
 }
 
-Graphics::IDrawable * Graphics::RenderScene::find(const std::string & id)
+Graphics::SceneItem* Graphics::RenderScene::find(const std::string & id)
 {
-	Graphics::IDrawable* retVal = nullptr;
+	Graphics::SceneItem* retVal = nullptr;
 
-	for (list<Graphics::IDrawable*>::iterator it = m_items.begin(); it != m_items.end(); it++)
+	for (auto& it = m_items.begin(); it != m_items.end(); it++)
 	{
-		Graphics::IDrawable* pObj = *it;
+		auto& pObj = *it;
 		if (*pObj == id)
 		{
 			retVal = *it;

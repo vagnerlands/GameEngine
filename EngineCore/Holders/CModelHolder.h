@@ -28,7 +28,8 @@ public:
     
 	void RemoveModel(const string& modelId);
 	Graphics::IModel* GetModelById(const string& modelId);
-	void DrawModelById(const string& modelId);
+
+	void Update(float dt);
 
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(const string& removeItem);

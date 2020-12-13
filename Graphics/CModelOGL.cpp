@@ -5,6 +5,7 @@
 #include "IRenderer.h"
 #include "Ilumination.h"
 #include "IvMatrix44.h"
+#include "SceneItem.h"
 #include <time.h> // put this somewhere else, create a lib for time
 #include <WinBase.h> // put this somewhere else
 
@@ -17,8 +18,6 @@ Graphics::CModelOGL::CModelOGL(string modelName) :
 	m_elementBufferObject.clear();
 	m_drawAttr.clear();
 	m_vertexBufferObject.clear();
-	// safe initialization of rotation
-	m_rotation.Identity();
 }
 
 Graphics::CModelOGL::~CModelOGL()
@@ -225,11 +224,11 @@ void Graphics::CModelOGL::Update(float dt)
 	}
 }
 
-void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
+void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingShadows)
 {
 	// nothing to do here in case we're currently preparing the shadow map
 	// and this object doesn't block light
-	if ((isRenderingShadows) && (!m_hasShadow))
+	if ((isRenderingShadows) && (!si.HasShadows()))
 	{
 		return;
 	}
@@ -254,11 +253,11 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 	scaleModel.Identity();
 	// calculates idependently each transformation
 	// rotate transformation
-	rotateModel.Rotation(m_rotation);
+	rotateModel.Rotation(si.GetRotation());
 	// scale transformation
-	scaleModel.Scaling(m_scale);
+	scaleModel.Scaling(si.GetScale());
 	// translation transformation
-	translateModel.Translation(m_location);
+	translateModel.Translation(si.GetLocation());
 	// combine both transformations
 	model = translateModel * scaleModel * rotateModel;
 
@@ -286,15 +285,15 @@ void Graphics::CModelOGL::Draw(float dt, bool isRenderingShadows)
 
 			m_drawAttr[i].m_pShader->setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
 			m_drawAttr[i].m_pShader->setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
-			if (m_hasShadow)
+			if (si.HasShadows())
 			{
 				m_drawAttr[i].m_pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
 			}
 
-			if (m_hasShadow)
+			if (si.HasShadows())
 			{
 				// update the boolean flag for "has shadows"
-				m_drawAttr[i].m_pShader->setUniform1i("cast_shadows", m_hasShadow);
+				m_drawAttr[i].m_pShader->setUniform1i("cast_shadows", si.HasShadows());
 
 				// these parameters are important for the depth shadow map 
 				m_drawAttr[i].m_pShader->setUniform3f("viewPos",

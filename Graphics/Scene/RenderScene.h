@@ -5,6 +5,7 @@
 #include "IDrawable.h"
 #include "IvVector3.h"
 #include "IvQuat.h"
+#include "SceneItem.h"
 #include <list>
 
 using namespace Types;
@@ -41,19 +42,21 @@ namespace Graphics
 		virtual void Remove(const std::string& id);
 		
 
-		virtual void Update(float dt) const;
+		//virtual void Update(float dt) const;
 
 		virtual void Render(float dt, bool isRenderingShadows = false) const;
 
 	protected:
-		list<Graphics::IDrawable*> m_items;
+		//list<Graphics::IDrawable*> m_items;
+		typedef list<Graphics::SceneItem*> DatabaseSceneItemsType;
+		DatabaseSceneItemsType m_items;
 
 		RenderScene()
 		{
 
 		}
 
-		Graphics::IDrawable* find(const std::string& id);
+		Graphics::SceneItem* find(const std::string& id);
 
 	private:
 		// copy operations

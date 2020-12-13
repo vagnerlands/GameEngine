@@ -9,6 +9,8 @@
 #include "CommonTypes.h"
 #include "OGLTypes.h"
 #include "IDrawable.h"
+#include "SceneItem.h"
+
 #include <vector>
 
 using namespace Types;
@@ -25,12 +27,12 @@ namespace UtilitiesCore
 		virtual ~Skybox();
 
 		virtual void Update(float dt) override;
-		virtual void Draw(float dt, bool isRenderingShadows) override;
+		virtual void Draw(const class Graphics::SceneItem& si, float dt, bool isRenderingShadows) override;
 		virtual void Tick(float delta_time);
 
 	protected:
 		// generated sky model
-		Graphics::IDrawable* m_skyModel;
+		Graphics::SceneItem m_skyModel;
 
 	};
 
