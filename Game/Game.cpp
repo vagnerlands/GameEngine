@@ -71,9 +71,9 @@ bool Game::PostRendererInitialize()
 	// [Models]
 
 	Graphics::RenderScene::Instance().Add("Yoni1",CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
-	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
-	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
-	//Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 
 	Graphics::IModel* p = CModelHolder::s_pInstance->GetModelById("Cube.obj");
 	//p->AppendTexture("brick_n.bmp", "normalMap");
@@ -106,15 +106,14 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Scale("Ground1", IvVector3(100.0, 1.0, 100.0 ));
 
 	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
-	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0.f, 0.5f, 0.f));
-	//Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
-	//Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
-	//Graphics::RenderScene::Instance().Scale("Yoni4", IvVector3(.020f, .020f, .020f));
+	Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
+	Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
+	Graphics::RenderScene::Instance().Scale("Yoni4", IvVector3(.020f, .020f, .020f));
 
 	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0.0, 1., 0.5));
-	//Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(3.0, 1., 3.5));
-	//Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(-3.0, 1., 3.5));
-	//Graphics::RenderScene::Instance().Translate("Yoni4", IvVector3(2.0, 1., 2.5));
+	Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(3.0, 1., 3.5));
+	Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(-3.0, 1., 3.5));
+	Graphics::RenderScene::Instance().Translate("Yoni4", IvVector3(2.0, 1., 2.5));
 
 	Graphics::RenderScene::Instance().Scale("SKY1", IvVector3(50,50,50));
 
@@ -215,7 +214,7 @@ void Game::Render(float dt)
 	// set which buffers are used, set the modelview matrix and more
 	Graphics::IRenderer::mRenderer->PrepareFrame();
 	// Update objects based on current timestamp
-	Graphics::RenderScene::Instance().Update(dt);
+	CModelHolder::s_pInstance->Update(dt);
 
 	/*const Float aspect = Graphics::IRenderer::mRenderer->GetAspect();
 

@@ -34,8 +34,8 @@ namespace Graphics
 
 	private:
 		// copy operations
-		IModel(const IModel& other);
-		IModel& operator=(const IModel& other);
+		IModel(const IModel& other) = delete;
+		IModel& operator=(const IModel& other) = delete;
 	};
 
 
