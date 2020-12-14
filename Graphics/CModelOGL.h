@@ -5,6 +5,7 @@
 #include "ogltypes.h"
 #include "IModel.h"
 #include "Shaders\glsl.h"
+#include "IMutex.h"
 
 #include "IvMatrix44.h"
 
@@ -12,7 +13,12 @@ using namespace Types;
 
 namespace Graphics
 {
-
+	enum eBuffering
+	{
+		eBuffering_First = 0,
+		eBuffering_Second,
+		eBuffering_Total,
+	};
 	class CModelOGL : public IModel
 	{
 	public:
@@ -90,7 +96,9 @@ namespace Graphics
 		void boneTransform(double time_in_sec, vector<aiMatrix4x4>& transforms);
 		SBoneInformation m_boneInformation;
 		// placeholder for animations purposes
-		vector<aiMatrix4x4> m_boneTransforms;
+		IMutex* m_pBoneMutex;
+		vector<aiMatrix4x4> m_boneTransforms[eBuffering_Total];
+		eBuffering m_currentBuffer;
 		IvMatrix44 castToIvMatrix44(const aiMatrix4x4& input) const;
 	};
 

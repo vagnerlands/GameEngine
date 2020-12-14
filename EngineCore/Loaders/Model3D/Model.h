@@ -39,6 +39,12 @@ public:
 		
     }
 
+    ~Model()
+    {
+        textures_loaded = vector<Types::SModelTexture>();
+        meshes = vector<Types::SModelMesh>();
+    }
+
 	void Load(string const& path, bool gamma = false)
 	{
 		gammaCorrection = gamma;
@@ -182,8 +188,8 @@ private:
         std::vector<SModelTexture> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, "normalMap");
         processedMesh.m_textures.insert(processedMesh.m_textures.end(), normalMaps.begin(), normalMaps.end());
         // 4. height maps
-        std::vector<SModelTexture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
-        processedMesh.m_textures.insert(processedMesh.m_textures.end(), heightMaps.begin(), heightMaps.end());
+        std::vector<SModelTexture> ambientMap = loadMaterialTextures(material, aiTextureType_AMBIENT, "ambientMap");
+        processedMesh.m_textures.insert(processedMesh.m_textures.end(), ambientMap.begin(), ambientMap.end());
 
         if ((mesh->mNumBones > 0) && (m_pBoneInformation))
         {

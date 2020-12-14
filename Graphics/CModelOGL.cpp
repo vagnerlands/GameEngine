@@ -6,12 +6,13 @@
 #include "Ilumination.h"
 #include "IvMatrix44.h"
 #include "SceneItem.h"
+#include "MutexFactory.h"
 #include <time.h> // put this somewhere else, create a lib for time
 #include <WinBase.h> // put this somewhere else
 
 
 Graphics::CModelOGL::CModelOGL(string modelName) :
-	m_vboBufferCreated(false), m_hasAnimations(false), m_isWireMode(false)
+	m_vboBufferCreated(false), m_hasAnimations(false), m_isWireMode(false), m_currentBuffer(eBuffering_First), m_pBoneMutex(MutexFactory::Instance().Create("Bones"))
 {
 	// only for debug purposes
 	m_modelName = modelName;
@@ -218,9 +219,12 @@ void Graphics::CModelOGL::Update(float dt)
 {
 	// if this has 
 	if (m_hasAnimations)
-	{
-		m_boneTransforms = vector<aiMatrix4x4>();
-		boneTransform((double)dt, m_boneTransforms);
+	{		
+		m_boneTransforms[m_currentBuffer].resize(m_boneInformation.m_num_bones);
+		boneTransform((double)dt, m_boneTransforms[m_currentBuffer]);
+		m_pBoneMutex->mutexLock();
+		m_currentBuffer = (m_currentBuffer == eBuffering_First) ? eBuffering_Second : eBuffering_First;
+		m_pBoneMutex->mutexUnlock();
 	}
 }
 
@@ -311,17 +315,20 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 
 		if (m_hasAnimations)
 		{
-			for (UInt32 s = 0; s < m_boneTransforms.size(); s++) // move all matrices for actual model position to shader
+			m_pBoneMutex->mutexLock();
+			eBuffering buffer = m_currentBuffer == eBuffering_First ? eBuffering_Second : eBuffering_First;
+			for (UInt32 s = 0; s < m_boneTransforms[buffer].size(); s++) // move all matrices for actual model position to shader
 			{
 				if (isRenderingShadows)
 				{
-					Graphics::Ilumination::Instance().UpdateBoneTransformations((Float*)&m_boneTransforms[s], s);
+					Graphics::Ilumination::Instance().UpdateBoneTransformations((Float*)&m_boneTransforms[buffer][s], s);
 				}
 				else
 				{
-					m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&m_boneTransforms[s], m_bone_location[s]);
+					m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&m_boneTransforms[buffer][s], m_bone_location[s]);
 				}
 			}
+			m_pBoneMutex->mutexUnlock();
 		}
 
 		glErr = glGetError();
@@ -668,8 +675,6 @@ void Graphics::CModelOGL::boneTransform(double time_in_sec, vector<aiMatrix4x4>&
 	// animation_time - ���� ������� ������ � ���� ������ �� ������ �������� (�� ������� �������� ����� � �������� )
 
 	readNodeHierarchy(animation_time, m_Importer.GetScene()->mRootNode, identity_matrix);
-
-	transforms.resize(m_boneInformation.m_num_bones);
 
 	for (UInt32 i = 0; i < m_boneInformation.m_num_bones; i++)
 	{

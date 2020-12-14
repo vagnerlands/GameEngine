@@ -1528,7 +1528,13 @@ GLint compiled = 0;
   glGetObjectParameterivARB(ShaderObject, GL_COMPILE_STATUS, &compiled);
   CHECK_GL_ERROR();
 
-  if (compiled) is_compiled=true;
+  if (compiled)
+  {
+      // free loaded source
+      delete[] ShaderSource;
+      ShaderSource = 0;
+      is_compiled = true;
+  }
  
 return is_compiled;
 }

@@ -19,6 +19,7 @@ public:
 
 protected:
 
+	virtual void ExecuteBackground();
 	virtual void UpdateObjects(float dt);
 	virtual void Render(float dt);
 
