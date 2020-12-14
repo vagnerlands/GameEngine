@@ -137,6 +137,13 @@ namespace Types
 
     struct SModelMesh
     {
+		~SModelMesh()
+		{
+			m_textures = vector<SModelTexture>();
+			m_indices = vector<UInt32>();
+			m_vertices = vector<SModelVertex>();
+			bones_id_weights_for_each_vertex = vector<SVertexBoneData>();
+		}
         vector<SModelVertex>    m_vertices;
         vector<UInt32>          m_indices;
         vector<SModelTexture>   m_textures;
@@ -145,29 +152,7 @@ namespace Types
 		// shader name (Model.h suggests a name)
 		string					m_shaderName = "model";
     };
-
-
-	struct SModelData
-	{
-		virtual ~SModelData()
-		{
-
-		}
-
-		SModelData() 
-		{
-			
-		}
-
-
-		vector<UInt16> m_indexes;
-		vector<IvVector2> m_textures;
-		vector<IvVector3> m_normals;
-		vector<IvVector3> m_vertices;
-		vector<SMaterialAttr> m_material;
-		vector<SFaceAttr> m_faces;
-	};
-
+	
 }
 
 #endif //_OGLTYPES_H_

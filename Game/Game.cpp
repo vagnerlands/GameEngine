@@ -14,6 +14,7 @@
 // debug
 #include "CModelOGL.h"
 #include "Rendered/Skybox.h"
+#include "IClock.h"
 
 #include "GL/glut.h"
 #include "CGameController.h"
@@ -70,10 +71,10 @@ bool Game::PostRendererInitialize()
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
 
-	Graphics::RenderScene::Instance().Add("Yoni1",CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
-	Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
-	Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
-	Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	//Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 
 	Graphics::IModel* p = CModelHolder::s_pInstance->GetModelById("Cube.obj");
 	//p->AppendTexture("brick_n.bmp", "normalMap");
@@ -121,6 +122,12 @@ bool Game::PostRendererInitialize()
 
 
 	return true;
+}
+
+void Game::ExecuteBackground()
+{
+	// Update objects based on current timestamp
+	CModelHolder::s_pInstance->Update(mClock->GetTimeInMili());
 }
 
 void Game::UpdateObjects(float dt)
@@ -213,8 +220,6 @@ void Game::Render(float dt)
 {
 	// set which buffers are used, set the modelview matrix and more
 	Graphics::IRenderer::mRenderer->PrepareFrame();
-	// Update objects based on current timestamp
-	CModelHolder::s_pInstance->Update(dt);
 
 	/*const Float aspect = Graphics::IRenderer::mRenderer->GetAspect();
 
