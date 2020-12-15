@@ -30,7 +30,7 @@ bool CModelHolder::Create(const string& pathToModelFile)
 		// creates instance of CModelHolder
 		s_pInstance = new CModelHolder(pathToModelFile);
 		// tries to open the resource file - out of the constructor so errors may be reported
-		if ((s_pInstance != nullptr) && (s_pInstance->m_modelFiles->VOpen()))
+		if (s_pInstance != nullptr) /*&& (s_pInstance->m_modelFiles->VOpen()))*/
 		{
 			return true;
 		}
@@ -45,13 +45,9 @@ CModelHolder::OnRemoveEvent(const string& removeItem)
 }
 
 CModelHolder::CModelHolder(const string& pathToResources)
-	: m_modelFiles(new CResourceZipFile(pathToResources.data(), this->OnRemoveEvent))
+	/*: m_modelFiles(new CResourceZipFile(pathToResources.data(), this->OnRemoveEvent))*/
 {
 	m_pModelContentMapMutex = MutexFactory::Instance().Create("ModelContentMap");
-	if (m_pModelContentMapMutex == NULL)
-	{
-        DEBUG_OUT("Failed to create Mutex");
-	}
 }
 
 Graphics::IModel*

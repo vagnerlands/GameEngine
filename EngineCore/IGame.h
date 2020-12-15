@@ -42,7 +42,9 @@ namespace EngineCore
 		// pauses the application without finalizing the application
 		inline void Pause() { mPaused = true; }
 		inline void Continue() { mPaused = false; }
-		inline bool IsRunning() { return !mPaused; }
+		inline bool IsRunning() { return (!mPaused) && (!mQuit); }
+		inline void IsReadyToClose() { mReadyToClose = true; }
+		inline bool ReadyToClose() { return mReadyToClose; }
 		// is fixed frames per second
 		inline Int32 GetFps()
 		{
@@ -66,7 +68,10 @@ namespace EngineCore
 		virtual void UpdateObjects(float dt) = 0;
 		virtual void Render(float dt) = 0;
 
+		// user has requested to quit
 		bool mQuit;
+		// only start closing the applications once we're ready to close
+		bool mReadyToClose;
 		bool mPaused;
 		Int32 mFps;
 

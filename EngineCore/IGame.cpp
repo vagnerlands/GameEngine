@@ -34,11 +34,7 @@ bool EngineCore::IGame::PostRendererInitialize()
 
 void EngineCore::IGame::ExecuteBackground()
 {
-	// do something here
-
-	// testing it
-	static int vagner = 0;
-	vagner++;
+	// this method should be overloaded
 }
 
 
@@ -58,7 +54,7 @@ void EngineCore::IGame::Display()
 
 		mClock->Hold(mGame->GetFps());
 
-		if (mQuit)
+		if (ReadyToClose())
 		{
 			gDebugger.Flush();
 			// kill all background threads
@@ -76,6 +72,7 @@ void EngineCore::IGame::Display()
 EngineCore::IGame::IGame() :
 	mPaused(false), 
 	mQuit(false),
+	mReadyToClose(false),
 	mFps(0)
 {
 	// 

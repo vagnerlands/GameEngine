@@ -35,11 +35,6 @@ CTextureHolder::CTextureHolder(const string& pathToTexturesFile, UInt32 maxAlloc
 {
 	// cross platform implementation for mutex creation
 	m_textureContentMapMutex = MutexFactory::Instance().Create("TextureMapMutex");
-
-	if (m_textureContentMapMutex != NULL)
-    {
-        m_textureContentMapMutex->createMutex("TextureContentMap");
-    }
 }
 
 void 
