@@ -47,7 +47,7 @@ private:
 	IMutex* m_pModelContentMapMutex;
 
 	// file content may be found here
-	IResourceFile* m_modelFiles;
+	//IResourceFile* m_modelFiles;
 	// cache database (allocated with fixed and known size)
 	//CResCache m_cacheDb;
 

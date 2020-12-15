@@ -32,11 +32,6 @@ CShaderHolder::OnRemoveEvent(string removeItem)
 CShaderHolder::CShaderHolder()
 {
 	m_pShaderContentMapMutex = MutexFactory::Instance().Create("ShaderMutex");
-	if (m_pShaderContentMapMutex != NULL)
-	{
-		m_pShaderContentMapMutex->createMutex("ShaderContentMap");
-	}
-	
 }
 
 void 

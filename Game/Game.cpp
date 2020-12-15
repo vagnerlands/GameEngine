@@ -61,7 +61,7 @@ bool Game::PostRendererInitialize()
 	// create model holder
 	CModelHolder::s_pInstance->Create(".\\Assets\\model.zip");
     // 50mb allocation for VRAM textures
-	CTextureHolder::s_pInstance->Create(".\\Assets\\textures.zip", 200U*1024U*1024U);
+	CTextureHolder::s_pInstance->Create(".\\Assets\\textures.zip", 100U*1024U*1024U);
 
 	IGame::mGame->SetFps(120);
 
@@ -70,8 +70,15 @@ bool Game::PostRendererInitialize()
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
-
-	Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	const Int32 cWarriors = 10;
+	for (Int32 i = 0; i < cWarriors; ++i)
+	{	
+		IvVector3 WarriorPosition(-8 + i * 2.5, 1., 0.5);
+		Graphics::RenderScene::Instance().Add("Yoni" + i, CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+		Graphics::RenderScene::Instance().Scale("Yoni" + i, IvVector3(.020f, .020f, .020f));
+		Graphics::RenderScene::Instance().Translate("Yoni" + i, WarriorPosition);
+	}
+	//Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
@@ -106,15 +113,15 @@ bool Game::PostRendererInitialize()
 	//Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
 	Graphics::RenderScene::Instance().Scale("Ground1", IvVector3(100.0, 1.0, 100.0 ));
 
-	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
-	Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
-	Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
-	Graphics::RenderScene::Instance().Scale("Yoni4", IvVector3(.020f, .020f, .020f));
+	//Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
+	//Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
+	//Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
+	//Graphics::RenderScene::Instance().Scale("Yoni4", IvVector3(.020f, .020f, .020f));
 
-	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0.0, 1., 0.5));
-	Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(3.0, 1., 3.5));
-	Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(-3.0, 1., 3.5));
-	Graphics::RenderScene::Instance().Translate("Yoni4", IvVector3(2.0, 1., 2.5));
+	//Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0.0, 1., 0.5));
+	//Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(3.0, 1., 3.5));
+	//Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(-3.0, 1., 3.5));
+	//Graphics::RenderScene::Instance().Translate("Yoni4", IvVector3(2.0, 1., 2.5));
 
 	Graphics::RenderScene::Instance().Scale("SKY1", IvVector3(50,50,50));
 
@@ -128,6 +135,7 @@ void Game::ExecuteBackground()
 {
 	// Update objects based on current timestamp
 	CModelHolder::s_pInstance->Update(mClock->GetTimeInMili());
+	//Graphics::RenderScene::Instance().Update(mClock->GetTimeInMili());
 }
 
 void Game::UpdateObjects(float dt)
