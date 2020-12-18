@@ -53,20 +53,21 @@ void EngineCore::IGame::Display()
 		Render(mClock->GetTimeInMili());
 
 		mClock->Hold(mGame->GetFps());
-
-		if (ReadyToClose())
-		{
-			gDebugger.Flush();
-			// kill all background threads
-			CThreadHolder::instance()->DestroyAll();
-			// release the rendering resources
-			Graphics::IRenderer::Destroy();
-			// release other game related resources
-			EngineCore::IGame::Destroy();
-			// exit with no error if get to this point
-			exit(0);
-		}
 	}
+
+	if (ReadyToClose())
+	{
+		gDebugger.Flush();
+		// kill all background threads
+		CThreadHolder::instance()->DestroyAll();
+		// release the rendering resources
+		Graphics::IRenderer::Destroy();
+		// release other game related resources
+		EngineCore::IGame::Destroy();
+		// exit with no error if get to this point
+		exit(0);
+	}
+
 }
 
 EngineCore::IGame::IGame() :
