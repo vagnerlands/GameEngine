@@ -36,6 +36,8 @@ namespace Graphics
 		// Update ilumination location
 		virtual void Update(const std::string& id, const IvVector3& newLocation);
 
+		void IncreaseAttenuationBy(const std::string& id, const float attenuationIncrease);
+
 		// Update ilumination location
 		virtual void Remove(const std::string& id);
 
@@ -46,6 +48,8 @@ namespace Graphics
         void UpdateModel(IvMatrix44& model);
 
 		void HasAnimations(bool value);
+
+		float GetLightAttenuation() const;
 
 		void UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex);
 

@@ -34,6 +34,10 @@ Game::Game() :
     m_lightAngle(0.F)
 {
 	mpGameInput = new CGameController(1280, 720);
+	KeyBinderDelegator<KeyBinderT>::Instance().BindKey(this);
+	KeyBinderDelegator<KeyBinderY>::Instance().BindKey(this);
+	KeyBinderDelegator<KeyBinderG>::Instance().BindKey(this);
+	KeyBinderDelegator<KeyBinderH>::Instance().BindKey(this);
 }
 
 Game::~Game()
@@ -73,12 +77,12 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
 	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0,0.5,0));
-	Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"));
-	Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
-	Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(-3, 0.5, 0));
-	Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"));
-	Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
-	Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(3, 0.5, 0));
+	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"));
+	//Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
+	//Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(-3, 0.5, 0));
+	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"));
+	//Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
+	//Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(3, 0.5, 0));
 	//Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
@@ -224,6 +228,27 @@ void Game::UpdateObjects(float dt)
 	Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
 
 }
+
+void Game::OnKeyEvent(const KeyBinderT& e)
+{
+	Graphics::RenderScene::Instance().Change("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"));
+}
+
+void Game::OnKeyEvent(const KeyBinderY& e)
+{
+	Graphics::RenderScene::Instance().Change("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+}
+
+void Game::OnKeyEvent(const KeyBinderG& e)
+{
+	Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", 0.0015f);
+}
+
+void Game::OnKeyEvent(const KeyBinderH& e)
+{
+	Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", -0.0015f);
+}
+
 
 void Game::Render(float dt)
 {

@@ -12,6 +12,16 @@ void Graphics::RenderScene::Add(const std::string& id, IDrawable* pDrawable)
 	m_items.push_back(new SceneItem(id, pDrawable));
 }
 
+void Graphics::RenderScene::Change(const std::string& id, IDrawable* pDrawable)
+{
+	Graphics::SceneItem* pObj = find(id);
+	if (pObj != nullptr)
+	{
+		pObj->ReplaceDrawable(pDrawable);
+	}
+
+}
+
 void Graphics::RenderScene::Translate(const std::string & id, const IvVector3 & newLocation)
 {
 	Graphics::SceneItem* pObj = find(id);

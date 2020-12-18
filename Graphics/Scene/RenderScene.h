@@ -26,6 +26,9 @@ namespace Graphics
 
 		virtual void Add(const std::string& id, IDrawable* pDrawable);
 
+		// replace the current model by another model
+		virtual void Change(const std::string& id, IDrawable* pDrawable);
+
 		// Update ilumination location
 		virtual void Translate(const std::string& id, const IvVector3& newLocation);
 

@@ -292,12 +292,10 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 			if (si.HasShadows())
 			{
 				m_drawAttr[i].m_pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
-			}
-
-			if (si.HasShadows())
-			{
 				// update the boolean flag for "has shadows"
 				m_drawAttr[i].m_pShader->setUniform1i("cast_shadows", si.HasShadows());
+
+				m_drawAttr[i].m_pShader->setUniform1f("light_attenuation", Graphics::Ilumination::Instance().GetLightAttenuation());
 
 				// these parameters are important for the depth shadow map 
 				m_drawAttr[i].m_pShader->setUniform3f("viewPos",

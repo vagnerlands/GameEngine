@@ -2,10 +2,15 @@
 #define _GAME_H_
 
 #include "IGame.h"
+#include "CGameController.h"
 
-class CGameController;
+//class CGameController;
 
-class Game : public EngineCore::IGame
+class Game : public EngineCore::IGame,
+	public KeyBinderT,
+	public KeyBinderY,
+	public KeyBinderG,
+	public KeyBinderH
 {
 public:
 	Game();
@@ -16,6 +21,11 @@ public:
 	{
 		return mpGameInput;
 	}
+
+	void OnKeyEvent(const KeyBinderT& e) override;
+	void OnKeyEvent(const KeyBinderY& e) override;
+	void OnKeyEvent(const KeyBinderG& e) override;
+	void OnKeyEvent(const KeyBinderH& e) override;
 
 protected:
 

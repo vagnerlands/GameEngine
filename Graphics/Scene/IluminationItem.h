@@ -46,10 +46,15 @@ namespace Graphics
 
 		virtual ELightType GetDirection() const;
 
+		Float GetLightAttenuation() const;
+
+		void IncreaseAttenuation(float increaseValue);
+
 	protected:
 		IvVector3	m_location;
 		ELightType	m_type;
 		std::string m_id;
+		float		m_lightAttenuation;
 
 	private:
 		// copy operations
@@ -65,6 +70,20 @@ namespace Graphics
 	inline  ELightType IluminationItem::GetDirection() const
 	{
 		return m_type;
+	}
+
+	inline  Float IluminationItem::GetLightAttenuation() const
+	{
+		return m_lightAttenuation;
+	}
+
+	inline void IluminationItem::IncreaseAttenuation(float increaseValue)
+	{
+		m_lightAttenuation += increaseValue;
+		if (m_lightAttenuation < 0.f)
+		{
+			m_lightAttenuation = 0.f;
+		}
 	}
 
 }

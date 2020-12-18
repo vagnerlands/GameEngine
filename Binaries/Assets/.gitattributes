@@ -2,4 +2,6 @@ textures.zip filter=lfs diff=lfs merge=lfs -text
 Warrior.dae filter=lfs diff=lfs merge=lfs -text
 Warrior_Attack.dae filter=lfs diff=lfs merge=lfs -text
 Warrior_Taunt.dae filter=lfs diff=lfs merge=lfs -text
+Castle OBJ.obj filter=lfs diff=lfs merge=lfs -text
+Church-scene.obj filter=lfs diff=lfs merge=lfs -text
 
