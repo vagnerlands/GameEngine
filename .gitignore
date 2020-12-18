@@ -18,3 +18,9 @@ Game/Release/
 Game/Debug.txt
 
 .vs/
+Libs/x64/Debug/UtilitiesCore.pdb
+Libs/x64/Debug/UtilitiesCore.lib
+Libs/x64/Debug/Graphics.pdb
+Libs/x64/Debug/Graphics.lib
+Libs/x64/Debug/EngineCore.pdb
+Libs/x64/Debug/EngineCore.lib
