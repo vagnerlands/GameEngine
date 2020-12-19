@@ -53,6 +53,21 @@ void Graphics::Ilumination::IncreaseAttenuationBy(const std::string& id, const f
 	}
 }
 
+void Graphics::Ilumination::SetLightColor(const std::string& id, const IvVector3& lightColor)
+{
+	for (std::list<Graphics::IluminationItem*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
+	{
+		// de-reference the iterator to the list type
+		Graphics::IluminationItem* pLightObj = *it;
+		// calls overloaded operator==() for comparisson
+		if (*pLightObj == id)
+		{
+			pLightObj->SetLightColor(lightColor);
+			break;
+		}
+	}
+}
+
 void Graphics::Ilumination::Remove(const std::string & id)
 {
 	for (std::list<Graphics::IluminationItem*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
@@ -111,6 +126,11 @@ void Graphics::Ilumination::HasAnimations(bool value)
 float Graphics::Ilumination::GetLightAttenuation() const
 {
 	return (*m_lights.begin())->GetLightAttenuation();
+}
+
+const IvVector3& Graphics::Ilumination::GetLightColor() const
+{
+	return (*m_lights.begin())->GetLightColor();
 }
 
 void Graphics::Ilumination::UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex)

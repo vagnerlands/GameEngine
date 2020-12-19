@@ -291,25 +291,20 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 			m_drawAttr[i].m_pShader->setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
 			if (si.HasShadows())
 			{
-				m_drawAttr[i].m_pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
-				// update the boolean flag for "has shadows"
-				m_drawAttr[i].m_pShader->setUniform1i("cast_shadows", si.HasShadows());
-
-				m_drawAttr[i].m_pShader->setUniform1f("light_attenuation", Graphics::Ilumination::Instance().GetLightAttenuation());
-
-				// these parameters are important for the depth shadow map 
 				m_drawAttr[i].m_pShader->setUniform3f("viewPos",
 					Graphics::IRenderer::mRenderer->GetCamera().m_position.GetX(),
 					Graphics::IRenderer::mRenderer->GetCamera().m_position.GetY(),
 					Graphics::IRenderer::mRenderer->GetCamera().m_position.GetZ());
+				m_drawAttr[i].m_pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
+				const IvVector3& lc = Graphics::Ilumination::Instance().GetLightColor();
+				m_drawAttr[i].m_pShader->setUniform3f("light_color", lc.GetX(), lc.GetY(), lc.GetZ());
+				// update the boolean flag for "has shadows"
+				m_drawAttr[i].m_pShader->setUniform1i("cast_shadows", si.HasShadows());
+				m_drawAttr[i].m_pShader->setUniform1f("light_attenuation", Graphics::Ilumination::Instance().GetLightAttenuation());
 				m_drawAttr[i].m_pShader->setUniform1f("far_plane", Graphics::IRenderer::mRenderer->GetFar());
-				glErr = glGetError();
 				m_drawAttr[i].m_pShader->setUniform1i("depthMap", 2);
-				glErr = glGetError();
 			}
         }		
-
-		glErr = glGetError();
 
 		if (m_hasAnimations)
 		{
@@ -328,8 +323,6 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 			}
 			m_pBoneMutex->mutexUnlock();
 		}
-
-		glErr = glGetError();
 
 		if (isRenderingShadows)
 		{
@@ -402,9 +395,6 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 		{
 			glActiveTexture(GL_TEXTURE0);
 			glUseProgram(0);
-			glErr = glGetError();
-			if (glErr != 0)
-				DEBUG_OUT("Failed halting shader");
 		}
 	}
 }

@@ -189,9 +189,10 @@
     <ClInclude Include="Holders\CThreadHolder.h" />
     <ClInclude Include="IGame.h" />
     <ClInclude Include="Input\CGameController.h" />
-    <ClInclude Include="Input\IEventInput.h" />
+    <ClInclude Include="Input\IKeyEvent.h" />
     <ClInclude Include="Input\IKeyboardHandler.h" />
     <ClInclude Include="Input\IMouseHandler.h" />
+    <ClInclude Include="Input\Keys.h" />
     <ClInclude Include="Loaders\Images\CBmp.h" />
     <ClInclude Include="Loaders\Images\CFactory2dImage.h" />
     <ClInclude Include="Loaders\Images\CPng.h" />

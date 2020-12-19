@@ -7,10 +7,14 @@
 //class CGameController;
 
 class Game : public EngineCore::IGame,
-	public KeyBinderT,
-	public KeyBinderY,
-	public KeyBinderG,
-	public KeyBinderH
+	public _Keys::KeyT,
+	public _Keys::KeyY,
+	public _Keys::KeyG,
+	public _Keys::KeyH,
+	public _Keys::Key0,
+	public _Keys::Key1,
+	public _Keys::Key2,
+	public _Keys::Key3
 {
 public:
 	Game();
@@ -22,10 +26,14 @@ public:
 		return mpGameInput;
 	}
 
-	void OnKeyEvent(const KeyBinderT& e) override;
-	void OnKeyEvent(const KeyBinderY& e) override;
-	void OnKeyEvent(const KeyBinderG& e) override;
-	void OnKeyEvent(const KeyBinderH& e) override;
+	void OnKeyEvent(const Key0& e) override;
+	void OnKeyEvent(const Key1& e) override;
+	void OnKeyEvent(const Key2& e) override;
+	void OnKeyEvent(const Key3& e) override;
+	void OnKeyEvent(const KeyT& e) override;
+	void OnKeyEvent(const KeyY& e) override;
+	void OnKeyEvent(const KeyG& e) override;
+	void OnKeyEvent(const KeyH& e) override;
 
 protected:
 
@@ -34,7 +42,7 @@ protected:
 	virtual void Render(float dt);
 
 private:
-	Game(const Game& other);
+	Game(const Game& other) = delete;
 	Game& operator=(const Game& other);
 
 	CGameController* mpGameInput;

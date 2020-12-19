@@ -189,9 +189,6 @@
     <ClInclude Include="Input\IMouseHandler.h">
       <Filter>Src\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Input\IEventInput.h">
-      <Filter>Src\Input</Filter>
-    </ClInclude>
     <ClInclude Include="MainWinOgl.h">
       <Filter>Src</Filter>
     </ClInclude>
@@ -239,6 +236,12 @@
     </ClInclude>
     <ClInclude Include="Loaders\Images\Windows\stbi_DDS_aug_c.h">
       <Filter>Src\Loaders\Images\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\IKeyEvent.h">
+      <Filter>Src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Keys.h">
+      <Filter>Src\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

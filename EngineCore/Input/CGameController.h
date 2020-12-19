@@ -4,72 +4,15 @@
 #include "CommonTypes.h"
 #include "IKeyboardHandler.h"
 #include "IMouseHandler.h"
+#include "Keys.h"
 #include <string>
 
 using namespace std;
 using namespace Types;
 
 #define KeyBindEvent(K) 			case K::cAscValue: \
-									KeyBinderDelegator<K>::Instance().Event(); \
-									break;
-
-template <char KEY>
-class IKey
-{
-public:
-	static const Byte cAscValue = KEY;
-};
-
-class KeyBinderT : public IKey<116>
-{
-public:
-	virtual void OnKeyEvent(const KeyBinderT& e) {};
-};
-
-class KeyBinderY : public IKey<121>
-{
-public:
-	virtual void OnKeyEvent(const KeyBinderY& e) {};
-};
-
-class KeyBinderG : public IKey<103>
-{
-public:
-	virtual void OnKeyEvent(const KeyBinderG& e) {};
-};
-
-class KeyBinderH : public IKey<104>
-{
-public:
-	virtual void OnKeyEvent(const KeyBinderH& e) {};
-};
-
-template <typename KeyBinder>
-class KeyBinderDelegator 
-{
-public:
-	static KeyBinderDelegator& Instance()
-	{
-		static KeyBinderDelegator instance;
-		return instance;
-	}
-	~KeyBinderDelegator() {}
-	void BindKey(KeyBinder* b) { m_listeners.push_back(b); }
-	void Event()
-	{
-		for (list<KeyBinder*>::iterator i = m_listeners.begin(); i != m_listeners.end(); i++)
-		{
-			(*i)->OnKeyEvent(KeyBinder());
-		}
-	}
-private:
-	list<KeyBinder*> m_listeners;
-	KeyBinderDelegator()
-	{
-
-	}
-
-};
+											_Keys::KeyBinderDispatcher<K>::Instance().Event(); \
+											break;
 
 class CGameController : public IKeyboardHandler, public IMouseHandler
 {
@@ -121,10 +64,14 @@ public:
 		m_bKey[c] = false; 
 		switch (c)
 		{
-			KeyBindEvent(KeyBinderT);
-			KeyBindEvent(KeyBinderY);
-			KeyBindEvent(KeyBinderG);
-			KeyBindEvent(KeyBinderH);
+			KeyBindEvent(_Keys::Key0);
+			KeyBindEvent(_Keys::Key1);
+			KeyBindEvent(_Keys::Key2);
+			KeyBindEvent(_Keys::Key3);
+			KeyBindEvent(_Keys::KeyT);
+			KeyBindEvent(_Keys::KeyY);
+			KeyBindEvent(_Keys::KeyG);
+			KeyBindEvent(_Keys::KeyH);
 
 			default:
 				break;

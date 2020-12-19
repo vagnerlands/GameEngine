@@ -492,6 +492,9 @@ bool glShader::setUniform3f(const GLcharARB* varname, GLfloat v0, GLfloat v1, GL
     
     glUniform3f(loc, v0, v1, v2);
 
+    // clear errors
+    (void)glGetError();
+
     return true;
 }
 

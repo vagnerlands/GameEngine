@@ -38,6 +38,8 @@ namespace Graphics
 
 		void IncreaseAttenuationBy(const std::string& id, const float attenuationIncrease);
 
+		void SetLightColor(const std::string& id, const IvVector3& lightColor);
+
 		// Update ilumination location
 		virtual void Remove(const std::string& id);
 
@@ -50,6 +52,8 @@ namespace Graphics
 		void HasAnimations(bool value);
 
 		float GetLightAttenuation() const;
+
+		const IvVector3& GetLightColor() const;
 
 		void UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex);
 

@@ -75,6 +75,7 @@ public:
     inline void SetX( float _x ) { x = _x; }
     inline void SetY( float _y ) { y = _y; }
     inline void SetZ( float _z ) { z = _z; }
+    inline float* GetPtr() const { return &x; }
     inline float GetX() const { return x; }
     inline float GetY() const { return y; }
     inline float GetZ() const { return z; }
@@ -116,7 +117,7 @@ public:
     
 protected:
     // member variables
-    float x, y, z;
+    mutable float x, y, z;
         
 private:
 };

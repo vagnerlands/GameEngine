@@ -42,24 +42,29 @@ namespace Graphics
 
 		virtual void SetDirection(ELightType type);
 
+		void IncreaseAttenuation(float increaseValue);
+
+		void SetLightColor(const IvVector3& lightColor);
+
 		virtual const IvVector3& GetLocation() const;
 
 		virtual ELightType GetDirection() const;
 
 		Float GetLightAttenuation() const;
 
-		void IncreaseAttenuation(float increaseValue);
+		const IvVector3& GetLightColor() const;
 
 	protected:
 		IvVector3	m_location;
 		ELightType	m_type;
 		std::string m_id;
 		float		m_lightAttenuation;
+		IvVector3   m_lightColor;
 
 	private:
 		// copy operations
-		IluminationItem(const IluminationItem& other);
-		IluminationItem& operator=(const IluminationItem& other);
+		IluminationItem(const IluminationItem& other) = delete;
+		IluminationItem& operator=(const IluminationItem& other) = delete;
 	};
 
 	inline const IvVector3& IluminationItem::GetLocation() const
@@ -77,6 +82,11 @@ namespace Graphics
 		return m_lightAttenuation;
 	}
 
+	inline  const IvVector3& IluminationItem::GetLightColor() const
+	{
+		return m_lightColor;
+	}
+
 	inline void IluminationItem::IncreaseAttenuation(float increaseValue)
 	{
 		m_lightAttenuation += increaseValue;
@@ -84,6 +94,11 @@ namespace Graphics
 		{
 			m_lightAttenuation = 0.f;
 		}
+	}
+
+	inline void IluminationItem::SetLightColor(const IvVector3& lightColor)
+	{
+		m_lightColor = lightColor;
 	}
 
 }
