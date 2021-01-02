@@ -21,20 +21,27 @@ uniform mat4 model;
 
 uniform vec3 lightPos;
 uniform vec3 viewPos;
+uniform bool hasAnimations;
 
 const int MAX_BONES = 100;
 uniform mat4 bones[MAX_BONES];
 
-void main()
+vec4 BonesTransformation()
 {
 	mat4 bone_transform = bones[bone_ids[0]] * weights[0];
 		bone_transform += bones[bone_ids[1]] * weights[1];
 		bone_transform += bones[bone_ids[2]] * weights[2];
 		bone_transform += bones[bone_ids[3]] * weights[3];
-			
 	vec4 boned_position = model * bone_transform * vec4(aPos, 1.0); // transformed by bones
 	
-	vs_out.FragPos = vec3(boned_position);   
+	return boned_position;
+
+}
+
+void main()
+{
+	vec4 vxPos = hasAnimations ? BonesTransformation() : model * vec4(aPos, 1.0);
+	vs_out.FragPos = vec3(vxPos);
     vs_out.TexCoords = aTexCoords;
     
     mat3 normalMatrix = transpose(inverse(mat3(model)));
@@ -48,7 +55,7 @@ void main()
     vs_out.TangentViewPos  = TBN * viewPos;
     vs_out.TangentFragPos  = TBN * vs_out.FragPos;
         
-    gl_Position = projection * view * boned_position;
+    gl_Position = projection * view * vxPos;
 	
 	
 }

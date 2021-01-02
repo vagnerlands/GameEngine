@@ -78,7 +78,7 @@ bool Game::PostRendererInitialize()
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
-	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed);
 	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
 	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0,0.5,0));
 	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"));
@@ -95,11 +95,11 @@ bool Game::PostRendererInitialize()
 	Graphics::IModel* p = CModelHolder::s_pInstance->GetModelById("Cube.obj");
 	//p->AppendTexture("brick_n.bmp", "normalMap");
 	//p->AppendTexture("brick_n.bmp", "normalMap");
-	Graphics::RenderScene::Instance().Add("Ground1", p);
+	Graphics::RenderScene::Instance().Add("Ground1", p, eSceneItemType_Regular);
 	//Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
     //Graphics::RenderScene::Instance().Add("church",	CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
 	//Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
-	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("cube.obj"));
+	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("cube.obj"), eSceneItemType_Regular);
 	// debug
 
 
@@ -111,7 +111,7 @@ bool Game::PostRendererInitialize()
 	faces.push_back("skytop.bmp");
 	faces.push_back("skyfront.bmp");
 	faces.push_back("skyback.bmp");
-	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces));
+	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces), eSceneItemType_Regular);
 	// update models location
 
 	//Graphics::RenderScene::Instance().Translate("church",	IvVector3(0.f, 0.0f, -2.f));

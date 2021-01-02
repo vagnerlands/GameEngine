@@ -2,7 +2,6 @@
 #include <iostream>
 #include "Model.h"
 #include "CTextureHolder.h"
-#include "IRenderer.h"
 #include "Ilumination.h"
 #include "IvMatrix44.h"
 #include "SceneItem.h"
@@ -242,96 +241,36 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 	if (glErr != 0)
 		DEBUG_OUT("Untreated error has been found");
 
-	// identity
-	// final model for the shader - each transformation should be calculated
-	// alone and then combined
-	IvMatrix44 model;
-	// translate model
-	IvMatrix44 translateModel;
-	translateModel.Identity();
-	// rotate model
-	IvMatrix44 rotateModel;
-	rotateModel.Identity();
-	// scale model
-	IvMatrix44 scaleModel;
-	scaleModel.Identity();
-	// calculates idependently each transformation
-	// rotate transformation
-	rotateModel.Rotation(si.GetRotation());
-	// scale transformation
-	scaleModel.Scaling(si.GetScale());
-	// translation transformation
-	translateModel.Translation(si.GetLocation());
-	// combine both transformations
-	model = translateModel * scaleModel * rotateModel;
-
 	// indexer
 	for (UInt32 i = 0; i < m_drawAttr.size(); ++i)
 	{
 		// when rendering shadows, we must not enable other shaders or activate textures
 		if (!isRenderingShadows)
 		{
-			// get shader program id 
-			GLuint programId = m_drawAttr[i].m_pShader->GetProgramObject();
-			// enable it
-			glUseProgram(programId);
-			// check for errors
-			Int32 glErr = glGetError();
-			if (glErr != 0)
-				DEBUG_OUT("Failed to apply shader ");
-
-			// Apply attributes known for this shader
-			IvMatrix44& projMatrix = Graphics::IRenderer::mRenderer->GetProjectionMatrix();
-			IvMatrix44& viewMatrix = Graphics::IRenderer::mRenderer->GetViewMatrix();
-
-			Float lightLocation[4] = { 0 };
-			Graphics::Ilumination::Instance().GetIluminationItemLocationPtr("main", lightLocation);
-
-			m_drawAttr[i].m_pShader->setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
-			m_drawAttr[i].m_pShader->setUniformMatrix4fv("view", 1, false, (GLfloat*)viewMatrix.GetFloatPtr());
-			if (si.HasShadows())
+			si.SetUpScene(m_drawAttr[i].m_pShader);
+			m_pBoneMutex->mutexLock();
+			si.SetUpAnimation(m_drawAttr[i].m_pShader);
+			eBuffering buffer = m_currentBuffer == eBuffering_First ? eBuffering_Second : eBuffering_First;
+			for (UInt32 s = 0; s < m_boneTransforms[buffer].size(); s++) // move all matrices for actual model position to shader
 			{
-				m_drawAttr[i].m_pShader->setUniform3f("viewPos",
-					Graphics::IRenderer::mRenderer->GetCamera().m_position.GetX(),
-					Graphics::IRenderer::mRenderer->GetCamera().m_position.GetY(),
-					Graphics::IRenderer::mRenderer->GetCamera().m_position.GetZ());
-				m_drawAttr[i].m_pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
-				const IvVector3& lc = Graphics::Ilumination::Instance().GetLightColor();
-				m_drawAttr[i].m_pShader->setUniform3f("light_color", lc.GetX(), lc.GetY(), lc.GetZ());
-				// update the boolean flag for "has shadows"
-				m_drawAttr[i].m_pShader->setUniform1i("cast_shadows", si.HasShadows());
-				m_drawAttr[i].m_pShader->setUniform1f("light_attenuation", Graphics::Ilumination::Instance().GetLightAttenuation());
-				m_drawAttr[i].m_pShader->setUniform1f("far_plane", Graphics::IRenderer::mRenderer->GetFar());
-				m_drawAttr[i].m_pShader->setUniform1i("depthMap", 2);
+				m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&m_boneTransforms[buffer][s], m_bone_location[s]);
 			}
-        }		
-
-		if (m_hasAnimations)
+			m_pBoneMutex->mutexUnlock();
+        }	
+		else
 		{
 			m_pBoneMutex->mutexLock();
 			eBuffering buffer = m_currentBuffer == eBuffering_First ? eBuffering_Second : eBuffering_First;
 			for (UInt32 s = 0; s < m_boneTransforms[buffer].size(); s++) // move all matrices for actual model position to shader
 			{
-				if (isRenderingShadows)
-				{
-					Graphics::Ilumination::Instance().UpdateBoneTransformations((Float*)&m_boneTransforms[buffer][s], s);
-				}
-				else
-				{
-					m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&m_boneTransforms[buffer][s], m_bone_location[s]);
-				}
+				Graphics::Ilumination::Instance().UpdateBoneTransformations((Float*)&m_boneTransforms[buffer][s], s);
 			}
 			m_pBoneMutex->mutexUnlock();
 		}
 
 		if (isRenderingShadows)
 		{
-			Graphics::Ilumination::Instance().HasAnimations(m_hasAnimations);
-			Graphics::Ilumination::Instance().UpdateModel(model);
-		}
-		else
-		{
-			m_drawAttr[i].m_pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)model.GetFloatPtr());
+			si.ShadowsPass();
     	}
 
 		// when rendering shadows, we must not enable other shaders or activate textures

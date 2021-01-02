@@ -5,6 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{8ef4ab18-30d2-44cc-839a-3b69556b148e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -15,5 +18,31 @@
     <ClInclude Include="Game.h">
       <Filter>Src</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Binaries\Assets\animatedModel_dnFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\animatedModel_dnsFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\animatedModel_dnsVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\animatedModel_dnVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\animatedModel_dsFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\animatedModel_dsVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\animatedModelFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\animatedModelVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
   </ItemGroup>
 </Project>

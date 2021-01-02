@@ -142,9 +142,9 @@ UInt32 Graphics::ShadowsOGL::GetDepthMapId() const
 	return m_depthCubemap;
 }
 
-void Graphics::ShadowsOGL::SetModel(IvMatrix44 & model)
+void Graphics::ShadowsOGL::SetModel(const IvMatrix44 & model)
 {
-    m_pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)model.GetFloatPtr());
+    m_pShader->setUniformMatrix4fv("model", 1, false, (const GLfloat*)model.GetFloatPtr());
 }
 
 void Graphics::ShadowsOGL::HasAnimations(bool value)

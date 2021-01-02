@@ -31,7 +31,7 @@ namespace Graphics
 		// periodic call to update
 		virtual void Update(float dt) override;
 		//bool SetShader(const string& shaderName);
-		virtual void Draw(const SceneItem& si, float dt, bool isRenderingShadows);
+		virtual void Draw(const SceneItem& si, float dt, bool isRenderingShadows) override;
 		// allocate SModelData for custom objects
 		virtual shared_ptr<Model> Allocate();
 		// commit changes

@@ -52,7 +52,7 @@ public:
     // accessors
     float &operator()(unsigned int i, unsigned int j);
     float operator()(unsigned int i, unsigned int j) const;
-    inline const float* GetFloatPtr() { return mV; }
+    inline const float* GetFloatPtr() const { return mV; }
 
     // comparison
     bool operator==( const IvMatrix44& other ) const;

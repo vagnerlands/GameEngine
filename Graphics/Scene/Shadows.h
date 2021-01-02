@@ -33,7 +33,7 @@ namespace Graphics
 
 		virtual UInt32 GetDepthMapId() const = 0;
 
-        virtual void SetModel(IvMatrix44& model) = 0;
+        virtual void SetModel(const IvMatrix44& model) = 0;
 
 		virtual void HasAnimations(bool value) = 0;
 

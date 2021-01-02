@@ -4,7 +4,12 @@
 #include "CommonTypes.h"
 #include "IDrawable.h"
 #include "IvVector3.h"
+#include "IvMatrix44.h"
 #include "IvQuat.h"
+
+// TODO: wrap this
+#include "glsl.h"
+
 #include <list>
 
 using namespace Types;
@@ -12,21 +17,13 @@ using namespace Types;
 namespace Graphics
 {
 	// Everything that can be rendered shall be a "IDrawable"
-	class SceneItem
+	class SceneItem 
 	{
 	public:
 		// virtual ctor
-		SceneItem(const std::string id, Graphics::IDrawable* pDrawable) :
-			m_pDrawable(pDrawable),
-			m_sceneItemId(id),
-			m_location(0.f, 0.f, 0.f), // default location
-			m_scale(1.f, 1.f, 1.f), // default scale (original size from editor)
-			m_hasShadow(true)
-		{
-			m_rotation.Identity();
-		}
+		SceneItem(const std::string& id, Graphics::IDrawable* pDrawable);
 		// virtual dtor
-		~SceneItem()
+		virtual ~SceneItem()
 		{
 		}
 
@@ -34,16 +31,20 @@ namespace Graphics
 		void ReplaceDrawable(Graphics::IDrawable* pDrawable);
 		void Release();
 
-		const IvVector3& GetLocation() const;
-		const IvVector3& GetScale() const;
-		const IvQuat& GetRotation() const;
+
+		const IvMatrix44& GetModel() const;
 		const std::string& GetId() const;
 		const bool HasShadows() const;
-		void SetLocation(const IvVector3& newLocation);
-		void SetScale(const IvVector3& newDimension);
+		virtual void SetLocation(const IvVector3& newLocation);
+		virtual void SetScale(const IvVector3& newDimension);
 		virtual void SetRotation(const IvQuat& newRotation);
 		void SetId(const std::string& id);
 		void SetCastShadows(bool castShadows);
+
+		virtual void SetUpScene(cwc::glShader* pShader) const;
+		virtual void SetUpAnimation(cwc::glShader* pShader) const;
+		virtual void SetUpShadows(cwc::glShader* pShader) const;
+		virtual void ShadowsPass() const;
 
 		// for comparison
 		virtual bool operator==(const SceneItem& other)
@@ -57,10 +58,16 @@ namespace Graphics
 		}
 
 
-	private:
+	protected:
 		// copy operations
 		SceneItem(const SceneItem& other) = delete;
 		SceneItem& operator=(const SceneItem& other) = delete;
+
+		const IvVector3& GetLocation() const;
+		const IvVector3& GetScale() const;
+		const IvQuat& GetRotation() const;
+
+		void updateModel();
 
 		// model to be rendered
 		Graphics::IDrawable* m_pDrawable;
@@ -72,9 +79,12 @@ namespace Graphics
 		IvVector3		m_scale;
 		// rotation matrix for the model
 		IvQuat			m_rotation;
+		// pre-calculated model
+		IvMatrix44		m_model;
+
 		// does this item cast a shadow
 		bool			m_hasShadow;
-		// has animations
+
 	};
 }
 
@@ -93,6 +103,11 @@ inline const IvQuat& Graphics::SceneItem::GetRotation() const
 	return m_rotation;
 }
 
+inline const IvMatrix44& Graphics::SceneItem::GetModel() const
+{
+	return m_model;
+}
+
 inline const std::string& Graphics::SceneItem::GetId() const
 {
 	return m_sceneItemId;
@@ -106,16 +121,19 @@ inline const bool Graphics::SceneItem::HasShadows() const
 inline void Graphics::SceneItem::SetLocation(const IvVector3& newLocation)
 {
 	m_location = newLocation;
+	updateModel();
 }
 
 inline void Graphics::SceneItem::SetScale(const IvVector3& newDimension)
 {
 	m_scale = newDimension;
+	updateModel();
 }
 
 inline void Graphics::SceneItem::SetRotation(const IvQuat& newRotation)
 {
 	m_rotation = newRotation;
+	updateModel();
 }
 
 inline void Graphics::SceneItem::SetId(const std::string& id)

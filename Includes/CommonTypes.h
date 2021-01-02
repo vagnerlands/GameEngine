@@ -253,6 +253,14 @@ namespace Types
 		UByte b;
 	};
 
+	enum eSceneItemType
+	{
+		eSceneItemType_Regular = 0,
+		eSceneItemType_Animated,
+		eSceneItemType_AnimatedAndShadowed,
+		eSceneItemType_NonAnimatedAndShadowed
+	};
+
 	//-------------------------------------------------------------------------------
 	//-- Typedefs, Structs ----------------------------------------------------------
 	//-------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ namespace Graphics
 
 		UInt32 GetDepthMapId() const override;
 
-        void SetModel(IvMatrix44& model) override;
+        void SetModel(const IvMatrix44& model) override;
 
 		void HasAnimations(bool value) override;
 

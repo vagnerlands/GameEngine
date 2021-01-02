@@ -167,6 +167,16 @@
   <ItemGroup>
     <ClInclude Include="Game.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Binaries\Assets\animatedModelFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\animatedModelVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\animatedModel_dnFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\animatedModel_dnsFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\animatedModel_dnsVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\animatedModel_dnVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\animatedModel_dsFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\animatedModel_dsVertexshader.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

@@ -112,7 +112,7 @@ void Graphics::Ilumination::GetIluminationItemLocation(const std::string & id, I
 	}
 }
 
-void Graphics::Ilumination::UpdateModel(IvMatrix44 & model)
+void Graphics::Ilumination::UpdateModel(const IvMatrix44 & model)
 {
     m_pShadows->SetModel(model);
 }

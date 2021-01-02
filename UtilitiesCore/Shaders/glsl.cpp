@@ -1039,7 +1039,7 @@ bool glShader::setUniformMatrix3fv(const GLcharARB* varname, GLsizei count, GLbo
 
 //----------------------------------------------------------------------------- 
 
-bool glShader::setUniformMatrix4fv(const GLcharARB* varname, GLsizei count, GLboolean transpose, GLfloat *value, GLint index)
+bool glShader::setUniformMatrix4fv(const GLcharARB* varname, GLsizei count, GLboolean transpose, const GLfloat *value, GLint index)
 {
     if (!useGLSL) return false; // GLSL not available
     if (!_noshader) return true;

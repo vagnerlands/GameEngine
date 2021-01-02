@@ -165,6 +165,7 @@
     <ClCompile Include="Scene\IluminationItem.cpp" />
     <ClCompile Include="Scene\RenderScene.cpp" />
     <ClCompile Include="Scene\SceneItem.cpp" />
+    <ClCompile Include="Scene\SceneItemFactory.cpp" />
     <ClCompile Include="Scene\Shadows.cpp" />
     <ClCompile Include="Scene\ShadowsOGL.cpp" />
     <ClInclude Include="CCamera.h" />
@@ -178,10 +179,14 @@
     <ClInclude Include="IModel.h" />
     <ClInclude Include="IRenderer.h" />
     <ClInclude Include="ITexture.h" />
+    <ClInclude Include="Scene\SceneItemAnimatedAndShadowed.h" />
+    <ClInclude Include="Scene\SceneItemFactory.h" />
     <ClInclude Include="Scene\Ilumination.h" />
     <ClInclude Include="Scene\IluminationItem.h" />
     <ClInclude Include="Scene\RenderScene.h" />
     <ClInclude Include="Scene\SceneItem.h" />
+    <ClInclude Include="Scene\SceneItemAnimatedSimple.h" />
+    <ClInclude Include="Scene\SceneItemShadowedSimple.h" />
     <ClInclude Include="Scene\Shadows.h" />
     <ClInclude Include="Scene\ShadowsOGL.h" />
   </ItemGroup>

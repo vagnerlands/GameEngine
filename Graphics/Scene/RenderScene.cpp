@@ -1,4 +1,5 @@
 #include "RenderScene.h"
+#include "SceneItemFactory.h"
 
 Graphics::RenderScene & Graphics::RenderScene::Instance()
 {
@@ -6,10 +7,10 @@ Graphics::RenderScene & Graphics::RenderScene::Instance()
 	return instance;
 }
 
-void Graphics::RenderScene::Add(const std::string& id, IDrawable* pDrawable)
+void Graphics::RenderScene::Add(const std::string& id, IDrawable* pDrawable, eSceneItemType type)
 {	
 	// add to the current rendering database
-	m_items.push_back(new SceneItem(id, pDrawable));
+	m_items.push_back(SceneItemFactory::Instance().Create(id, pDrawable, type));
 }
 
 void Graphics::RenderScene::Change(const std::string& id, IDrawable* pDrawable)

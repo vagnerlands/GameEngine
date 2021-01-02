@@ -27,21 +27,6 @@ namespace Graphics
 		// render this object as is
 		virtual void Draw(const class SceneItem& si, float dt, bool isRenderingShadows) = 0;
 
-		// for comparison
-		//virtual bool operator==(const IDrawable& other)
-		//{
-		//	return other.m_id == m_id;
-		//}
-		//// for comparison
-		//virtual bool operator==(const std::string& other)
-		//{
-		//	return other == m_id;
-		//}
-
-	//protected:
-	//	// identification of this drawable, user must set it
-	//	std::string		m_id;
-
 	private:
 		// copy operations
 		IDrawable(const IDrawable& other) = delete;

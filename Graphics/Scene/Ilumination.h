@@ -47,7 +47,7 @@ namespace Graphics
 		virtual void GetIluminationItemLocationPtr(const std::string& id, Float* location);
 		virtual void GetIluminationItemLocation(const std::string& id, IvVector3& location);
 
-        void UpdateModel(IvMatrix44& model);
+        void UpdateModel(const IvMatrix44& model);
 
 		void HasAnimations(bool value);
 

@@ -62,6 +62,18 @@
     <ClInclude Include="Scene\SceneItem.h">
       <Filter>Src\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\SceneItemShadowedSimple.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneItemAnimatedSimple.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneItemFactory.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneItemAnimatedAndShadowed.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRendererOGL.cpp">
@@ -107,6 +119,9 @@
       <Filter>Src\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SceneItem.cpp">
+      <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneItemFactory.cpp">
       <Filter>Src\Scene</Filter>
     </ClCompile>
   </ItemGroup>
