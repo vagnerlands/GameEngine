@@ -255,10 +255,12 @@ namespace Types
 
 	enum eSceneItemType
 	{
-		eSceneItemType_Regular = 0,
-		eSceneItemType_Animated,
-		eSceneItemType_AnimatedAndShadowed,
-		eSceneItemType_NonAnimatedAndShadowed
+		eSceneItemType_Regular = 0, // only the most primitive commands required by the engine
+		eSceneItemType_Simple, // no animations and no specific behaviors
+		eSceneItemType_SkyBox, // To be used for skybox only
+		eSceneItemType_Animated, // animated
+		eSceneItemType_AnimatedAndShadowed, // animated and cast shadows
+		eSceneItemType_NonAnimatedAndShadowed // not animated, but cast shadows
 	};
 
 	//-------------------------------------------------------------------------------

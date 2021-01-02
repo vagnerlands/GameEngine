@@ -2,7 +2,7 @@
 #define _SceneItemShadowedSimple_H_
 
 #include "CommonTypes.h"
-#include "SceneItem.h"
+#include "SceneItemSimple.h"
 #include "Ilumination.h"
 
 using namespace Types;
@@ -10,10 +10,10 @@ using namespace Types;
 namespace Graphics
 {
 	// Gives extra behavior for Shadowed Scene Objects
-	class SceneItemShadowedSimple : public SceneItem
+	class SceneItemShadowedSimple : public SceneItemSimple
 	{
 	public:
-		SceneItemShadowedSimple(const std::string& id, IDrawable* pDrawable) : SceneItem(id, pDrawable)
+		SceneItemShadowedSimple(const std::string& id, IDrawable* pDrawable) : SceneItemSimple(id, pDrawable)
 		{}
 		// virtual dtor
 		~SceneItemShadowedSimple()

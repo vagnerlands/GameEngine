@@ -3,6 +3,7 @@
 
 #include "CommonTypes.h"
 #include "IDrawable.h"
+#include "IvVector2.h"
 #include "IvVector3.h"
 #include "IvMatrix44.h"
 #include "IvQuat.h"
@@ -38,6 +39,7 @@ namespace Graphics
 		virtual void SetLocation(const IvVector3& newLocation);
 		virtual void SetScale(const IvVector3& newDimension);
 		virtual void SetRotation(const IvQuat& newRotation);
+		virtual void SetTextureUV(const IvVector2& uvFactor);
 		void SetId(const std::string& id);
 		void SetCastShadows(bool castShadows);
 
@@ -66,6 +68,7 @@ namespace Graphics
 		const IvVector3& GetLocation() const;
 		const IvVector3& GetScale() const;
 		const IvQuat& GetRotation() const;
+		const IvVector2& GetUVFactor() const;
 
 		void updateModel();
 
@@ -79,6 +82,8 @@ namespace Graphics
 		IvVector3		m_scale;
 		// rotation matrix for the model
 		IvQuat			m_rotation;
+		// texture resize, default value is 1x1
+		IvVector2		m_uvFactor;
 		// pre-calculated model
 		IvMatrix44		m_model;
 
@@ -101,6 +106,11 @@ inline const IvVector3& Graphics::SceneItem::GetScale() const
 inline const IvQuat& Graphics::SceneItem::GetRotation() const
 {
 	return m_rotation;
+}
+
+inline const IvVector2& Graphics::SceneItem::GetUVFactor() const
+{
+	return m_uvFactor;
 }
 
 inline const IvMatrix44& Graphics::SceneItem::GetModel() const
@@ -134,6 +144,11 @@ inline void Graphics::SceneItem::SetRotation(const IvQuat& newRotation)
 {
 	m_rotation = newRotation;
 	updateModel();
+}
+
+inline void Graphics::SceneItem::SetTextureUV(const IvVector2& uvFactor)
+{
+	m_uvFactor = uvFactor;
 }
 
 inline void Graphics::SceneItem::SetId(const std::string& id)

@@ -22,6 +22,7 @@ uniform mat4 model;
 
 uniform vec3 lightPos;
 uniform vec3 viewPos;
+uniform vec2 uvFactor;
 uniform bool hasAnimations;
 
 const int MAX_BONES = 100;
@@ -43,7 +44,7 @@ void main()
 {
 	vec4 vxPos = hasAnimations ? BonesTransformation() : model * vec4(aPos, 1.0);
 	vs_out.FragPos = vec3(vxPos);
-    vs_out.TexCoords = aTexCoords;
+    vs_out.TexCoords = aTexCoords * uvFactor;
     
     mat3 normalMatrix = transpose(inverse(mat3(model)));	
     vs_out.Normal = mat3(transpose(inverse(model))) * aNormal;  	

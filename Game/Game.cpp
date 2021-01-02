@@ -84,19 +84,16 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"), eSceneItemType_AnimatedAndShadowed);
 	Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
 	Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(-3, 0.5, 0));
-	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"));
-	//Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
-	//Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(3, 0.5, 0));
+	Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"), eSceneItemType_AnimatedAndShadowed);
+	Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
+	Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(3, 0.5, 0));
 	//Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 
-	Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Regular);
-	//Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
-    //Graphics::RenderScene::Instance().Add("church",	CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
-	//Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));
-	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("cube.obj"), eSceneItemType_Regular);
+	Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
+	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("cube.obj"), eSceneItemType_Simple);
 	// debug
 
 
@@ -108,7 +105,7 @@ bool Game::PostRendererInitialize()
 	faces.push_back("skytop.bmp");
 	faces.push_back("skyfront.bmp");
 	faces.push_back("skyback.bmp");
-	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces), eSceneItemType_Regular);
+	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces), eSceneItemType_SkyBox);
 	// update models location
 
 	//Graphics::RenderScene::Instance().Translate("church",	IvVector3(0.f, 0.0f, -2.f));
@@ -118,6 +115,7 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.3, 0.3, 0.3));
 	//Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
 	Graphics::RenderScene::Instance().Scale("Ground1", IvVector3(200.0, 1.0, 200.0));
+	Graphics::RenderScene::Instance().SetTextureUV("Ground1", IvVector2(10.f, 10.f));
 
 	Graphics::RenderScene::Instance().Scale("SKY1", IvVector3(50,50,50));
 

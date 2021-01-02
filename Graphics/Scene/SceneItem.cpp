@@ -8,6 +8,7 @@ Graphics::SceneItem::SceneItem(const std::string& id, Graphics::IDrawable* pDraw
 	m_sceneItemId(id),
 	m_location(0.f, 0.f, 0.f), // default location
 	m_scale(1.f, 1.f, 1.f), // default scale (original size from editor)
+	m_uvFactor(1.f, 1.f),
 	m_hasShadow(true)
 {
 	m_rotation.Identity();
@@ -89,7 +90,7 @@ void Graphics::SceneItem::SetUpScene(cwc::glShader* pShader) const
 		pShader->setUniform1f("far_plane", Graphics::IRenderer::mRenderer->GetFar());
 		pShader->setUniform1i("depthMap", 2);
 	}
-
+	
 	pShader->setUniformMatrix4fv("model", 1, false, (GLfloat*)m_model.GetFloatPtr());
 
 }

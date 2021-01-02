@@ -50,6 +50,15 @@ void Graphics::RenderScene::Scale(const std::string & id, const IvVector3 & newS
 	}
 }
 
+void Graphics::RenderScene::SetTextureUV(const std::string& id, const IvVector2& uvFactor)
+{
+	Graphics::SceneItem* pObj = find(id);
+	if (pObj != nullptr)
+	{
+		pObj->SetTextureUV(uvFactor);
+	}
+}
+
 void Graphics::RenderScene::CastShadow(const std::string & id, bool hasShadow)
 {
 	Graphics::SceneItem* pObj = find(id);

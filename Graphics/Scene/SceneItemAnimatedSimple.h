@@ -2,7 +2,7 @@
 #define _SceneItemAnimatedSimple_H_
 
 #include "CommonTypes.h"
-#include "SceneItem.h"
+#include "SceneItemSimple.h"
 #include "Ilumination.h"
 
 using namespace Types;
@@ -10,10 +10,10 @@ using namespace Types;
 namespace Graphics
 {
 	// Gives extra behavior for Animated Scene Objects
-	class SceneItemAnimatedSimple : public SceneItem
+	class SceneItemAnimatedSimple : public SceneItemSimple
 	{
 	public:
-		SceneItemAnimatedSimple(const std::string& id, IDrawable* pDrawable) : SceneItem(id, pDrawable)
+		SceneItemAnimatedSimple(const std::string& id, IDrawable* pDrawable) : SceneItemSimple(id, pDrawable)
 		{}
 		// virtual dtor
 		~SceneItemAnimatedSimple()

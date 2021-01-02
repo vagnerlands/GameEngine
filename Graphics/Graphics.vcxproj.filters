@@ -74,6 +74,12 @@
     <ClInclude Include="Scene\SceneItemAnimatedAndShadowed.h">
       <Filter>Src\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\SceneItemSimple.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneItemSkyBox.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRendererOGL.cpp">

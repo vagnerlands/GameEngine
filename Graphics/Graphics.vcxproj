@@ -187,6 +187,8 @@
     <ClInclude Include="Scene\SceneItem.h" />
     <ClInclude Include="Scene\SceneItemAnimatedSimple.h" />
     <ClInclude Include="Scene\SceneItemShadowedSimple.h" />
+    <ClInclude Include="Scene\SceneItemSimple.h" />
+    <ClInclude Include="Scene\SceneItemSkyBox.h" />
     <ClInclude Include="Scene\Shadows.h" />
     <ClInclude Include="Scene\ShadowsOGL.h" />
   </ItemGroup>
