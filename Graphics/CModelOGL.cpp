@@ -248,14 +248,17 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 		if (!isRenderingShadows)
 		{
 			si.SetUpScene(m_drawAttr[i].m_pShader);
-			m_pBoneMutex->mutexLock();
 			si.SetUpAnimation(m_drawAttr[i].m_pShader);
+
+			m_pBoneMutex->mutexLock();
 			eBuffering buffer = m_currentBuffer == eBuffering_First ? eBuffering_Second : eBuffering_First;
 			for (UInt32 s = 0; s < m_boneTransforms[buffer].size(); s++) // move all matrices for actual model position to shader
 			{
 				m_drawAttr[i].m_pShader->setUniformMatrix4fv(nullptr, 1, GL_TRUE, (GLfloat*)&m_boneTransforms[buffer][s], m_bone_location[s]);
 			}
 			m_pBoneMutex->mutexUnlock();
+
+			applyTextures(m_drawAttr[i]);
         }	
 		else
 		{
@@ -266,49 +269,9 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 				Graphics::Ilumination::Instance().UpdateBoneTransformations((Float*)&m_boneTransforms[buffer][s], s);
 			}
 			m_pBoneMutex->mutexUnlock();
-		}
 
-		if (isRenderingShadows)
-		{
+			// setup certain
 			si.ShadowsPass();
-    	}
-
-		// when rendering shadows, we must not enable other shaders or activate textures
-		if (!isRenderingShadows)
-		{
-			const UInt32 cTexturesCount = m_drawAttr[i].m_textures.size();
-			if (cTexturesCount > 0)
-			{
-				// checks whether is a cubemap - in this case, there will be a texture id for the 6 cube faces
-				if (m_drawAttr[i].m_textures[0].m_isCubeMap)
-				{
-					// who cares, set the first one as the active one
-					glActiveTexture(GL_TEXTURE0);
-					string name = m_drawAttr[i].m_textures[0].m_uniformName;
-					// now set the sampler to the correct texture unit
-					m_drawAttr[i].m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureVector(m_drawAttr[i].m_textures));
-				}
-				else
-				{
-					// texture indexer
-					UInt32 ti = 0;
-					for (; ti < cTexturesCount; ti++)
-					{
-						glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
-														  // retrieve texture number (the N in diffuse_textureN)
-						string name = m_drawAttr[i].m_textures[ti].m_uniformName;
-						// now set the sampler to the correct texture unit
-						m_drawAttr[i].m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(m_drawAttr[i].m_textures[ti].m_filename));
-					}
-
-					// if this object casts shadow, then apply the fbo shadow texture
-					//if (m_hasShadow)
-					{
-						glActiveTexture(GL_TEXTURE0 + ti);
-						glBindTexture(GL_TEXTURE_CUBE_MAP, Graphics::Ilumination::Instance().GetShadowTexture());
-					}
-				}
-			}
 		}
 
 		if (m_isWireMode)
@@ -405,6 +368,47 @@ cwc::glShader* Graphics::CModelOGL::generateShader(const string& shaderName)
 #pragma optimize( "", on )
 
 
+
+void Graphics::CModelOGL::applyTextures(const SDrawData& renderObject)
+{
+	const UInt32 cTexturesCount = renderObject.m_textures.size();
+	if (cTexturesCount > 0)
+	{
+		// checks whether is a cubemap - in this case, there will be a texture id for the 6 cube faces
+		if (renderObject.m_textures[0].m_isCubeMap)
+		{
+			// who cares, set the first one as the active one
+			glActiveTexture(GL_TEXTURE0);
+			string name = renderObject.m_textures[0].m_uniformName;
+			// now set the sampler to the correct texture unit
+			renderObject.m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureVector(renderObject.m_textures));
+		}
+		else
+		{
+			// texture indexer
+			UInt32 ti = 0;
+			for (; ti < cTexturesCount; ti++)
+			{
+				glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
+												  // retrieve texture number (the N in diffuse_textureN)
+				string name = renderObject.m_textures[ti].m_uniformName;
+				// now set the sampler to the correct texture unit
+				renderObject.m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(renderObject.m_textures[ti].m_filename));
+				// activate the respective texture
+				glActiveTexture(GL_TEXTURE0 + ti);
+			}
+			// apply shadows mapping, today, all shaders may receive this Texture3D
+			glBindTexture(GL_TEXTURE_CUBE_MAP, Graphics::Ilumination::Instance().GetShadowTexture());
+		}
+	}
+	else
+	{
+		// no textures mapped, so apply default texture
+		renderObject.m_pShader->setTexture("diffuseMap", CTextureHolder::s_pInstance->getTextureById("__no_valid_texture__.bmp"));
+		glActiveTexture(GL_TEXTURE0);
+		 
+	}
+}
 
 UInt32 Graphics::CModelOGL::findPosition(float p_animation_time, const aiNodeAnim* p_node_anim)
 {

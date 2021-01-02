@@ -19,8 +19,8 @@ void CWinThread::createThread(string thName, void* thEntry)
 		cout << "CreateThread error: " << GetLastError() << " on creating <" << thName << ">" << endl;
 		return;
 	}
-	const Int32 core = 0xf;
-	if (!SetThreadAffinityMask(m_threadHandle, (1 << core) - 1))
+
+	if (!SetThreadAffinityMask(m_threadHandle, 0x03))
 	{
 		cout << "SetThreadAffinityMask error: " << GetLastError() << " on set thread affinity <" << thName << ">" << endl;
 	}

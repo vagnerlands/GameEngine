@@ -81,9 +81,9 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed);
 	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
 	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0,0.5,0));
-	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"));
-	//Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
-	//Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(-3, 0.5, 0));
+	Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"), eSceneItemType_AnimatedAndShadowed);
+	Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
+	Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(-3, 0.5, 0));
 	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"));
 	//Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
 	//Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(3, 0.5, 0));
@@ -92,10 +92,7 @@ bool Game::PostRendererInitialize()
 	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 
-	Graphics::IModel* p = CModelHolder::s_pInstance->GetModelById("Cube.obj");
-	//p->AppendTexture("brick_n.bmp", "normalMap");
-	//p->AppendTexture("brick_n.bmp", "normalMap");
-	Graphics::RenderScene::Instance().Add("Ground1", p, eSceneItemType_Regular);
+	Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Regular);
 	//Graphics::RenderScene::Instance().Add("castle1",	CModelHolder::s_pInstance->GetModelById("Castle OBJ.obj"));
     //Graphics::RenderScene::Instance().Add("church",	CModelHolder::s_pInstance->GetModelById("Church-scene.obj"));
 	//Graphics::RenderScene::Instance().Add("cyborg1",	CModelHolder::s_pInstance->GetModelById("cyborg.obj"));

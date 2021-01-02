@@ -82,6 +82,7 @@ namespace Graphics
 		bool m_isWireMode;
 
 	private:
+		void applyTextures(const SDrawData& renderObject);
 		UInt32 findPosition(float p_animation_time, const aiNodeAnim* p_node_anim);
 		UInt32 findRotation(float p_animation_time, const aiNodeAnim* p_node_anim);
 		UInt32 findScaling(float p_animation_time, const aiNodeAnim* p_node_anim);
