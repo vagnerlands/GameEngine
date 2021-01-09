@@ -80,6 +80,12 @@
     <ClInclude Include="Scene\SceneItemSkyBox.h">
       <Filter>Src\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\SceneItemParticlesSystem.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CParticle.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRendererOGL.cpp">
@@ -129,6 +135,9 @@
     </ClCompile>
     <ClCompile Include="Scene\SceneItemFactory.cpp">
       <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CParticle.cpp">
+      <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -156,6 +156,7 @@
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CCubeTextureOGL.cpp" />
     <ClCompile Include="CModelOGL.cpp" />
+    <ClCompile Include="CParticle.cpp" />
     <ClCompile Include="CRendererOGL.cpp" />
     <ClCompile Include="CTextureOGL.cpp" />
     <ClCompile Include="I2dImage.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CCubeTextureOGL.h" />
     <ClInclude Include="CModelOGL.h" />
+    <ClInclude Include="CParticle.h" />
     <ClInclude Include="CRendererOGL.h" />
     <ClCompile Include="IRenderer.cpp" />
     <ClInclude Include="CTextureOGL.h" />
@@ -186,6 +188,7 @@
     <ClInclude Include="Scene\RenderScene.h" />
     <ClInclude Include="Scene\SceneItem.h" />
     <ClInclude Include="Scene\SceneItemAnimatedSimple.h" />
+    <ClInclude Include="Scene\SceneItemParticlesSystem.h" />
     <ClInclude Include="Scene\SceneItemShadowedSimple.h" />
     <ClInclude Include="Scene\SceneItemSimple.h" />
     <ClInclude Include="Scene\SceneItemSkyBox.h" />

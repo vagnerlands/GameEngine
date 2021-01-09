@@ -153,6 +153,7 @@
     <ClCompile Include="Cache\ResourceCache\CResHandle.cpp" />
     <ClCompile Include="Cache\ResourceCache\ZipFile.cpp" />
     <ClCompile Include="Holders\CModelHolder.cpp" />
+    <ClCompile Include="Holders\CParticlesSystemHolder.cpp" />
     <ClCompile Include="Holders\CShaderHolder.cpp" />
     <ClCompile Include="Holders\CSocketHolder.cpp" />
     <ClCompile Include="Holders\CTextureHolder.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Cache\ResourceCache\IResourceFile.h" />
     <ClInclude Include="Cache\ResourceCache\ZipFile.h" />
     <ClInclude Include="Holders\CModelHolder.h" />
+    <ClInclude Include="Holders\CParticlesSystemHolder.h" />
     <ClInclude Include="Holders\CShaderHolder.h" />
     <ClInclude Include="Holders\CSocketHolder.h" />
     <ClInclude Include="Holders\CTextureHolder.h" />

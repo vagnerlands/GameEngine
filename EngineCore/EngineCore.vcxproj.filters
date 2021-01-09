@@ -121,6 +121,9 @@
     <ClCompile Include="Loaders\Images\Windows\stb_image_aug.c">
       <Filter>Src\Loaders\Images\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Holders\CParticlesSystemHolder.cpp">
+      <Filter>Src\Holders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IGame.h">
@@ -242,6 +245,9 @@
     </ClInclude>
     <ClInclude Include="Input\Keys.h">
       <Filter>Src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Holders\CParticlesSystemHolder.h">
+      <Filter>Src\Holders</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

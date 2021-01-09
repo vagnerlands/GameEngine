@@ -6,6 +6,7 @@
 #include "SceneItemAnimatedAndShadowed.h"
 #include "SceneItemAnimatedSimple.h"
 #include "SceneItemShadowedSimple.h"
+#include "SceneItemParticlesSystem.h"
 
 Graphics::SceneItem* Graphics::SceneItemFactory::Create(const std::string& id, IDrawable* pDrawable, eSceneItemType type)
 {
@@ -17,6 +18,7 @@ Graphics::SceneItem* Graphics::SceneItemFactory::Create(const std::string& id, I
 	case eSceneItemType_Animated: return new SceneItemAnimatedSimple(id, pDrawable);
 	case eSceneItemType_AnimatedAndShadowed: return new SceneItemAnimatedAndShadowed(id, pDrawable);
 	case eSceneItemType_NonAnimatedAndShadowed: return new SceneItemShadowedSimple(id, pDrawable);
+	case eSceneItemType_ParticlesSystem: return new SceneItemParticlesSystem(id, pDrawable);
 	default:
 		break;
 	}

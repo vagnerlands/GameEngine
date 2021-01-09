@@ -260,7 +260,8 @@ namespace Types
 		eSceneItemType_SkyBox, // To be used for skybox only
 		eSceneItemType_Animated, // animated
 		eSceneItemType_AnimatedAndShadowed, // animated and cast shadows
-		eSceneItemType_NonAnimatedAndShadowed // not animated, but cast shadows
+		eSceneItemType_NonAnimatedAndShadowed, // not animated, but cast shadows
+		eSceneItemType_ParticlesSystem // animated according to different parameters
 	};
 
 	//-------------------------------------------------------------------------------
