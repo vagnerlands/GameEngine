@@ -1,0 +1,51 @@
+#version 330 core
+layout (location = 0) in vec3 aPos;
+uniform float time_0_X;
+uniform mat4  view_inverse_matrix;
+uniform float particleSystemHeight;
+uniform float particleSpeed;
+uniform float particleSpread;
+uniform float particleSystemShape;
+uniform float particleShape;
+uniform float particleSize;
+uniform vec4  particleSystemPosition;
+uniform mat4 projection;
+uniform mat4 view;
+
+// The model for the particle system consists of a hundred quads.
+// These quads are simple (-1,-1) to (1,1) quads where each quad
+// has a z ranging from 0 to 1. The z will be used to differenciate
+// between different particles
+
+
+varying vec2  vTexCoord;
+varying float vColor;
+
+void main(void)
+{
+  
+   // Loop particles
+   float t = fract(aPos.z + particleSpeed * time_0_X);
+   // Determine the shape of the system
+   float s = pow(t, particleSystemShape);
+
+   vec3 pos;
+   // Spread particles in a semi-random fashion
+   pos.x = particleSpread * s * cos(62.0 * aPos.z);
+   pos.z = particleSpread * s * sin(163.0 * aPos.z);
+   // Particles goes up
+   pos.y = particleSystemHeight * t;
+
+   // Billboard the quads.
+   // The view matrix gives us our right and up vectors.
+   pos += particleSize * (aPos.x * view_inverse_matrix[0] + aPos.y * view_inverse_matrix[1]).xyz;
+   // And put the system into place
+   pos += particleSystemPosition.xyz;
+
+   
+   gl_Position = projection * view * vec4(pos,1.0);
+   
+   vTexCoord = aPos.xy;
+   vColor    = 1.0 - t;
+   
+}

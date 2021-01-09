@@ -1,0 +1,16 @@
+#version 330 core
+uniform sampler2D diffuseMap;
+uniform float particleShape;
+varying vec2  vTexCoord;
+varying float vColor;
+
+void main(void)
+{
+   
+   // Fade the particle to a circular shape
+   float fade = pow(dot(vTexCoord, vTexCoord), particleShape);
+   //gl_FragColor = vec4(0.5, 1.0, 0.75, 1.0);
+   gl_FragColor = (1.0 - fade) * texture2D(diffuseMap, vec2(vColor,0.0));
+   
+  
+}
