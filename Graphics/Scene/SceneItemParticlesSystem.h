@@ -22,11 +22,37 @@ namespace Graphics
 	class SceneItemParticlesSystem : public SceneItemSimple
 	{
 	public:
-		SceneItemParticlesSystem(const std::string& id, IDrawable* pDrawable) : SceneItemSimple(id, pDrawable)
-		{}
+		SceneItemParticlesSystem(const std::string& id, IDrawable* pDrawable, Int32 NumberOfParticles) : SceneItemSimple(id, pDrawable), m_numberOfParticles(NumberOfParticles)
+		{
+			for (Int32 i = 0; i < NumberOfParticles; ++i)
+			{
+				Float speed = 1.f + (((rand() % 100)+1) / 100.f);
+				Float size = 0.01f + ((((rand() % 10)) + 1) / 100.f);
+				float height = 0.5f + (((rand() % 100) + 1) / 100.f);
+				float spread = (((rand() % 50)-25) + 1) / 100.f;
+				Int32 age = 100+(rand() % 100) + 1;
+				m_attributes.push_back(ParticleAttributes(speed, size, age, height, spread));
+			}
+			m_timetag = 1;
+		}
 		// virtual dtor
 		~SceneItemParticlesSystem()
 		{
+		}
+
+		Int32 GetNumberOfParticles() const
+		{
+			return m_numberOfParticles;
+		}
+
+		void SetUpParticleAttributes(cwc::glShader* pShader, Int32 index) const
+		{
+			pShader->setUniform1f("particleSize", m_attributes[index].Size);
+			pShader->setUniform1f("particleSpeed", m_attributes[index].Speed);
+			pShader->setUniform1f("particleHeight", m_attributes[index].MaxHeight);
+			pShader->setUniform1f("particleAge", m_attributes[index].Age);
+			pShader->setUniform1f("particleSpread", m_attributes[index].Spread);
+			pShader->setUniform1f("time_0_X", m_timetag % m_attributes[index].Age);
 		}
 
 		virtual void SetUpScene(cwc::glShader* pShader) const
@@ -50,17 +76,15 @@ namespace Graphics
 			IvVector3 CameraRight_worldspace(cols[0].GetX(), cols[0].GetY(), cols[0].GetZ());
 			IvVector3 CameraUp_worldspace(cols[1].GetX(), cols[1].GetY(), cols[1].GetZ());
 
-			static Float time_0_X = 0.f;
-			time_0_X += 0.16666f;
-
 			// Apply attributes known for this shader
-			//pShader->setUniform1f("time_0_X", time_0_X);
 			pShader->setUniform3f("cameraRight", CameraRight_worldspace.GetX(), CameraRight_worldspace.GetY(), CameraRight_worldspace.GetZ());
 			pShader->setUniform3f("cameraUp", CameraUp_worldspace.GetX(), CameraUp_worldspace.GetY(), CameraUp_worldspace.GetZ());
-			pShader->setUniform1f("particleSize", 1.0f);
-			pShader->setUniform4f("particleSystemPosition", 0.f, 1.5f, 3.f, 0.f);
+			pShader->setUniform4f("particleSystemPosition", m_location.GetX(), m_location.GetY(), m_location.GetZ(), 0.f);
 			char* dif = "diffuseMap";
-			pShader->setTexture(dif, CTextureHolder::s_pInstance->getTextureById("blob.png"));
+			pShader->setTexture(dif, CTextureHolder::s_pInstance->getTextureById("flame.png"));
+
+			m_timetag++;
+			if (m_timetag > 100000) m_timetag = 1;
 
 		}
 
@@ -76,7 +100,17 @@ namespace Graphics
 		}
 
 	private:
-		std::vector<ParticlesAttributes>* m_pParticlesAttributes;
+		struct ParticleAttributes
+		{
+			ParticleAttributes(Float speed, Float size, Int32 age, Float maxheight, Float spread) : Speed(speed), Size(size), Age(age), MaxHeight(maxheight), Spread(spread) {}
+			Float Speed, Size;
+			Float MaxHeight;
+			float Spread;
+			Int32 Age;
+		};
+		Int32 m_numberOfParticles;
+		std::vector<ParticleAttributes> m_attributes;
+		mutable Int32 m_timetag;
 	};
 }
 

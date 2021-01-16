@@ -18,7 +18,7 @@ Graphics::SceneItem* Graphics::SceneItemFactory::Create(const std::string& id, I
 	case eSceneItemType_Animated: return new SceneItemAnimatedSimple(id, pDrawable);
 	case eSceneItemType_AnimatedAndShadowed: return new SceneItemAnimatedAndShadowed(id, pDrawable);
 	case eSceneItemType_NonAnimatedAndShadowed: return new SceneItemShadowedSimple(id, pDrawable);
-	case eSceneItemType_ParticlesSystem: return new SceneItemParticlesSystem(id, pDrawable);
+	case eSceneItemType_ParticlesSystem: return new SceneItemParticlesSystem(id, pDrawable, 100);
 	default:
 		break;
 	}

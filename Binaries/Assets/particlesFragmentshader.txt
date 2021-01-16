@@ -1,6 +1,6 @@
 #version 330 core
 uniform sampler2D diffuseMap;
-uniform float particleShape;
+//uniform float particleSpread;
 varying vec2  vTexCoord;
 varying float vColor;
 
@@ -8,8 +8,8 @@ void main(void)
 {
    
    // Fade the particle to a circular shape
-   float fade = pow(dot(vTexCoord, vTexCoord), particleShape);
-   vec4 texColor = texture2D(diffuseMap, vTexCoord);
+   //float fade = pow(dot(vTexCoord, vTexCoord), vColor);
+   vec4 texColor = (vColor+0.2) * texture2D(diffuseMap, vTexCoord);
    //vec4 texColor = vec4(0.5, 1.0, 0.75, 0.25);
    if (texColor.a < 0.1)
       discard;

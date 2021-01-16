@@ -97,7 +97,11 @@ void Graphics::CParticle::Draw(const SceneItem& si, float dt, bool isRenderingSh
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	for (Int32 i = 0; i < pParticleSceneInstance.GetNumberOfParticles(); ++i)
+	{
+		pParticleSceneInstance.SetUpParticleAttributes(m_pShader, i);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	}
 	glDisable(GL_BLEND);
 	// check for GL errors
 	Int32 error = glGetError();

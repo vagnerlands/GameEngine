@@ -80,7 +80,7 @@ bool Game::PostRendererInitialize()
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	// [Models]
-	//Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed);
+	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed);
 	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
 	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0,0.5,0));
 	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"), eSceneItemType_AnimatedAndShadowed);
@@ -94,10 +94,11 @@ bool Game::PostRendererInitialize()
 	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 
-	//Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
-	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
+	Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
+	//Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
 
 	Graphics::RenderScene::Instance().Add("Particles1", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem);
+	Graphics::RenderScene::Instance().Translate("Particles1", IvVector3(0.f, 3.f, 0.f));
 	Graphics::RenderScene::Instance().CastShadow("Particles1", false);
 	// debug
 
@@ -214,12 +215,13 @@ void Game::UpdateObjects(float dt)
 	}
 	// Update Debug objects
 	// [Light]
-	m_lightAngle += 0.35f;
+	m_lightAngle += 0.15f;
 	static float MoveRadius = 7.F;
     IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius + -10.1136, 7, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius+5.65836);
 	//IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) - 20.f);
 	Graphics::Ilumination::Instance().Update("main", lightLocation);
-	Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
+	//Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
+	Graphics::RenderScene::Instance().Translate("Particles1", lightLocation);
 
 }
 

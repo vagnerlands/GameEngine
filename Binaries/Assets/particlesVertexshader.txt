@@ -3,14 +3,14 @@ layout (location = 0) in vec3 aPos;
 uniform float time_0_X;
 //uniform mat4  view_inverse_matrix;
 uniform float particleSystemHeight;
-uniform float particleSpeed;
-uniform float particleSpread;
-uniform float particleSystemShape;
-uniform float particleShape;
 uniform float particleSize;
+uniform float particleSpeed;
+uniform float particleHeight;
+uniform float particleSpread;
+uniform float particleAge;
 uniform vec3 cameraUp;
 uniform vec3 cameraRight;
-uniform vec4  particleSystemPosition;
+uniform vec4 particleSystemPosition;
 uniform mat4 projection;
 uniform mat4 view;
 
@@ -27,16 +27,22 @@ void main(void)
 {
   
    // Loop particles
-   //float t = fract(aPos.z + particleSpeed * time_0_X);
+   vec4 particlePosition = particleSystemPosition;
+   // s will be a value between 0.0 up to 1.0, based on the particle age
+   float s = ((particleSpeed * time_0_X) / (particleAge * particleSpeed)) ;
+   particlePosition.y = particlePosition.y + s * particleHeight;
+   
+   particlePosition.x = particlePosition.x + (particleSpread * cos(62.0 * aPos.y)) * s;
+   particlePosition.z = particlePosition.z + (particleSpread * cos(62.0 * aPos.y))* s;
   
 	vec3 vertexPosition_worldspace =
-    particleSystemPosition.xyz
+    particlePosition.xyz
     + cameraRight * aPos.x * particleSize
     + cameraUp * aPos.y * particleSize;
 	
 	gl_Position = projection * view * vec4(vertexPosition_worldspace,1);
    
-    vTexCoord = vec2((particleSystemPosition.x + aPos.x * particleSize)+0.5, (particleSystemPosition.y + aPos.y * particleSize));
-    vColor    = 1.0 ;//- t;
+    vTexCoord = vec2(aPos.x+0.5, aPos.y+0.5);//vec2((particleSize + aPos.x )+1, (particleSize + aPos.y ))+0.5;
+    vColor    = 1.0 - s;
    
 }
