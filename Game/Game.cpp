@@ -94,11 +94,11 @@ bool Game::PostRendererInitialize()
 	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 	//Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 
+	//Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
+	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
+
 	Graphics::RenderScene::Instance().Add("Particles1", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem);
 	Graphics::RenderScene::Instance().CastShadow("Particles1", false);
-
-	//Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
-	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("cube.obj"), eSceneItemType_Simple);
 	// debug
 
 

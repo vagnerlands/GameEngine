@@ -31,14 +31,13 @@ namespace Graphics
 		CParticle(const CParticle& other) = delete;
 		CParticle& operator=(const CParticle& other) = delete;
 
-		UInt32 VAO, VBO, EBO = 0;
-
-		Int32                   m_indicesCount;
- 
+		UInt32 VAO, VBO = 0;
 
 		std::string				m_particleName;
 
 		cwc::glShader*			m_pShader;
+
+
 
 	};
 

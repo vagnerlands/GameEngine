@@ -157,7 +157,7 @@ void MainOgl::StartUp(int argv, char** argc)
 	// window or color-index mode).
 	glutInit(&argv, argc);
 	// only one buffer
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_ALPHA | GLUT_DOUBLE | GLUT_RGBA);
 
 	// Position window at (80,80) and sets to it a title
 	glutInitWindowPosition(200, 20);

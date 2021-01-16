@@ -9,8 +9,10 @@ void main(void)
    
    // Fade the particle to a circular shape
    float fade = pow(dot(vTexCoord, vTexCoord), particleShape);
-   //gl_FragColor = vec4(0.5, 1.0, 0.75, 1.0);
-   gl_FragColor = (1.0 - fade) * texture2D(diffuseMap, vec2(vColor,0.0));
-   
+   vec4 texColor = texture2D(diffuseMap, vTexCoord);
+   //vec4 texColor = vec4(0.5, 1.0, 0.75, 0.25);
+   if (texColor.a < 0.1)
+      discard;
+   gl_FragColor = texColor;
   
 }

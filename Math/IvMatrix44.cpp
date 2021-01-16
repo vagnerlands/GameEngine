@@ -1239,3 +1239,21 @@ IvMatrix44::SetRows(const IvVector4& row1, const IvVector4& row2, const IvVector
 	mV[15] = row4.w;
 
 }   // End of IvMatrix44::SetRows()
+
+void 
+IvMatrix44::GetRows(IvVector4& row1, IvVector4& row2, IvVector4& row3, IvVector4& row4)
+{
+    row1 = IvVector4(mV[0], mV[4], mV[8], mV[12]);
+    row2 = IvVector4(mV[1], mV[5], mV[9], mV[13]);
+    row3 = IvVector4(mV[2], mV[6], mV[10], mV[14]);
+    row4 = IvVector4(mV[3], mV[7], mV[11], mV[15]);
+}
+
+void
+IvMatrix44::GetColumns(IvVector4& col1, IvVector4& col2, IvVector4& col3, IvVector4& col4)
+{
+    col1 = IvVector4(mV[0], mV[1], mV[2], mV[3]);
+    col2 = IvVector4(mV[4], mV[5], mV[6], mV[7]);
+    col3 = IvVector4(mV[8], mV[9], mV[10], mV[11]);
+    col4 = IvVector4(mV[12], mV[13], mV[14], mV[15]);
+}
