@@ -79,6 +79,8 @@ bool Game::PostRendererInitialize()
 	// Build a debug scenario
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
+	Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(.5f, .5f, .5f));
+
 	// [Models]
 	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed);
 	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
@@ -216,7 +218,7 @@ void Game::UpdateObjects(float dt)
 	// Update Debug objects
 	// [Light]
 	m_lightAngle += 0.15f;
-	static float MoveRadius = 7.F;
+	static float MoveRadius = 15.F;
     IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius + -10.1136, 7, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius+5.65836);
 	//IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) - 20.f);
 	Graphics::Ilumination::Instance().Update("main", lightLocation);
@@ -237,12 +239,12 @@ void Game::OnKeyEvent(const KeyY& e)
 
 void Game::OnKeyEvent(const KeyG& e)
 {
-	Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", 0.0015f);
+	Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", 0.015f);
 }
 
 void Game::OnKeyEvent(const KeyH& e)
 {
-	Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", -0.0015f);
+	Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", -0.015f);
 }
 
 void Game::OnKeyEvent(const Key0& e)

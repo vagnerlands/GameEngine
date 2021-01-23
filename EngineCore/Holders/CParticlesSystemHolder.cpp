@@ -1,11 +1,8 @@
 #include "CParticlesSystemHolder.h"
-#include "gl/glut.h"
 #include <time.h>
 #include <iostream>
 #include <string>
 #include "MutexFactory.h"
-
-#include "CParticle.h"
 
 CParticlesSystemHolder* CParticlesSystemHolder::s_pInstance = NULL;
 
@@ -49,6 +46,20 @@ CParticlesSystemHolder::CParticlesSystemHolder(const string& pathToResources)
 	/*: m_modelFiles(new CResourceZipFile(pathToResources.data(), this->OnRemoveEvent))*/
 {
 	m_pParticlesContentMapMutex = MutexFactory::Instance().Create("ParticlesContentMapMutex");
+}
+
+Graphics::CParticle* CParticlesSystemHolder::findParticleInDB(const std::string& id)
+{
+	Graphics::CParticle* pRet = nullptr;
+	// update all animations related to each model
+	for (auto& it : m_mapParticles)
+	{
+		if (it.first == id)
+		{
+			pRet = it.second;
+		}
+	}
+	return pRet;
 }
 
 
@@ -105,3 +116,33 @@ void CParticlesSystemHolder::Update(float dt)
 	}
 }
 
+void CParticlesSystemHolder::SetLoopCount(const string& particleId, Int32 loopCount)
+{
+	Graphics::CParticle* pParticle = findParticleInDB(particleId);
+	if (pParticle != nullptr)
+	{
+
+	}
+}
+
+void CParticlesSystemHolder::SetMaxNumberOfParticles(const string& particleId, Int32 maxNumberOfParticles)
+{
+	Graphics::CParticle* pParticle = findParticleInDB(particleId);
+	if (pParticle != nullptr)
+	{
+
+	}
+}
+
+void CParticlesSystemHolder::SetVariants(const string& particleId, Int32 spread, Int32 speed, Int32 height, Int32 age, Int32 size)
+{
+	Graphics::CParticle* pParticle = findParticleInDB(particleId);
+	if (pParticle != nullptr)
+	{
+
+	}
+}
+
+void CParticlesSystemHolder::SetParticlesPosition(const string& particleId, IvVector3& position)
+{
+}

@@ -68,6 +68,11 @@ void Graphics::Ilumination::SetLightColor(const std::string& id, const IvVector3
 	}
 }
 
+void Graphics::Ilumination::SetAmbientLightColor(const IvVector3& lightColor)
+{
+	m_ambientColor = lightColor;
+}
+
 void Graphics::Ilumination::Remove(const std::string & id)
 {
 	for (std::list<Graphics::IluminationItem*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
@@ -131,6 +136,11 @@ float Graphics::Ilumination::GetLightAttenuation() const
 const IvVector3& Graphics::Ilumination::GetLightColor() const
 {
 	return (*m_lights.begin())->GetLightColor();
+}
+
+const IvVector3& Graphics::Ilumination::GetAmbientLightColor() const
+{
+	return m_ambientColor;
 }
 
 void Graphics::Ilumination::UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex)

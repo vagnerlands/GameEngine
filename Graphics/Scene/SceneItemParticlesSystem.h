@@ -30,7 +30,7 @@ namespace Graphics
 				Float size = 0.01f + ((((rand() % 10)) + 1) / 100.f);
 				float height = 0.5f + (((rand() % 100) + 1) / 100.f);
 				float spread = (((rand() % 50)-25) + 1) / 100.f;
-				Int32 age = 100+(rand() % 100) + 1;
+				Int32 age = 100 + (rand() % 100) + 1;
 				m_attributes.push_back(ParticleAttributes(speed, size, age, height, spread));
 			}
 			m_timetag = 1;

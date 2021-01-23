@@ -14,7 +14,7 @@ namespace Graphics
 	class Ilumination
 	{
 	public:
-		Ilumination()
+		Ilumination() : m_ambientColor(0.15f, 0.15f, 0.15f)
 		{
 
 
@@ -40,6 +40,8 @@ namespace Graphics
 
 		void SetLightColor(const std::string& id, const IvVector3& lightColor);
 
+		void SetAmbientLightColor(const IvVector3& lightColor);
+
 		// Update ilumination location
 		virtual void Remove(const std::string& id);
 
@@ -54,6 +56,7 @@ namespace Graphics
 		float GetLightAttenuation() const;
 
 		const IvVector3& GetLightColor() const;
+		const IvVector3& GetAmbientLightColor() const;
 
 		void UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex);
 
@@ -68,6 +71,8 @@ namespace Graphics
 		std::list<IluminationItem*> m_lights;
 
 		Shadows* m_pShadows;
+
+		IvVector3 m_ambientColor;
 
 	private:
 

@@ -84,6 +84,8 @@ void Graphics::SceneItem::SetUpScene(cwc::glShader* pShader) const
 		pShader->setUniform3f("lightPos", lightLocation[0], lightLocation[1], lightLocation[2]);
 		const IvVector3& lc = Graphics::Ilumination::Instance().GetLightColor();
 		pShader->setUniform3f("light_color", lc.GetX(), lc.GetY(), lc.GetZ());
+		const IvVector3& ac = Graphics::Ilumination::Instance().GetAmbientLightColor();
+		pShader->setUniform3f("ambient_color", ac.GetX(), ac.GetY(), ac.GetZ());
 		// update the boolean flag for "has shadows"
 		pShader->setUniform1i("cast_shadows", HasShadows());
 		pShader->setUniform1f("light_attenuation", Graphics::Ilumination::Instance().GetLightAttenuation());
