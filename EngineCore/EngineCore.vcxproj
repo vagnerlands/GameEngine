@@ -156,6 +156,7 @@
     <ClCompile Include="Holders\CParticlesSystemHolder.cpp" />
     <ClCompile Include="Holders\CShaderHolder.cpp" />
     <ClCompile Include="Holders\CSocketHolder.cpp" />
+    <ClCompile Include="Holders\CSoundHolder.cpp" />
     <ClCompile Include="Holders\CTextureHolder.cpp" />
     <ClCompile Include="Holders\CThreadHolder.cpp" />
     <ClCompile Include="IGame.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Holders\CParticlesSystemHolder.h" />
     <ClInclude Include="Holders\CShaderHolder.h" />
     <ClInclude Include="Holders\CSocketHolder.h" />
+    <ClInclude Include="Holders\CSoundHolder.h" />
     <ClInclude Include="Holders\CTextureHolder.h" />
     <ClInclude Include="Holders\CThreadHolder.h" />
     <ClInclude Include="IGame.h" />

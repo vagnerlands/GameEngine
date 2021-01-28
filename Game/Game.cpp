@@ -23,6 +23,8 @@
 #include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtc/type_ptr.hpp>
 
+#include "CSoundHolder.h"
+
 bool 
 EngineCore::IGame::Create()
 {
@@ -70,19 +72,22 @@ bool Game::PostRendererInitialize()
 	// create model holder
 	CModelHolder::s_pInstance->Create(".\\Assets\\model.zip");
 	CParticlesSystemHolder::s_pInstance->Create(".\\Assets\\model.zip");
+	CSoundHolder::s_pInstance->Create("test", 1);
     // 50mb allocation for VRAM textures
 	CTextureHolder::s_pInstance->Create(".\\Assets\\textures.zip", 100U*1024U*1024U);
 
 	IGame::mGame->SetFps(120);
 
 	
+	// test sound
+	CSoundHolder::s_pInstance->PlaySoundById("door.wav");
 	// Build a debug scenario
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(.2f, .2f, .2f));
 
 	// [Models]
-	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed);
+	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed);
 	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
 	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0,0.5,0));
 	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"), eSceneItemType_AnimatedAndShadowed);
@@ -129,13 +134,13 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Scale("SKY1", IvVector3(50,50,50));
 
 	// [Landscape]
-
+	
 
 	return true;
 }
 
 void Game::ExecuteBackground()
-{
+{	
 	// Update objects based on current timestamp
 	CModelHolder::s_pInstance->Update(mClock->GetTimeInMili());
 	//Graphics::RenderScene::Instance().Update(mClock->GetTimeInMili());

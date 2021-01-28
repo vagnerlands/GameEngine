@@ -15,6 +15,9 @@ assimp-vc140-mt.lib;^
 DevIL.lib;^
 ILU.lib;^
 ILUT.lib;^
+SDL2.lib;^
+SDL2main.lib;^
+shell32.lib;^
 zlibd.lib
 
 

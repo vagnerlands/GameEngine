@@ -124,6 +124,9 @@
     <ClCompile Include="Holders\CParticlesSystemHolder.cpp">
       <Filter>Src\Holders</Filter>
     </ClCompile>
+    <ClCompile Include="Holders\CSoundHolder.cpp">
+      <Filter>Src\Holders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IGame.h">
@@ -247,6 +250,9 @@
       <Filter>Src\Input</Filter>
     </ClInclude>
     <ClInclude Include="Holders\CParticlesSystemHolder.h">
+      <Filter>Src\Holders</Filter>
+    </ClInclude>
+    <ClInclude Include="Holders\CSoundHolder.h">
       <Filter>Src\Holders</Filter>
     </ClInclude>
   </ItemGroup>

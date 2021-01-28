@@ -33,6 +33,7 @@ main(int argv, char** argc)
 	{
 		obj = new MainWinOgl();
 	}
+
 	// most of the time, the arguments are pointless
 	// but for some implementations it's a must
 	// let's keep it here
