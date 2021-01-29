@@ -10,7 +10,7 @@ CWinThread::CWinThread()
 	// empty implementation
 }
 
-void CWinThread::createThread(string thName, void* thEntry)
+void CWinThread::createThread(string thName, Byte affinity, void* thEntry)
 {
 	m_threadHandle = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)thEntry, 0, 0x00000000, &m_threadID);
 	
@@ -20,7 +20,7 @@ void CWinThread::createThread(string thName, void* thEntry)
 		return;
 	}
 
-	if (!SetThreadAffinityMask(m_threadHandle, 0x03))
+	if (!SetThreadAffinityMask(m_threadHandle, affinity))
 	{
 		cout << "SetThreadAffinityMask error: " << GetLastError() << " on set thread affinity <" << thName << ">" << endl;
 	}

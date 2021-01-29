@@ -17,12 +17,12 @@ void ThreadFactoryWin::Initialize()
     ThreadFactory::s_pInstance = &instance;
 }
 
-IThread* ThreadFactoryWin::Create(const Byte * name, void* EntryPoint)
+IThread* ThreadFactoryWin::Create(const Byte * name, Byte affinity, void* EntryPoint)
 {
     CWinThread* hnd = new CWinThread();
     if (hnd != 0)
     {
-        hnd->createThread(name, EntryPoint);
+        hnd->createThread(name, affinity, EntryPoint);
     }
 
     return hnd;

@@ -174,9 +174,11 @@
     <ClCompile Include="MainOgl.cpp" />
     <ClCompile Include="MainWinOgl.cpp" />
     <ClCompile Include="OS\Windows\CWinMutex.cpp" />
+    <ClCompile Include="OS\Windows\CWinSemaphore.cpp" />
     <ClCompile Include="OS\Windows\CWinSocket.cpp" />
     <ClCompile Include="OS\Windows\CWinThread.cpp" />
     <ClCompile Include="OS\Windows\MutexFactoryWin.cpp" />
+    <ClCompile Include="OS\Windows\SemaphoreFactoryWin.cpp" />
     <ClCompile Include="OS\Windows\SocketFactoryWin.cpp" />
     <ClCompile Include="OS\Windows\ThreadFactoryWin.cpp" />
   </ItemGroup>
@@ -212,15 +214,19 @@
     <ClInclude Include="MainOgl.h" />
     <ClInclude Include="MainWinOgl.h" />
     <ClInclude Include="OS\Abstract\IMutex.h" />
+    <ClInclude Include="OS\Abstract\ISemaphore.h" />
     <ClInclude Include="OS\Abstract\ISocket.h" />
     <ClInclude Include="OS\Abstract\IThread.h" />
     <ClInclude Include="OS\Abstract\MutexFactory.h" />
+    <ClInclude Include="OS\Abstract\SemaphoreFactory.h" />
     <ClInclude Include="OS\Abstract\SocketFactory.h" />
     <ClInclude Include="OS\Abstract\ThreadFactory.h" />
     <ClInclude Include="OS\Windows\CWinMutex.h" />
+    <ClInclude Include="OS\Windows\CWinSemaphore.h" />
     <ClInclude Include="OS\Windows\CWinSocket.h" />
     <ClInclude Include="OS\Windows\CWinThread.h" />
     <ClInclude Include="OS\Windows\MutexFactoryWin.h" />
+    <ClInclude Include="OS\Windows\SemaphoreFactoryWin.h" />
     <ClInclude Include="OS\Windows\SocketFactoryWin.h" />
     <ClInclude Include="OS\Windows\ThreadFactoryWin.h" />
   </ItemGroup>

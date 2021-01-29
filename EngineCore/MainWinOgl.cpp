@@ -79,7 +79,7 @@ void MainWinOgl::StartUp(int argv, char** argc)
 
 #ifdef WIN32
 	// creates a thread for loading resources purpose
-	CThreadHolder::instance()->registerThread("thBackgroundLoader", WinOglBackgroundLoader);
+	CThreadHolder::instance()->registerThread("thBackgroundLoader", 0x03, WinOglBackgroundLoader);
 #endif
 
 	// should never get to this point, but as a good practice...

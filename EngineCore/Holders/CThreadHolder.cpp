@@ -26,11 +26,11 @@ CThreadHolder::destroyThread(string threadId)
 	}
 }
 
-void CThreadHolder::registerThread(string thName, void * thEntry)
+void CThreadHolder::registerThread(string thName, Byte affinity, void * thEntry)
 {
 
 	// creates a thread using the abstract factory
-	IThread* thObj = ThreadFactory::Instance().Create(thName.data(), thEntry);
+	IThread* thObj = ThreadFactory::Instance().Create(thName.data(), affinity, thEntry);
 
 	if (thObj == nullptr)
 	{

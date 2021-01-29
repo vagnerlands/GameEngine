@@ -16,7 +16,7 @@ class CThreadHolder
 public:
 	static CThreadHolder* instance();
 	void destroyThread(string threadId);
-	void registerThread(string thName, void* thEntry);
+	void registerThread(string thName, Byte affinity, void* thEntry);
 	void DestroyAll();
 private:
 	CThreadHolder();

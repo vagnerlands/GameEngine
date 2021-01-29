@@ -17,7 +17,7 @@ public:
 	{
 		// empty - should be reinplemented by derived class
 	}
-	virtual void createThread(string thName, void* thEntry) = 0;
+	virtual void createThread(string thName, Byte affinity, void* thEntry) = 0;
 	virtual void destroy() = 0;
 };
 

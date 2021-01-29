@@ -15,8 +15,8 @@ class CWinThread : public IThread
 public:
 	CWinThread();
 	~CWinThread();
-	void createThread(string thName, void* thEntry);
-	void destroy();
+	void createThread(string thName, Byte affinity, void* thEntry) override;
+	void destroy() override;
 private:
 	DWORD m_threadID;
 	HANDLE m_threadHandle;

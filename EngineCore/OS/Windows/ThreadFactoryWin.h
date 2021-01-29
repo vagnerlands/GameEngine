@@ -15,7 +15,7 @@ public:
 
     static void Initialize();
 
-    virtual IThread* Create(const Byte* name, void* EntryPoint) override;
+    virtual IThread* Create(const Byte* name, Byte affinity, void* EntryPoint) override;
 };
 
 

@@ -127,6 +127,12 @@
     <ClCompile Include="Holders\CSoundHolder.cpp">
       <Filter>Src\Holders</Filter>
     </ClCompile>
+    <ClCompile Include="OS\Windows\CWinSemaphore.cpp">
+      <Filter>Src\OS\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="OS\Windows\SemaphoreFactoryWin.cpp">
+      <Filter>Src\OS\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IGame.h">
@@ -254,6 +260,18 @@
     </ClInclude>
     <ClInclude Include="Holders\CSoundHolder.h">
       <Filter>Src\Holders</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Abstract\ISemaphore.h">
+      <Filter>Src\OS\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Abstract\SemaphoreFactory.h">
+      <Filter>Src\OS\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Windows\CWinSemaphore.h">
+      <Filter>Src\OS\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="OS\Windows\SemaphoreFactoryWin.h">
+      <Filter>Src\OS\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

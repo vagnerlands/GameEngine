@@ -14,6 +14,7 @@
 #include "MutexFactoryWin.h"
 #include "SocketFactoryWin.h"
 #include "ThreadFactoryWin.h"
+#include "SemaphoreFactoryWin.h"
 #include "CFactory2dImageWin.h"
 #include "Ilumination.h"
 #include "ShadowsOGL.h"
@@ -151,6 +152,7 @@ void MainOgl::StartUp(int argv, char** argc)
     MutexFactoryWin::Initialize();
     SocketFactoryWin::Initialize();
     ThreadFactoryWin::Initialize();
+	SemaphoreFactoryWin::Initialize();
 	//CFactory2dImageWin::Initialize();
 
 	// Use a single buffered window in RGB mode (as opposed to a double-buffered
@@ -219,7 +221,7 @@ void MainOgl::StartUp(int argv, char** argc)
 	glutPassiveMotionFunc(MouseMotion);
 
 	// creates a thread for loading resources purpose
-	CThreadHolder::instance()->registerThread("thBackgroundLoader", BackgroundLoader);
+	CThreadHolder::instance()->registerThread("thBackgroundLoader", 0x03, BackgroundLoader);
 
 	// initialize the opengl main loop
 	// this will handle the whole displaying states of our game...
