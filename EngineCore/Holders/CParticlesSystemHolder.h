@@ -37,11 +37,6 @@ public:
 
 	void Update(float dt);
 
-	void SetLoopCount(const string& particleId, Int32 loopCount = -1);
-	void SetMaxNumberOfParticles(const string& particleId, Int32 maxNumberOfParticles);
-	void SetVariants(const string& particleId, Int32 spread, Int32 speed, Int32 height, Int32 age, Int32 size);
-	void SetParticlesPosition(const string& particleId, IvVector3& position);
-
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(const string& removeItem);
 	// local instance

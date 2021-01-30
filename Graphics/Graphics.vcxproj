@@ -181,6 +181,8 @@
     <ClInclude Include="IModel.h" />
     <ClInclude Include="IRenderer.h" />
     <ClInclude Include="ITexture.h" />
+    <ClInclude Include="Scene\Query\SceneQuery.h" />
+    <ClInclude Include="Scene\Query\SceneQueryParticles.h" />
     <ClInclude Include="Scene\SceneItemAnimatedAndShadowed.h" />
     <ClInclude Include="Scene\SceneItemFactory.h" />
     <ClInclude Include="Scene\Ilumination.h" />

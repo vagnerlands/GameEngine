@@ -24,6 +24,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "CSoundHolder.h"
+#include "Scene/Query/SceneQueryParticles.h"
 
 bool 
 EngineCore::IGame::Create()
@@ -80,7 +81,7 @@ bool Game::PostRendererInitialize()
 
 	
 	// test sound
-	CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
+	//CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
 	CSoundHolder::s_pInstance->PlaySoundById("highlands.wav", eSoundType_Music, 0.5f);
 	// Build a debug scenario
 	// [Light]
@@ -91,16 +92,6 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed);
 	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
 	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0,0.5,0));
-	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"), eSceneItemType_AnimatedAndShadowed);
-	//Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
-	//Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(-3, 0.5, 0));
-	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"), eSceneItemType_AnimatedAndShadowed);
-	//Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
-	//Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(3, 0.5, 0));
-	//Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
-	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
-	//Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
-	//Graphics::RenderScene::Instance().Add("Yoni4", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 
 	Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
 	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
@@ -109,9 +100,14 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem);
 	Graphics::RenderScene::Instance().Translate("Particles2", IvVector3(0.f, 5.f, 0.f));
 	Graphics::RenderScene::Instance().CastShadow("Particles2", false);
-	CSoundHolder::s_pInstance->PlaySoundById("door.wav", eSoundType_Effect, 0.1f);
+
+	Graphics::SceneQueryParticles part;
+	part.Set(Graphics::ParticleSeeds(100, 100, 150, 100, 200, 200, 500, 20, 50, 100, 200, "flame.png"));
+	Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
+
+	//CSoundHolder::s_pInstance->PlaySoundById("door.wav", eSoundType_Effect, 0.1f);
 	CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
-	CSoundHolder::s_pInstance->PlaySoundById("door.wav", eSoundType_Effect, 0.1f);
+	//CSoundHolder::s_pInstance->PlaySoundById("door.wav", eSoundType_Effect, 0.1f);
 	// debug
 
 

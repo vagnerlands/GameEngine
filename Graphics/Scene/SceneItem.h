@@ -47,6 +47,11 @@ namespace Graphics
 		virtual void SetUpAnimation(cwc::glShader* pShader) const;
 		virtual void SetUpShadows(cwc::glShader* pShader) const;
 		virtual void ShadowsPass() const;
+		// visitor - base implementation do nothing
+		virtual void Query(class SceneQuery& query)
+		{
+			// do nothing
+		}
 
 		// for comparison
 		virtual bool operator==(const SceneItem& other)

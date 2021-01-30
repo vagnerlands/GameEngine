@@ -87,6 +87,15 @@ void Graphics::RenderScene::Remove(const std::string & id)
 //	}
 //}
 
+void Graphics::RenderScene::ApplyQuery(const std::string& id, SceneQuery& query)
+{
+	Graphics::SceneItem* pObj = find(id);
+	if (pObj != nullptr)
+	{
+		pObj->Query(query);
+	}
+}
+
 void Graphics::RenderScene::Render(float dt, bool isRenderingShadows) const
 {
 	for (auto& it = m_items.begin(); it != m_items.end(); it++)

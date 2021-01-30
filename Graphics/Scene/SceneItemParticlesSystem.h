@@ -3,28 +3,25 @@
 
 #include "CommonTypes.h"
 #include "SceneItemSimple.h"
-//#include "Ilumination.h"
 #include "IRenderer.h"
 #include "CTextureHolder.h"
-
+#include "Scene/Query/SceneQueryParticles.h"
 
 using namespace Types;
 
 namespace Graphics
 {
-	struct ParticlesAttributes
-	{
-		IvVector4 ParticlePosition;
-		Float ParticleSize;
-	};
-
 	// Gives extra behavior for Shadowed Scene Objects
 	class SceneItemParticlesSystem : public SceneItemSimple
 	{
 	public:
 		SceneItemParticlesSystem(const std::string& id, IDrawable* pDrawable, Int32 NumberOfParticles) : SceneItemSimple(id, pDrawable), m_numberOfParticles(NumberOfParticles)
 		{
-			for (Int32 i = 0; i < NumberOfParticles; ++i)
+			// make sure it's empty
+			m_attributes.clear();
+			// default behavior must be overriden by user
+			// this avoids displaying nothing
+			for (Int32 i = 0; i < m_numberOfParticles; ++i)
 			{
 				Float speed = 1.f + (((rand() % 100)+1) / 100.f);
 				Float size = 0.01f + ((((rand() % 10)) + 1) / 100.f);
@@ -80,8 +77,7 @@ namespace Graphics
 			pShader->setUniform3f("cameraRight", CameraRight_worldspace.GetX(), CameraRight_worldspace.GetY(), CameraRight_worldspace.GetZ());
 			pShader->setUniform3f("cameraUp", CameraUp_worldspace.GetX(), CameraUp_worldspace.GetY(), CameraUp_worldspace.GetZ());
 			pShader->setUniform4f("particleSystemPosition", m_location.GetX(), m_location.GetY(), m_location.GetZ(), 0.f);
-			char* dif = "diffuseMap";
-			pShader->setTexture(dif, CTextureHolder::s_pInstance->getTextureById("flame.png"));
+			pShader->setTexture("diffuseMap", CTextureHolder::s_pInstance->getTextureById(m_texture));
 
 			m_timetag++;
 			if (m_timetag > 100000) m_timetag = 1;
@@ -90,26 +86,49 @@ namespace Graphics
 
 		virtual void SetUpAnimation(cwc::glShader* pShader) const override
 		{
-			//pShader->setUniform1i("hasAnimations", 0);
+			// do nothing
 		}
-		//virtual void SetUpShadows(cwc::glShader* pShader) const;
 		virtual void ShadowsPass() const override
 		{
-			//Graphics::Ilumination::Instance().HasAnimations(0);
-			//Graphics::Ilumination::Instance().UpdateModel(m_model);
+			// do nothing
+		}
+
+		virtual void Query(SceneQuery& query)
+		{
+			const ParticleSeeds& seeds = query.GetParticlesSeeds();
+			// calculate the seeds based on min/max values and update this scene item
+			if (seeds.IsValid)
+			{
+				// make sure it's empty
+				m_attributes.clear();
+				m_numberOfParticles = seeds.NumberOfParticles;
+				m_texture = seeds.Texture;
+				for (Int32 i = 0; i < m_numberOfParticles; ++i)
+				{
+					Float speed = (seeds.SpeedMin + abs((rand() % (seeds.SpeedMax - seeds.SpeedMin)))) / 100.f;
+					Float size = (seeds.SizeMin + abs((rand() % (seeds.SizeMax - seeds.SizeMin)))) / 1000.f;
+					Float height = (seeds.HeightMin + abs((rand() % (seeds.HeightMax - seeds.HeightMin)))) / 100.f;
+					Float spread = ((rand() % seeds.SpreadMax) - seeds.SpreadMin + 1)  / 100.f;
+					Int32 age = (seeds.AgeMin + abs((rand() % (seeds.AgeMax - seeds.AgeMin))));
+					m_attributes.push_back(ParticleAttributes(speed, size, age, height, spread));
+				}
+				m_timetag = 1;
+			}
 		}
 
 	private:
 		struct ParticleAttributes
 		{
 			ParticleAttributes(Float speed, Float size, Int32 age, Float maxheight, Float spread) : Speed(speed), Size(size), Age(age), MaxHeight(maxheight), Spread(spread) {}
-			Float Speed, Size;
+			Float Speed;
+			Float Size;
 			Float MaxHeight;
-			float Spread;
+			Float Spread;
 			Int32 Age;
 		};
 		Int32 m_numberOfParticles;
 		std::vector<ParticleAttributes> m_attributes;
+		string m_texture = "flame.png";
 		mutable Int32 m_timetag;
 	};
 }

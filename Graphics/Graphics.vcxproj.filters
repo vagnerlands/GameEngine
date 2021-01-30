@@ -12,6 +12,9 @@
     <Filter Include="Src\Scene">
       <UniqueIdentifier>{6ccc465b-75aa-46f0-83e5-3ea9b7e57203}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Scene\Query">
+      <UniqueIdentifier>{ddf4f3ca-560c-459e-9d0c-a4e0b257bd6e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderer.h">
@@ -85,6 +88,12 @@
     </ClInclude>
     <ClInclude Include="CParticle.h">
       <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Query\SceneQuery.h">
+      <Filter>Src\Scene\Query</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Query\SceneQueryParticles.h">
+      <Filter>Src\Scene\Query</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

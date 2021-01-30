@@ -48,7 +48,7 @@ namespace Graphics
 		virtual void Remove(const std::string& id);
 		
 
-		//virtual void Update(float dt) const;
+		virtual void ApplyQuery(const std::string& id, class SceneQuery& query);
 
 		virtual void Render(float dt, bool isRenderingShadows = false) const;
 

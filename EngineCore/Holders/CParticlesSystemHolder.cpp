@@ -116,33 +116,47 @@ void CParticlesSystemHolder::Update(float dt)
 	}
 }
 
-void CParticlesSystemHolder::SetLoopCount(const string& particleId, Int32 loopCount)
-{
-	Graphics::CParticle* pParticle = findParticleInDB(particleId);
-	if (pParticle != nullptr)
-	{
-
-	}
-}
-
-void CParticlesSystemHolder::SetMaxNumberOfParticles(const string& particleId, Int32 maxNumberOfParticles)
-{
-	Graphics::CParticle* pParticle = findParticleInDB(particleId);
-	if (pParticle != nullptr)
-	{
-
-	}
-}
-
-void CParticlesSystemHolder::SetVariants(const string& particleId, Int32 spread, Int32 speed, Int32 height, Int32 age, Int32 size)
-{
-	Graphics::CParticle* pParticle = findParticleInDB(particleId);
-	if (pParticle != nullptr)
-	{
-
-	}
-}
-
-void CParticlesSystemHolder::SetParticlesPosition(const string& particleId, IvVector3& position)
-{
-}
+//void CParticlesSystemHolder::SetLoopCount(const string& particleId, Int32 loopCount)
+//{
+//	Graphics::CParticle* pParticle = findParticleInDB(particleId);
+//	if (pParticle != nullptr)
+//	{
+//
+//	}
+//}
+//
+//void CParticlesSystemHolder::SetMaxNumberOfParticles(const string& particleId, Int32 maxNumberOfParticles)
+//{
+//	Graphics::CParticle* pParticle = findParticleInDB(particleId);
+//	if (pParticle != nullptr)
+//	{
+//
+//	}
+//}
+//
+//void CParticlesSystemHolder::SetVariants(const string& particleId, Int32 spread, Int32 speed, Int32 height, Int32 age, Int32 size)
+//{
+//	Graphics::CParticle* pParticle = findParticleInDB(particleId);
+//	if (pParticle != nullptr)
+//	{
+//
+//	}
+//}
+//
+//void CParticlesSystemHolder::SetParticlesPosition(const string& particleId, IvVector3& position)
+//{
+//	Graphics::CParticle* pParticle = findParticleInDB(particleId);
+//	if (pParticle != nullptr)
+//	{
+//
+//	}
+//}
+//
+//void CParticlesSystemHolder::SetTexture(const string& particleId, const string& textureId)
+//{
+//	Graphics::CParticle* pParticle = findParticleInDB(particleId);
+//	if (pParticle != nullptr)
+//	{
+//
+//	}
+//}
