@@ -38,6 +38,9 @@
     <Filter Include="Src\Loaders\Images\Windows">
       <UniqueIdentifier>{fd0f5ff5-36f7-4e60-8924-3123ac367127}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Sound">
+      <UniqueIdentifier>{2347d22b-3428-45d9-a84a-71b775410f32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IGame.cpp">
@@ -132,6 +135,9 @@
     </ClCompile>
     <ClCompile Include="OS\Windows\SemaphoreFactoryWin.cpp">
       <Filter>Src\OS\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound\audio.c">
+      <Filter>Src\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -272,6 +278,9 @@
     </ClInclude>
     <ClInclude Include="OS\Windows\SemaphoreFactoryWin.h">
       <Filter>Src\OS\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\audio.h">
+      <Filter>Src\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

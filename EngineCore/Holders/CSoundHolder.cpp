@@ -1,6 +1,5 @@
 #include "CSoundHolder.h"
 #include "MutexFactory.h"
-#include "sdl/SDL.h"
 
 #include "IThread.h"
 #include "ISemaphore.h"
@@ -10,40 +9,9 @@
 #include <time.h>
 #include <iostream>
 
+#include "Sound/audio.h"
+
 using namespace std;
-
-struct AudioData
-{
-	Uint8* position;
-	Uint32 length;
-};
-
-void AudioCallback(void* userData, Uint8* stream, int streamLength)
-{
-	CSoundHolder::s_pInstance->LockMix();
-	AudioData* audio = (AudioData*)userData;
-	Uint32 length = (Uint32)streamLength;
-	if (audio->length == 0) 
-		return;
-
-	if (length > audio->length) {
-		length = audio->length;
-	}
-
-	SDL_memset(stream, 0, length);
-	//SDL_MixAudioFormat(stream, audio->position, SDL_AUDIO_ALLOW_FORMAT_CHANGE, length, 100);
-	//SDL_memcpy(stream, audio->position, length);
-	SDL_MixAudio(stream, audio->position, length, SDL_MIX_MAXVOLUME);// mix from one buffer into another
-	//memcpy(stream, audio->position, length);
-
-	audio->position += length;
-	audio->length -= length;
-
-	//cout << "writing " << length << " bytes, from ";
-	//cout << (int)audio->position << " to " << (int)stream << endl;
-
-	CSoundHolder::s_pInstance->UnlockMix();
-}
 
 CSoundHolder* CSoundHolder::s_pInstance = NULL;
 
@@ -60,28 +28,24 @@ bool CSoundHolder::Create(const string& pathToTexturesFile, UInt32 maxAllocSize)
 			return true;
 		}
 		s_pInstance->initialize();
-		SDL_Init(SDL_INIT_AUDIO);
+		/* Init Simple-SDL2-Audio */
+		initAudio();
+
+		/* While using delay for showcase, don't actually do this in your project */
+		SDL_Delay(5000);
 	}
 	return false;
 }
 
-void CSoundHolder::PlaySoundById(const string& id)
+void CSoundHolder::PlaySoundById(const string& id, eSoundType type, Float volume)
 {
-	// 
-	//bool isLoaded = true;
-	// then try to find it in the textures map
-	//SoundContentMap::iterator result = m_soundMap.find(id);
-	//if (result == m_soundMap.end())
-	//{
-	//	//isLoaded = loadSound(id);
-	//}
-
 	m_soundMapMutex->mutexLock();
-	m_soundsToPlay.push_back(id);
+	m_soundsToPlay.push_back(SoundAttributes(id, type, volume));
 	m_soundMapMutex->mutexUnlock();
-	//IThread* pThr = ThreadFactory::Instance().Create(string("TSoundPlayer_" + id).data(), 0x02, CSoundHolder::PlaySound);
+	// thread will run immediatelly
+	IThread* pThr = ThreadFactory::Instance().Create(string("TSoundPlayer_" + id).data(), 0x02, CSoundHolder::PlaySound);
 	// allow the sound thread to start working
-	m_pSemaphore->signal();
+	//m_pSemaphore->signal();
 
 	
 
@@ -113,84 +77,32 @@ CSoundHolder::OnRemoveEvent(const string& removeItem)
 
 void CSoundHolder::PlaySound()
 { 
-	while (1) 
+	SoundAttributes sound;
+	// extracts and pop from the queue - it uses mutex internally, so no need to protect this critical section
+	CSoundHolder::s_pInstance->getNextSound(sound);
+	// music will play in loop, while sound effect will play once.
+	// only 1x music can play at a time, while up to 25 different sound effects may play at the same time...
+	switch (sound.m_type)
 	{
-		// set this thread to rest
-		CSoundHolder::s_pInstance->finish();
-
-		string id;
-		CSoundHolder::s_pInstance->getNextSound(id);
-
-		SDL_AudioSpec wavSpec;
-		Uint8* wavStart;
-		Uint32 wavLength;
-		std::string filePath = "./Assets/" + id;
-
-		if (SDL_LoadWAV(filePath.data(), &wavSpec, &wavStart, &wavLength) == NULL)
-		{
-			printf("Error: file could not be loaded as an audio file.\n");
-		}
-
-		AudioData audio;
-		audio.position = wavStart;
-		audio.length = wavLength;
-
-		wavSpec.callback = AudioCallback;
-		wavSpec.userdata = &audio;
-
-		/* Open the audio device */
-		if (SDL_OpenAudio(&wavSpec, NULL) < 0) {
-			fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
-			exit(-1);
-		}
-
-		/* Start playing */
-		SDL_PauseAudio(0);
-
-		while (audio.length > 0)
-		{
-			SDL_Delay(100);
-		}
-
-		SDL_CloseAudio();
-		SDL_FreeWAV(wavStart);
-
+		case eSoundType_Music:
+			playMusic(string("./Assets/" + sound.m_id).data(), static_cast<Int32>(SDL_MIX_MAXVOLUME * sound.m_volume));
+			break;
+		case eSoundType_Effect:
+			playSound(string("./Assets/" + sound.m_id).data(), static_cast<Int32>(SDL_MIX_MAXVOLUME * sound.m_volume));
+			break;
 	}
+	
+	SDL_Delay(1000);
 }
 
 bool
 CSoundHolder::loadSound(const string& id)
 {
-	//// assumes it passed
-	//bool ret = true;
-	//// start loading measuring time
-	//clock_t start = clock();
-
-	//// cache missed - must reload it from resources db
-	//CResource resourceItem(id);
-
-	//Byte*  dataStream = m_pResHandler->VAllocateAndGetResource(resourceItem);
-	//UInt32 dataLength = m_pResHandler->VGetResourceSize(resourceItem);
-	//// status OK
-	//if (dataStream != 0)
-	//{
-	//	m_soundMap.insert({ id, dataStream });
-	//}
-	//else
-	//{
-	//	ret = false;
-	//	DEBUG_OUT("Sound %s not found\n", id);
-	//}
-	//
-	//// time measurement
-	//printf(" loading tex [%s] %.2fms\n", id.data(), (float)(clock() - start));
-
-	//return ret;
-
+	// might be useful later
 	return true;
 }
 
-void CSoundHolder::getNextSound(string& out)
+void CSoundHolder::getNextSound(SoundAttributes& out)
 {
 	// lock mutex
 	m_soundMapMutex->mutexLock();
@@ -213,23 +125,15 @@ void CSoundHolder::initialize()
 	// cross platform implementation for mutex creation
 	m_soundMapMutex = MutexFactory::Instance().Create("SoundMapMutex");
 	// create semaphore
-	m_pSemaphore = SemaphoreFactory::Instance().Create("TSoundSem", 1);
+	//m_pSemaphore = SemaphoreFactory::Instance().Create("TSoundSem", 1);
 	// create a thread
-	m_pThread = ThreadFactory::Instance().Create("TSoundPlayer", 0x02, CSoundHolder::PlaySound);
+	//m_pThread = ThreadFactory::Instance().Create("TSoundPlayer", 0x02, CSoundHolder::PlaySound);
 }
 
 
 void CSoundHolder::RemoveSound(const string& id)
 {
-	//SoundContentMap::iterator it = m_soundMap.find(id);
-	//if (it == m_soundMap.end())
-	//{
-	//	// this shouldn't happen - never, but if happens, trying 
-	//	// to erase will cause an exception - so must quit method
-	//	return;
-	//}
-	//delete[] it->second;
-	//m_soundMap.erase(it);
+
 }
 
 
@@ -242,8 +146,8 @@ CSoundHolder::~CSoundHolder()
 		m_soundMap.erase(it);
 	}*/		
 
-	m_pSemaphore->destroy();
-	m_pThread->destroy();
+	//m_pSemaphore->destroy();
+	//m_pThread->destroy();
 
 	SDL_Quit();
 }

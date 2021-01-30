@@ -80,18 +80,17 @@ bool Game::PostRendererInitialize()
 
 	
 	// test sound
-	CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav");
-	CSoundHolder::s_pInstance->PlaySoundById("door.wav");
+	CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
+	CSoundHolder::s_pInstance->PlaySoundById("highlands.wav", eSoundType_Music, 0.5f);
 	// Build a debug scenario
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
-	Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(.2f, .2f, .2f));
+	Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(.5f, .5f, .5f));
 
 	// [Models]
 	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed);
 	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
 	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0,0.5,0));
-	CSoundHolder::s_pInstance->PlaySoundById("door.wav");
 	//Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"), eSceneItemType_AnimatedAndShadowed);
 	//Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
 	//Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(-3, 0.5, 0));
@@ -110,7 +109,9 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem);
 	Graphics::RenderScene::Instance().Translate("Particles2", IvVector3(0.f, 5.f, 0.f));
 	Graphics::RenderScene::Instance().CastShadow("Particles2", false);
-	CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav");
+	CSoundHolder::s_pInstance->PlaySoundById("door.wav", eSoundType_Effect, 0.1f);
+	CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
+	CSoundHolder::s_pInstance->PlaySoundById("door.wav", eSoundType_Effect, 0.1f);
 	// debug
 
 

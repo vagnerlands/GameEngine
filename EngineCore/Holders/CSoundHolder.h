@@ -8,12 +8,18 @@
 using namespace Types;
 using namespace std;
 
+enum eSoundType
+{
+	eSoundType_Music = 0,
+	eSoundType_Effect
+};
+
 class CSoundHolder 
 {
 public:
 	//typedef unordered_map<string, Types::Byte*> SoundContentMap;
 	static bool Create(const string& pathToSounds, UInt32 maxAllocSize);
-	void PlaySoundById(const string& id);
+	void PlaySoundById(const string& id, eSoundType type, Float volume);
 	void RemoveSound(const string& id);
 	void Destroy(const string& id);
 	CSoundHolder::~CSoundHolder();
@@ -32,9 +38,20 @@ public:
 
 
 private:
+
+	struct SoundAttributes
+	{
+		SoundAttributes() : m_id(""), m_type(eSoundType_Music), m_volume(1.f) {}
+		explicit SoundAttributes(const string& id, eSoundType type, Float volume) : m_id(id), m_type(type), m_volume(volume){}
+		string m_id;
+		eSoundType m_type;
+		Float m_volume;
+	};
+
+
 	bool loadSound(const string& id);
 
-	void getNextSound(string& out);
+	void getNextSound(SoundAttributes& out);
 
 	void finish();
 
@@ -45,7 +62,7 @@ private:
 	// local hashmap for textures to be generated
 	//SoundContentMap m_soundMap;
 
-	list<string> m_soundsToPlay;
+	list<SoundAttributes> m_soundsToPlay;
 
 	// mutex for m_processes
 	IMutex* m_soundMapMutex;
