@@ -41,6 +41,9 @@
     <Filter Include="Src\Sound">
       <UniqueIdentifier>{2347d22b-3428-45d9-a84a-71b775410f32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Utils">
+      <UniqueIdentifier>{057a5bcd-2eb8-4513-9bb5-1f4a0b98957a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IGame.cpp">
@@ -138,6 +141,9 @@
     </ClCompile>
     <ClCompile Include="Sound\audio.c">
       <Filter>Src\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\JobList.cpp">
+      <Filter>Src\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +287,9 @@
     </ClInclude>
     <ClInclude Include="Sound\audio.h">
       <Filter>Src\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\JobList.h">
+      <Filter>Src\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

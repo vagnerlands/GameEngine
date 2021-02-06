@@ -16,6 +16,7 @@ Graphics::SceneItem::SceneItem(const std::string& id, Graphics::IDrawable* pDraw
 
 void Graphics::SceneItem::Render(float dt, bool isRenderingShadows) const
 {
+	if (m_pDrawable!=nullptr)
 	m_pDrawable->Draw(*this, dt, isRenderingShadows);
 }
 

@@ -11,6 +11,11 @@
 
 #include "Assimp\Importer.hpp"
 
+// multi threading
+#include "IMutex.h"
+#include "ThreadFactory.h"
+#include "IThread.h"
+
 CModelHolder* CModelHolder::s_pInstance = NULL;
 
 CModelHolder::~CModelHolder()
@@ -29,6 +34,8 @@ bool CModelHolder::Create(const string& pathToModelFile)
 	{
 		// creates instance of CModelHolder
 		s_pInstance = new CModelHolder(pathToModelFile);
+		// instantiate a new thread
+		s_pInstance->m_pThread = ThreadFactory::Instance().Create("ModelLoading", 0x01, CModelHolder::Loading);
 		// tries to open the resource file - out of the constructor so errors may be reported
 		if (s_pInstance != nullptr) /*&& (s_pInstance->m_modelFiles->VOpen()))*/
 		{
@@ -44,6 +51,23 @@ CModelHolder::OnRemoveEvent(const string& removeItem)
 	s_pInstance->RemoveModel(removeItem);
 }
 
+void CModelHolder::Loading()
+{
+	while (true)
+	{
+		_Utils::JobList& jobs = s_pInstance->m_jobs;
+		if (!jobs.IsEmpty())
+		{
+			_Utils::Job next(jobs);
+			jobs.Retrieve(next);
+			// parse the huge model files
+			Graphics::IModel* result = s_pInstance->LoadModel(next.Get());
+			// push the results back to the job list, so it will 
+			jobs.PushResult(result);
+		}
+	}
+}
+
 CModelHolder::CModelHolder(const string& pathToResources)
 	/*: m_modelFiles(new CResourceZipFile(pathToResources.data(), this->OnRemoveEvent))*/
 {
@@ -56,18 +80,18 @@ CModelHolder::LoadModel(const string& modelId)
 	// start loading measuring time
 	clock_t start = clock();
 
-	// must manipulate this object using specific CModelHolder
-	// in the future, this should be a #define or a strategy
-	Graphics::CModelOGL* pGfxModel = nullptr;
-	pGfxModel = new Graphics::CModelOGL(modelId);
-	pGfxModel->Create();
-
-	m_mapModels.insert(make_pair(modelId, pGfxModel));
+	// then try to find it in the textures map
+	ModelObject::iterator pGfxModel = m_mapModels.find(modelId);
+	if (pGfxModel != m_mapModels.end())
+	{
+		// Try to Load
+		(*pGfxModel).second->Create();
+	}
 
 	// time measurement
 	printf(" loading model [%s] %.2fms\n", modelId.data(), (float)(clock() - start));
 
-	return pGfxModel;
+	return (*pGfxModel).second;
 }
 
 
@@ -95,7 +119,7 @@ CModelHolder::RemoveModel(const string& textId)
 Graphics::IModel*
 CModelHolder::GetModelById(const string& modelId)
 {
-	Graphics::IModel* pRet = (Graphics::IModel*)(NULL);
+	Graphics::IModel* pRet = nullptr;
 	// then try to find it in the textures map
 	ModelObject::iterator result = m_mapModels.find(modelId);
 	if (result != m_mapModels.end())
@@ -105,7 +129,14 @@ CModelHolder::GetModelById(const string& modelId)
 	else
 	{
 		// cache miss - then add this texture to the process list
-		pRet = LoadModel(modelId);
+		// first, create it and push to the map models
+		// must manipulate this object using specific CModelHolder
+		// in the future, this should be a #define or a strategy
+		pRet = new Graphics::CModelOGL(modelId);
+		m_mapModels.insert(make_pair(modelId, pRet));
+
+		//pRet = LoadModel(modelId);
+		m_jobs.PushRequest(modelId);
 	}
 
 	// if it somehow failed, returns -1
@@ -118,6 +149,16 @@ void CModelHolder::Update(float dt)
 	for (auto& it : m_mapModels) 
 	{		
 		it.second->Update(dt);
+	}
+}
+
+void CModelHolder::Refresh()
+{
+	Graphics::IModel* pModel = m_jobs.GetNextResult();
+	if (pModel != nullptr)
+	{
+		// forces to use the already existing Model
+		pModel->Apply(nullptr);
 	}
 }
 

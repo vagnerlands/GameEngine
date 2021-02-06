@@ -11,7 +11,12 @@
 
 
 Graphics::CModelOGL::CModelOGL(string modelName) :
-	m_vboBufferCreated(false), m_hasAnimations(false), m_isWireMode(false), m_currentBuffer(eBuffering_First), m_pBoneMutex(MutexFactory::Instance().Create("Bones"))
+	m_vboBufferCreated(false), 
+	m_hasAnimations(false), 
+	m_isWireMode(false), 
+	m_currentBuffer(eBuffering_First),
+	m_pBoneMutex(MutexFactory::Instance().Create("Bones")),
+	m_pModelImporter()
 {
 	// only for debug purposes
 	m_modelName = modelName;
@@ -69,6 +74,9 @@ Graphics::CModelOGL::~CModelOGL()
 
 		// unmark it as "created", cause now it no longer exists
 		m_vboBufferCreated = false;
+
+		// destroy shared_ptr
+		m_pModelImporter = nullptr;
 	}
 }
 
@@ -77,10 +85,10 @@ Graphics::CModelOGL::~CModelOGL()
 bool Graphics::CModelOGL::Create()
 {
 	//Model modelLoader(bytesStream, length);
-	Model modelImporter(m_Importer);
-	modelImporter.SetBoneInformation(&m_boneInformation);
+	m_pModelImporter = make_shared<Model>(m_Importer);
+	m_pModelImporter->SetBoneInformation(&m_boneInformation);
 	// actually tries to load the model
-	modelImporter.Load("./Assets/" + m_modelName);
+	m_pModelImporter->Load("./Assets/" + m_modelName);
 
 	m_global_inverse_transform = m_Importer.GetScene()->mRootNode->mTransformation;
 	m_global_inverse_transform.Inverse();
@@ -96,13 +104,18 @@ bool Graphics::CModelOGL::Create()
 		ticks_per_second = 25.0f;
 	}
 
-	return Apply(modelImporter);
-	
+	// TODO: check for fail condition
+	return true;
 }
 
 
-bool Graphics::CModelOGL::Apply(const Model& modelInfo)
+bool Graphics::CModelOGL::Apply(const Model* pModelInfo)
 {
+	const Model* pModel = pModelInfo;
+	if (pModel == nullptr)
+	{
+		pModel = m_pModelImporter.get();
+	}
 	if (!m_vboBufferCreated)
 	{
 		m_vboBufferCreated = true;
@@ -115,18 +128,18 @@ bool Graphics::CModelOGL::Apply(const Model& modelInfo)
 		}
 
 		// improves performance by avoiding resizing the vector during the operation
-		m_drawAttr.reserve(modelInfo.meshes.size());
+		m_drawAttr.reserve((*pModel).meshes.size());
 		if (m_hasAnimations)
 		{
-			m_bonesBufferObject.reserve(modelInfo.meshes.size());
+			m_bonesBufferObject.reserve((*pModel).meshes.size());
 		}
-		m_vertexBufferObject.reserve(modelInfo.meshes.size());
-		m_elementBufferObject.reserve(modelInfo.meshes.size());
+		m_vertexBufferObject.reserve((*pModel).meshes.size());
+		m_elementBufferObject.reserve((*pModel).meshes.size());
 		// iterates on each mesh, creating VAO, VBO and Textures
-		for (UInt32 i = 0; i < modelInfo.meshes.size(); ++i)
+		for (UInt32 i = 0; i < (*pModel).meshes.size(); ++i)
 		{
 			// first, try to compile the shader
-			cwc::glShader* pShader = generateShader(modelInfo.meshes[i].m_shaderName);
+			cwc::glShader* pShader = generateShader((*pModel).meshes[i].m_shaderName);
 
 			UInt32 VAO, VBO, EBO, VBO_bones = 0;
 			// create buffers/arrays
@@ -144,7 +157,7 @@ bool Graphics::CModelOGL::Apply(const Model& modelInfo)
 				}
 				glGenBuffers(1, &VBO_bones);
 				glBindBuffer(GL_ARRAY_BUFFER, VBO_bones);
-				glBufferData(GL_ARRAY_BUFFER, modelInfo.meshes[i].bones_id_weights_for_each_vertex.size() * sizeof(modelInfo.meshes[i].bones_id_weights_for_each_vertex[0]), &modelInfo.meshes[i].bones_id_weights_for_each_vertex[0], GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, (*pModel).meshes[i].bones_id_weights_for_each_vertex.size() * sizeof((*pModel).meshes[i].bones_id_weights_for_each_vertex[0]), &(*pModel).meshes[i].bones_id_weights_for_each_vertex[0], GL_STATIC_DRAW);
  				glBindBuffer(GL_ARRAY_BUFFER, 0);
 				m_bonesBufferObject.push_back(VBO_bones);
 			}
@@ -152,7 +165,7 @@ bool Graphics::CModelOGL::Apply(const Model& modelInfo)
 			m_vertexBufferObject.push_back(VBO);
 			m_elementBufferObject.push_back(EBO);
 			// copy the texture vector into m_drawAttr.m_textures
-			m_drawAttr.push_back(SDrawData(VAO, modelInfo.meshes[i].m_indices.size(), modelInfo.meshes[i].m_textures, pShader));
+			m_drawAttr.push_back(SDrawData(VAO, (*pModel).meshes[i].m_indices.size(), (*pModel).meshes[i].m_textures, pShader));
 
 			glBindVertexArray(VAO);
 			// load data into vertex buffers
@@ -160,13 +173,13 @@ bool Graphics::CModelOGL::Apply(const Model& modelInfo)
 			// A great thing about structs is that their memory layout is sequential for all its items.
 			// The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
 			// again translates to 3/2 floats which translates to a byte array.
-			glBufferData(GL_ARRAY_BUFFER, modelInfo.meshes[i].m_vertices.size() * sizeof(SModelVertex), &modelInfo.meshes[i].m_vertices[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, (*pModel).meshes[i].m_vertices.size() * sizeof(SModelVertex), &(*pModel).meshes[i].m_vertices[0], GL_STATIC_DRAW);
 
 			// element buffer object allocation
-			if (modelInfo.meshes[i].m_indices.size() > 0)
+			if ((*pModel).meshes[i].m_indices.size() > 0)
 			{
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, modelInfo.meshes[i].m_indices.size() * sizeof(UInt32), &modelInfo.meshes[i].m_indices[0], GL_STATIC_DRAW);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, (*pModel).meshes[i].m_indices.size() * sizeof(UInt32), &(*pModel).meshes[i].m_indices[0], GL_STATIC_DRAW);
 			}
 
 			// set the vertex attribute pointers
@@ -210,6 +223,8 @@ bool Graphics::CModelOGL::Apply(const Model& modelInfo)
 		m_vboBufferCreated = true;
 
 	}
+	// destroy shared_ptr
+	m_pModelImporter = nullptr;
 
 	return m_vboBufferCreated;
 }
@@ -312,7 +327,7 @@ shared_ptr<Model> Graphics::CModelOGL::Allocate()
 bool Graphics::CModelOGL::Commit()
 {
 	// create in the regular way - no duplicated code here
-	bool retVal = Apply(*m_pData);
+	bool retVal = Apply(&*m_pData);
 
 	// release this data (let the shared_ptr destructor take care)
 	m_pData = nullptr;

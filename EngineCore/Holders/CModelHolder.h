@@ -4,11 +4,12 @@
 #include "CommonTypes.h"
 #include "OGLTypes.h"
 #include "CResHandle.h"
-#include "IMutex.h"
+
 #include <unordered_map>
 #include <memory>
 #include "gl/glut.h"
 #include "IModel.h"
+#include "Utils/JobList.h"
 
 using namespace Types;
 using namespace std;
@@ -31,8 +32,13 @@ public:
 
 	void Update(float dt);
 
+	// this process shall be executed once in a while to actually create the pending loaded models
+	void Refresh();
+
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(const string& removeItem);
+	// external callback event in case a resource is deallocated
+	static void Loading();
 	// local instance
 	static CModelHolder* s_pInstance;
 
@@ -44,12 +50,11 @@ private:
 	// hash map for the IModels* - containing what you need to render this model
 	ModelObject m_mapModels;
 	// mutex for m_processes
-	IMutex* m_pModelContentMapMutex;
-
-	// file content may be found here
-	//IResourceFile* m_modelFiles;
-	// cache database (allocated with fixed and known size)
-	//CResCache m_cacheDb;
+	class IMutex* m_pModelContentMapMutex;
+	// process list
+	_Utils::JobList m_jobs;
+	// background thread for model loading
+	class IThread* m_pThread;
 
 
 };

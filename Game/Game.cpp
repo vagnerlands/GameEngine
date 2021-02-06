@@ -89,13 +89,13 @@ bool Game::PostRendererInitialize()
 	Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(.5f, .5f, .5f));
 
 	// [Models]
-	Graphics::RenderScene::Instance().Add("Yoni1" , CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed);
-	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
-	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0,0.5,0));
-
 	Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
 	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
 	Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
+
+	Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed);
+	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
+	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0, 0.5, 0));
 
 	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem);
 	Graphics::RenderScene::Instance().Translate("Particles2", IvVector3(0.f, 5.f, 0.f));
@@ -277,6 +277,8 @@ void Game::Render(float dt)
 {
 	// set which buffers are used, set the modelview matrix and more
 	Graphics::IRenderer::mRenderer->PrepareFrame();
+	// must be called once in a while
+	CModelHolder::s_pInstance->Refresh();
 
 	/*const Float aspect = Graphics::IRenderer::mRenderer->GetAspect();
 

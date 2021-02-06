@@ -27,7 +27,9 @@ namespace Graphics
         
         // create based on SModelData
         virtual bool Create() override;
-		virtual bool Apply(const Model& modelInfo) override;
+		// OpenGL commands will be applied, VAO, VBO and more.
+		// This shall be executed in the same thread OpenGL is running
+		virtual bool Apply(const Model* pModelInfo) override;
 		// periodic call to update
 		virtual void Update(float dt) override;
 		//bool SetShader(const string& shaderName);
@@ -101,6 +103,7 @@ namespace Graphics
 		vector<aiMatrix4x4> m_boneTransforms[eBuffering_Total];
 		eBuffering m_currentBuffer;
 		IvMatrix44 castToIvMatrix44(const aiMatrix4x4& input) const;
+		shared_ptr<Model> m_pModelImporter;
 	};
 
 

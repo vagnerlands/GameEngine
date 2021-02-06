@@ -20,7 +20,7 @@ namespace Graphics
 
 		}
         virtual bool Create() = 0;
-		virtual bool Apply(const Model& modelInfo) = 0;
+		virtual bool Apply(const Model* pModelInfo) = 0;
 
 		// allocate SModelData for custom objects
 		virtual shared_ptr<Model> Allocate() = 0;
