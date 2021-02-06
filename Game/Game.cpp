@@ -98,11 +98,11 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0, 0.5, 0));
 
 	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem);
-	Graphics::RenderScene::Instance().Translate("Particles2", IvVector3(0.f, 5.f, 0.f));
+	Graphics::RenderScene::Instance().Translate("Particles2", IvVector3(0.f, 1.0f, 2.5f));
 	Graphics::RenderScene::Instance().CastShadow("Particles2", false);
 
 	Graphics::SceneQueryParticles part;
-	part.Set(Graphics::ParticleSeeds(100, 100, 150, 100, 200, 200, 500, 20, 50, 100, 200, "flame.png"));
+	part.Set(Graphics::ParticleSeeds(300, 100, 150, 120, 420, 50, 250, 50, 100, 100, 200, "flame.png"));
 	Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 
 	//CSoundHolder::s_pInstance->PlaySoundById("door.wav", eSoundType_Effect, 0.1f);
@@ -189,6 +189,70 @@ void Game::UpdateObjects(float dt)
     {
         m_lightAngle -= 1.f;
     }
+
+	static Float SpreadConst = 10;
+	static Float HeightConst = 100;
+	static Float SizeConst = 0;
+	static Float NumberOfParticles = 100;
+
+	if (mpGameInput->m_bKey['o'])
+	{
+		SpreadConst += 1.f;
+		Graphics::SceneQueryParticles part;
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 300 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
+		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
+	}
+	else if (mpGameInput->m_bKey['p'])
+	{
+		SpreadConst -= 1.f;
+		Graphics::SceneQueryParticles part;
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
+	}
+
+	if (mpGameInput->m_bKey['k'])
+	{
+		HeightConst += 1.f;
+		Graphics::SceneQueryParticles part;
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
+	}
+	else if (mpGameInput->m_bKey['l'])
+	{
+		HeightConst -= 1.f;
+		Graphics::SceneQueryParticles part;
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200+ SizeConst, 500+ SizeConst, 200+HeightConst, 400 + HeightConst, 30+SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
+	}
+	if (mpGameInput->m_bKey['n'])
+	{
+		SizeConst += 1.f;
+		Graphics::SceneQueryParticles part;
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
+	}
+	else if (mpGameInput->m_bKey['m'])
+	{
+		SizeConst -= 1.f;
+		Graphics::SceneQueryParticles part;
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
+	}
+	
+	if (mpGameInput->m_bKey['1'])
+	{
+		NumberOfParticles -= 1.f;
+		Graphics::SceneQueryParticles part;
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
+	}
+	else if (mpGameInput->m_bKey['2'])
+	{
+		NumberOfParticles += 1.f;
+		Graphics::SceneQueryParticles part;
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
+	}
 
 
 	if (mpGameInput->m_isLeftButtonPressed)

@@ -6,6 +6,7 @@
 
 #include "MutexFactory.h"
 #include "Model.h"
+#include "IGame.h"
 // should make this configurable - there should be a factory instead
 #include "CModelOGL.h"
 
@@ -53,7 +54,7 @@ CModelHolder::OnRemoveEvent(const string& removeItem)
 
 void CModelHolder::Loading()
 {
-	while (true)
+	while (EngineCore::IGame::mGame->IsRunning())
 	{
 		_Utils::JobList& jobs = s_pInstance->m_jobs;
 		if (!jobs.IsEmpty())
@@ -66,6 +67,8 @@ void CModelHolder::Loading()
 			jobs.PushResult(result);
 		}
 	}
+	// notify that this thread is closed
+	EngineCore::IGame::mGame->IsReadyToClose();
 }
 
 CModelHolder::CModelHolder(const string& pathToResources)
@@ -154,11 +157,15 @@ void CModelHolder::Update(float dt)
 
 void CModelHolder::Refresh()
 {
-	Graphics::IModel* pModel = m_jobs.GetNextResult();
-	if (pModel != nullptr)
+	Graphics::IModel* pModel = nullptr;
+	do
 	{
-		// forces to use the already existing Model
-		pModel->Apply(nullptr);
-	}
+		pModel = m_jobs.GetNextResult();
+		if (pModel != nullptr)
+		{
+			// forces to use the already existing Model
+			pModel->Apply(nullptr);
+		}
+	} while (pModel != nullptr);
 }
 

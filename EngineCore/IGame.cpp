@@ -74,7 +74,8 @@ EngineCore::IGame::IGame() :
 	mPaused(false), 
 	mQuit(false),
 	mReadyToClose(false),
-	mFps(0)
+	mFps(0),
+	mClosedThreads(0)
 {
 	// 
 }

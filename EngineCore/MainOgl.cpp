@@ -33,7 +33,7 @@ DWORD WINAPI BackgroundLoader(LPVOID lpParameter)
 		EngineCore::IGame::mGame->ExecuteBackground();
 	}
 
-	EngineCore::IGame::mGame->IsReadyToClose();
+	EngineCore::IGame::mGame->IsReadyToClose(); 
 
 	return (DWORD WINAPI)0;
 }

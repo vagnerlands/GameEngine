@@ -43,7 +43,11 @@ namespace EngineCore
 		inline void Pause() { mPaused = true; }
 		inline void Continue() { mPaused = false; }
 		inline bool IsRunning() { return (!mPaused) && (!mQuit); }
-		inline void IsReadyToClose() { mReadyToClose = true; }
+		inline void IsReadyToClose() 
+		{ 
+			if (++mClosedThreads == 2)
+				mReadyToClose = true; 
+		}
 		inline bool ReadyToClose() { return mReadyToClose; }
 		// is fixed frames per second
 		inline Int32 GetFps()
@@ -74,6 +78,7 @@ namespace EngineCore
 		bool mReadyToClose;
 		bool mPaused;
 		Int32 mFps;
+		Int32 mClosedThreads;
 
 		UtilitiesCore::IClock* mClock;
 
