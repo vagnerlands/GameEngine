@@ -6,15 +6,13 @@
 using namespace Types;
 using namespace std;
 
-class I2dImage;
-
 class CFactory2dImageWin : public CFactory2dImage
 {
 public:
 	
 	static void Initialize();
 
-	virtual I2dImage* Create2dImage(Byte fileType[]);
+	std::shared_ptr<I2dImage> Create2dImage(Byte fileType[]) override;
 
 private:
 	CFactory2dImageWin();

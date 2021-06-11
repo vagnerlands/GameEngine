@@ -121,9 +121,5 @@ bool CTga::ParseStream(Byte* pData, UInt32 length)
 
 CTga::~CTga()
 {
-	if (m_pContent != NULL)
-	{
-		delete[] m_pContent;
-		m_pContent = 0;
-	}
+
 }

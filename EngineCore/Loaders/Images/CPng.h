@@ -14,6 +14,9 @@ class CPng : public I2dImage
 public:
 	CPng();
 
+    CPng(CPng&& rhs) : I2dImage(std::move(rhs))
+    {}
+
 	virtual bool ParseStream(Byte* pData, UInt32 length) override;
 
 	virtual ~CPng();

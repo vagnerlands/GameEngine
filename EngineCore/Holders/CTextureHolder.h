@@ -56,7 +56,7 @@ public:
 private:
 	CTextureHolder(const string& pathToTexturesFile, UInt32 maxAllocSize);
 	// build texture, if any available
-	void BuildTexture(const string& textureId, const I2dImage* pData);
+	void BuildTexture(const string& textureId, const std::shared_ptr<I2dImage>& pData);
     void increaseTexturePriority(const string & textureId, UInt32 size);
     void removeLastItem();
 	// local hashmap built textures

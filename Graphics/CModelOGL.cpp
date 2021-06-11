@@ -90,13 +90,17 @@ bool Graphics::CModelOGL::Create()
 	// actually tries to load the model
 	m_pModelImporter->Load("./Assets/" + m_modelName);
 
-	m_global_inverse_transform = m_Importer.GetScene()->mRootNode->mTransformation;
+    const aiScene* pScene = m_Importer.GetScene();
+    if (pScene != nullptr)
+    {
+        m_global_inverse_transform = pScene->mRootNode->mTransformation;
+    }
 	m_global_inverse_transform.Inverse();
-	const aiScene* scene = m_Importer.GetScene();
 
-	if (scene->mAnimations != nullptr)
+	if ((pScene != nullptr) 
+        && (pScene->mAnimations != nullptr))
 	{
-		ticks_per_second = scene->mAnimations[0]->mTicksPerSecond;
+		ticks_per_second = pScene->mAnimations[0]->mTicksPerSecond;
 		m_hasAnimations = true;
 	}
 	else

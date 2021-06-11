@@ -18,14 +18,34 @@ struct SImageData
 
 class I2dImage
 {
+    I2dImage(const I2dImage& rhs);
+    I2dImage& operator=(const I2dImage& rhs);
 public:
 	I2dImage();
+
+    I2dImage(I2dImage&& rhs) : 
+        m_Width (rhs.m_Width),
+        m_Height (rhs.m_Height), 
+        m_NumberOfBytes (rhs.m_NumberOfBytes), 
+        m_SizeInBytes (rhs.m_SizeInBytes),
+        m_isCubeMap (rhs.m_isCubeMap)
+    {
+        if (rhs.m_pContent != nullptr)
+        {
+            m_pContent = rhs.m_pContent;
+            rhs.m_pContent = nullptr;
+        }
+    }
 
 	virtual bool ParseStream(Byte* pData, UInt32 length) = 0;
 
 	virtual ~I2dImage() 
 	{
-		//empty implementation
+        if (m_pContent != nullptr)
+        {
+            delete[] m_pContent;
+            m_pContent = nullptr;
+        }
 	}
 
 	virtual void SetCubeMap(bool isCubeMap)

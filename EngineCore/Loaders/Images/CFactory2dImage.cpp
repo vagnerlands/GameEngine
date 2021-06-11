@@ -15,28 +15,24 @@ CFactory2dImage* CFactory2dImage::instance()
 	return s_pInstance;
 }
 
-I2dImage* CFactory2dImage::Create2dImage(Byte fileType[])
+std::shared_ptr<I2dImage>
+CFactory2dImage::Create2dImage(Byte fileType[])
 {
-	// default value is NULL
-	I2dImage* retVal = NULL;
-
 	if ((fileType[0] == 0x42) 
 		&& (fileType[1] == 0x4D)) // BMP
 	{
-		retVal = new CBmp();
+		return std::shared_ptr<I2dImage>(new CBmp);
 	}
 	else if ((fileType[1] == 'P') // TGA, no best way to identify the format type than this
 		&& (fileType[2] == 'N'))
 	{
-		retVal = new CPng();
+        return std::shared_ptr<I2dImage>(new CPng);
 	}
 	else if ((fileType[0] == 0x00) // TGA, no best way to identify the format type than this
 		&& (fileType[1] == 0x00)) 
 	{
-		retVal = new CTga();
+		return std::shared_ptr<I2dImage>(new CTga);
 	}
-
-	return retVal;
 }
 
 CFactory2dImage::CFactory2dImage()

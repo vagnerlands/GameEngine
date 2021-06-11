@@ -14,7 +14,7 @@ namespace Graphics
 	class CTextureOGL : public ITexture
 	{
 	public:
-		virtual bool BuildTexture(const I2dImage* pData) override;
+		virtual bool BuildTexture(const std::shared_ptr<I2dImage>& pData) override;
 		virtual bool Bind() override;
 		virtual bool BindTextureToSampler(UInt32 samplerId) override;
 

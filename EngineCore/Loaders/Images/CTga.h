@@ -46,6 +46,9 @@ class CTga : public I2dImage
 public:
 	CTga();
 
+    CTga(CTga&& rhs) : I2dImage(std::move(rhs))
+    {}
+
 	virtual bool ParseStream(Byte* pData, UInt32 length) override;
 
 	virtual ~CTga();

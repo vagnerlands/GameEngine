@@ -2,7 +2,7 @@
 #include "I2dImage.h"
 #include <GL/glew.h>
 
-bool Graphics::CTextureOGL::BuildTexture(const I2dImage * pData)
+bool Graphics::CTextureOGL::BuildTexture(const std::shared_ptr<I2dImage>& pData)
 {
 	// allocate a texture name
 	m_textureId = -1;

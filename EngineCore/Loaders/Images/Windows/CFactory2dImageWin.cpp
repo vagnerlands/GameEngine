@@ -4,21 +4,19 @@
 
 void CFactory2dImageWin::Initialize()
 {
-	if (s_pInstance != nullptr)
+	if (CFactory2dImage::s_pInstance != nullptr)
 	{
 		// changing the factory during the run, uh? Well, why not...
-		delete s_pInstance;
+		delete CFactory2dImage::s_pInstance;
 	}
 
-	s_pInstance = new CFactory2dImageWin();
+    CFactory2dImage::s_pInstance = new CFactory2dImageWin();
 }
 
-I2dImage* CFactory2dImageWin::Create2dImage(Byte fileType[])
+std::shared_ptr<I2dImage> CFactory2dImageWin::Create2dImage(Byte fileType[])
 {
 	// default value is NULL
-	I2dImage* retVal = new DevILLoader();
-
-	return retVal;
+    return std::shared_ptr<I2dImage>(new DevILLoader);
 }
 
 CFactory2dImageWin::CFactory2dImageWin() : CFactory2dImage()

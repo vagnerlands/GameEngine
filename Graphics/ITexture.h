@@ -17,12 +17,12 @@ namespace Graphics
 		{
 
 		}
-		virtual bool BuildTexture(const I2dImage* pData)
+		virtual bool BuildTexture(const std::shared_ptr<I2dImage>& pData)
 		{
 			// must be implemented
 			return false;
 		}
-		virtual bool BuildVectorTexture(const I2dImage** pData)
+		virtual bool BuildVectorTexture(const std::vector< std::shared_ptr<I2dImage> >& pData)
 		{
 			// no real implementation
 			return false;

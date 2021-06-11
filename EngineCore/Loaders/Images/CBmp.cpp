@@ -64,9 +64,5 @@ bool CBmp::ParseStream(Byte* pData, UInt32 length)
 
 CBmp::~CBmp()
 {
-	if (m_pContent != NULL)
-	{
-		delete[] m_pContent;
-		m_pContent = 0;
-	}
+
 }

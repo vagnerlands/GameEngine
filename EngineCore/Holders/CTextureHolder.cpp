@@ -60,8 +60,8 @@ CTextureHolder::LoadTexture(const string& textId)
 		// checks the first 2 bytes of the stream to know if we know how to parse it
 		Byte fileType[3];
 		memcpy(&fileType, textureDataStream, 3);
-		I2dImage* pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
-		if (pRawImage != NULL) // is this file a BMP?
+		std::shared_ptr<I2dImage> pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
+		if (pRawImage != nullptr) // is this file a BMP?
 		{
 			if (pRawImage->ParseStream(textureDataStream, textureDataLength))
 			{
@@ -73,7 +73,7 @@ CTextureHolder::LoadTexture(const string& textId)
 			}
 			// free allocated data from the heap
 			// this must also free the array of bmp pixels 
-			delete pRawImage;
+			//delete pRawImage;
 		}
 		// free file content buffer
 		delete[] textureDataStream;
@@ -87,9 +87,8 @@ CTextureHolder::LoadTexture(const string& textId)
 	printf(" loading tex [%s] %.2fms\n", textId.data(), (float)(clock() - start));
 }
 
-void CTextureHolder::BuildTexture(const string& textureId, const I2dImage* pData)
+void CTextureHolder::BuildTexture(const string& textureId, const std::shared_ptr<I2dImage>& pData)
 {
-
 	Graphics::ITexture* pTextureObj = NULL;
 	if (pData != NULL)
 	{
@@ -196,7 +195,8 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 
 	// cache missed - must reload it from resources db
 	CResource* resourceItem = new CResource[arrLen];
-	I2dImage** pRawImageArray = new I2dImage*[arrLen];
+    std::vector< std::shared_ptr<I2dImage> > pRawImageArray(arrLen);
+	//I2dImage** pRawImageArray = new I2dImage*[arrLen];
 	for (UInt32 i = 0; i < arrLen; ++i)
 	{
 		resourceItem[i].SetName(attr[i].m_filename);
@@ -220,7 +220,7 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 	//if (pData != NULL)
 	{
 		pTextureObj = new Graphics::CCubeTextureOGL();
-		pTextureObj->BuildVectorTexture((const I2dImage**)pRawImageArray);
+		pTextureObj->BuildVectorTexture(pRawImageArray);
 		if (pTextureObj->ProcessStatus())
 		{
 			m_textures.insert(make_pair(textureId, pTextureObj));
@@ -233,12 +233,12 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 
 
 	// release allocated data
-	for (UInt32 i = 0; i < arrLen; ++i)
-	{
-		delete pRawImageArray[i];
-	}
+	//for (UInt32 i = 0; i < arrLen; ++i)
+	//{
+	//	delete pRawImageArray[i];
+	//}
 
-	delete[] pRawImageArray;
+	//delete[] pRawImageArray;
 	delete[] resourceItem;
 
 	// time measurement
