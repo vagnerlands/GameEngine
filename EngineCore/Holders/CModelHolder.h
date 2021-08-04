@@ -53,8 +53,6 @@ private:
 	class IMutex* m_pModelContentMapMutex;
 	// process list
 	_Utils::JobList m_jobs;
-	// background thread for model loading
-	class IThread* m_pThread;
 
 
 };

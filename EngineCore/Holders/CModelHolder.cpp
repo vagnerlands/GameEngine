@@ -14,7 +14,7 @@
 
 // multi threading
 #include "IMutex.h"
-#include "ThreadFactory.h"
+#include "CThreadHolder.h"
 #include "IThread.h"
 
 CModelHolder* CModelHolder::s_pInstance = NULL;
@@ -35,10 +35,10 @@ bool CModelHolder::Create(const string& pathToModelFile)
 	{
 		// creates instance of CModelHolder
 		s_pInstance = new CModelHolder(pathToModelFile);
-		// instantiate a new thread
-		s_pInstance->m_pThread = ThreadFactory::Instance().Create("ModelLoading", 0x01, CModelHolder::Loading);
+		// thread will start to run immediatelly
+		CThreadHolder::instance()->registerThread("thModelLoading", 0x01, CModelHolder::Loading);
 		// tries to open the resource file - out of the constructor so errors may be reported
-		if (s_pInstance != nullptr) /*&& (s_pInstance->m_modelFiles->VOpen()))*/
+		if (s_pInstance != nullptr) 
 		{
 			return true;
 		}

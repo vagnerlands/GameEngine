@@ -132,7 +132,11 @@ bool CPng::ParseStream(Byte* pData, UInt32 length)
 
 CPng::~CPng()
 {
-
+    if (m_pContent != nullptr)
+    {
+        delete[] m_pContent;
+        m_pContent = 0;
+    }
 }
 
 // method to treat the readed information from PNG

@@ -238,8 +238,12 @@ void Graphics::CModelOGL::Update(float dt)
 	// if this has 
 	if (m_hasAnimations)
 	{		
-		m_boneTransforms[m_currentBuffer].resize(m_boneInformation.m_num_bones);
+        if (m_boneTransforms[m_currentBuffer].size() < m_boneInformation.m_num_bones)
+        {
+            m_boneTransforms[m_currentBuffer].resize(m_boneInformation.m_num_bones);
+        }
 		boneTransform((double)dt, m_boneTransforms[m_currentBuffer]);
+        // we always draw the alternative buffer, next round we'll prepare the next animation on "currentBuffer"
 		m_pBoneMutex->mutexLock();
 		m_currentBuffer = (m_currentBuffer == eBuffering_First) ? eBuffering_Second : eBuffering_First;
 		m_pBoneMutex->mutexUnlock();
@@ -571,11 +575,10 @@ void Graphics::CModelOGL::readNodeHierarchy(float p_animation_time, const aiNode
 
 	string node_name(p_node->mName.data);
 
-	//������� node, �� ������� ������������ �������, ������������� �������� ���� ������(aiNodeAnim).
 	const aiAnimation* animation = m_Importer.GetScene()->mAnimations[0];
 	aiMatrix4x4 node_transform = p_node->mTransformation;
 
-	const aiNodeAnim* node_anim = findNodeAnim(animation, node_name); // ����� ������� �� ����� ����
+	const aiNodeAnim* node_anim = findNodeAnim(animation, node_name); 
 
 	if (node_anim)
 	{
@@ -602,7 +605,6 @@ void Graphics::CModelOGL::readNodeHierarchy(float p_animation_time, const aiNode
 
 	aiMatrix4x4 global_transform = parent_transform * node_transform;
 
-	// ���� � node �� �������� ����������� bone, �� �� node ������ ��������� � ������ bone !!!
 	if (m_boneInformation.m_bone_mapping.find(node_name) != m_boneInformation.m_bone_mapping.end()) // true if node_name exist in bone_mapping
 	{
 		UInt32 bone_index = m_boneInformation.m_bone_mapping[node_name];
@@ -621,8 +623,7 @@ void Graphics::CModelOGL::boneTransform(double time_in_sec, vector<aiMatrix4x4>&
 	aiMatrix4x4 identity_matrix; // = mat4(1.0f);
 
 	double time_in_ticks = time_in_sec * ticks_per_second;
-	float animation_time = fmod(time_in_ticks, m_Importer.GetScene()->mAnimations[0]->mDuration); //������� �� ����� (������� �� ������)
-	// animation_time - ���� ������� ������ � ���� ������ �� ������ �������� (�� ������� �������� ����� � �������� )
+	float animation_time = fmod(time_in_ticks, m_Importer.GetScene()->mAnimations[0]->mDuration); 
 
 	readNodeHierarchy(animation_time, m_Importer.GetScene()->mRootNode, identity_matrix);
 

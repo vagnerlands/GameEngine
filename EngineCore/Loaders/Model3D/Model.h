@@ -98,7 +98,8 @@ private:
     {
         // data to fill
         SModelMesh processedMesh;
-
+        processedMesh.m_vertices.reserve(mesh->mNumVertices);
+        processedMesh.m_indices.reserve(mesh->mNumFaces);
         // Walk through each of the mesh's vertices
         for(UInt32 i = 0; i < mesh->mNumVertices; i++)
         {
@@ -250,55 +251,6 @@ private:
         {
             processedMesh.m_shaderName = "animatedModel";
         }
-
-		// TODO: make this look nicer - quick and dirty implementation
-  //      if (hasAnimations)
-  //      {
-  //          if ((diffuseMaps.size() > 0)
-  //              && (specularMaps.size() > 0)
-  //              && (normalMaps.size()) > 0)
-  //          {
-  //              processedMesh.m_shaderName = "animatedModel_dns";
-  //          }
-  //          else if ((diffuseMaps.size() > 0)
-  //              && (specularMaps.size() > 0))
-  //          {
-  //              processedMesh.m_shaderName = "animatedModel_ds";
-  //          }
-  //          else if ((diffuseMaps.size() > 0)
-  //              && (normalMaps.size() > 0))
-  //          {
-  //              processedMesh.m_shaderName = "animatedModel_dn";
-  //          }
-  //          else
-  //          {
-  //              processedMesh.m_shaderName = "animatedModel";
-  //          }
-  //      } 
-  //      else if ((diffuseMaps.size() > 0) 
-		//	&& (specularMaps.size() > 0) 
-		//	&& (normalMaps.size()) > 0)
-		//{
-  //          processedMesh.m_shaderName = "model_dns";
-		//}
-		//else if ((diffuseMaps.size() > 0)
-		//	&& (specularMaps.size() > 0))
-		//{
-  //          processedMesh.m_shaderName = "model_ds";
-		//}
-		//else if ((diffuseMaps.size() > 0)
-		//	&& (normalMaps.size() > 0))
-		//{
-  //          processedMesh.m_shaderName = "model_dn";
-		//}
-  //      else if (!((diffuseMaps.size() > 0)
-  //          || (specularMaps.size() > 0)
-  //          || (normalMaps.size() > 0)))
-  //      {
-  //          // in this mesh, there are no materials associated
-  //          // so use solid color for rendering
-  //          processedMesh.m_shaderName = "solidModel";
-  //      }
 
         // return a mesh object created from the extracted mesh data
         return processedMesh;

@@ -8,6 +8,54 @@
 
 #include "MainWinOgl.h"
 
+#include <iostream>
+
+#ifndef IRIS_DEBUG_MEM_ALLOC
+void* operator new(size_t size)
+{
+    void* memory = malloc(size);
+
+    if (size > (1024*1024 * 1))
+    {
+        std::cout << " [+] Allocating new big chunk of [" << size / 1024 / 1024 << "] MBs" << endl;
+    }
+
+    return memory;
+}
+
+void* operator new[](size_t size)
+{
+    void* memory = malloc(size);
+
+    if (size > (1024 * 1024 * 1))
+    {
+        std::cout << " [+] Allocating new[] big chunk of [" << size / 1024 / 1024 << "] MBs" << endl;
+    }
+
+    return memory;
+}
+
+void operator delete(void* p)
+{
+    //if (_BoardServices::BoardServices::IsInOperational())
+    {
+        //std::cout << " [+] Releasing delete [" << size / 1024 / 1024 << "] MBs" << endl;
+    }
+
+    free(p);
+}
+
+void operator delete[](void* p)
+{
+    //if (_BoardServices::BoardServices::IsInOperational())
+    {
+        //printf("Dynamic Free[] detected!");
+    }
+
+    free(p);
+}
+#endif
+
 int 
 main(int argv, char** argc)
 {

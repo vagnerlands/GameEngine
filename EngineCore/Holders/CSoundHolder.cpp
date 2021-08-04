@@ -43,12 +43,7 @@ void CSoundHolder::PlaySoundById(const string& id, eSoundType type, Float volume
 	m_soundsToPlay.push_back(SoundAttributes(id, type, volume));
 	m_soundMapMutex->mutexUnlock();
 	// thread will run immediatelly
-	IThread* pThr = ThreadFactory::Instance().Create(string("TSoundPlayer_" + id).data(), 0x02, CSoundHolder::PlaySound);
-	// allow the sound thread to start working
-	//m_pSemaphore->signal();
-
-	
-
+	IThread* pThr = ThreadFactory::Instance().Create(string("thTSoundPlayer_" + id).data(), 0x02, CSoundHolder::PlaySound);
 }
 
 CSoundHolder::CSoundHolder(const string& pathToTexturesFile, UInt32 maxAllocSize) :
@@ -124,10 +119,6 @@ void CSoundHolder::initialize()
 {
 	// cross platform implementation for mutex creation
 	m_soundMapMutex = MutexFactory::Instance().Create("SoundMapMutex");
-	// create semaphore
-	//m_pSemaphore = SemaphoreFactory::Instance().Create("TSoundSem", 1);
-	// create a thread
-	//m_pThread = ThreadFactory::Instance().Create("TSoundPlayer", 0x02, CSoundHolder::PlaySound);
 }
 
 
