@@ -24,9 +24,9 @@
 //-- Typedefs, Structs ----------------------------------------------------------
 //-------------------------------------------------------------------------------
 
-#define ERROR_OUT( a, b, c, x ) \
+#define ERROR_OUT( File, Function, Line, Msg, ... ) \
 { \
-    gDebugger << a << "::" << b << ":" << c << " Log: " << x; \
+    gDebugger << File << "::" << Function << ":" << Line << " Log: " << Msg; \
     gDebugger.Flush(); \
 }
 

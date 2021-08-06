@@ -22,6 +22,7 @@ Graphics::SceneItem* Graphics::SceneItemFactory::Create(const std::string& id, s
 	default:
 		break;
 	}
+    return nullptr;
 }
 
 Graphics::SceneItemFactory& Graphics::SceneItemFactory::Instance()

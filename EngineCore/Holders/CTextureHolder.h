@@ -5,7 +5,6 @@
 #include "ITexture.h"
 #include "OGLTypes.h"
 #include "CResHandle.h"
-#include "IMutex.h"
 #include "I2dImage.h"
 
 #include <unordered_map>
@@ -14,6 +13,8 @@
 
 using namespace Types;
 using namespace std;
+
+class IMutex;
 
 struct STextureItem
 {

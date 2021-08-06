@@ -7,7 +7,7 @@
 #include "CTextureOGL.h"
 #include "CCubeTextureOGL.h"
 #endif
-
+#include "IMutex.h"
 #include "CFactory2dImage.h"
 
 CTextureHolder* CTextureHolder::s_pInstance = NULL;

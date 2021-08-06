@@ -126,9 +126,11 @@ cwc::glShader* Graphics::CParticle::generateShader(const string& shaderName)
 
 	// read data from file
 	cwc::glShader* pShader = nullptr;
-	char vertexFilename[128], fragmentFilename[128], geometryFilename[128];
-	sprintf(vertexFilename, "./Assets/%sVertexshader.txt", shaderName.data());
-	sprintf(fragmentFilename, "./Assets/%sFragmentshader.txt", shaderName.data());
+    const UInt32 cMaxFilenameLen = 128U;
+    char vertexFilename[cMaxFilenameLen] = { 0 };
+    char fragmentFilename[cMaxFilenameLen] = { 0 };
+	sprintf_s(vertexFilename, cMaxFilenameLen, "./Assets/%sVertexshader.txt", shaderName.data());
+	sprintf_s(fragmentFilename, cMaxFilenameLen, "./Assets/%sFragmentshader.txt", shaderName.data());
 	// there should be a specialized class for this whole thing
 	cwc::glShaderManager shaderLoader;
 
@@ -136,7 +138,6 @@ cwc::glShader* Graphics::CParticle::generateShader(const string& shaderName)
 
 	// checks if the geometry shader actually is required
 	pShader = shaderLoader.loadfromFile(vertexFilename, fragmentFilename);
-
 
 	if (pShader == nullptr)
 	{
