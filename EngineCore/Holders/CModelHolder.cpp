@@ -21,12 +21,8 @@ CModelHolder* CModelHolder::s_pInstance = NULL;
 
 CModelHolder::~CModelHolder()
 {
-	while (!m_mapModels.empty())
-	{
-		if (m_mapModels.begin()->second != NULL)
-			delete m_mapModels.begin()->second;
-		m_mapModels.erase(m_mapModels.begin());
-	}	
+    // this clear all map models and release the shared_ptr counters of each item
+    m_mapModels = ModelObject();
 }
 
 bool CModelHolder::Create(const string& pathToModelFile)
@@ -62,7 +58,7 @@ void CModelHolder::Loading()
 			_Utils::Job next(jobs);
 			jobs.Retrieve(next);
 			// parse the huge model files
-			Graphics::IModel* result = s_pInstance->LoadModel(next.Get());
+            shared_ptr<Graphics::IModel> result = s_pInstance->LoadModel(next.Get());
 			// push the results back to the job list, so it will 
 			jobs.PushResult(result);
 		}
@@ -77,7 +73,7 @@ CModelHolder::CModelHolder(const string& pathToResources)
 	m_pModelContentMapMutex = MutexFactory::Instance().Create("ModelContentMap");
 }
 
-Graphics::IModel*
+shared_ptr<Graphics::IModel>
 CModelHolder::LoadModel(const string& modelId)
 {
 	// start loading measuring time
@@ -102,32 +98,20 @@ void
 CModelHolder::RemoveModel(const string& textId)
 {
 	ModelObject::iterator it = m_mapModels.find(textId);
-	if (it == m_mapModels.end())
+	if (it != m_mapModels.end())
 	{
-		// this shouldn't happen - never, but if happens, trying 
-		// to erase will cause an exception - so must quit method
-		return;
-	}
-
-	if (it->second != NULL)
-	{
-		delete it->second;
-	}
-
-	m_mapModels.erase(it);
-
-	//_CrtDumpMemoryLeaks();
+        m_mapModels.erase(it);
+	}    
 }
 
-Graphics::IModel*
+shared_ptr<Graphics::IModel>
 CModelHolder::GetModelById(const string& modelId)
 {
-	Graphics::IModel* pRet = nullptr;
 	// then try to find it in the textures map
 	ModelObject::iterator result = m_mapModels.find(modelId);
 	if (result != m_mapModels.end())
 	{
-		pRet = result->second;
+		return result->second;
 	}
 	else
 	{
@@ -135,15 +119,13 @@ CModelHolder::GetModelById(const string& modelId)
 		// first, create it and push to the map models
 		// must manipulate this object using specific CModelHolder
 		// in the future, this should be a #define or a strategy
-		pRet = new Graphics::CModelOGL(modelId);
+        shared_ptr<Graphics::IModel> pRet = make_shared<Graphics::CModelOGL>(modelId);
 		m_mapModels.insert(make_pair(modelId, pRet));
 
 		//pRet = LoadModel(modelId);
 		m_jobs.PushRequest(modelId);
+        return pRet;
 	}
-
-	// if it somehow failed, returns -1
-	return pRet;
 }
 
 void CModelHolder::Update(float dt)
@@ -157,15 +139,19 @@ void CModelHolder::Update(float dt)
 
 void CModelHolder::Refresh()
 {
-	Graphics::IModel* pModel = nullptr;
+    bool finished = false;
 	do
 	{
-		pModel = m_jobs.GetNextResult();
+        shared_ptr<Graphics::IModel> pModel = m_jobs.GetNextResult();
 		if (pModel != nullptr)
 		{
 			// forces to use the already existing Model
 			pModel->Apply(nullptr);
 		}
-	} while (pModel != nullptr);
+        else
+        {
+            finished = true;
+        }
+	} while (!finished);
 }
 

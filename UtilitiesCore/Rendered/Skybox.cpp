@@ -3,14 +3,19 @@
 #include "CModelOGL.h"
 #include "glm/glm.hpp"
 
-UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& faces) : 
+shared_ptr<UtilitiesCore::Skybox> UtilitiesCore::Skybox::CreateSky(const std::string& id, const vector<std::string>& faces)
+{
+    return make_shared<UtilitiesCore::Skybox>(id, faces);
+}
+
+UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& faces) :
 	Graphics::IDrawable(), 
-	m_skyModel(id, this)
+	m_skyModel(id, shared_ptr<Graphics::IDrawable>(nullptr))
 {
 	// constant normalized box size - shall be used for texture mapping too
 	const Float cBoxSize = 1.f;
 	// allocate a open gl type model - can make this crossplatform using factories
-	Graphics::CModelOGL* pSkyModel = new Graphics::CModelOGL(id);
+	shared_ptr<Graphics::CModelOGL> pSkyModel = make_shared<Graphics::CModelOGL>(id);
 	// allocates a temporary buffer to create the cube
 	shared_ptr<Model> pModel = pSkyModel->Allocate();
 

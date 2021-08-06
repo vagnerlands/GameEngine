@@ -13,12 +13,7 @@ bool CParticlesSystemHolder::Create()
 
 CParticlesSystemHolder::~CParticlesSystemHolder()
 {
-	while (!m_mapParticles.empty())
-	{
-		if (m_mapParticles.begin()->second != NULL)
-			delete m_mapParticles.begin()->second;
-		m_mapParticles.erase(m_mapParticles.begin());
-	}	
+    m_mapParticles = DisplayObject();
 }
 
 bool CParticlesSystemHolder::Create(const string& pathToModelFile)
@@ -48,7 +43,7 @@ CParticlesSystemHolder::CParticlesSystemHolder(const string& pathToResources)
 	m_pParticlesContentMapMutex = MutexFactory::Instance().Create("ParticlesContentMapMutex");
 }
 
-Graphics::CParticle* CParticlesSystemHolder::findParticleInDB(const std::string& id)
+shared_ptr<Graphics::CParticle> CParticlesSystemHolder::findParticleInDB(const std::string& id)
 {
 	Graphics::CParticle* pRet = nullptr;
 	// update all animations related to each model
@@ -56,10 +51,10 @@ Graphics::CParticle* CParticlesSystemHolder::findParticleInDB(const std::string&
 	{
 		if (it.first == id)
 		{
-			pRet = it.second;
+			return it.second;
 		}
 	}
-	return pRet;
+	return nullptr;
 }
 
 
@@ -67,44 +62,29 @@ void
 CParticlesSystemHolder::RemoveParticle(const string& textId)
 {
 	DisplayObject::iterator it = m_mapParticles.find(textId);
-	if (it == m_mapParticles.end())
+	if (it != m_mapParticles.end())
 	{
-		// this shouldn't happen - never, but if happens, trying 
-		// to erase will cause an exception - so must quit method
-		return;
+        m_mapParticles.erase(it);
 	}
-
-	if (it->second != NULL)
-	{
-		delete it->second;
-	}
-
-	m_mapParticles.erase(it);
-
-	//_CrtDumpMemoryLeaks();
 }
 
-Graphics::IDrawable*
+shared_ptr<Graphics::IDrawable>
 CParticlesSystemHolder::GetParticleById(const string& particleId)
 {
-	Graphics::IDrawable* pRet = (Graphics::IDrawable*)(NULL);
 	// then try to find it in the textures map
 	DisplayObject::iterator result = m_mapParticles.find(particleId);
 	if (result != m_mapParticles.end())
 	{
-		pRet = result->second;
+		return result->second;
 	}
 	else
 	{
 		// cache miss - then create a particle system
-		Graphics::CParticle * pParticle = new Graphics::CParticle(particleId);
+		shared_ptr<Graphics::CParticle> pParticle = make_shared<Graphics::CParticle>(particleId);
 		pParticle->Create();
 		m_mapParticles.insert(make_pair(particleId, pParticle));
-		pRet = pParticle;
+        return pParticle;
 	}
-
-	// if it somehow failed, returns -1
-	return pRet;
 }
 
 void CParticlesSystemHolder::Update(float dt)
@@ -115,48 +95,3 @@ void CParticlesSystemHolder::Update(float dt)
 		it.second->Update(dt);
 	}
 }
-
-//void CParticlesSystemHolder::SetLoopCount(const string& particleId, Int32 loopCount)
-//{
-//	Graphics::CParticle* pParticle = findParticleInDB(particleId);
-//	if (pParticle != nullptr)
-//	{
-//
-//	}
-//}
-//
-//void CParticlesSystemHolder::SetMaxNumberOfParticles(const string& particleId, Int32 maxNumberOfParticles)
-//{
-//	Graphics::CParticle* pParticle = findParticleInDB(particleId);
-//	if (pParticle != nullptr)
-//	{
-//
-//	}
-//}
-//
-//void CParticlesSystemHolder::SetVariants(const string& particleId, Int32 spread, Int32 speed, Int32 height, Int32 age, Int32 size)
-//{
-//	Graphics::CParticle* pParticle = findParticleInDB(particleId);
-//	if (pParticle != nullptr)
-//	{
-//
-//	}
-//}
-//
-//void CParticlesSystemHolder::SetParticlesPosition(const string& particleId, IvVector3& position)
-//{
-//	Graphics::CParticle* pParticle = findParticleInDB(particleId);
-//	if (pParticle != nullptr)
-//	{
-//
-//	}
-//}
-//
-//void CParticlesSystemHolder::SetTexture(const string& particleId, const string& textureId)
-//{
-//	Graphics::CParticle* pParticle = findParticleInDB(particleId);
-//	if (pParticle != nullptr)
-//	{
-//
-//	}
-//}

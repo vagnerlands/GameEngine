@@ -1,4 +1,6 @@
 #include "JobList.h"
+#include "IMutex.h"
+#include "MutexFactory.h"
 
 namespace _Utils
 {
@@ -10,7 +12,11 @@ namespace _Utils
 	{
 		return m_requests.empty();
 	}
-	JobList::JobList(): m_requests(), m_results()
+    JobList::JobList() :
+        m_pRequestsMutex(MutexFactory::Instance().Create("JobRequestsMutex")),
+        m_requests(),
+        m_pResultsMutex(MutexFactory::Instance().Create("JobResultsMutex")),
+        m_results()
 	{
 	}
 	bool JobList::PushRequest(const std::string& id)
@@ -26,28 +32,32 @@ namespace _Utils
 
 		if (!found)
 		{
+            LockGuard mutex(m_pRequestsMutex);
 			m_requests.push_back(id);
 		}
 
 		return true;
 	}
 
-	void JobList::PushResult(Graphics::IModel* result)
+	void JobList::PushResult(shared_ptr<Graphics::IModel> result)
 	{
+        LockGuard mutex(m_pResultsMutex);
 		m_results.push_back(result);
 	}
 
 	void _Utils::JobList::Retrieve(Job& out)
 	{
+        LockGuard mutex(m_pRequestsMutex);
 		out = m_requests.front();
 	}
 
-	Graphics::IModel* JobList::GetNextResult()
-	{
-		Graphics::IModel* pRet = nullptr;
+    shared_ptr<Graphics::IModel> JobList::GetNextResult()
+	{		
+        shared_ptr<Graphics::IModel> pRet = nullptr;
 		if (!m_results.empty())
 		{
-			pRet = m_results.front();
+            LockGuard mutex(m_pResultsMutex);
+            pRet = m_results.front();
 			m_results.pop_front();
 		}
 

@@ -93,9 +93,13 @@ bool Game::PostRendererInitialize()
 	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
 	Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
 
-	Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed);
-	Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
-	Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(0, 0.5, 0));
+    Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"), eSceneItemType_AnimatedAndShadowed);
+    Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
+    Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(2.0, 0.5, 0));
+
+    Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed);
+    Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
+    Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(-2.0, 0.5, 0));
 
 	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem);
 	Graphics::RenderScene::Instance().Translate("Particles2", IvVector3(0.f, 1.0f, 2.5f));
@@ -119,7 +123,7 @@ bool Game::PostRendererInitialize()
 	faces.push_back("skytop.bmp");
 	faces.push_back("skyfront.bmp");
 	faces.push_back("skyback.bmp");
-	Graphics::RenderScene::Instance().Add("SKY1",		new UtilitiesCore::Skybox("sky1", faces), eSceneItemType_SkyBox);
+	Graphics::RenderScene::Instance().Add("SKY1", UtilitiesCore::Skybox::CreateSky("sky1", faces), eSceneItemType_SkyBox);
 	// update models location
 
 	//Graphics::RenderScene::Instance().Translate("church",	IvVector3(0.f, 0.0f, -2.f));

@@ -22,14 +22,13 @@ namespace Graphics
 	{
 	public:
 		// virtual ctor
-		SceneItem(const std::string& id, Graphics::IDrawable* pDrawable);
+		SceneItem(const std::string& id, shared_ptr<Graphics::IDrawable> pDrawable);
 		// virtual dtor
 		virtual ~SceneItem()
-		{
-		}
+		{}
 
 		void Render(float dt, bool isRenderingShadows = false) const;
-		void ReplaceDrawable(Graphics::IDrawable* pDrawable);
+		void ReplaceDrawable(shared_ptr<Graphics::IDrawable> pDrawable);
 		void Release();
 
 
@@ -78,7 +77,7 @@ namespace Graphics
 		void updateModel();
 
 		// model to be rendered
-		Graphics::IDrawable* m_pDrawable;
+        shared_ptr<Graphics::IDrawable> m_pDrawable;
 		// identification
 		std::string		m_sceneItemId;
 		// world location of this drawable

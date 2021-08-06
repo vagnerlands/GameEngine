@@ -13,28 +13,12 @@ namespace Graphics
 	class SceneItemSkyBox : public SceneItem
 	{
 	public:
-		SceneItemSkyBox(const std::string& id, IDrawable* pDrawable) : SceneItem(id, pDrawable)
+		SceneItemSkyBox(const std::string& id, shared_ptr<Graphics::IDrawable> pDrawable) : SceneItem(id, pDrawable)
 		{}
 		// virtual dtor
 		~SceneItemSkyBox()
 		{
 		}
-		//virtual void SetUpScene(cwc::glShader* pShader) const;
-		//virtual void SetUpAnimation(cwc::glShader* pShader) const override
-		//{
-		//	pShader->setUniform1i("hasAnimations", 1);
-		//}
-		//virtual void SetUpShadows(cwc::glShader* pShader) const override
-		//{
-
-		//}
-
-		//virtual void SetUpShadows(cwc::glShader* pShader) const;
-		/*virtual void ShadowsPass() const override
-		{
-			Graphics::Ilumination::Instance().HasAnimations(1);
-			Graphics::Ilumination::Instance().UpdateModel(m_model);
-		}*/
 	};
 }
 

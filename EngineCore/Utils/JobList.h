@@ -6,6 +6,7 @@
 
 using namespace Types;
 namespace Graphics { class IModel; }
+class IMutex;
 
 namespace _Utils
 {
@@ -16,15 +17,17 @@ namespace _Utils
 	{
 		friend class Job;
 	private:
+        IMutex* m_pRequestsMutex;
 		std::list<std::string> m_requests;
-		std::list<Graphics::IModel*> m_results;
+        IMutex* m_pResultsMutex;
+		std::list<shared_ptr<Graphics::IModel>> m_results;
 		void Pop(const std::string& id);
 	public:
 		JobList();
 		bool PushRequest(const std::string& id);
-		void PushResult(Graphics::IModel* pModel);
+		void PushResult(shared_ptr<Graphics::IModel> pModel);
 		void Retrieve(class Job& out);
-		Graphics::IModel* GetNextResult();
+        shared_ptr<Graphics::IModel> GetNextResult();
 		bool IsEmpty() const;
 
 	};

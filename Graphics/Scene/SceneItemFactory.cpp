@@ -8,7 +8,7 @@
 #include "SceneItemShadowedSimple.h"
 #include "SceneItemParticlesSystem.h"
 
-Graphics::SceneItem* Graphics::SceneItemFactory::Create(const std::string& id, IDrawable* pDrawable, eSceneItemType type)
+Graphics::SceneItem* Graphics::SceneItemFactory::Create(const std::string& id, shared_ptr<IDrawable> pDrawable, eSceneItemType type)
 {
 	switch (type)
 	{

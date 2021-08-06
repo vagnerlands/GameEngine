@@ -19,16 +19,15 @@ class CModelHolder
 public:
 
 	//typedef unordered_map<string, SModelData> ModelMap;
-	typedef unordered_map<string, Graphics::IModel*> ModelObject;
+	typedef unordered_map<string, shared_ptr<Graphics::IModel>> ModelObject;
 
 	// always create before using
 	static bool Create(const string& pathToModelFile);
 	virtual ~CModelHolder();
 	
-	Graphics::IModel* LoadModel(const string& modelId);
-    
+    shared_ptr<Graphics::IModel> LoadModel(const string& modelId);    
 	void RemoveModel(const string& modelId);
-	Graphics::IModel* GetModelById(const string& modelId);
+    shared_ptr<Graphics::IModel> GetModelById(const string& modelId);
 
 	void Update(float dt);
 

@@ -23,7 +23,7 @@ class CParticlesSystemHolder
 public:
 
 	//typedef unordered_map<string, SModelData> ModelMap;
-	typedef unordered_map<string, Graphics::CParticle*> DisplayObject;
+	typedef unordered_map<string, shared_ptr<Graphics::CParticle>> DisplayObject;
 
 	// always create before using
 	static bool Create();
@@ -33,7 +33,7 @@ public:
     
 	void RemoveParticle(const string& particleId);
 
-	Graphics::IDrawable* GetParticleById(const string& particleId);
+    shared_ptr<Graphics::IDrawable> GetParticleById(const string& particleId);
 
 	void Update(float dt);
 
@@ -45,7 +45,7 @@ public:
 private:
 	CParticlesSystemHolder(const string& pathToResources);
 
-	Graphics::CParticle* findParticleInDB(const std::string& id);
+    shared_ptr<Graphics::CParticle> findParticleInDB(const std::string& id);
 
 	// hash map for the raw data models (vertexes, normals, material, etc)
 	//ModelMap m_models;

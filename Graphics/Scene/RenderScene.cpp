@@ -7,13 +7,13 @@ Graphics::RenderScene & Graphics::RenderScene::Instance()
 	return instance;
 }
 
-void Graphics::RenderScene::Add(const std::string& id, IDrawable* pDrawable, eSceneItemType type)
+void Graphics::RenderScene::Add(const std::string& id, shared_ptr<IDrawable> pDrawable, eSceneItemType type)
 {	
 	// add to the current rendering database
 	m_items.push_back(SceneItemFactory::Instance().Create(id, pDrawable, type));
 }
 
-void Graphics::RenderScene::Change(const std::string& id, IDrawable* pDrawable)
+void Graphics::RenderScene::Change(const std::string& id, shared_ptr<IDrawable> pDrawable)
 {
 	Graphics::SceneItem* pObj = find(id);
 	if (pObj != nullptr)
@@ -73,19 +73,11 @@ void Graphics::RenderScene::Remove(const std::string & id)
 	Graphics::SceneItem* pObj = find(id);
 	if (pObj != nullptr)
 	{
+        pObj->Release(); // drop a reference to the underlying drawable
 		m_items.remove(pObj);
 		delete pObj;
 	}
 }
-
-//void Graphics::RenderScene::Update(float dt) const
-//{
-//	for (const auto& it = m_items.begin(); it != m_items.end(); it++)
-//	{
-//		Graphics::SceneItem* pObj = *it;
-//		pObj->Update(dt);
-//	}
-//}
 
 void Graphics::RenderScene::ApplyQuery(const std::string& id, SceneQuery& query)
 {

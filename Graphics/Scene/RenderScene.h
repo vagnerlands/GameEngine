@@ -24,10 +24,10 @@ namespace Graphics
 
 		static RenderScene& Instance();
 
-		virtual void Add(const std::string& id, IDrawable* pDrawable, eSceneItemType type);
+		virtual void Add(const std::string& id, shared_ptr<IDrawable> pDrawable, eSceneItemType type);
 
 		// replace the current model by another model
-		virtual void Change(const std::string& id, IDrawable* pDrawable);
+		virtual void Change(const std::string& id, shared_ptr<IDrawable> pDrawable);
 
 		// Update ilumination location
 		virtual void Translate(const std::string& id, const IvVector3& newLocation);

@@ -13,7 +13,7 @@ namespace Graphics
 	class SceneItemSimple : public SceneItem
 	{
 	public:
-		SceneItemSimple(const std::string& id, IDrawable* pDrawable) : SceneItem(id, pDrawable)
+		SceneItemSimple(const std::string& id, shared_ptr<Graphics::IDrawable> pDrawable) : SceneItem(id, pDrawable)
 		{}
 		// virtual dtor
 		~SceneItemSimple()
@@ -24,22 +24,6 @@ namespace Graphics
 			SceneItem::SetUpScene(pShader);
 			pShader->setUniform2f("uvFactor", m_uvFactor.GetX(), m_uvFactor.GetY());
 		}
-
-		//virtual void SetUpAnimation(cwc::glShader* pShader) const override
-		//{
-		//	pShader->setUniform1i("hasAnimations", 0);
-		//}
-		//virtual void SetUpShadows(cwc::glShader* pShader) const override
-		//{
-
-		//}
-
-		//virtual void SetUpShadows(cwc::glShader* pShader) const;
-		//virtual void ShadowsPass() const override
-		//{
-		//	Graphics::Ilumination::Instance().HasAnimations(0);
-		//	Graphics::Ilumination::Instance().UpdateModel(m_model);
-		//}
 	};
 }
 

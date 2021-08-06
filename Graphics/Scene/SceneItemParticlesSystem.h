@@ -15,7 +15,7 @@ namespace Graphics
 	class SceneItemParticlesSystem : public SceneItemSimple
 	{
 	public:
-		SceneItemParticlesSystem(const std::string& id, IDrawable* pDrawable, Int32 NumberOfParticles) : SceneItemSimple(id, pDrawable), m_numberOfParticles(NumberOfParticles)
+		SceneItemParticlesSystem(const std::string& id, shared_ptr<Graphics::IDrawable> pDrawable, Int32 NumberOfParticles) : SceneItemSimple(id, pDrawable), m_numberOfParticles(NumberOfParticles)
 		{
 			// make sure it's empty
 			m_attributes.clear();

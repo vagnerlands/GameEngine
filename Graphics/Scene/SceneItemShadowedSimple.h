@@ -13,7 +13,7 @@ namespace Graphics
 	class SceneItemShadowedSimple : public SceneItemSimple
 	{
 	public:
-		SceneItemShadowedSimple(const std::string& id, IDrawable* pDrawable) : SceneItemSimple(id, pDrawable)
+		SceneItemShadowedSimple(const std::string& id, shared_ptr<Graphics::IDrawable> pDrawable) : SceneItemSimple(id, pDrawable)
 		{}
 		// virtual dtor
 		~SceneItemShadowedSimple()

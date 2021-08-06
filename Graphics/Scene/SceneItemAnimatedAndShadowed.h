@@ -13,7 +13,7 @@ namespace Graphics
 	class SceneItemAnimatedAndShadowed : public SceneItemSimple
 	{
 	public:
-		SceneItemAnimatedAndShadowed(const std::string& id, IDrawable* pDrawable) : SceneItemSimple(id, pDrawable)
+		SceneItemAnimatedAndShadowed(const std::string& id, shared_ptr<Graphics::IDrawable> pDrawable) : SceneItemSimple(id, pDrawable)
 		{}
 		// virtual dtor
 		~SceneItemAnimatedAndShadowed()

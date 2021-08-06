@@ -3,7 +3,7 @@
 #include "IRenderer.h"
 #include "Ilumination.h"
 
-Graphics::SceneItem::SceneItem(const std::string& id, Graphics::IDrawable* pDrawable) :
+Graphics::SceneItem::SceneItem(const std::string& id, shared_ptr<Graphics::IDrawable> pDrawable) :
 	m_pDrawable(pDrawable),
 	m_sceneItemId(id),
 	m_location(0.f, 0.f, 0.f), // default location
@@ -16,21 +16,19 @@ Graphics::SceneItem::SceneItem(const std::string& id, Graphics::IDrawable* pDraw
 
 void Graphics::SceneItem::Render(float dt, bool isRenderingShadows) const
 {
-	if (m_pDrawable!=nullptr)
-	m_pDrawable->Draw(*this, dt, isRenderingShadows);
+	if (m_pDrawable != nullptr)
+	    m_pDrawable->Draw(*this, dt, isRenderingShadows);
 }
 
-void Graphics::SceneItem::ReplaceDrawable(Graphics::IDrawable* pDrawable)
+void Graphics::SceneItem::ReplaceDrawable(shared_ptr<Graphics::IDrawable> pDrawable)
 {
 	m_pDrawable = pDrawable;
 }
 
 void Graphics::SceneItem::Release()
 {
-	if (m_pDrawable != nullptr)
-	{
-		delete m_pDrawable;
-	}
+    // release 1 shared pointer counter
+    m_pDrawable = nullptr;
 }
 
 void Graphics::SceneItem::updateModel()
