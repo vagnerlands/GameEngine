@@ -8,17 +8,17 @@
 #include "SceneItemShadowedSimple.h"
 #include "SceneItemParticlesSystem.h"
 
-Graphics::SceneItem* Graphics::SceneItemFactory::Create(const std::string& id, shared_ptr<IDrawable> pDrawable, eSceneItemType type)
+shared_ptr<Graphics::SceneItem> Graphics::SceneItemFactory::Create(const std::string& id, shared_ptr<IDrawable> pDrawable, eSceneItemType type)
 {
 	switch (type)
 	{
-	case eSceneItemType_Regular: return new SceneItem(id, pDrawable);
-	case eSceneItemType_Simple: return new SceneItemSimple(id, pDrawable);
-	case eSceneItemType_SkyBox: return new SceneItemSkyBox(id, pDrawable);
-	case eSceneItemType_Animated: return new SceneItemAnimatedSimple(id, pDrawable);
-	case eSceneItemType_AnimatedAndShadowed: return new SceneItemAnimatedAndShadowed(id, pDrawable);
-	case eSceneItemType_NonAnimatedAndShadowed: return new SceneItemShadowedSimple(id, pDrawable);
-	case eSceneItemType_ParticlesSystem: return new SceneItemParticlesSystem(id, pDrawable, 100);
+    case eSceneItemType_Regular: return make_shared<Graphics::SceneItem>(id, pDrawable);
+	case eSceneItemType_Simple: return make_shared<Graphics::SceneItemSimple>(id, pDrawable);
+	case eSceneItemType_SkyBox: return make_shared<Graphics::SceneItemSkyBox>(id, pDrawable);
+	case eSceneItemType_Animated: return make_shared<Graphics::SceneItemAnimatedSimple>(id, pDrawable);
+	case eSceneItemType_AnimatedAndShadowed: return make_shared<Graphics::SceneItemAnimatedAndShadowed>(id, pDrawable);
+	case eSceneItemType_NonAnimatedAndShadowed: return make_shared<Graphics::SceneItemShadowedSimple>(id, pDrawable);
+	case eSceneItemType_ParticlesSystem: return make_shared<Graphics::SceneItemParticlesSystem>(id, pDrawable, 100);
 	default:
 		break;
 	}

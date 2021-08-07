@@ -176,6 +176,21 @@
     <Text Include="..\Binaries\Assets\animatedModel_dnVertexshader.txt" />
     <Text Include="..\Binaries\Assets\animatedModel_dsFragmentshader.txt" />
     <Text Include="..\Binaries\Assets\animatedModel_dsVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\lightFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\lightVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\particlesFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\particlesVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\shadowsFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\shadowsGeometryshader.txt" />
+    <Text Include="..\Binaries\Assets\shadowsVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\simpleFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\simpletextureFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\simpletextureVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\simpleVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\skyFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\skyVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\solidModelFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\solidModelVertexshader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

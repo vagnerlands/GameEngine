@@ -44,5 +44,50 @@
     <Text Include="..\Binaries\Assets\animatedModelVertexshader.txt">
       <Filter>Assets</Filter>
     </Text>
+    <Text Include="..\Binaries\Assets\lightVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\particlesFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\particlesVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\shadowsFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\shadowsGeometryshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\shadowsVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\simpleFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\simpletextureFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\simpletextureVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\simpleVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\skyFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\skyVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\solidModelFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\solidModelVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\lightFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -23,7 +23,7 @@ CFactory2dImage::Create2dImage(Byte fileType[])
 	{
 		return std::shared_ptr<I2dImage>(new CBmp);
 	}
-	else if ((fileType[1] == 'P') // TGA, no best way to identify the format type than this
+	else if ((fileType[1] == 'P') // PNG, no best way to identify the format type than this
 		&& (fileType[2] == 'N'))
 	{
         return std::shared_ptr<I2dImage>(new CPng);

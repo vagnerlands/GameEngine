@@ -30,16 +30,6 @@ bool Graphics::CTextureOGL::BuildTexture(const std::shared_ptr<I2dImage>& pData)
 	// build our texture mipmaps	
 	if (pData->GetNumberOfBytes() == 4)
 	{
-        //const Int32 siz = pData->GetWidth() * 4 * pData->GetHeight();
-        //Byte* dummyBuf = new Byte[siz];
-        //for (int i = 0; i < (siz-4); i += 4)
-        //{
-        //    dummyBuf[i] = 0x00;
-        //    dummyBuf[i + 1] = 0xff;
-        //    dummyBuf[i + 2] = 0x00;
-        //    dummyBuf[i + 4] = 0x00;
-        //}
-
 		glTexImage2D(GL_TEXTURE_2D,
 			0,
 			GL_RGBA,
@@ -48,23 +38,11 @@ bool Graphics::CTextureOGL::BuildTexture(const std::shared_ptr<I2dImage>& pData)
 			0,
 			GL_RGBA,
 			GL_UNSIGNED_BYTE,
-            //dummyBuf);
             pData->GetPointerToData());
-
-        //delete[] dummyBuf;
 	}
 	else
 	{
         const Byte* p = pData->GetPointerToData();
-        //const Int32 siz = pData->GetWidth() * 3 * pData->GetHeight();
-        //Byte* dummyBuf = new Byte[siz];
-        //for (int i = 0; i < (siz-3); i+=3)
-        //{
-        //    dummyBuf[i] = 0xff;
-        //    dummyBuf[i+1] = 0x00;
-        //    dummyBuf[i+2] = 0x00;
-        //}
-
 		glTexImage2D(GL_TEXTURE_2D,
 			0,
 			GL_RGB,
@@ -73,10 +51,7 @@ bool Graphics::CTextureOGL::BuildTexture(const std::shared_ptr<I2dImage>& pData)
 			0,
 			GL_RGB,
 			GL_UNSIGNED_BYTE,
-            //dummyBuf);
 			pData->GetPointerToData());
-
-        //delete[] dummyBuf;
 	}
 	// checks for GL ERROR
 	err = glGetError();

@@ -170,6 +170,7 @@
     <ClCompile Include="Loaders\Images\Windows\CFactory2dImageWin.cpp" />
     <ClCompile Include="Loaders\Images\Windows\stb_image.cpp" />
     <ClCompile Include="Loaders\Images\Windows\stb_image_aug.c" />
+    <ClCompile Include="Loaders\Model3D\Model.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainOgl.cpp" />
     <ClCompile Include="MainWinOgl.cpp" />

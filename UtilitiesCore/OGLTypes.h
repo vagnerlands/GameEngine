@@ -94,6 +94,14 @@ namespace Types
         // bitangent
         glm::vec3 Bitangent;
     };
+
+    // axis aligned bounding box
+    struct AABB
+    {
+        AABB(): Min { 0 }, Max{ 0 } {}
+        glm::vec3 Min;
+        glm::vec3 Max;
+    };
 	
 	struct SVertexBoneData
 	{
@@ -137,6 +145,41 @@ namespace Types
 
     struct SModelMesh
     {
+        SModelMesh()
+        {
+
+        }
+        explicit SModelMesh(const SModelMesh& rhs)
+        {
+            m_vertices = std::move(rhs.m_vertices);
+            m_indices = std::move(rhs.m_indices);
+            m_textures = std::move(rhs.m_textures);
+            bones_id_weights_for_each_vertex = std::move(rhs.bones_id_weights_for_each_vertex);
+            m_aabb = rhs.m_aabb;
+            m_shaderName = rhs.m_shaderName;
+        }
+        SModelMesh(SModelMesh&& rhs)
+        {
+            m_vertices = std::move(rhs.m_vertices);
+            m_indices = std::move(rhs.m_indices);
+            m_textures = std::move(rhs.m_textures);
+            bones_id_weights_for_each_vertex = std::move(rhs.bones_id_weights_for_each_vertex);
+            m_aabb = rhs.m_aabb;
+            m_shaderName = rhs.m_shaderName;
+        }
+        SModelMesh& operator=(SModelMesh&& rhs)
+        {
+            if (&rhs != this)
+            {
+                m_vertices = std::move(rhs.m_vertices);
+                m_indices = std::move(rhs.m_indices);
+                m_textures = std::move(rhs.m_textures);
+                bones_id_weights_for_each_vertex = std::move(rhs.bones_id_weights_for_each_vertex);
+                m_aabb = rhs.m_aabb;
+                m_shaderName = rhs.m_shaderName;
+            }
+            return *this;
+        }
 		~SModelMesh()
 		{
 			m_textures = vector<SModelTexture>();
@@ -149,6 +192,8 @@ namespace Types
         vector<SModelTexture>   m_textures;
 		// bone information
 		vector<SVertexBoneData>	bones_id_weights_for_each_vertex;
+        // axis aligned bounding box for clipping/collision purposes
+        AABB                    m_aabb;
 		// shader name (Model.h suggests a name)
 		string					m_shaderName = "model";
     };

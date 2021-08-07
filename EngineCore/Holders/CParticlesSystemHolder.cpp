@@ -37,7 +37,7 @@ CParticlesSystemHolder::OnRemoveEvent(const string& removeItem)
 	s_pInstance->RemoveParticle(removeItem);
 }
 
-CParticlesSystemHolder::CParticlesSystemHolder(const string& pathToResources)
+CParticlesSystemHolder::CParticlesSystemHolder(const string& )
 	/*: m_modelFiles(new CResourceZipFile(pathToResources.data(), this->OnRemoveEvent))*/
 {
 	m_pParticlesContentMapMutex = MutexFactory::Instance().Create("ParticlesContentMapMutex");

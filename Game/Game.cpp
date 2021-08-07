@@ -51,9 +51,11 @@ Game::Game() :
 Game::~Game()
 {
 	// release all allocated resources
-	delete CTextureHolder::s_pInstance;
+    delete CParticlesSystemHolder::s_pInstance;    
+    delete CTextureHolder::s_pInstance;
 	delete CShaderHolder::s_pInstance;
 	delete CModelHolder::s_pInstance;
+    Graphics::RenderScene::Instance().Destroy();
 }
 
 bool Game::PostRendererInitialize()
@@ -62,7 +64,7 @@ bool Game::PostRendererInitialize()
 	CShaderHolder::Create();
 
 	// Set the view parameters in renderer
-	Graphics::IRenderer::mRenderer->SetFOV(60.0F);
+	Graphics::IRenderer::mRenderer->SetFOV(90.0F);
 	// Update camera to be above ground
 	Graphics::IRenderer::mRenderer->GetCamera().MoveRight(5.f);
 	Graphics::IRenderer::mRenderer->GetCamera().MoveForward(10.f);

@@ -44,17 +44,15 @@ namespace Graphics
 		// Update ilumination location
 		virtual void CastShadow(const std::string& id, bool hasShadow);
 
-		// Update ilumination location
+		// Remove a scene item from the database
 		virtual void Remove(const std::string& id);
-		
-
 		virtual void ApplyQuery(const std::string& id, class SceneQuery& query);
-
 		virtual void Render(float dt, bool isRenderingShadows = false) const;
 
+        virtual void Destroy();
+
 	protected:
-		//list<Graphics::IDrawable*> m_items;
-		typedef list<Graphics::SceneItem*> DatabaseSceneItemsType;
+		typedef list<shared_ptr<Graphics::SceneItem>> DatabaseSceneItemsType;
 		DatabaseSceneItemsType m_items;
 
 		RenderScene()
@@ -62,7 +60,7 @@ namespace Graphics
 
 		}
 
-		Graphics::SceneItem* find(const std::string& id);
+		shared_ptr<Graphics::SceneItem> find(const std::string& id);
 
 	private:
 		// copy operations

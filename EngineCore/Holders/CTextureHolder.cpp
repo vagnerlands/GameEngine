@@ -145,14 +145,11 @@ void CTextureHolder::removeLastItem()
 void CTextureHolder::RemoveTexture(const string& textId)
 {
 	TextureMap::iterator it = m_textures.find(textId);
-	if (it == m_textures.end())
+	if (it != m_textures.end())
 	{
-		// this shouldn't happen - never, but if happens, trying 
-		// to erase will cause an exception - so must quit method
-		return;
+        it->second->Destroy();
+        m_textures.erase(it);
 	}
-	it->second->Destroy();
-	m_textures.erase(it);
 }
 
 Graphics::ITexture*
@@ -196,7 +193,6 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 	// cache missed - must reload it from resources db
 	CResource* resourceItem = new CResource[arrLen];
     std::vector< std::shared_ptr<I2dImage> > pRawImageArray(arrLen);
-	//I2dImage** pRawImageArray = new I2dImage*[arrLen];
 	for (UInt32 i = 0; i < arrLen; ++i)
 	{
 		resourceItem[i].SetName(attr[i].m_filename);
@@ -228,17 +224,6 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 			increaseTexturePriority(textureId/*, pData->GetSizeInBytes()*/);
 		}
 	}
-
-	
-
-
-	// release allocated data
-	//for (UInt32 i = 0; i < arrLen; ++i)
-	//{
-	//	delete pRawImageArray[i];
-	//}
-
-	//delete[] pRawImageArray;
 	delete[] resourceItem;
 
 	// time measurement
