@@ -47,7 +47,9 @@ private:
     // checks all material textures of a given type and loads the textures if they're not loaded yet.
     // the required info is returned as a Texture struct.
     vector<SModelTexture>   loadMaterialTextures(aiMaterial *mat, aiTextureType type, const string& typeName);
-    AABB                    Model::calculateBoundingBox(const SModelMesh& mesh) const;
+    AABB                    calculateBoundingBox(const SModelMesh& mesh) const;
+    UInt32                  estimateMeshesCount(aiNode * node) const;
+    void                    estimateMeshesCountLooper(aiNode * node, UInt32& meshesCount) const;
 };
 
 inline void Model::Load(string const & path, bool gamma)

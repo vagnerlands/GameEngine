@@ -20,6 +20,8 @@ void Model::loadModel(string const & path)
         return;
     }
 
+    const UInt32 cMeshesCount = estimateMeshesCount(scene->mRootNode);
+    meshes.reserve(cMeshesCount);
     // process ASSIMP's root node recursively
     processNode(scene->mRootNode, scene);
 }
@@ -256,6 +258,26 @@ AABB Model::calculateBoundingBox(const SModelMesh& mesh) const
             result.Min.z = m.Position.z;
     }
     return result;
+}
+
+UInt32 Model::estimateMeshesCount(aiNode * node) const
+{
+    UInt32 meshesCount = 0U;
+    estimateMeshesCountLooper(node, meshesCount);
+    return meshesCount;
+}
+
+void Model::estimateMeshesCountLooper(aiNode * node, UInt32 & meshesCount) const
+{
+    // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
+    if (node != nullptr)
+    {
+        for (UInt32 i = 0; i < node->mNumChildren; ++i)
+        {
+            meshesCount += node->mChildren[i]->mNumMeshes;
+            estimateMeshesCountLooper(node->mChildren[i], meshesCount);
+        }
+    }
 }
 
 
