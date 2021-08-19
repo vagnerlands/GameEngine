@@ -108,7 +108,8 @@ namespace Graphics
 					Float speed = (seeds.SpeedMin + abs((rand() % (seeds.SpeedMax - seeds.SpeedMin)))) / 100.f;
 					Float size = (seeds.SizeMin + abs((rand() % (seeds.SizeMax - seeds.SizeMin)))) / 1000.f;
 					Float height = (seeds.HeightMin + abs((rand() % (seeds.HeightMax - seeds.HeightMin)))) / 100.f;
-					Float spread = ((rand() % seeds.SpreadMax) - seeds.SpreadMin + 1)  / 100.f;
+                    const Float cHalfSpread = -(seeds.SpreadMax / 2);                    
+					Float spread = ((rand() % seeds.SpreadMax) + cHalfSpread)  / 100.f;
 					Int32 age = (seeds.AgeMin + abs((rand() % (seeds.AgeMax - seeds.AgeMin))));
 					m_attributes.push_back(ParticleAttributes(speed, size, age, height, spread));
 				}

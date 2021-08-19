@@ -5,12 +5,12 @@
 
 using namespace Types;
 
-template <char KEY>
+template <UByte KEY>
 class IKey
 {
 public:
 	virtual ~IKey() {}
-	static const Byte cAscValue = KEY;
+	static const UByte cAscValue = KEY;
 };
 
 #endif //_IKEYEVENT_H_

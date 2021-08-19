@@ -161,6 +161,7 @@
     <ClCompile Include="Holders\CThreadHolder.cpp" />
     <ClCompile Include="IGame.cpp" />
     <ClCompile Include="Input\CGameController.cpp" />
+    <ClCompile Include="Input\KeyDispatcher.cpp" />
     <ClCompile Include="Loaders\Images\CBmp.cpp" />
     <ClCompile Include="Loaders\Images\CFactory2dImage.cpp" />
     <ClCompile Include="Loaders\Images\CPng.cpp" />
@@ -201,7 +202,7 @@
     <ClInclude Include="Input\IKeyEvent.h" />
     <ClInclude Include="Input\IKeyboardHandler.h" />
     <ClInclude Include="Input\IMouseHandler.h" />
-    <ClInclude Include="Input\Keys.h" />
+    <ClInclude Include="Input\KeyDispatcher.h" />
     <ClInclude Include="Loaders\Images\CBmp.h" />
     <ClInclude Include="Loaders\Images\CFactory2dImage.h" />
     <ClInclude Include="Loaders\Images\CPng.h" />

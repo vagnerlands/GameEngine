@@ -19,8 +19,14 @@ public:
 
 	virtual bool VOnKeyUp(const Byte c) = 0;
 
+    struct KeyAttr
+    {
+        bool    isPressed = false;
+        UInt32  cycles = 0; // cycles this key is being pressed
+    };
+
 	// Which keys are up and down
-	bool m_bKey[256];
+    KeyAttr     m_bKey[256];
 };
 
 #endif //_IKEYBOARDHANDLER_H_

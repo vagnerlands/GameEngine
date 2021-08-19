@@ -148,6 +148,9 @@
     <ClCompile Include="Loaders\Model3D\Model.cpp">
       <Filter>Src\Loaders</Filter>
     </ClCompile>
+    <ClCompile Include="Input\KeyDispatcher.cpp">
+      <Filter>Src\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IGame.h">
@@ -267,9 +270,6 @@
     <ClInclude Include="Input\IKeyEvent.h">
       <Filter>Src\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Input\Keys.h">
-      <Filter>Src\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Holders\CParticlesSystemHolder.h">
       <Filter>Src\Holders</Filter>
     </ClInclude>
@@ -293,6 +293,9 @@
     </ClInclude>
     <ClInclude Include="Utils\JobList.h">
       <Filter>Src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\KeyDispatcher.h">
+      <Filter>Src\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

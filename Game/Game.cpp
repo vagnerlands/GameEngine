@@ -38,14 +38,16 @@ Game::Game() :
     m_lightAngle(0.F)
 {
 	mpGameInput = new CGameController(1280, 720);
+    _Keys::KeyDispatcherFactory::Create(mpGameInput);
 	BindKey(Key0, this);
 	BindKey(Key1, this);
 	BindKey(Key2, this);
 	BindKey(Key3, this);
-	BindKey(KeyT, this);
-	BindKey(KeyY, this);
-	BindKey(KeyG, this);
-	BindKey(KeyH, this);
+	BindKey(Keyt, this);
+	BindKey(Keyy, this);
+	BindKey(Keyg, this);
+	BindKey(Keyh, this);
+    BindKey(KeyEscape, this);
 }
 
 Game::~Game()
@@ -62,6 +64,40 @@ bool Game::PostRendererInitialize()
 {
 	//TODO: initialize lighting default values (some basic light somewhere)
 	CShaderHolder::Create();
+
+    const Float cInitialSpeed = 6.f;
+    const Float cAcceleration = 1.5f;
+    const Float cMaxSpeed = 20.f;
+
+    _Keys::KeyDispatcher::Instance().Bind('w', [=](Float dt, Int32 cycles)
+    {
+        Graphics::IRenderer::mRenderer->GetCamera().MoveForward(dt*(clamp(cInitialSpeed+(cycles*cAcceleration), cMaxSpeed)));
+    });
+
+    _Keys::KeyDispatcher::Instance().Bind('s', [=](Float dt, Int32 cycles)
+    {
+        Graphics::IRenderer::mRenderer->GetCamera().MoveForward(-dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
+    });
+
+    _Keys::KeyDispatcher::Instance().Bind('d', [=](Float dt, Int32 cycles)
+    {
+        Graphics::IRenderer::mRenderer->GetCamera().MoveRight(dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
+    });
+
+    _Keys::KeyDispatcher::Instance().Bind('a', [=](Float dt, Int32 cycles)
+    {
+        Graphics::IRenderer::mRenderer->GetCamera().MoveRight(-dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
+    });
+
+    _Keys::KeyDispatcher::Instance().Bind('e', [=](Float dt, Int32 cycles)
+    {
+        Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
+    });
+
+    _Keys::KeyDispatcher::Instance().Bind('q', [=](Float dt, Int32 cycles)
+    {
+        Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(-dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
+    });
 
 	// Set the view parameters in renderer
 	Graphics::IRenderer::mRenderer->SetFOV(90.0F);
@@ -102,6 +138,10 @@ bool Game::PostRendererInitialize()
     Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed);
     Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
     Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(-2.0, 0.5, 0));
+
+    Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"), eSceneItemType_AnimatedAndShadowed);
+    Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
+    Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(5.0, 0.5, 0));
 
 	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem);
 	Graphics::RenderScene::Instance().Translate("Particles2", IvVector3(0.f, 1.0f, 2.5f));
@@ -156,42 +196,21 @@ void Game::UpdateObjects(float dt)
 {
     const Float cSpeed = 15.0f;
 	const Float cMouseSensibility = 5.f;
-	if (mpGameInput->m_bKey[27])
-	{
-		mGame->Quit();
-		return;
-	}
-	if (mpGameInput->m_bKey['w'])
-	{
-		Graphics::IRenderer::mRenderer->GetCamera().MoveForward(dt*cSpeed);
-	} 
-	else if (mpGameInput->m_bKey['s'])
-	{
-		Graphics::IRenderer::mRenderer->GetCamera().MoveForward(-dt* cSpeed);
-	}
-	if (mpGameInput->m_bKey['d'])
-	{
-		Graphics::IRenderer::mRenderer->GetCamera().MoveRight(dt*cSpeed);
-	}
-	else if (mpGameInput->m_bKey['a'])
-	{
-		Graphics::IRenderer::mRenderer->GetCamera().MoveRight(-dt* cSpeed);
-	}
 
-	if (mpGameInput->m_bKey['e'])
-	{
-		Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(dt*cSpeed);
-	}
-	else if (mpGameInput->m_bKey['q'])
-	{
-		Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(-dt* cSpeed);
-	}
+    // update all listening components about the pressed key (if any)
+    for (Int32 key = 0; key < 256; ++key)
+    {
+        if (mpGameInput->m_bKey[key].isPressed)
+        {
+            _Keys::KeyDispatcher::Instance().Event(dt, key);
+        }
+    }
     
-    if (mpGameInput->m_bKey['y'])
+    if (mpGameInput->m_bKey['y'].isPressed)
     {
         m_lightAngle += 1.f;
     }
-    else if (mpGameInput->m_bKey['t'])
+    else if (mpGameInput->m_bKey['t'].isPressed)
     {
         m_lightAngle -= 1.f;
     }
@@ -201,14 +220,14 @@ void Game::UpdateObjects(float dt)
 	static Float SizeConst = 0;
 	static Float NumberOfParticles = 100;
 
-	if (mpGameInput->m_bKey['o'])
+	if (mpGameInput->m_bKey['o'].isPressed)
 	{
 		SpreadConst += 1.f;
 		Graphics::SceneQueryParticles part;
 		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 300 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mpGameInput->m_bKey['p'])
+	else if (mpGameInput->m_bKey['p'].isPressed)
 	{
 		SpreadConst -= 1.f;
 		Graphics::SceneQueryParticles part;
@@ -216,28 +235,28 @@ void Game::UpdateObjects(float dt)
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 
-	if (mpGameInput->m_bKey['k'])
+	if (mpGameInput->m_bKey['k'].isPressed)
 	{
 		HeightConst += 1.f;
 		Graphics::SceneQueryParticles part;
 		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mpGameInput->m_bKey['l'])
+	else if (mpGameInput->m_bKey['l'].isPressed)
 	{
 		HeightConst -= 1.f;
 		Graphics::SceneQueryParticles part;
 		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200+ SizeConst, 500+ SizeConst, 200+HeightConst, 400 + HeightConst, 30+SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	if (mpGameInput->m_bKey['n'])
+	if (mpGameInput->m_bKey['n'].isPressed)
 	{
 		SizeConst += 1.f;
 		Graphics::SceneQueryParticles part;
 		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mpGameInput->m_bKey['m'])
+	else if (mpGameInput->m_bKey['m'].isPressed)
 	{
 		SizeConst -= 1.f;
 		Graphics::SceneQueryParticles part;
@@ -245,14 +264,14 @@ void Game::UpdateObjects(float dt)
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	
-	if (mpGameInput->m_bKey['1'])
+	if (mpGameInput->m_bKey['1'].isPressed)
 	{
 		NumberOfParticles -= 1.f;
 		Graphics::SceneQueryParticles part;
 		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mpGameInput->m_bKey['2'])
+	else if (mpGameInput->m_bKey['2'].isPressed)
 	{
 		NumberOfParticles += 1.f;
 		Graphics::SceneQueryParticles part;
@@ -302,24 +321,29 @@ void Game::UpdateObjects(float dt)
 
 }
 
-void Game::OnKeyEvent(const KeyT& e)
+void Game::OnKeyEvent(const Keyt& e)
 {
 	Graphics::RenderScene::Instance().Change("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"));
 }
 
-void Game::OnKeyEvent(const KeyY& e)
+void Game::OnKeyEvent(const Keyy& e)
 {
 	Graphics::RenderScene::Instance().Change("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 }
 
-void Game::OnKeyEvent(const KeyG& e)
+void Game::OnKeyEvent(const Keyg& e)
 {
 	Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", 0.015f);
 }
 
-void Game::OnKeyEvent(const KeyH& e)
+void Game::OnKeyEvent(const Keyh& e)
 {
 	Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", -0.015f);
+}
+
+void Game::OnKeyEvent(const KeyEscape & e)
+{
+    mGame->Quit();
 }
 
 void Game::OnKeyEvent(const Key0& e)

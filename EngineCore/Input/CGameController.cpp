@@ -7,7 +7,8 @@ CGameController::CGameController(Int32 centerOfScreen_X, Int32 centerOfScreen_Y)
 {
 	for (Int32 i = 0; i < 256; i++)
 	{
-		m_bKey[i] = false;
+		m_bKey[i].isPressed = false;
+        m_bKey[i].cycles = 0;
 	}
 }
 

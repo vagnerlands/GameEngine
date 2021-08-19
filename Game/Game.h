@@ -7,14 +7,15 @@
 //class CGameController;
 
 class Game : public EngineCore::IGame,
-	public _Keys::KeyT,
-	public _Keys::KeyY,
-	public _Keys::KeyG,
-	public _Keys::KeyH,
+	public _Keys::Keyt,
+	public _Keys::Keyy,
+	public _Keys::Keyg,
+	public _Keys::Keyh,
 	public _Keys::Key0,
 	public _Keys::Key1,
 	public _Keys::Key2,
-	public _Keys::Key3
+	public _Keys::Key3,
+    public _Keys::KeyEscape
 {
 public:
 	Game();
@@ -30,10 +31,11 @@ public:
 	void OnKeyEvent(const Key1& e) override;
 	void OnKeyEvent(const Key2& e) override;
 	void OnKeyEvent(const Key3& e) override;
-	void OnKeyEvent(const KeyT& e) override;
-	void OnKeyEvent(const KeyY& e) override;
-	void OnKeyEvent(const KeyG& e) override;
-	void OnKeyEvent(const KeyH& e) override;
+	void OnKeyEvent(const Keyt& e) override;
+	void OnKeyEvent(const Keyy& e) override;
+	void OnKeyEvent(const Keyg& e) override;
+	void OnKeyEvent(const Keyh& e) override;
+    void OnKeyEvent(const KeyEscape& e) override;
 
 protected:
 
@@ -43,20 +45,11 @@ protected:
 
 private:
 	Game(const Game& other) = delete;
-	Game& operator=(const Game& other);
+	Game& operator=(const Game& other) = delete;
 
 	CGameController* mpGameInput;
 
     Float m_lightAngle;
-
-	inline Float clamp(Float number1, Float number2) const
-	{
-		if (number1 > number2)
-			return number1;
-		else
-			return number2;
-	}
-
 };
 
 

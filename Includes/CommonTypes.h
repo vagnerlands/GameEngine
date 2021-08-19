@@ -12,6 +12,15 @@
 class CResHandle;
 using namespace std;
 
+
+template <typename Type> Type clamp(Type value, Type max) 
+{
+    if (value > max)
+        return max;
+    else
+        return value;
+}
+
 namespace Types 
 {
 	typedef unsigned int UInt32;
