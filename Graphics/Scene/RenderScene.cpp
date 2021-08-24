@@ -7,10 +7,12 @@ Graphics::RenderScene & Graphics::RenderScene::Instance()
 	return instance;
 }
 
-void Graphics::RenderScene::Add(const std::string& id, shared_ptr<IDrawable> pDrawable, eSceneItemType type)
+Graphics::SceneItem& Graphics::RenderScene::Add(const std::string& id, shared_ptr<IDrawable> pDrawable, eSceneItemType type)
 {	
+    auto scene = SceneItemFactory::Instance().Create(id, pDrawable, type);
 	// add to the current rendering database
-	m_items.push_back(SceneItemFactory::Instance().Create(id, pDrawable, type));
+	m_items.push_back(scene);
+    return *scene;
 }
 
 void Graphics::RenderScene::Change(const std::string& id, shared_ptr<IDrawable> pDrawable)
@@ -112,4 +114,13 @@ shared_ptr<Graphics::SceneItem> Graphics::RenderScene::find(const std::string & 
 void Graphics::RenderScene::Destroy()
 {
     m_items = DatabaseSceneItemsType();
+}
+
+void Graphics::RenderScene::DisplayBoundingBox(const std::string& id, bool display)
+{
+    auto sceneItem = find(id);
+    if (sceneItem != nullptr)
+    {
+        sceneItem->DisplayBoundingBox(display);
+    }
 }

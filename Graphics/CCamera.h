@@ -9,6 +9,9 @@ using namespace Types;
 
 class CCamera 
 {
+    // Camera kind
+    ECameraType m_type;
+    void removeCameraRoll();
 public:
 	// regular ctor - just initialize m_data
 	CCamera();
@@ -33,13 +36,9 @@ public:
 	
 	void HoverForward(Float Distance);
 
-	void HoverRight(Float Distance);
-
-	void removeCameraRoll();
-
-	//void SetCameraAttribute(CameraAttributeType attr, Float x, Float y, Float z);
-
-	//void SetCameraAttribute(CameraAttributeType attr, IvVector3 xyz);
+	void HoverRight(Float Distance);	
+    
+    void SetCameraType(ECameraType camera_type);
 
 	// view/forward vector
 	IvVector3 m_viewDir;
@@ -54,11 +53,6 @@ public:
 
 	// new approach for camera rotation
 	IvMatrix33 m_camRotation;
-
-	// Camera kind
-	ECameraType m_type;
-
-
 };
 
 

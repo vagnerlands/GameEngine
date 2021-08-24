@@ -72,6 +72,7 @@ namespace Graphics
 			viewMatrix.GetColumns(cols[0], cols[1], cols[2],cols[3]);
 			IvVector3 CameraRight_worldspace(cols[0].GetX(), cols[0].GetY(), cols[0].GetZ());
 			IvVector3 CameraUp_worldspace(cols[1].GetX(), cols[1].GetY(), cols[1].GetZ());
+            //IvVector3 CameraForward_worldspace(cols[2].GetX(), cols[2].GetY(), cols[2].GetZ());
 
 			// Apply attributes known for this shader
 			pShader->setUniform3f("cameraRight", CameraRight_worldspace.GetX(), CameraRight_worldspace.GetY(), CameraRight_worldspace.GetZ());

@@ -15,6 +15,8 @@ uniform samplerCube depthMap;
 
 uniform vec3 lightPos;
 uniform vec3 viewPos;
+uniform float bias;
+uniform float shadow_factor;
 uniform float far_plane;
 uniform float light_attenuation;
 uniform vec3 light_color;
@@ -38,10 +40,9 @@ float ShadowCalculation(vec3 fragPos)
     // now get current linear depth as the length between the fragment and light position
     float currentDepth = length(fragToLight);
     float shadow = 0.0;
-    float bias = 0.35;
     int samples = 20;
     float viewDistance = length(viewPos - fragPos);
-    float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
+    float diskRadius = (1.0 + (viewDistance / far_plane)) / shadow_factor;
     for(int i = 0; i < samples; ++i)
     {
         float closestDepth = texture(depthMap, fragToLight + gridSamplingDisk[i] * diskRadius).r;
@@ -52,7 +53,7 @@ float ShadowCalculation(vec3 fragPos)
     shadow /= float(samples);
         
     // display closestDepth as debug (to visualize depth cubemap)
-    // FragColor = vec4(vec3(closestDepth / far_plane), 1.0);    
+    //FragColor = vec4(vec3(closestDepth / far_plane), 1.0);    
         
     return shadow;
 }
@@ -83,4 +84,6 @@ void main()
 
 	float shadow = cast_shadows ? ShadowCalculation(fs_in.FragPos) : 0.0;
     gl_FragColor = vec4((attenuation*(1.0 - shadow) * ((diffuse * light_color* attenuation) + specular)) + ambient, 1.0);
+    //vec3 fragToLight = fs_in.FragPos - lightPos;
+    //gl_FragColor  = vec4(texture(depthMap, fragToLight).rgb, 1.0);
 }

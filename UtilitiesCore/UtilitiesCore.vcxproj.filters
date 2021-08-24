@@ -34,6 +34,9 @@
     <ClCompile Include="Rendered\Skybox.cpp">
       <Filter>Src\Rendered</Filter>
     </ClCompile>
+    <ClCompile Include="Rendered\SceneItemBoundingBox.cpp">
+      <Filter>Src\Rendered</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debugger.h">
@@ -70,6 +73,9 @@
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Rendered\Skybox.h">
+      <Filter>Src\Rendered</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendered\SceneItemBoundingBox.h">
       <Filter>Src\Rendered</Filter>
     </ClInclude>
   </ItemGroup>

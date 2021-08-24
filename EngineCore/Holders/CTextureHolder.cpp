@@ -49,6 +49,8 @@ CTextureHolder::LoadTexture(const string& textId)
 	// start loading measuring time
 	clock_t start = clock();
 
+    printf(" [Texture] Start loading [%s]...\n", textId.data());
+
 	// cache missed - must reload it from resources db
 	CResource resourceItem(textId);
 
@@ -71,20 +73,20 @@ CTextureHolder::LoadTexture(const string& textId)
 			{
 				std::cout << " Bad input stream, failed to load texture [" << textId << "]" << std::endl;
 			}
-			// free allocated data from the heap
-			// this must also free the array of bmp pixels 
-			//delete pRawImage;
 		}
-		// free file content buffer
-		delete[] textureDataStream;
 	}
 	else
 	{
 		DEBUG_OUT("Texture %s not found\n", textId);
 	}
+
+    if (textureDataStream != nullptr)
+    {
+        delete[] textureDataStream;
+    }
 	
 	// time measurement
-	printf(" loading tex [%s] %.2fms\n", textId.data(), (float)(clock() - start));
+    printf(" [Texture] Finished loading [%s] in %.2fms\n", textId.data(), (float)(clock() - start));
 }
 
 void CTextureHolder::BuildTexture(const string& textureId, const std::shared_ptr<I2dImage>& pData)
@@ -138,7 +140,10 @@ void CTextureHolder::removeLastItem()
     STextureItem& doomed = m_lru.back();
     RemoveTexture(doomed.m_name);
     m_sizeInUse -= doomed.m_size;
-    printf(" tex removed %s\n", doomed.m_name.c_str());
+    printf(" [Texture] Removed %s :: Current %ud (Free %ud) %.1f\n", 
+        doomed.m_name.c_str(), 
+        m_maxAllocSize - m_sizeInUse, 
+        (m_sizeInUse/(float)m_maxAllocSize)*100.f);
     m_lru.pop_back();
 }
 
@@ -188,6 +193,8 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 	// start loading measuring time
 	clock_t start = clock();
 
+    printf(" [Texture] Start loading 3D texture [%s]\n", textureId.data());
+
 	const UInt32 arrLen = attr.size();
 
 	// cache missed - must reload it from resources db
@@ -227,7 +234,7 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 	delete[] resourceItem;
 
 	// time measurement
-	printf(" loading cube tex [%s] %.2fms\n", textureId.data(), (float)(clock() - start));
+	printf(" [Texture] Finished loading 3D texture [%s] in %.2fms\n", textureId.data(), (float)(clock() - start));
 
 	// if it somehow failed, returns -1
 	return nullptr;

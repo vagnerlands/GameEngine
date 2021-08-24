@@ -73,8 +73,8 @@ void Graphics::ShadowsOGL::Start(const IvVector3& lightPos)
     // clear the depth buffer and the color buffer
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    const Float near_plane = 0.1f;
-	const Float far_plane = 25.f;
+    const Float near_plane = Graphics::IRenderer::mRenderer->GetNear();
+	const Float far_plane = Graphics::IRenderer::mRenderer->GetFar();
 
     // d is distance from view view position to the projection plane
     float d = 1.0f / IvTan(90.f / 180.0f * Types::s_PI * 0.5f);
@@ -118,7 +118,6 @@ void Graphics::ShadowsOGL::Start(const IvVector3& lightPos)
 	{
 		string matrixName = "shadowMatrices[" + std::to_string(i) + "]";
 		m_pShader->setUniformMatrix4fv(matrixName.c_str(), 1, false, (GLfloat*)shadowTransforms[i].GetFloatPtr());
-		//simpleDepthShader.setMat4("shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
 	}
 
 	m_pShader->setUniform1f("far_plane", Graphics::IRenderer::mRenderer->GetFar());

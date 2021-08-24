@@ -24,6 +24,8 @@ void Model::loadModel(string const & path)
     meshes.reserve(cMeshesCount);
     // process ASSIMP's root node recursively
     processNode(scene->mRootNode, scene);
+    m_boundaryBox = calculateBoundingBox(meshes);
+
 }
 
 void Model::processNode(aiNode * node, const aiScene * scene)
@@ -199,9 +201,6 @@ SModelMesh Model::processMesh(aiMesh * mesh, const aiScene * scene)
     {
         processedMesh.m_shaderName = "animatedModel";
     }
-
-    processedMesh.m_aabb = calculateBoundingBox(processedMesh);
-
     // return a mesh object created from the extracted mesh data
     return processedMesh;
 }
@@ -237,25 +236,28 @@ vector<SModelTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType
     return textures;
 }
 
-AABB Model::calculateBoundingBox(const SModelMesh& mesh) const
+AABB Model::calculateBoundingBox(const vector<SModelMesh>& meshes) const
 {
     AABB result;
-    for (SModelVertex m : mesh.m_vertices)
+    for (auto& mesh : meshes)
     {
-        // Maximals
-        if (result.Max.x < m.Position.x)
-            result.Max.x = m.Position.x;
-        if (result.Max.y < m.Position.y)
-            result.Max.y = m.Position.y;
-        if (result.Max.z < m.Position.z)
-            result.Max.z = m.Position.z;
-        // Minimals
-        if (result.Min.x > m.Position.x)
-            result.Min.x = m.Position.x;
-        if (result.Min.y > m.Position.y)
-            result.Min.y = m.Position.y;
-        if (result.Min.z > m.Position.z)
-            result.Min.z = m.Position.z;
+        for (SModelVertex m : mesh.m_vertices)
+        {
+            // Maximals
+            if (result.Max.x < m.Position.x)
+                result.Max.x = m.Position.x;
+            if (result.Max.y < m.Position.y)
+                result.Max.y = m.Position.y;
+            if (result.Max.z < m.Position.z)
+                result.Max.z = m.Position.z;
+            // Minimals
+            if (result.Min.x > m.Position.x)
+                result.Min.x = m.Position.x;
+            if (result.Min.y > m.Position.y)
+                result.Min.y = m.Position.y;
+            if (result.Min.z > m.Position.z)
+                result.Min.z = m.Position.z;
+        }
     }
     return result;
 }

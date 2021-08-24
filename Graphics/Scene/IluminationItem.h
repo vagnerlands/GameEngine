@@ -94,6 +94,7 @@ namespace Graphics
 		{
 			m_lightAttenuation = 0.f;
 		}
+        printf("[ DEBUG ] Light Attenuation value %.8f\n", m_lightAttenuation);
 	}
 
 	inline void IluminationItem::SetLightColor(const IvVector3& lightColor)

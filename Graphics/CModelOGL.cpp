@@ -34,7 +34,6 @@ Graphics::CModelOGL::~CModelOGL()
 			// delete VAO
 			glDeleteVertexArrays(1, &m_drawAttr[i].m_vertexArrayObject);
 
-
 			if (m_drawAttr[i].m_pShader != nullptr)
 			{
 				// destructor releases resources
@@ -224,7 +223,9 @@ bool Graphics::CModelOGL::Apply(const Model* pModelInfo)
 			}
 		}
 
-		m_vboBufferCreated = true;
+        m_boundaryBox = pModel->m_boundaryBox; // copies the content to local boundary box
+
+		m_vboBufferCreated = true; // mark this as "created" already, to avoid creating the same object twice...
 
 	}
 	// destroy shared_ptr
@@ -323,6 +324,7 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 		}
 	}
 }
+
 
 shared_ptr<Model> Graphics::CModelOGL::Allocate()
 {
@@ -435,12 +437,11 @@ void Graphics::CModelOGL::applyTextures(const SDrawData& renderObject)
 
 UInt32 Graphics::CModelOGL::findPosition(float p_animation_time, const aiNodeAnim* p_node_anim)
 {
-	// ����� ���� ������� ����� ����� ����� ������� ���������� ����� ������ ��������
-	for (UInt32 i = 0; i < p_node_anim->mNumPositionKeys - 1; i++) // �������� ����� ��������
+	for (UInt32 i = 0; i < p_node_anim->mNumPositionKeys - 1; i++) 
 	{
-		if (p_animation_time < (float)p_node_anim->mPositionKeys[i + 1].mTime) // �������� �� �������� ��������� !!!
+		if (p_animation_time < (float)p_node_anim->mPositionKeys[i + 1].mTime) 
 		{
-			return i; // �� ������� ������ �������� !!!!!!!!!!!!!!!!!! ����������������������������
+			return i; 
 		}
 	}
 
@@ -490,7 +491,6 @@ aiVector3D Graphics::CModelOGL::calcInterpolatedPosition(float p_animation_time,
 	float delta_time = (float)(p_node_anim->mPositionKeys[next_position_index].mTime - p_node_anim->mPositionKeys[position_index].mTime);
 	
 	float factor = (p_animation_time - (float)p_node_anim->mPositionKeys[position_index].mTime) / delta_time;
-	//assert(factor >= 0.0f && factor <= 1.0f);
 	if (!(factor >= 0.0f && factor <= 1.0f))
 	{
 		factor = 0.01f;
@@ -504,20 +504,18 @@ aiVector3D Graphics::CModelOGL::calcInterpolatedPosition(float p_animation_time,
 
 aiQuaternion Graphics::CModelOGL::calcInterpolatedRotation(float p_animation_time, const aiNodeAnim* p_node_anim)
 {
-	if (p_node_anim->mNumRotationKeys == 1) // Keys ��� ������� �����
+	if (p_node_anim->mNumRotationKeys == 1)
 	{
 		return p_node_anim->mRotationKeys[0].mValue;
 	}
 
-	UInt32 rotation_index = findRotation(p_animation_time, p_node_anim); // ������ ������ �������� ����� ������� ������
-	UInt32 next_rotation_index = rotation_index + 1; // ������ ��������� �������� �����
+	UInt32 rotation_index = findRotation(p_animation_time, p_node_anim); 
+	UInt32 next_rotation_index = rotation_index + 1; 
 	assert(next_rotation_index < p_node_anim->mNumRotationKeys);
-	// ���� ����� �������
+
 	float delta_time = (float)(p_node_anim->mRotationKeys[next_rotation_index].mTime - p_node_anim->mRotationKeys[rotation_index].mTime);
-	// ������ = (���� ������� ������ �� ������ �������� ��������� �����) / �� ���� ����� �������
 	float factor = (p_animation_time - (float)p_node_anim->mRotationKeys[rotation_index].mTime) / delta_time;
 
-	//assert(factor >= 0.0f && factor <= 1.0f);
 	if (!(factor >= 0.0f && factor <= 1.0f))
 	{
 		factor = 0.01f;
@@ -530,19 +528,17 @@ aiQuaternion Graphics::CModelOGL::calcInterpolatedRotation(float p_animation_tim
 
 aiVector3D Graphics::CModelOGL::calcInterpolatedScaling(float p_animation_time, const aiNodeAnim* p_node_anim)
 {
-	if (p_node_anim->mNumScalingKeys == 1) // Keys ��� ������� �����
+	if (p_node_anim->mNumScalingKeys == 1) 
 	{
 		return p_node_anim->mScalingKeys[0].mValue;
 	}
 
-	UInt32 scaling_index = findScaling(p_animation_time, p_node_anim); // ������ ������ �������� ����� ������� ������
-	UInt32 next_scaling_index = scaling_index + 1; // ������ ��������� �������� �����
+	UInt32 scaling_index = findScaling(p_animation_time, p_node_anim); 
+	UInt32 next_scaling_index = scaling_index + 1; 
 	assert(next_scaling_index < p_node_anim->mNumScalingKeys);
-	// ���� ����� �������
+
 	float delta_time = (float)(p_node_anim->mScalingKeys[next_scaling_index].mTime - p_node_anim->mScalingKeys[scaling_index].mTime);
-	// ������ = (���� ������� ������ �� ������ �������� ��������� �����) / �� ���� ����� �������
 	float  factor = (p_animation_time - (float)p_node_anim->mScalingKeys[scaling_index].mTime) / delta_time;
-	//assert(factor >= 0.0f && factor <= 1.0f);
 	if (!(factor >= 0.0f && factor <= 1.0f))
 	{
 		factor = 0.01f;
@@ -560,10 +556,10 @@ const aiNodeAnim* Graphics::CModelOGL::findNodeAnim(const aiAnimation* p_animati
 	// numChannels == numBones
 	for (UInt32 i = 0; i < p_animation->mNumChannels; i++)
 	{
-		const aiNodeAnim* node_anim = p_animation->mChannels[i]; // ��������� ������� ������ node
+		const aiNodeAnim* node_anim = p_animation->mChannels[i]; 
 		if (string(node_anim->mNodeName.data) == p_node_name)
 		{
-			return node_anim;// ���� ����� �������� �� ������� ����� (� ������� ����������� node) ������������ ���� node_anim
+			return node_anim;
 		}
 	}
 
@@ -640,19 +636,6 @@ glm::mat4 Graphics::CModelOGL::aiToGlm(aiMatrix4x4 ai_matr)
 	result[1].x = ai_matr.a2; result[1].y = ai_matr.b2; result[1].z = ai_matr.c2; result[1].w = ai_matr.d2;
 	result[2].x = ai_matr.a3; result[2].y = ai_matr.b3; result[2].z = ai_matr.c3; result[2].w = ai_matr.d3;
 	result[3].x = ai_matr.a4; result[3].y = ai_matr.b4; result[3].z = ai_matr.c4; result[3].w = ai_matr.d4;
-
-	//cout << " " << result[0].x << "		 " << result[0].y << "		 " << result[0].z << "		 " << result[0].w << endl;
-	//cout << " " << result[1].x << "		 " << result[1].y << "		 " << result[1].z << "		 " << result[1].w << endl;
-	//cout << " " << result[2].x << "		 " << result[2].y << "		 " << result[2].z << "		 " << result[2].w << endl;
-	//cout << " " << result[3].x << "		 " << result[3].y << "		 " << result[3].z << "		 " << result[3].w << endl;
-	//cout << endl;
-
-	//cout << " " << ai_matr.a1 << "		 " << ai_matr.b1 << "		 " << ai_matr.c1 << "		 " << ai_matr.d1 << endl;
-	//cout << " " << ai_matr.a2 << "		 " << ai_matr.b2 << "		 " << ai_matr.c2 << "		 " << ai_matr.d2 << endl;
-	//cout << " " << ai_matr.a3 << "		 " << ai_matr.b3 << "		 " << ai_matr.c3 << "		 " << ai_matr.d3 << endl;
-	//cout << " " << ai_matr.a4 << "		 " << ai_matr.b4 << "		 " << ai_matr.c4 << "		 " << ai_matr.d4 << endl;
-	//cout << endl;
-
 	return result;
 }
 
@@ -682,4 +665,13 @@ aiQuaternion Graphics::CModelOGL::nlerp(aiQuaternion a, aiQuaternion b, float bl
 	}
 
 	return result.Normalize();
+}
+
+const AABB& Graphics::CModelOGL::GetBoundaryBox() const
+{
+    return m_boundaryBox;
+}
+void Graphics::CModelOGL::SetWireMode(bool display)
+{
+    m_isWireMode = display;
 }

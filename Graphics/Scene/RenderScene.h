@@ -24,7 +24,7 @@ namespace Graphics
 
 		static RenderScene& Instance();
 
-		virtual void Add(const std::string& id, shared_ptr<IDrawable> pDrawable, eSceneItemType type);
+		virtual Graphics::SceneItem& Add(const std::string& id, shared_ptr<IDrawable> pDrawable, eSceneItemType type);
 
 		// replace the current model by another model
 		virtual void Change(const std::string& id, shared_ptr<IDrawable> pDrawable);
@@ -50,6 +50,8 @@ namespace Graphics
 		virtual void Render(float dt, bool isRenderingShadows = false) const;
 
         virtual void Destroy();
+
+        virtual void DisplayBoundingBox(const std::string& id, bool display);
 
 	protected:
 		typedef list<shared_ptr<Graphics::SceneItem>> DatabaseSceneItemsType;

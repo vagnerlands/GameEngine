@@ -23,13 +23,16 @@ class Model
 public:
     
     // Keep track of already loaded textures in order to not load the same texture twice in the VRAM
-    vector<Types::SModelTexture> textures_loaded;
+    vector<Types::SModelTexture>    textures_loaded;
 	// meshes contain also list of textures
-    vector<Types::SModelMesh> meshes;
-    bool gammaCorrection;
-    bool hasAnimations;
-    Assimp::Importer* m_importer;
-    SBoneInformation* m_pBoneInformation;
+    vector<Types::SModelMesh>       meshes;
+    bool                            gammaCorrection;
+    bool                            hasAnimations;
+    Assimp::Importer*               m_importer;
+    SBoneInformation*               m_pBoneInformation;
+    AABB                            m_boundaryBox;
+    
+    // public methods
     Model();
     /*  Functions   */
     Model(Assimp::Importer& importer);
@@ -47,9 +50,9 @@ private:
     // checks all material textures of a given type and loads the textures if they're not loaded yet.
     // the required info is returned as a Texture struct.
     vector<SModelTexture>   loadMaterialTextures(aiMaterial *mat, aiTextureType type, const string& typeName);
-    AABB                    calculateBoundingBox(const SModelMesh& mesh) const;
+    AABB                    calculateBoundingBox(const vector<SModelMesh>& meshes) const;
     UInt32                  estimateMeshesCount(aiNode * node) const;
-    void                    estimateMeshesCountLooper(aiNode * node, UInt32& meshesCount) const;
+    void                    estimateMeshesCountLooper(aiNode * node, UInt32& meshesCount) const;    
 };
 
 inline void Model::Load(string const & path, bool gamma)

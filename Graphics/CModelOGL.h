@@ -39,6 +39,9 @@ namespace Graphics
 		// commit changes
 		virtual bool Commit();
 
+        const AABB& GetBoundaryBox() const;
+        void SetWireMode(bool display);
+
 	protected:
 
 		cwc::glShader* generateShader(const string& shaderName);
@@ -82,6 +85,7 @@ namespace Graphics
 		Assimp::Importer		m_Importer;
 		bool m_hasAnimations;
 		bool m_isWireMode;
+        AABB m_boundaryBox;
 
 	private:
 		void applyTextures(const SDrawData& renderObject);

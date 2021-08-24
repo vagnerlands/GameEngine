@@ -7,10 +7,16 @@
 //class CGameController;
 
 class Game : public EngineCore::IGame,
-	public _Keys::Keyt,
+    public _Keys::Keyn,
+    public _Keys::Keym,
+    public _Keys::Keyv,
+	public _Keys::Keyb,
+    public _Keys::Keyt,
 	public _Keys::Keyy,
 	public _Keys::Keyg,
 	public _Keys::Keyh,
+    public _Keys::Keyz,
+    public _Keys::Keyc,
 	public _Keys::Key0,
 	public _Keys::Key1,
 	public _Keys::Key2,
@@ -36,7 +42,12 @@ public:
 	void OnKeyEvent(const Keyg& e) override;
 	void OnKeyEvent(const Keyh& e) override;
     void OnKeyEvent(const KeyEscape& e) override;
-
+    void OnKeyEvent(const Keyv& e) override;
+    void OnKeyEvent(const Keyb& e) override;
+    void OnKeyEvent(const Keyn& e) override;
+    void OnKeyEvent(const Keym& e) override;
+    void OnKeyEvent(const Keyz& e) override;
+    void OnKeyEvent(const Keyc& e) override;
 protected:
 
 	virtual void ExecuteBackground();
@@ -49,7 +60,10 @@ private:
 
 	CGameController* mpGameInput;
 
+    // Debug shit...
     Float m_lightAngle;
+    Float m_bias;
+    Float m_shadowDetailsFactor;
 };
 
 

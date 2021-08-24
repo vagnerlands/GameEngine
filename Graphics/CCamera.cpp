@@ -89,10 +89,16 @@ void CCamera::HoverRight(Float Distance)
 	m_position = IvVector3(direction.GetX(), m_position.GetY(), direction.GetZ());
 }
 
+void CCamera::SetCameraType(ECameraType camera_type)
+{
+    m_type = camera_type;
+
+}
+
 void CCamera::removeCameraRoll()
 {
-	if ((m_type == Camera_Human) 
-		|| (m_type == Camera_Spectator))
+	if ((m_type == ECameraType::Camera_Human)
+		|| (m_type == ECameraType::Camera_Spectator))
 	{
 		// temporary vectors 
 		IvVector3 right, up, forward;

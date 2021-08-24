@@ -10,7 +10,7 @@ shared_ptr<UtilitiesCore::Skybox> UtilitiesCore::Skybox::CreateSky(const std::st
 
 UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& faces) :
 	Graphics::IDrawable(), 
-	m_skyModel(id, shared_ptr<Graphics::IDrawable>(nullptr))
+    m_sceneItem(id, shared_ptr<Graphics::IDrawable>(nullptr))
 {
 	// constant normalized box size - shall be used for texture mapping too
 	const Float cBoxSize = 1.f;
@@ -117,15 +117,15 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 	pSkyModel->Commit();
 
 	// finally, assign it to the sky model
-	m_skyModel.ReplaceDrawable(pSkyModel);
-    m_skyModel.SetCastShadows(false);
+    m_sceneItem.ReplaceDrawable(pSkyModel);
+    m_sceneItem.SetCastShadows(false);
 	// resize this
-	m_skyModel.SetScale(IvVector3(150, 150, 150));
+    m_sceneItem.SetScale(IvVector3(50000, 50000, 50000));
 }
 
 UtilitiesCore::Skybox::~Skybox()
 {
-	m_skyModel.Release();
+    m_sceneItem.Release();
 }
 
 void UtilitiesCore::Skybox::Update(float dt)
@@ -138,7 +138,7 @@ void UtilitiesCore::Skybox::Draw(const Graphics::SceneItem& , float dt, bool isR
 	// in case we're currently rendering shadows, the skybox shouldn't affect it
 	if (isRenderingShadows) return;
 	// otherwise, proceed regularly
-	m_skyModel.Render(dt, isRenderingShadows);
+    m_sceneItem.Render(dt, isRenderingShadows);
 }
 
 void UtilitiesCore::Skybox::Tick(float delta_time)

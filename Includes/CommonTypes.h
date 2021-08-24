@@ -52,7 +52,7 @@ namespace Types
 	};
 
 	// kind of cameras available, each one will give a different behavior for vector calculations
-	enum ECameraType
+	enum class ECameraType
 	{
 		// camera must be above ground and ignores roll rotation
 		Camera_Human = 0,

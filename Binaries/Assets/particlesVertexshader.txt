@@ -30,10 +30,10 @@ void main(void)
    vec4 particlePosition = particleSystemPosition;
    // s will be a value between 0.0 up to 1.0, based on the particle age
    float s = ((particleSpeed * time_0_X) / (particleAge * particleSpeed)) ;
-   particlePosition.y = particlePosition.y + s * particleHeight;
-   
-   particlePosition.x = particlePosition.x + (particleSpread * cos(62.0 * aPos.y)) * s;
-   particlePosition.z = particlePosition.z + (particleSpread * cos(62.0 * aPos.y))* s;
+
+   particlePosition.y = particlePosition.y + s * (particleHeight);   
+   particlePosition.x = particlePosition.x + s * (particleSpread * cos(13.0 * aPos.x));
+   particlePosition.z = particlePosition.z + s * (particleSpread * cos(13.0 * aPos.z));
   
 	vec3 vertexPosition_worldspace =
     particlePosition.xyz

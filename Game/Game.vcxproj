@@ -176,6 +176,8 @@
     <Text Include="..\Binaries\Assets\animatedModel_dnVertexshader.txt" />
     <Text Include="..\Binaries\Assets\animatedModel_dsFragmentshader.txt" />
     <Text Include="..\Binaries\Assets\animatedModel_dsVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\boundingBoxFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\boundingBoxVertexshader.txt" />
     <Text Include="..\Binaries\Assets\lightFragmentshader.txt" />
     <Text Include="..\Binaries\Assets\lightVertexshader.txt" />
     <Text Include="..\Binaries\Assets\particlesFragmentshader.txt" />

@@ -31,11 +31,15 @@ namespace Graphics
 		virtual Float GetAspect();
 		virtual Float GetFar();
 		virtual Float GetNear();
+        virtual Float GetBias();
+        virtual Float GetShadowFactor();
 		// setters
 		virtual void SetDisplayWidth(UInt32 width);
 		virtual void SetDisplayHeight(UInt32 height);
 		virtual void SetNearPlane(Float near);
 		virtual void SetFarPlane(Float far);
+        virtual void SetBias(Float var);
+        virtual void SetShadowFactor(Float var);
 		virtual void SetFOV(Float fov);
 		virtual void SetOrtho(Float l, Float r, Float t, Float b, Float n, Float f);
 		virtual CCamera& GetCamera()
@@ -70,6 +74,8 @@ namespace Graphics
 		Float mFOV;
 		Float mNear;
 		Float mFar;
+        Float mBias;
+        Float mShadowFactor;
 
 		// Parameters for Orthographic rendering
 		Float mRight;
@@ -128,6 +134,30 @@ namespace Graphics
 	{
 		return mNear;
 	}
+
+    inline Float
+        IRenderer::GetBias()
+    {
+        return mBias;
+    }
+
+    inline void
+        IRenderer::SetBias(Float var)
+    {
+        mBias = var;
+    }
+
+    inline Float
+        IRenderer::GetShadowFactor()
+    {
+        return mShadowFactor;
+    }
+
+    inline void
+        IRenderer::SetShadowFactor(Float var)
+    {
+        mShadowFactor = var;
+    }
 
 	//-------------------------------------------------------------------------------
 	// @ IRendererOGL::SetDisplayWidth()

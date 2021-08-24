@@ -33,7 +33,7 @@ namespace UtilitiesCore
 
 	protected:
 		// generated sky model
-		Graphics::SceneItem m_skyModel;
+		Graphics::SceneItem m_sceneItem;
 
 	};
 

@@ -2,6 +2,7 @@
 #include "IvMatrix44.h"
 #include "IRenderer.h"
 #include "Ilumination.h"
+#include "Rendered/SceneItemBoundingBox.h"
 
 Graphics::SceneItem::SceneItem(const std::string& id, shared_ptr<Graphics::IDrawable> pDrawable) :
 	m_pDrawable(pDrawable),
@@ -16,8 +17,14 @@ Graphics::SceneItem::SceneItem(const std::string& id, shared_ptr<Graphics::IDraw
 
 void Graphics::SceneItem::Render(float dt, bool isRenderingShadows) const
 {
-	if (m_pDrawable != nullptr)
-	    m_pDrawable->Draw(*this, dt, isRenderingShadows);
+    if (m_pDrawable != nullptr)
+    {
+        m_pDrawable->Draw(*this, dt, isRenderingShadows);
+        if (m_nextScene != nullptr)
+        {
+            m_nextScene->Render(dt, isRenderingShadows);
+        }
+    }
 }
 
 void Graphics::SceneItem::ReplaceDrawable(shared_ptr<Graphics::IDrawable> pDrawable)
@@ -88,6 +95,8 @@ void Graphics::SceneItem::SetUpScene(cwc::glShader* pShader) const
 		// update the boolean flag for "has shadows"
 		pShader->setUniform1i("cast_shadows", HasShadows());
 		pShader->setUniform1f("light_attenuation", Graphics::Ilumination::Instance().GetLightAttenuation());
+        pShader->setUniform1f("bias", Graphics::IRenderer::mRenderer->GetBias());
+        pShader->setUniform1f("shadow_factor", Graphics::IRenderer::mRenderer->GetShadowFactor());
 		pShader->setUniform1f("far_plane", Graphics::IRenderer::mRenderer->GetFar());
 		pShader->setUniform1i("depthMap", 2);
 	}
@@ -111,3 +120,19 @@ void Graphics::SceneItem::ShadowsPass() const
 	Graphics::Ilumination::Instance().HasAnimations(0);
 	Graphics::Ilumination::Instance().UpdateModel(m_model);
 }
+
+Graphics::SceneItem& 
+Graphics::SceneItem::DisplayBoundingBox(bool display)
+{
+    m_nextScene = (display) ? (UtilitiesCore::SceneItemBoundingBox::CreateBoundingBox(*this)) : nullptr;
+    if (m_nextScene != nullptr)
+    {
+        m_nextScene->SetLocation(GetLocation());
+        m_nextScene->SetRotation(GetRotation());
+        m_nextScene->SetScale(GetScale());
+    }
+    return *this;
+}
+
+
+

@@ -14,8 +14,10 @@ Graphics::IRenderer::IRenderer() :
 	mWidth(640),
 	mHeight(480),
 	mFOV(45.0F),
-	mNear(0.1F),
-	mFar(1000.F)
+	mNear(10.0F),
+	mFar(100000.F),
+    mBias(.15F),
+    mShadowFactor(25.0F)
 {
 
 	mDiffuseColor.Set(1.0f, 1.0f, 1.0f, 1.0f);

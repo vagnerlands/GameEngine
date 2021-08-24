@@ -15,16 +15,10 @@ namespace Graphics
 	{
 	public:
 		IModel();
-		virtual ~IModel()
-		{
-
-		}
+		virtual ~IModel() { }
         virtual bool Create() = 0;
 		virtual bool Apply(const Model* pModelInfo) = 0;
-
-		// allocate SModelData for custom objects
 		virtual shared_ptr<Model> Allocate() = 0;
-		// commit changes
 		virtual bool Commit() = 0;
 	protected:
 		// data to be used, this shall be released once Commit() is called

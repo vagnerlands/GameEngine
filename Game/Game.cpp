@@ -25,6 +25,9 @@
 
 #include "CSoundHolder.h"
 #include "Scene/Query/SceneQueryParticles.h"
+#include "Rendered/SceneItemBoundingBox.h"
+
+using namespace _Keys;
 
 bool 
 EngineCore::IGame::Create()
@@ -35,10 +38,12 @@ EngineCore::IGame::Create()
 
 Game::Game() : 
 	EngineCore::IGame(),
-    m_lightAngle(0.F)
+    m_lightAngle(0.F),
+    m_bias(10.6F),
+    m_shadowDetailsFactor(0.59F)
 {
 	mpGameInput = new CGameController(1280, 720);
-    _Keys::KeyDispatcherFactory::Create(mpGameInput);
+    KeyDispatcherFactory::Create(mpGameInput);
 	BindKey(Key0, this);
 	BindKey(Key1, this);
 	BindKey(Key2, this);
@@ -47,6 +52,12 @@ Game::Game() :
 	BindKey(Keyy, this);
 	BindKey(Keyg, this);
 	BindKey(Keyh, this);
+    BindKey(Keyv, this);
+    BindKey(Keyb, this);
+    BindKey(Keyn, this);
+    BindKey(Keym, this);
+    BindKey(Keyz, this);
+    BindKey(Keyc, this);
     BindKey(KeyEscape, this);
 }
 
@@ -65,94 +76,101 @@ bool Game::PostRendererInitialize()
 	//TODO: initialize lighting default values (some basic light somewhere)
 	CShaderHolder::Create();
 
-    const Float cInitialSpeed = 6.f;
-    const Float cAcceleration = 1.5f;
-    const Float cMaxSpeed = 20.f;
+    const Float cInitialSpeed = 600.f;
+    const Float cAcceleration = 100.5f;
+    const Float cMaxSpeed = 2000.f;    
 
-    _Keys::KeyDispatcher::Instance().Bind('w', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('w', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveForward(dt*(clamp(cInitialSpeed+(cycles*cAcceleration), cMaxSpeed)));
     });
 
-    _Keys::KeyDispatcher::Instance().Bind('s', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('s', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveForward(-dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
     });
 
-    _Keys::KeyDispatcher::Instance().Bind('d', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('d', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveRight(dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
     });
 
-    _Keys::KeyDispatcher::Instance().Bind('a', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('a', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveRight(-dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
     });
 
-    _Keys::KeyDispatcher::Instance().Bind('e', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('e', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
     });
 
-    _Keys::KeyDispatcher::Instance().Bind('q', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('q', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(-dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
     });
 
+    Graphics::IRenderer::mRenderer->SetBias(m_bias);
+    Graphics::IRenderer::mRenderer->SetShadowFactor(m_shadowDetailsFactor);
 	// Set the view parameters in renderer
 	Graphics::IRenderer::mRenderer->SetFOV(90.0F);
 	// Update camera to be above ground
 	Graphics::IRenderer::mRenderer->GetCamera().MoveRight(5.f);
-	Graphics::IRenderer::mRenderer->GetCamera().MoveForward(10.f);
-	Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(5.f);
+	Graphics::IRenderer::mRenderer->GetCamera().MoveForward(1000.f);
+	Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(180.f);
 	Graphics::IRenderer::mRenderer->GetCamera().RotateY(90.f);
 	// Update this camera type
-	Graphics::IRenderer::mRenderer->GetCamera().m_type = Camera_Spectator;
+	Graphics::IRenderer::mRenderer->GetCamera().SetCameraType(ECameraType::Camera_Spectator);
 	// create model holder
 	CModelHolder::s_pInstance->Create(".\\Assets\\model.zip");
 	CParticlesSystemHolder::s_pInstance->Create(".\\Assets\\model.zip");
 	CSoundHolder::s_pInstance->Create("test", 1);
-    // 50mb allocation for VRAM textures
-	CTextureHolder::s_pInstance->Create(".\\Assets\\textures.zip", 100U*1024U*1024U);
+    // allocation for VRAM textures
+    const UInt32 cTextureCacheSizeInMBs = 120;
+	CTextureHolder::s_pInstance->Create(".\\Assets\\textures.zip", cTextureCacheSizeInMBs*1024U*1024U);
 
 	IGame::mGame->SetFps(120);
 
 	
 	// test sound
 	//CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
-	CSoundHolder::s_pInstance->PlaySoundById("highlands.wav", eSoundType_Music, 0.5f);
+	//CSoundHolder::s_pInstance->PlaySoundById("highlands.wav", eSoundType_Music, 0.5f);
 	// Build a debug scenario
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(.5f, .5f, .5f));
 
 	// [Models]
-	Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
-	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple);
-	Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
+	Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple)
+        .SetScale(IvVector3(20000.0, 1.0, 20000.0))
+        .SetTextureUV(IvVector2(100.f, 100.f));
 
-    Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"), eSceneItemType_AnimatedAndShadowed);
-    Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(.020f, .020f, .020f));
-    Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(2.0, 0.5, 0));
+	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple)
+        .SetScale(IvVector3(0.01f, 0.01f, 0.01f))
+        .SetCastShadows(false);
 
-    Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed);
-    Graphics::RenderScene::Instance().Scale("Yoni1", IvVector3(.020f, .020f, .020f));
-    Graphics::RenderScene::Instance().Translate("Yoni1", IvVector3(-2.0, 0.5, 0));
+    Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed)
+        .SetScale(IvVector3(1.f, 1.f, 1.f))
+        .SetLocation(IvVector3(200.0, 0.5, 0));
 
-    Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"), eSceneItemType_AnimatedAndShadowed);
-    Graphics::RenderScene::Instance().Scale("Yoni3", IvVector3(.020f, .020f, .020f));
-    Graphics::RenderScene::Instance().Translate("Yoni3", IvVector3(5.0, 0.5, 0));
+    //Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed)
+    //    .SetScale(IvVector3(1.f, 1.f, 1.f))
+    //    .SetLocation(IvVector3(-200.0, 0.5, 0));
 
-	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem);
-	Graphics::RenderScene::Instance().Translate("Particles2", IvVector3(0.f, 1.0f, 2.5f));
-	Graphics::RenderScene::Instance().CastShadow("Particles2", false);
+    //Graphics::RenderScene::Instance().Add("Yoni3", CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed)
+    //    .SetScale(IvVector3(1.f, 1.f, 1.f))
+    //    .SetLocation(IvVector3(500.0, 0.5, 0));
+
+	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem)
+        .SetLocation(IvVector3(0.f, 100.0f, 200.5f))
+        .SetCastShadows(false);
 
 	Graphics::SceneQueryParticles part;
-	part.Set(Graphics::ParticleSeeds(300, 100, 150, 120, 420, 50, 250, 50, 100, 100, 200, "flame.png"));
+	part.Set(Graphics::ParticleSeeds(300, 100, 150, 1200, 4200, 500, 2500, 50, 100, 100, 200, "flame.png"));
 	Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 
 	//CSoundHolder::s_pInstance->PlaySoundById("door.wav", eSoundType_Effect, 0.1f);
-	CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
+	//CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
 	//CSoundHolder::s_pInstance->PlaySoundById("door.wav", eSoundType_Effect, 0.1f);
 	// debug
 
@@ -165,22 +183,9 @@ bool Game::PostRendererInitialize()
 	faces.push_back("skytop.bmp");
 	faces.push_back("skyfront.bmp");
 	faces.push_back("skyback.bmp");
-	Graphics::RenderScene::Instance().Add("SKY1", UtilitiesCore::Skybox::CreateSky("sky1", faces), eSceneItemType_SkyBox);
-	// update models location
-
-	//Graphics::RenderScene::Instance().Translate("church",	IvVector3(0.f, 0.0f, -2.f));
-	Graphics::RenderScene::Instance().Translate("cyborg1",	IvVector3(0.f, 0.5f, 5.f));
-	Graphics::RenderScene::Instance().Rotate("cyborg1", IvQuat(IvVector3(0, 1, 0), 125));	
-	Graphics::RenderScene::Instance().CastShadow("lightDebug", false);
-	Graphics::RenderScene::Instance().Scale("lightDebug", IvVector3(0.3, 0.3, 0.3));
-	//Graphics::RenderScene::Instance().Scale("castle1", IvVector3(1.3, 1.0, 1.3));
-	Graphics::RenderScene::Instance().Scale("Ground1", IvVector3(200.0, 1.0, 200.0));
-	Graphics::RenderScene::Instance().SetTextureUV("Ground1", IvVector2(10.f, 10.f));
-
-	Graphics::RenderScene::Instance().Scale("SKY1", IvVector3(50,50,50));
-
+    Graphics::RenderScene::Instance().Add("SKY1", UtilitiesCore::Skybox::CreateSky("sky1", faces), eSceneItemType_SkyBox);
 	// [Landscape]
-	
+    // TODO...
 
 	return true;
 }
@@ -189,7 +194,6 @@ void Game::ExecuteBackground()
 {	
 	// Update objects based on current timestamp
 	CModelHolder::s_pInstance->Update(mClock->GetTimeInMili());
-	//Graphics::RenderScene::Instance().Update(mClock->GetTimeInMili());
 }
 
 void Game::UpdateObjects(float dt)
@@ -202,7 +206,7 @@ void Game::UpdateObjects(float dt)
     {
         if (mpGameInput->m_bKey[key].isPressed)
         {
-            _Keys::KeyDispatcher::Instance().Event(dt, key);
+            KeyDispatcher::Instance().Event(dt, key);
         }
     }
     
@@ -216,22 +220,22 @@ void Game::UpdateObjects(float dt)
     }
 
 	static Float SpreadConst = 10;
-	static Float HeightConst = 100;
-	static Float SizeConst = 0;
+	static Float HeightConst = 1000;
+	static Float SizeConst = 1200;
 	static Float NumberOfParticles = 100;
 
 	if (mpGameInput->m_bKey['o'].isPressed)
 	{
 		SpreadConst += 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 300 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 300 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	else if (mpGameInput->m_bKey['p'].isPressed)
 	{
 		SpreadConst -= 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 
@@ -239,28 +243,28 @@ void Game::UpdateObjects(float dt)
 	{
 		HeightConst += 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	else if (mpGameInput->m_bKey['l'].isPressed)
 	{
 		HeightConst -= 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200+ SizeConst, 500+ SizeConst, 200+HeightConst, 400 + HeightConst, 30+SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500+ SizeConst, 200+HeightConst, 400 + HeightConst, 30+SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	if (mpGameInput->m_bKey['n'].isPressed)
 	{
 		SizeConst += 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	else if (mpGameInput->m_bKey['m'].isPressed)
 	{
 		SizeConst -= 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	
@@ -268,17 +272,46 @@ void Game::UpdateObjects(float dt)
 	{
 		NumberOfParticles -= 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	else if (mpGameInput->m_bKey['2'].isPressed)
 	{
 		NumberOfParticles += 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, 200 + SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
+    if (mpGameInput->m_bKey['x'].isPressed)
+    {
+        Graphics::IRenderer::mRenderer->SetBias(m_bias += .01F);
+        std::cout << "[ DEBUG ] Light bias value " << m_bias << std::endl;
+    }
+    if (mpGameInput->m_bKey['z'].isPressed)
+    {
+        Graphics::IRenderer::mRenderer->SetBias(m_bias -= .01F);
+        std::cout << "[ DEBUG ] Light bias value " << m_bias << std::endl;
+    }
+    if (mpGameInput->m_bKey['c'].isPressed)
+    {
+        Graphics::IRenderer::mRenderer->SetShadowFactor(m_shadowDetailsFactor += .1F);
+        std::cout << "[ DEBUG ] Shadow details factor value " << m_shadowDetailsFactor << std::endl;
+    }
+    if (mpGameInput->m_bKey['v'].isPressed)
+    {
+        Graphics::IRenderer::mRenderer->SetShadowFactor(m_shadowDetailsFactor -= .1F);
+        std::cout << "[ DEBUG ] Shadow details factor value " << m_shadowDetailsFactor << std::endl;
+    }
 
+
+    if (mpGameInput->m_bKey['g'].isPressed)
+    {
+        Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", -.000001F);
+    }
+    if (mpGameInput->m_bKey['h'].isPressed)
+    {
+        Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", +.000001F);
+    }
 
 	if (mpGameInput->m_isLeftButtonPressed)
 	{		
@@ -301,21 +334,14 @@ void Game::UpdateObjects(float dt)
 		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(MovementIntensityOnX) * dt * 0.5f);
 	}
 
-	static int noFlood = 0;
-	if (noFlood++ > 100)
-	{
-        CCamera& a = Graphics::IRenderer::mRenderer->GetCamera();
-		noFlood = 0;
-		//cout << "    X [" << a.m_position.GetX()
-		//	<< "]   Y [" << a.m_position.GetY()
-		//	<< "]   Z [" << a.m_position.GetZ() << "]" << endl;
-	}
 	// Update Debug objects
 	// [Light]
 	m_lightAngle += 0.15f;
-	static float MoveRadius = 15.F;
-    IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius + -10.1136, 20, cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius+5.65836);
-	//IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 5.f, (cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius) - 20.f);
+	static float MoveRadius = 1000.F;
+    IvVector3 lightLocation(sin(m_lightAngle * 3.14159 / 180.F) * MoveRadius, 
+        500, 
+        cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius);
+
 	Graphics::Ilumination::Instance().Update("main", lightLocation);
 	Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
 
@@ -323,27 +349,60 @@ void Game::UpdateObjects(float dt)
 
 void Game::OnKeyEvent(const Keyt& e)
 {
-	Graphics::RenderScene::Instance().Change("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior_Taunt.dae"));
+	//Graphics::RenderScene::Instance().Change("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"));
+    Graphics::RenderScene::Instance().DisplayBoundingBox("Yoni2", true);
 }
 
 void Game::OnKeyEvent(const Keyy& e)
 {
-	Graphics::RenderScene::Instance().Change("Yoni1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
+	//Graphics::RenderScene::Instance().Change("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"));
 }
 
 void Game::OnKeyEvent(const Keyg& e)
 {
-	Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", 0.015f);
+	//Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", 0.000005f);
 }
 
 void Game::OnKeyEvent(const Keyh& e)
 {
-	Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", -0.015f);
+	//Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", -0.000005f);
 }
 
 void Game::OnKeyEvent(const KeyEscape & e)
 {
     mGame->Quit();
+}
+
+void Game::OnKeyEvent(const Keyv & e)
+{
+    //Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(0, 5, 0));
+}
+
+void Game::OnKeyEvent(const Keyb & e)
+{
+    Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(0, 1, 0));
+}
+
+void Game::OnKeyEvent(const Keyn & e)
+{
+    Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(5.f, 5.f, 5.f));
+}
+
+void Game::OnKeyEvent(const Keym & e)
+{
+    Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(1.f, 1.f, 1.f));
+}
+
+void Game::OnKeyEvent(const Keyz& e)
+{
+    //Graphics::IRenderer::mRenderer->SetBias(m_bias -= 1000.0f);
+    //std::cout << "[ DEBUG ] Light bias value " << m_bias << std::endl;
+}
+
+void Game::OnKeyEvent(const Keyc& e)
+{
+    //Graphics::IRenderer::mRenderer->SetBias(m_bias += 1000.0f);
+    //std::cout << "[ DEBUG ] Light bias value " << m_bias << std::endl;
 }
 
 void Game::OnKeyEvent(const Key0& e)
