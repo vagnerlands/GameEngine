@@ -8,7 +8,7 @@
 #include "Model.h"
 #include "IGame.h"
 // should make this configurable - there should be a factory instead
-#include "CModelOGL.h"
+#include "OpenGL/CModelOGL.h"
 
 #include "Assimp\Importer.hpp"
 

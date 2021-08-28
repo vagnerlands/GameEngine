@@ -145,10 +145,17 @@ namespace Types
 
     struct SModelMesh
     {
-        SModelMesh()
-        {
+        vector<SModelVertex>    m_vertices;
+        vector<UInt32>          m_indices;
+        vector<SModelTexture>   m_textures;
+        // bone information
+        vector<SVertexBoneData>	bones_id_weights_for_each_vertex;
+        // axis aligned bounding box for clipping/collision purposes
+        AABB                    m_aabb;
+        // shader name (Model.h will try to resolve the shader based on certain )
+        string					m_shaderName = "model";
 
-        }
+        SModelMesh() {}
         explicit SModelMesh(const SModelMesh& rhs)
         {
             m_vertices = std::move(rhs.m_vertices);
@@ -187,15 +194,6 @@ namespace Types
 			m_vertices = vector<SModelVertex>();
 			bones_id_weights_for_each_vertex = vector<SVertexBoneData>();
 		}
-        vector<SModelVertex>    m_vertices;
-        vector<UInt32>          m_indices;
-        vector<SModelTexture>   m_textures;
-		// bone information
-		vector<SVertexBoneData>	bones_id_weights_for_each_vertex;
-        // axis aligned bounding box for clipping/collision purposes
-        AABB                    m_aabb;
-		// shader name (Model.h suggests a name)
-		string					m_shaderName = "model";
     };
 	
 }

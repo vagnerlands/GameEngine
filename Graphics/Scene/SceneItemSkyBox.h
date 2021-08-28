@@ -19,6 +19,12 @@ namespace Graphics
 		~SceneItemSkyBox()
 		{
 		}
+        virtual void SetUpScene(cwc::glShader* pShader) const
+        {
+            SceneItem::SetUpScene(pShader);
+            const IvVector3& ac = Graphics::Ilumination::Instance().GetAmbientLightColor();
+            pShader->setUniform3f("ambient_color", ac.GetX(), ac.GetY(), ac.GetZ());
+        }
 	};
 }
 

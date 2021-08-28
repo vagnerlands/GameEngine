@@ -1,5 +1,6 @@
 #include "SceneItemBoundingBox.h"
-#include "CModelOGL.h" // TODO: must add abstraction to this
+#include "Factory/ModelFactory.h" 
+#include "OpenGL/CModelOGL.h"
 #include "glm/glm.hpp"
 
 namespace UtilitiesCore
@@ -15,7 +16,7 @@ namespace UtilitiesCore
         m_sceneItem("bb", shared_ptr<Graphics::IDrawable>(nullptr))
     {
         // allocate a open gl type model - can make this crossplatform using factories
-        shared_ptr<Graphics::CModelOGL> pBoundingBoxModel = make_shared<Graphics::CModelOGL>("bb");
+        auto pBoundingBoxModel = Graphics::ModelFactory::Instance().Create("bb");
         // allocates a temporary buffer to create the cube
         shared_ptr<Model> pModel = pBoundingBoxModel->Allocate();
 
@@ -29,7 +30,10 @@ namespace UtilitiesCore
             glm::vec3(-1.0f, 1.0f, -1.0f),
             glm::vec3(-1.0f, -1.0f, 1.0f),
             glm::vec3(1.0f, -1.0f, 1.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f),            glm::vec3(-1.0f, 1.0f, 1.0f)        };
+            glm::vec3(1.0f, 1.0f, 1.0f),
+            glm::vec3(-1.0f, 1.0f, 1.0f)
+        };
+
 
         // try to cast to CModelOGL type
         const Graphics::CModelOGL* modelOglRef = dynamic_cast<const Graphics::CModelOGL*>(mMeshReference.GetDrawable().get());
@@ -62,7 +66,9 @@ namespace UtilitiesCore
         meshValue.m_indices = {
             5, 4, 0, 1, 5, 0, 6, 5, 1, 2, 6, 1,
             7, 6, 2, 3, 7, 2, 4, 7, 3, 0, 4, 3,
-            6, 7, 4, 5, 6, 4, 1, 0, 3, 2, 1, 3         };
+            6, 7, 4, 5, 6, 4, 1, 0, 3, 2, 1, 3 
+        };
+
 
         // actually create all the vbo, vba, textures and so on...
         pModel->meshes.push_back(meshValue);        

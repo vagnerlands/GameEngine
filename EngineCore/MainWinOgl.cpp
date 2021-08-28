@@ -8,7 +8,7 @@
 
 #include "CGameController.h"
 
-#include "CRendererOGL.h"
+#include "OpenGL/CRendererOGL.h"
 #include "CThreadHolder.h"
 #include "IvPoint.h"
 

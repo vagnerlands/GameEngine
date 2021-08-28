@@ -39,8 +39,8 @@ namespace Graphics
 		// commit changes
 		virtual bool Commit();
 
-        const AABB& GetBoundaryBox() const;
-        void SetWireMode(bool display);
+        virtual const AABB& GetBoundaryBox() const override;
+        virtual void SetWireMode(bool display) override;
 
 	protected:
 
@@ -83,9 +83,9 @@ namespace Graphics
 		aiMatrix4x4 m_global_inverse_transform;
 		// assimp importer, keep a reference for the scene
 		Assimp::Importer		m_Importer;
-		bool m_hasAnimations;
-		bool m_isWireMode;
-        AABB m_boundaryBox;
+		bool                    m_hasAnimations;
+		bool                    m_isWireMode;
+        AABB                    m_boundaryBox;
 
 	private:
 		void applyTextures(const SDrawData& renderObject);

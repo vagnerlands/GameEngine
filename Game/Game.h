@@ -3,7 +3,7 @@
 
 #include "IGame.h"
 #include "CGameController.h"
-
+#include "IvVector3.h" // DEBUG - delete me
 //class CGameController;
 
 class Game : public EngineCore::IGame,
@@ -16,6 +16,7 @@ class Game : public EngineCore::IGame,
 	public _Keys::Keyg,
 	public _Keys::Keyh,
     public _Keys::Keyz,
+    public _Keys::Keyx,
     public _Keys::Keyc,
 	public _Keys::Key0,
 	public _Keys::Key1,
@@ -47,6 +48,7 @@ public:
     void OnKeyEvent(const Keyn& e) override;
     void OnKeyEvent(const Keym& e) override;
     void OnKeyEvent(const Keyz& e) override;
+    void OnKeyEvent(const Keyx& e) override;
     void OnKeyEvent(const Keyc& e) override;
 protected:
 
@@ -64,6 +66,7 @@ private:
     Float m_lightAngle;
     Float m_bias;
     Float m_shadowDetailsFactor;
+    IvVector3 m_ambient;
 };
 
 

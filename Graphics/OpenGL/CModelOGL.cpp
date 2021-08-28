@@ -1,4 +1,4 @@
-﻿#include "CModelOGL.h"
+﻿#include "OpenGL/CModelOGL.h"
 #include <iostream>
 #include "Model.h"
 #include "CTextureHolder.h"
@@ -411,8 +411,7 @@ void Graphics::CModelOGL::applyTextures(const SDrawData& renderObject)
 		else
 		{
 			// texture indexer
-			UInt32 ti = 0;
-			for (; ti < cTexturesCount; ti++)
+			for (UInt32 ti = 0; ti < cTexturesCount; ti++)
 			{
 				glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
 												  // retrieve texture number (the N in diffuse_textureN)

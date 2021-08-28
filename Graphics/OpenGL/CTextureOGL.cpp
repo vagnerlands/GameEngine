@@ -27,32 +27,19 @@ bool Graphics::CTextureOGL::BuildTexture(const std::shared_ptr<I2dImage>& pData)
 	{
 		printf("glError Texture parameters=%d\n", err);
 	}
-	// build our texture mipmaps	
-	if (pData->GetNumberOfBytes() == 4)
-	{
-		glTexImage2D(GL_TEXTURE_2D,
-			0,
-			GL_RGBA,
-			pData->GetWidth(),
-			pData->GetHeight(),
-			0,
-			GL_RGBA,
-			GL_UNSIGNED_BYTE,
-            pData->GetPointerToData());
-	}
-	else
-	{
-        const Byte* p = pData->GetPointerToData();
-		glTexImage2D(GL_TEXTURE_2D,
-			0,
-			GL_RGB,
-			pData->GetWidth(),
-			pData->GetHeight(),
-			0,
-			GL_RGB,
-			GL_UNSIGNED_BYTE,
-			pData->GetPointerToData());
-	}
+
+    const UInt16 cNumOfChannels = (pData->GetNumberOfBytes() == 4) ? GL_RGBA : GL_RGB;
+
+	// build our texture from the buffer data
+    glTexImage2D(GL_TEXTURE_2D,
+        0,
+        cNumOfChannels,
+        pData->GetWidth(),
+        pData->GetHeight(),
+        0,
+        cNumOfChannels,
+        GL_UNSIGNED_BYTE,
+        pData->GetPointerToData());
 	// checks for GL ERROR
 	err = glGetError();
 	if (err != GL_NO_ERROR)

@@ -75,19 +75,22 @@ void main()
     vec3 lightDir = normalize(fs_in.TangentLightPos - fs_in.TangentFragPos);
     float lightAngle = max(dot(lightPos, normal), 0.0);
     
-    // specular
-    vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
-    vec3 halfwayDir = normalize(lightDir + viewDir);  
-    float lightIntensity = pow(clamp(dot(normal, halfwayDir), 0.0, 1.0), 32.0);    
-	//attenuation
+    //attenuation
     float distanceToLight = length(lightPos - fs_in.FragPos);
     float attenuation = 1.0 / (1.0 + light_attenuation * pow(distanceToLight, 2));
 	
-    vec3 specular = vec3(0,0,0);
-    vec3 diffuse = lightAngle * color + (light_color*attenuation);
+    // specular
+    float specularStrength = 1.0;
+    vec3 reflectDir = reflect(-lightDir, normal); 
+    vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec3 specular = specularStrength * spec * light_color;  
+
+    // diffuse 
+    vec3 diffuse = lightAngle * color + (light_color*attenuation) ;
 
     float shadow = cast_shadows ? ShadowCalculation(fs_in.FragPos) : 0.0;
-    gl_FragColor = vec4((attenuation*(1.0 - shadow) * ((diffuse * light_color* attenuation) + specular) + ambient), 1.0);
+    FragColor = vec4((attenuation*(1.0 - shadow) * ((diffuse * light_color* attenuation) + specular) + ambient), 1.0);
 
     //vec3 fragToLight = fs_in.FragPos - lightPos;
     //gl_FragColor  = vec4(texture(depthMap, fragToLight).rgb, 1.0);

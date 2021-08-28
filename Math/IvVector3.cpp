@@ -252,6 +252,17 @@ IvVector3::operator+( const IvVector3& other ) const
 
 }   // End of IvVector3::operator+()
 
+//-------------------------------------------------------------------------------
+// @ IvVector3::operator+()
+//-------------------------------------------------------------------------------
+// Add vector to self and return
+//-------------------------------------------------------------------------------
+IvVector3
+IvVector3::operator+(const float& other) const
+{
+    return IvVector3(x + other, y + other, z + other);
+
+}   // End of IvVector3::operator+()
 
 //-------------------------------------------------------------------------------
 // @ IvVector3::operator+=()
@@ -264,6 +275,22 @@ operator+=( IvVector3& self, const IvVector3& other )
     self.x += other.x;
     self.y += other.y;
     self.z += other.z;
+
+    return self;
+
+}   // End of IvVector3::operator+=()
+
+//-------------------------------------------------------------------------------
+// @ IvVector3::operator+=()
+//-------------------------------------------------------------------------------
+// Add vector to self, store in self
+//-------------------------------------------------------------------------------
+IvVector3&
+operator+=(IvVector3& self, const float& other)
+{
+    self.x += other;
+    self.y += other;
+    self.z += other;
 
     return self;
 
@@ -284,6 +311,18 @@ IvVector3::operator-( const IvVector3& other ) const
 
 
 //-------------------------------------------------------------------------------
+// @ IvVector3::operator-()
+//-------------------------------------------------------------------------------
+// Subtract vector from self and return
+//-------------------------------------------------------------------------------
+IvVector3
+IvVector3::operator-(const float& other) const
+{
+    return IvVector3(x - other, y - other, z - other);
+
+}   // End of IvVector3::operator-()
+
+//-------------------------------------------------------------------------------
 // @ IvVector3::operator-=()
 //-------------------------------------------------------------------------------
 // Subtract vector from self, store in self
@@ -294,6 +333,22 @@ operator-=( IvVector3& self, const IvVector3& other )
     self.x -= other.x;
     self.y -= other.y;
     self.z -= other.z;
+
+    return self;
+
+}   // End of IvVector3::operator-=()
+
+//-------------------------------------------------------------------------------
+// @ IvVector3::operator-=()
+//-------------------------------------------------------------------------------
+// Subtract vector from self, store in self
+//-------------------------------------------------------------------------------
+IvVector3&
+operator-=(IvVector3& self, const float& other)
+{
+    self.x -= other;
+    self.y -= other;
+    self.z -= other;
 
     return self;
 

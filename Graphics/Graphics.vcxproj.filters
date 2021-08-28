@@ -15,24 +15,21 @@
     <Filter Include="Src\Scene\Query">
       <UniqueIdentifier>{ddf4f3ca-560c-459e-9d0c-a4e0b257bd6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\OpenGL">
+      <UniqueIdentifier>{6cf2fc86-abc6-4386-8e3a-62649f1df576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Factory">
+      <UniqueIdentifier>{1d713eac-4b05-4539-8f81-81ec811faac6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderer.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="CRendererOGL.h">
-      <Filter>Src</Filter>
-    </ClInclude>
     <ClInclude Include="ITexture.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="CTextureOGL.h">
-      <Filter>Src</Filter>
-    </ClInclude>
     <ClInclude Include="IModel.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="CModelOGL.h">
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="CCamera.h">
@@ -51,15 +48,6 @@
       <Filter>Src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\IluminationItem.h">
-      <Filter>Src\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="CCubeTextureOGL.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\Shadows.h">
-      <Filter>Src\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\ShadowsOGL.h">
       <Filter>Src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneItem.h">
@@ -95,24 +83,36 @@
     <ClInclude Include="Scene\Query\SceneQueryParticles.h">
       <Filter>Src\Scene\Query</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGL\CCubeTextureOGL.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL\CModelOGL.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL\CRendererOGL.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL\CTextureOGL.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL\ShadowsOGL.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Factory\ModelFactory.h">
+      <Filter>Src\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Factory\ModelFactoryOGL.h">
+      <Filter>Src\Factory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CRendererOGL.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="IRenderer.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="ITexture.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="CTextureOGL.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="IModel.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="CModelOGL.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="CCamera.cpp">
@@ -130,15 +130,6 @@
     <ClCompile Include="Scene\IluminationItem.cpp">
       <Filter>Src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="CCubeTextureOGL.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\Shadows.cpp">
-      <Filter>Src\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\ShadowsOGL.cpp">
-      <Filter>Src\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\SceneItem.cpp">
       <Filter>Src\Scene</Filter>
     </ClCompile>
@@ -147,6 +138,27 @@
     </ClCompile>
     <ClCompile Include="CParticle.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL\CCubeTextureOGL.cpp">
+      <Filter>Src\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL\CModelOGL.cpp">
+      <Filter>Src\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL\CRendererOGL.cpp">
+      <Filter>Src\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL\CTextureOGL.cpp">
+      <Filter>Src\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL\ShadowsOGL.cpp">
+      <Filter>Src\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Factory\ModelFactoryOGL.cpp">
+      <Filter>Src\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Factory\ModelFactory.cpp">
+      <Filter>Src\Factory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

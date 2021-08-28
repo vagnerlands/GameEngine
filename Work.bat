@@ -17,6 +17,7 @@ ILU.lib;^
 ILUT.lib;^
 SDL2.lib;^
 SDL2main.lib;^
+freetype.lib;^
 shell32.lib;^
 zlibd.lib
 

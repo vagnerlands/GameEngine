@@ -88,8 +88,13 @@ public:
     // addition/subtraction
     IvVector3 operator+( const IvVector3& other ) const;
     friend IvVector3& operator+=( IvVector3& vector, const IvVector3& other );
+    IvVector3 operator+(const float& other) const;
+    friend IvVector3& operator+=(IvVector3& vector, const float& other);
+
     IvVector3 operator-( const IvVector3& other ) const;
     friend IvVector3& operator-=( IvVector3& vector, const IvVector3& other );
+    IvVector3 operator-(const float& other) const;
+    friend IvVector3& operator-=(IvVector3& vector, const float& other);
 
     IvVector3 operator-() const;
 

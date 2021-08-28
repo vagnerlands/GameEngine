@@ -13,7 +13,6 @@
 #include "Scene\RenderScene.h"
 #include "Scene\Ilumination.h"
 // debug
-#include "CModelOGL.h"
 #include "Rendered/Skybox.h"
 #include "IClock.h"
 
@@ -40,7 +39,8 @@ Game::Game() :
 	EngineCore::IGame(),
     m_lightAngle(0.F),
     m_bias(10.6F),
-    m_shadowDetailsFactor(0.59F)
+    m_shadowDetailsFactor(0.59F),
+    m_ambient(.5F, .5F, .5F)
 {
 	mpGameInput = new CGameController(1280, 720);
     KeyDispatcherFactory::Create(mpGameInput);
@@ -57,6 +57,7 @@ Game::Game() :
     BindKey(Keyn, this);
     BindKey(Keym, this);
     BindKey(Keyz, this);
+    BindKey(Keyx, this);
     BindKey(Keyc, this);
     BindKey(KeyEscape, this);
 }
@@ -138,7 +139,7 @@ bool Game::PostRendererInitialize()
 	// Build a debug scenario
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
-	Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(.5f, .5f, .5f));
+	Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(m_ambient.GetX(), m_ambient.GetY(), m_ambient.GetZ()));
 
 	// [Models]
 	Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple)
@@ -282,16 +283,6 @@ void Game::UpdateObjects(float dt)
 		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-    if (mpGameInput->m_bKey['x'].isPressed)
-    {
-        Graphics::IRenderer::mRenderer->SetBias(m_bias += .01F);
-        std::cout << "[ DEBUG ] Light bias value " << m_bias << std::endl;
-    }
-    if (mpGameInput->m_bKey['z'].isPressed)
-    {
-        Graphics::IRenderer::mRenderer->SetBias(m_bias -= .01F);
-        std::cout << "[ DEBUG ] Light bias value " << m_bias << std::endl;
-    }
     if (mpGameInput->m_bKey['c'].isPressed)
     {
         Graphics::IRenderer::mRenderer->SetShadowFactor(m_shadowDetailsFactor += .1F);
@@ -395,8 +386,24 @@ void Game::OnKeyEvent(const Keym & e)
 
 void Game::OnKeyEvent(const Keyz& e)
 {
-    //Graphics::IRenderer::mRenderer->SetBias(m_bias -= 1000.0f);
-    //std::cout << "[ DEBUG ] Light bias value " << m_bias << std::endl;
+    m_ambient -= 0.05F;
+    Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(m_ambient.GetX(), m_ambient.GetY(), m_ambient.GetZ()));
+    std::cout << "[ DEBUG ] Ambient Light is"
+        << " X " << m_ambient.GetX()
+        << " Y " << m_ambient.GetY()
+        << " Z " << m_ambient.GetZ()
+        << std::endl;
+}
+
+void Game::OnKeyEvent(const Keyx& e)
+{
+    m_ambient += 0.05F;
+    Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(m_ambient.GetX(), m_ambient.GetY(), m_ambient.GetZ()));
+    std::cout << "[ DEBUG ] Ambient Light is"
+        << " X " << m_ambient.GetX()
+        << " Y " << m_ambient.GetY()
+        << " Z " << m_ambient.GetZ()
+        << std::endl;
 }
 
 void Game::OnKeyEvent(const Keyc& e)
@@ -433,19 +440,6 @@ void Game::Render(float dt)
 	// must be called once in a while
 	CModelHolder::s_pInstance->Refresh();
 
-	/*const Float aspect = Graphics::IRenderer::mRenderer->GetAspect();
-
-	const CCamera& camera = Graphics::IRenderer::mRenderer->GetCamera();
-
-	Graphics::IRenderer::mRenderer->SetOrtho(
-		aspect * 3.0f + camera.m_position.GetX(), 
-		-aspect*3.0f + camera.m_position.GetX(),
-		3.0f + camera.m_position.GetY(),
-		-3.0f + camera.m_position.GetY(),
-		1, 
-		10);
-	Graphics::IRenderer::mRenderer->PrepareCamera2D();*/
-
 	// first pass, using the shadows depth shader
 	Graphics::Ilumination::Instance().StartShadowsDepth();
 	Graphics::RenderScene::Instance().Render(dt, true);
@@ -457,6 +451,11 @@ void Game::Render(float dt)
 	Graphics::IRenderer::mRenderer->PrepareCamera3D();	
 	// Render everything in the scene database
 	Graphics::RenderScene::Instance().Render(dt, false);
+
+    Graphics::IRenderer::mRenderer->PrepareCamera2D();
+
+
+
 
 	glutSwapBuffers();
 }

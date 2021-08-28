@@ -4,7 +4,7 @@
 #include "Debugger.h"
 #include "gl/glew.h"
 #include "gl/glut.h"
-#include "CRendererOGL.h"
+#include "OpenGL/CRendererOGL.h"
 #include "CThreadHolder.h"
 #include "IvPoint.h"
 #include "CGameController.h"
@@ -16,8 +16,9 @@
 #include "ThreadFactoryWin.h"
 #include "SemaphoreFactoryWin.h"
 #include "CFactory2dImageWin.h"
+#include "Factory/ModelFactoryOGL.h"
 #include "Ilumination.h"
-#include "ShadowsOGL.h"
+#include "OpenGL/ShadowsOGL.h"
 
 static Int32 s_lastState = GLUT_UP;
 static Int32 s_lastCursorX = -1;
@@ -153,7 +154,7 @@ void MainOgl::StartUp(int argv, char** argc)
     SocketFactoryWin::Initialize();
     ThreadFactoryWin::Initialize();
 	SemaphoreFactoryWin::Initialize();
-	//CFactory2dImageWin::Initialize();
+    Graphics::ModelFactoryOGL::Initialize();
 
 	// Use a single buffered window in RGB mode (as opposed to a double-buffered
 	// window or color-index mode).
@@ -229,6 +230,8 @@ void MainOgl::StartUp(int argv, char** argc)
 
 	// should never get to this point, but as a good practice...
 	EngineCore::IGame::Destroy();
+
+    Graphics::ModelFactoryOGL::Destroy();
 
     return ;
 }

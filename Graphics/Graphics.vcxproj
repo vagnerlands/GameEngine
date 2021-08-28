@@ -154,33 +154,37 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CCamera.cpp" />
-    <ClCompile Include="CCubeTextureOGL.cpp" />
-    <ClCompile Include="CModelOGL.cpp" />
     <ClCompile Include="CParticle.cpp" />
-    <ClCompile Include="CRendererOGL.cpp" />
-    <ClCompile Include="CTextureOGL.cpp" />
+    <ClCompile Include="Factory\ModelFactory.cpp" />
+    <ClCompile Include="Factory\ModelFactoryOGL.cpp" />
     <ClCompile Include="I2dImage.cpp" />
     <ClCompile Include="IModel.cpp" />
     <ClCompile Include="ITexture.cpp" />
+    <ClCompile Include="OpenGL\CCubeTextureOGL.cpp" />
+    <ClCompile Include="OpenGL\CModelOGL.cpp" />
+    <ClCompile Include="OpenGL\CRendererOGL.cpp" />
+    <ClCompile Include="OpenGL\CTextureOGL.cpp" />
+    <ClCompile Include="OpenGL\ShadowsOGL.cpp" />
     <ClCompile Include="Scene\Ilumination.cpp" />
     <ClCompile Include="Scene\IluminationItem.cpp" />
     <ClCompile Include="Scene\RenderScene.cpp" />
     <ClCompile Include="Scene\SceneItem.cpp" />
     <ClCompile Include="Scene\SceneItemFactory.cpp" />
-    <ClCompile Include="Scene\Shadows.cpp" />
-    <ClCompile Include="Scene\ShadowsOGL.cpp" />
     <ClInclude Include="CCamera.h" />
-    <ClInclude Include="CCubeTextureOGL.h" />
-    <ClInclude Include="CModelOGL.h" />
     <ClInclude Include="CParticle.h" />
-    <ClInclude Include="CRendererOGL.h" />
     <ClCompile Include="IRenderer.cpp" />
-    <ClInclude Include="CTextureOGL.h" />
+    <ClInclude Include="Factory\ModelFactory.h" />
+    <ClInclude Include="Factory\ModelFactoryOGL.h" />
     <ClInclude Include="I2dImage.h" />
     <ClInclude Include="IDrawable.h" />
     <ClInclude Include="IModel.h" />
     <ClInclude Include="IRenderer.h" />
     <ClInclude Include="ITexture.h" />
+    <ClInclude Include="OpenGL\CCubeTextureOGL.h" />
+    <ClInclude Include="OpenGL\CModelOGL.h" />
+    <ClInclude Include="OpenGL\CRendererOGL.h" />
+    <ClInclude Include="OpenGL\CTextureOGL.h" />
+    <ClInclude Include="OpenGL\ShadowsOGL.h" />
     <ClInclude Include="Scene\Query\SceneQuery.h" />
     <ClInclude Include="Scene\Query\SceneQueryParticles.h" />
     <ClInclude Include="Scene\SceneItemAnimatedAndShadowed.h" />
@@ -194,8 +198,6 @@
     <ClInclude Include="Scene\SceneItemShadowedSimple.h" />
     <ClInclude Include="Scene\SceneItemSimple.h" />
     <ClInclude Include="Scene\SceneItemSkyBox.h" />
-    <ClInclude Include="Scene\Shadows.h" />
-    <ClInclude Include="Scene\ShadowsOGL.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,6 +1,6 @@
 #include "Skybox.h"
 // TODO: make this cross platform
-#include "CModelOGL.h"
+#include "Factory/ModelFactory.h"
 #include "glm/glm.hpp"
 
 shared_ptr<UtilitiesCore::Skybox> UtilitiesCore::Skybox::CreateSky(const std::string& id, const vector<std::string>& faces)
@@ -15,7 +15,7 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 	// constant normalized box size - shall be used for texture mapping too
 	const Float cBoxSize = 1.f;
 	// allocate a open gl type model - can make this crossplatform using factories
-	shared_ptr<Graphics::CModelOGL> pSkyModel = make_shared<Graphics::CModelOGL>(id);
+	auto pSkyModel = Graphics::ModelFactory::Instance().Create("skybox");
 	// allocates a temporary buffer to create the cube
 	shared_ptr<Model> pModel = pSkyModel->Allocate();
 

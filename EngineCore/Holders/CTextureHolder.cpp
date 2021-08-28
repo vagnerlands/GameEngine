@@ -4,8 +4,8 @@
 #include "MutexFactory.h"
 #include <iostream>
 #ifdef WIN32
-#include "CTextureOGL.h"
-#include "CCubeTextureOGL.h"
+#include "OpenGL/CTextureOGL.h"
+#include "OpenGL/CCubeTextureOGL.h"
 #endif
 #include "IMutex.h"
 #include "CFactory2dImage.h"

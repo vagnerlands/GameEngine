@@ -9,7 +9,7 @@
 #include "CommonTypes.h"
 #include "OGLTypes.h"
 #include "IDrawable.h"
-#include "SceneItem.h"
+#include "SceneItemSkyBox.h"
 
 #include <vector>
 
@@ -33,7 +33,7 @@ namespace UtilitiesCore
 
 	protected:
 		// generated sky model
-		Graphics::SceneItem m_sceneItem;
+		Graphics::SceneItemSkyBox m_sceneItem;
 
 	};
 

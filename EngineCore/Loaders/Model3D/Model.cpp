@@ -201,6 +201,9 @@ SModelMesh Model::processMesh(aiMesh * mesh, const aiScene * scene)
     {
         processedMesh.m_shaderName = "animatedModel";
     }
+
+    std::cout << "[DEBUG] Model Name: " << mesh->mName.C_Str() << ", Selected shader is '" << processedMesh.m_shaderName << "'" << std::endl;
+
     // return a mesh object created from the extracted mesh data
     return processedMesh;
 }

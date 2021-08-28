@@ -1,7 +1,6 @@
-#include "CAnimatedModelOGL.h"
+#include "OpenGL/CAnimatedModelOGL.h"
 #include <iostream>
 #include "Model.h"
-#include "CAnimatedModelOGL.h"
 
 Graphics::CAnimatedModelOGL::CAnimatedModelOGL(string modelName) : CModelOGL(modelName)
 {
