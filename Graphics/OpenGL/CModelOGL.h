@@ -44,27 +44,6 @@ namespace Graphics
 
 	protected:
 
-		cwc::glShader* generateShader(const string& shaderName);
-
-        struct SDrawData
-        {
-            SDrawData() : m_vertexArrayObject(0U), m_indicesCount(0U) {}
-            explicit SDrawData(UInt32 vao, UInt32 indCount, vector<SModelTexture> vTextures, cwc::glShader* pShader) : 
-				m_vertexArrayObject(vao), 
-				m_indicesCount(indCount), 
-				m_textures(vTextures),
-				m_pShader(pShader)
-			{
-				// empty
-			}
-       
-			vector<SModelTexture>   m_textures;
-            UInt32					m_vertexArrayObject;
-            UInt32					m_indicesCount;
-
-			cwc::glShader*			m_pShader;
-        };
-
 		// copy operations
 		CModelOGL(const CModelOGL& other) = delete;
 		CModelOGL& operator=(const CModelOGL& other) = delete;

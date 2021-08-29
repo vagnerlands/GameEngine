@@ -85,5 +85,5 @@ void main()
     vec3 diffuse = lightAngle * color + (light_color*attenuation) ;
 
 	float shadow = cast_shadows ? ShadowCalculation(fs_in.FragPos) : 0.0;
-    FragColor = vec4((attenuation*(1.0 - shadow) * ((diffuse * light_color* attenuation) + specular)) + ambient, 1.0);
+    FragColor = vec4((attenuation*(1.0 - shadow) * (((diffuse * light_color* attenuation) + specular)) + ambient)*color, 1.0);
 }

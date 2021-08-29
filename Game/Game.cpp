@@ -42,6 +42,7 @@ Game::Game() :
     m_shadowDetailsFactor(0.59F),
     m_ambient(.5F, .5F, .5F)
 {
+    wind.Setup();
 	mpGameInput = new CGameController(1280, 720);
     KeyDispatcherFactory::Create(mpGameInput);
 	BindKey(Key0, this);
@@ -453,7 +454,7 @@ void Game::Render(float dt)
 	Graphics::RenderScene::Instance().Render(dt, false);
 
     Graphics::IRenderer::mRenderer->PrepareCamera2D();
-
+    wind.Draw(dt);
 
 
 

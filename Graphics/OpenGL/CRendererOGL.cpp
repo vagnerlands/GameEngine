@@ -34,29 +34,31 @@ void Graphics::CRendererOGL::PrepareFrame()
 	// Set background (clear) color to black
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 }
-
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
 void Graphics::CRendererOGL::PrepareCamera2D()
 {
+    glm::mat4 proj = glm::ortho(0.f, (float)mWidth, (float)mHeight, 0.f, -1.f, 1.f);
+
 	IvMatrix44 ortho;
 
-    const Float cNear = 1.0;
-    const Float cFar = -1.0;
+    const Float cNear   = -1.0;
+    const Float cFar    =  1.0;
 
-	Float recipX = 1.0f / (mWidth - 0);
-	Float recipY = 1.0f / (mHeight - 0);
-	Float recipZ = 1.0f / (cNear - cFar);
+	Float recipX = (mWidth - 0);
+	Float recipY = (mHeight - 0);
+	Float recipZ = (cFar - cNear);
 
-	ortho(0, 0) = 2.0f*recipX;
-	ortho(0, 3) = -(mWidth)*recipX;
 
-	ortho(1, 1) = 2.0f*recipY;
-	ortho(1, 3) = -(mHeight)*recipY;
+	ortho(0, 0) = 2.0f/recipX;
+    ortho(1, 1) = -2.0f/recipY;
+    ortho(2, 2) = -2.0f/recipZ;
 
-	ortho(2, 2) = 2.0f*recipZ;
-	ortho(2, 3) = (mNear + mFar)*recipZ;
+	ortho(0, 3) = -(mWidth/recipX);
+	ortho(1, 3) = (mHeight/recipY);
+	ortho(2, 3) = -((cFar + cNear)/recipZ);
 
-    SetViewMatrix(IvMatrix44());
-    SetWorldMatrix(ortho);
+    SetProjectionMatrix(ortho);
 }
 
 void Graphics::CRendererOGL::PrepareCamera3D()

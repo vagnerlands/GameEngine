@@ -64,9 +64,7 @@ void Graphics::SceneItem::updateModel()
 void Graphics::SceneItem::SetUpScene(cwc::glShader* pShader) const
 {
 	// get shader program id 
-	GLuint programId = pShader->GetProgramObject();
-	// enable it
-	glUseProgram(programId);
+	pShader->Use();
 	// check for errors
 	Int32 glErr = glGetError();
 	if (glErr != 0)

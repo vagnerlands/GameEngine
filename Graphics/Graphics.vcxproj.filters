@@ -104,6 +104,18 @@
     <ClInclude Include="Factory\ModelFactoryOGL.h">
       <Filter>Src\Factory</Filter>
     </ClInclude>
+    <ClInclude Include="Widget.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL\Window2DOGL.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Window2D.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL\OglHelper.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IRenderer.cpp">
@@ -159,6 +171,12 @@
     </ClCompile>
     <ClCompile Include="Factory\ModelFactory.cpp">
       <Filter>Src\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL\Window2DOGL.cpp">
+      <Filter>Src\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Window2D.cpp">
+      <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

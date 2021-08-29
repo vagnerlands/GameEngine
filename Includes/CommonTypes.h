@@ -85,65 +85,7 @@ namespace Types
 
 
 
-	//typedef unsigned int GameViewId;
 
-	/*
-	class CPoint
-	{
-	public:
-		TInt32 x;
-		TInt32 y;
-
-		CPoint() :
-			x(0),
-			y(0)
-		{
-
-		}
-
-		CPoint(TInt32 argX, TInt32 argY) :
-			x(argX),
-			y(argY)
-		{
-
-		}
-
-		CPoint& operator=(const CPoint& arg) 			
-		{
-			x = arg.x;
-			y = arg.y;
-			return *this;
-		}
-
-		bool operator!=(const CPoint& arg)
-		{
-			if ((arg.x == x) && (arg.y == y))
-			{
-				return false;
-			}
-			return true;
-		}
-
-		bool operator==(const CPoint& arg)
-		{
-			if ((arg.x == x) && (arg.y == y))
-			{
-				return true;
-			}
-			return false;
-		}
-	};
-
-
-*/
-
-
-
-	
-	/*typedef unordered_map<string, shared_ptr<IViewElement>> ViewElementMap;
-	typedef unordered_map<string, shared_ptr<IViewLight>> ViewLightMap;
-	typedef std::list<shared_ptr<IView>> ViewList;
-	typedef std::list<shared_ptr<IViewElement2D>> HUDList;*/
 
 	typedef void(*OnRemoveEvent)(string);
 

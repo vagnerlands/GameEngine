@@ -245,6 +245,16 @@ namespace cwc
       bool        setVertexAttrib3ui(GLuint index, GLuint v0, GLuint v1, GLuint v2); //!< Specify value of attribute. \warning Requires GL_EXT_gpu_shader4.
       bool        setVertexAttrib4ui(GLuint index, GLuint v0, GLuint v1, GLuint v2, GLuint v3); //!< Specify value of attribute. \warning Requires GL_EXT_gpu_shader4.
 
+      void Use()
+      {
+          glUseProgram(GetProgramObject());
+      }
+
+      void StopUsing()
+      {
+          glUseProgram(0);
+      }
+
       //! Enable this Shader:
 	   void        enable(void) //!< Enables Shader (Shader is enabled by default)
 	   {

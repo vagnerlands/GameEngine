@@ -10,7 +10,7 @@ in VS_OUT {
     vec3 TangentFragPos;
 } fs_in;
 
-//uniform sampler2D diffuseMap;
+uniform sampler2D diffuseMap;
 uniform samplerCube depthMap;
 
 uniform vec3 lightPos;
@@ -20,6 +20,7 @@ uniform float shadow_factor;
 uniform float far_plane;
 uniform float light_attenuation;
 uniform vec3 light_color;
+uniform vec3 ambient_color;
 uniform bool cast_shadows;
 
 // array of offset direction for sampling
@@ -52,7 +53,7 @@ float ShadowCalculation(vec3 fragPos)
     shadow /= float(samples);
         
     // display closestDepth as debug (to visualize depth cubemap)
-    // FragColor = vec4(vec3(closestDepth / far_plane), 1.0);    
+    //FragColor = vec4(vec3(closestDepth / far_plane), 1.0);    
         
     return shadow;
 }
@@ -61,24 +62,28 @@ void main()
 {           
      // this normal is in tangent space
     vec3 normal = normalize(fs_in.Normal);  
-
+    // get diffuse color
+    vec3 color = texture(diffuseMap, fs_in.TexCoords).rgb;
     // ambient
-    vec3 ambient = vec3(0.5,0.5,0.5);
+    vec3 ambient = ambient_color * color;
     // diffuse
-    // vagner: vec3 lightDir = normalize(fs_in.TangentLightPos - fs_in.TangentFragPos);
-    vec3 lightDir = normalize(lightPos - fs_in.FragPos);
-    float diff = max(dot(lightDir, normal), 0.0);
-    vec3 diffuse = diff * light_color;
-    // specular
-    // vagner: vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
-    vec3 viewDir = normalize(viewPos - fs_in.FragPos);
-    vec3 reflectDir = reflect(-lightDir, normal);
-    vec3 halfwayDir = normalize(lightDir + viewDir);  
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), 64.0);
-    vec3 specular = spec * light_color;
+    vec3 lightDir = normalize(fs_in.TangentLightPos - fs_in.TangentFragPos);
+    float lightAngle = max(dot(lightPos, normal), 0.0);
+    
 	//attenuation
     float distanceToLight = length(lightPos - fs_in.FragPos);
     float attenuation = 1.0 / (1.0 + light_attenuation * pow(distanceToLight, 2));
+	
+    // specular
+    vec3 reflectDir = reflect(-lightDir, normal); 
+    float specularStrength = 1.0;
+    vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec3 specular = specularStrength * spec * light_color;  
+
+    // diffuse 
+    vec3 diffuse = lightAngle * color + (light_color*attenuation) ;
+
 	float shadow = cast_shadows ? ShadowCalculation(fs_in.FragPos) : 0.0;
-    gl_FragColor = vec4(ambient + attenuation*((1.0 - shadow) * (diffuse + specular)), 1.0);
+    FragColor = vec4((attenuation*(1.0 - shadow) * (((diffuse * light_color* attenuation) + specular)) + ambient)*color, 1.0);
 }

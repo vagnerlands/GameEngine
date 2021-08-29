@@ -95,5 +95,11 @@
     <Text Include="..\Binaries\Assets\boundingBoxVertexshader.txt">
       <Filter>Assets</Filter>
     </Text>
+    <Text Include="..\Binaries\Assets\windowFragmentshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
+    <Text Include="..\Binaries\Assets\windowVertexshader.txt">
+      <Filter>Assets</Filter>
+    </Text>
   </ItemGroup>
 </Project>

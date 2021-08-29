@@ -145,11 +145,11 @@
     <ClCompile Include="Utils\JobList.cpp">
       <Filter>Src\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Loaders\Model3D\Model.cpp">
-      <Filter>Src\Loaders</Filter>
-    </ClCompile>
     <ClCompile Include="Input\KeyDispatcher.cpp">
       <Filter>Src\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaders\Model3D\Model.cpp">
+      <Filter>Src\Loaders\Model3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -243,9 +243,6 @@
     <ClInclude Include="OS\Windows\ThreadFactoryWin.h">
       <Filter>Src\OS\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Loaders\Model3D\Model.h">
-      <Filter>Src\Loaders</Filter>
-    </ClInclude>
     <ClInclude Include="Loaders\Images\Windows\CFactory2dImageWin.h">
       <Filter>Src\Loaders\Images\Windows</Filter>
     </ClInclude>
@@ -296,6 +293,9 @@
     </ClInclude>
     <ClInclude Include="Input\KeyDispatcher.h">
       <Filter>Src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaders\Model3D\Model.h">
+      <Filter>Src\Loaders\Model3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

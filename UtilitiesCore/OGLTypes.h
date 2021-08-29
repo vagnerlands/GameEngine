@@ -21,10 +21,24 @@
 
 #define NUM_BONES_PER_VERTEX 4
 
+namespace cwc
+{
+    class glShader;
+}
+
 using namespace std;
 
 namespace Types 
 {
+
+    struct SScreenVertex
+    {
+        SScreenVertex(const glm::vec3& pos, const glm::vec2& tex) : Position(pos), TexCoords(tex) {}
+        // position
+        glm::vec3 Position;
+        // texCoords
+        glm::vec2 TexCoords;
+    };
 
 	enum EVertexBuffers
 	{
@@ -79,6 +93,25 @@ namespace Types
         std::string m_filename;
 		// should this texture be binded as a CUBE_MAP?
 		bool		m_isCubeMap;
+    };
+
+    struct SDrawData
+    {
+        SDrawData() : m_vertexArrayObject(0U), m_indicesCount(0U) {}
+        explicit SDrawData(UInt32 vao, UInt32 indCount, vector<SModelTexture> vTextures, cwc::glShader* pShader) :
+            m_vertexArrayObject(vao),
+            m_indicesCount(indCount),
+            m_textures(vTextures),
+            m_pShader(pShader)
+        {
+            // empty
+        }
+
+        vector<SModelTexture>   m_textures;
+        UInt32					m_vertexArrayObject;
+        UInt32					m_indicesCount;
+
+        cwc::glShader*			m_pShader;
     };
 
     struct SModelVertex

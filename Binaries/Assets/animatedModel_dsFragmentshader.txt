@@ -90,6 +90,6 @@ void main()
     vec3 specular = texture(specularMap, fs_in.TexCoords).rgb * lightIntensity;
 	
     float shadow = cast_shadows ? ShadowCalculation(fs_in.FragPos) : 0.0;
-    FragColor = vec4( (attenuation*(1.0 - shadow) * ((diffuse * light_color* attenuation) + specular)) + ambient, 1.0);
+    FragColor = vec4( (attenuation*(1.0 - shadow) * (((diffuse * light_color* attenuation) + specular)) + ambient)*color, 1.0);
 }
 
