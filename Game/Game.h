@@ -68,7 +68,9 @@ private:
     Float m_bias;
     Float m_shadowDetailsFactor;
     IvVector3 m_ambient;
-    Graphics::Window2DOGL wind;
+    Graphics::Window2DOGL wind1;
+    //Graphics::Window2DOGL wind2;
+    //Graphics::Window2DOGL wind3;
 };
 
 

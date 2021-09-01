@@ -81,12 +81,9 @@ namespace Types
 	};
 
     struct SModelTexture
-    {
-		SModelTexture() 
-			: m_isCubeMap(false)
-		{
-
-		}
+    {        
+		SModelTexture() : m_isCubeMap(false) {}
+        explicit SModelTexture(const char* uniform, const char* file) : m_uniformName(uniform), m_filename(file), m_isCubeMap(false) {}
         // either diffuse, normal or specular
         std::string m_uniformName;
         // name of the texture - may be the full path to the texture, who knows...

@@ -13,20 +13,18 @@ namespace Graphics
     class Window2D : public Widget
     {
     protected:
-        IvMatrix44 m_model;
-        IvVector2 m_location = { 500.f, 200.f };
-        IvVector2 m_size{ 100.f, 100.f };
-        IvVector4 m_color = { 1.f, 1.f, 1.f, 0.5f}; // includes transparency
-        std::pair<std::string, std::string> m_texture; // includes transparency    
+        IvVector4 m_color = { 1.f, 1.f, 1.f, 1.f}; // includes transparency
+        std::string m_texture; // file name 
         virtual void draw(Float dt) = 0; // to be implemented in DirectX, OpenGL, Vulkan ...
-        virtual void updateModel();
     public:
         Window2D() {}
         Window2D(const IvVector2& location, const IvVector2& size, const IvVector4& color);
-        Window2D(const IvVector2& location, const IvVector2& size, const IvVector4& color, const std::string& textureFile, const std::string& textureType);
+        Window2D(const IvVector2& location, const IvVector2& size, const IvVector4& color, const std::string& textureFile);
         virtual ~Window2D(); 
         virtual void Setup() = 0; // to be implemented in DirectX, OpenGL, Vulkan ...
         virtual void Draw(Float dt) override;
+        void SetTexture(const char* textureName) { m_texture = textureName; }
+        void SetColor(const IvVector4& color) { m_color = color; }
     };
 
 }

@@ -42,7 +42,26 @@ Game::Game() :
     m_shadowDetailsFactor(0.59F),
     m_ambient(.5F, .5F, .5F)
 {
-    wind.Setup();
+    wind1.SetTexture("window.bmp");
+
+    wind1.SetLocation(IvVector2(10.f, 10.f))
+        .SetSize(IvVector2(400.f, 500.f));
+    /*wind2.SetLocation(IvVector2(50.f, 50.f))
+        .SetSize(IvVector2(400.f, 400.f));
+    wind3.SetLocation(IvVector2(50.f, 50.f))
+        .SetSize(IvVector2(300.f, 300.f));*/
+
+    wind1.SetColor(IvVector4(0, 1, 1, 1));
+    /*wind2.SetColor(IvVector4(1, 1, 1, 1));
+    wind3.SetColor(IvVector4(0, 0, 1, 1));*/
+    
+    wind1.Setup();
+    /*wind2.Setup();
+    wind3.Setup();*/
+/*
+    wind2.Append(&wind3);
+    wind1.Append(&wind2);*/
+
 	mpGameInput = new CGameController(1280, 720);
     KeyDispatcherFactory::Create(mpGameInput);
 	BindKey(Key0, this);
@@ -454,7 +473,7 @@ void Game::Render(float dt)
 	Graphics::RenderScene::Instance().Render(dt, false);
 
     Graphics::IRenderer::mRenderer->PrepareCamera2D();
-    wind.Draw(dt);
+    wind1.Draw(dt);
 
 
 

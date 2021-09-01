@@ -280,7 +280,7 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 			}
 			m_pBoneMutex->mutexUnlock();
 
-			Graphics::OglHelper::applyTextures(m_drawAttr[i]);
+			Graphics::OglHelper::applyTextures(m_drawAttr[i].m_pShader, m_drawAttr[i].m_textures);
         }	
 		else
 		{

@@ -20,6 +20,7 @@ namespace Graphics
 
         SDrawData m_data;
         vector<SScreenVertex> Vertices;
+        vector<SModelTexture> Textures;
         UInt32 VBO = 0;
         virtual void draw(Float dt) override;
 	public:

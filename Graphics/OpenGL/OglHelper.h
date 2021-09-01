@@ -16,19 +16,19 @@ namespace Graphics
 	{
 	public:
 
-        static void Graphics::OglHelper::applyTextures(const SDrawData& renderObject)
+        static void Graphics::OglHelper::applyTextures(cwc::glShader* pShader, const vector<SModelTexture>& textures)
         {
-            const UInt32 cTexturesCount = renderObject.m_textures.size();
+            const UInt32 cTexturesCount = textures.size();
             if (cTexturesCount > 0)
             {
                 // checks whether is a cubemap - in this case, there will be a texture id for the 6 cube faces
-                if (renderObject.m_textures[0].m_isCubeMap)
+                if (textures[0].m_isCubeMap)
                 {
                     // who cares, set the first one as the active one
                     glActiveTexture(GL_TEXTURE0);
-                    string name = renderObject.m_textures[0].m_uniformName;
+                    string name = textures[0].m_uniformName;
                     // now set the sampler to the correct texture unit
-                    renderObject.m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureVector(renderObject.m_textures));
+                    pShader->setTexture(textures[0].m_uniformName.data(), CTextureHolder::s_pInstance->getTextureVector(textures));
                 }
                 else
                 {
@@ -37,9 +37,9 @@ namespace Graphics
                     {
                         glActiveTexture(GL_TEXTURE0 + ti); // active proper texture unit before binding
                                                           // retrieve texture number (the N in diffuse_textureN)
-                        string name = renderObject.m_textures[ti].m_uniformName;
+                        string name = textures[ti].m_uniformName;
                         // now set the sampler to the correct texture unit
-                        renderObject.m_pShader->setTexture((char*)name.data(), CTextureHolder::s_pInstance->getTextureById(renderObject.m_textures[ti].m_filename));
+                        pShader->setTexture(textures[ti].m_uniformName.data(), CTextureHolder::s_pInstance->getTextureById(textures[ti].m_filename));
                         // activate the respective texture
                         glActiveTexture(GL_TEXTURE0 + ti);
                     }
@@ -50,12 +50,11 @@ namespace Graphics
             else
             {
                 // no textures mapped, so apply default texture
-                renderObject.m_pShader->setTexture("diffuseMap", CTextureHolder::s_pInstance->getTextureById("__no_valid_texture__.bmp"));
+                pShader->setTexture("diffuseMap", CTextureHolder::s_pInstance->getTextureById("__no_valid_texture__.bmp"));
                 glActiveTexture(GL_TEXTURE0);
 
             }
         }
-
 
 #pragma optimize( "", off )
         static cwc::glShader* OglHelper::generateShader(const string& shaderName)

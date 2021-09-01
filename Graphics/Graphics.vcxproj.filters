@@ -116,6 +116,9 @@
     <ClInclude Include="OpenGL\OglHelper.h">
       <Filter>Src\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="WidgetTransforms.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IRenderer.cpp">
