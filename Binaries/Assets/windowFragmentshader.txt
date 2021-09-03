@@ -8,11 +8,11 @@ in VS_OUT {
 
 uniform sampler2D diffuseMap;
 uniform vec4 color;
+uniform bool has_texture;
 
 void main()
 {           
-	// Activate to DEBUG
-    vec4 base = texture(diffuseMap, fs_in.TexCoords);
+    vec4 base = has_texture ? texture(diffuseMap, fs_in.TexCoords) * color : color;
     if ((base.r < 0.01) && (base.g < 0.01) && (base.b < 0.01))
         base.a = 0.25;
     if ((base.r > 0.9) && (base.b > 0.9))

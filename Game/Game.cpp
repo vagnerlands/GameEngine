@@ -25,6 +25,7 @@
 #include "CSoundHolder.h"
 #include "Scene/Query/SceneQueryParticles.h"
 #include "Rendered/SceneItemBoundingBox.h"
+#include "TextRenderer.h"
 
 using namespace _Keys;
 
@@ -51,7 +52,7 @@ Game::Game() :
     wind3.SetLocation(IvVector2(50.f, 50.f))
         .SetSize(IvVector2(300.f, 300.f));*/
 
-    wind1.SetColor(IvVector4(0, 1, 1, 1));
+    wind1.SetColor(IvVector4(1, 1, 1, 1));
     /*wind2.SetColor(IvVector4(1, 1, 1, 1));
     wind3.SetColor(IvVector4(0, 0, 1, 1));*/
     
@@ -150,7 +151,7 @@ bool Game::PostRendererInitialize()
     const UInt32 cTextureCacheSizeInMBs = 120;
 	CTextureHolder::s_pInstance->Create(".\\Assets\\textures.zip", cTextureCacheSizeInMBs*1024U*1024U);
 
-	IGame::mGame->SetFps(120);
+	IGame::mGame->SetMaxFPS(120);
 
 	
 	// test sound
@@ -474,8 +475,7 @@ void Game::Render(float dt)
 
     Graphics::IRenderer::mRenderer->PrepareCamera2D();
     wind1.Draw(dt);
-
-
+    Graphics::TextRenderer::Instance().Render(string("FPS ") += std::to_string(GetFPS()), 12, 470, 0.25f, IvVector3(0, 1, 0));
 
 	glutSwapBuffers();
 }

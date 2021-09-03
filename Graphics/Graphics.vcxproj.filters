@@ -119,6 +119,12 @@
     <ClInclude Include="WidgetTransforms.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="TextRenderer.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL\TextRendererOGL.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IRenderer.cpp">
@@ -179,6 +185,12 @@
       <Filter>Src\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Window2D.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL\TextRendererOGL.cpp">
+      <Filter>Src\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderer.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>

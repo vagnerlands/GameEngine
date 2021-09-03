@@ -33,12 +33,12 @@ void Graphics::Window2DOGL::Setup()
 
     Vertices = {
         //                      Vertices                    TextCoords
-        SScreenVertex(glm::vec3{0.0f, 1.0f, 0.f}, glm::vec2{0.0f, 0.0f}),
-        SScreenVertex(glm::vec3{1.0f, 0.0f, 0.f}, glm::vec2{1.0f, 1.0f}),
-        SScreenVertex(glm::vec3{0.0f, 0.0f, 0.f}, glm::vec2{0.0f, 1.0f}),
-        SScreenVertex(glm::vec3{0.0f, 1.0f, 0.f}, glm::vec2{0.0f, 0.0f}),
-        SScreenVertex(glm::vec3{1.0f, 1.0f, 0.f}, glm::vec2{1.0f, 0.0f}),
-        SScreenVertex(glm::vec3{1.0f, 0.0f, 0.f}, glm::vec2{1.0f, 1.0f})
+        SScreenVertex(glm::vec3{0.0f, 1.0f, 0.f}, glm::vec2{0.0f, 1.0f}),
+        SScreenVertex(glm::vec3{1.0f, 0.0f, 0.f}, glm::vec2{1.0f, 0.0f}),
+        SScreenVertex(glm::vec3{0.0f, 0.0f, 0.f}, glm::vec2{0.0f, 0.0f}),
+        SScreenVertex(glm::vec3{0.0f, 1.0f, 0.f}, glm::vec2{0.0f, 1.0f}),
+        SScreenVertex(glm::vec3{1.0f, 1.0f, 0.f}, glm::vec2{1.0f, 1.0f}),
+        SScreenVertex(glm::vec3{1.0f, 0.0f, 0.f}, glm::vec2{1.0f, 0.0f})
     };
     m_data.m_indicesCount = Vertices.size();
     // create buffers/arrays
@@ -82,10 +82,10 @@ void Graphics::Window2DOGL::draw(Float dt)
     s_pShader->setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
     // color
     s_pShader->setUniform4f("color", m_color.GetX(), m_color.GetY(), m_color.GetZ(), m_color.GetW());
-
-    // bind textures
+    // texture
+    s_pShader->setUniform1i("has_texture", (GLint)(m_texture.length() > 0));
     if (m_texture.length() > 0)
-    {
+    {   
         OglHelper::applyTextures(s_pShader, Textures);
     }
 

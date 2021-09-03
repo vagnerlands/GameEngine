@@ -23,6 +23,27 @@ namespace EngineCore
 
 	class IGame
 	{
+
+    protected:
+        // constructor/destructor
+        IGame();
+        virtual ~IGame();
+
+        bool ParseCommandLine(int argc, char* argv[]);
+        bool SetupSubsystems(Types::EGraphicsAPI gfxApi);
+
+        virtual void UpdateObjects(float dt) = 0;
+        virtual void Render(float dt) = 0;
+
+        // user has requested to quit
+        bool mQuit;
+        // only start closing the applications once we're ready to close
+        bool mReadyToClose;
+        bool mPaused;
+        Int32 mMaxFps;
+        Int32 mClosedThreads;
+
+        UtilitiesCore::IClock* mClock;
 	public:
 		// Create needs to be implemented in the derived Game class
 		static bool Create();
@@ -49,38 +70,22 @@ namespace EngineCore
 				mReadyToClose = true; 
 		}
 		inline bool ReadyToClose() { return mReadyToClose; }
+
+        // is fixed frames per second
+        Int32 GetFPS() const;
+
+
 		// is fixed frames per second
-		inline Int32 GetFps()
+		inline Int32 GetMaxFPS()
 		{
-			return mFps;
+			return mMaxFps;
 		}
-		inline void SetFps(Int32 framesPerSecond)
+		inline void SetMaxFPS(Int32 framesPerSecond)
 		{
-			mFps = framesPerSecond;
+			mMaxFps = framesPerSecond;
 		}
 
 		static IGame* mGame;          // global pointer
-
-	protected:
-		// constructor/destructor
-		IGame();
-		virtual ~IGame();
-
-		bool ParseCommandLine(int argc, char* argv[]);
-		bool SetupSubsystems(Types::EGraphicsAPI gfxApi);
-
-		virtual void UpdateObjects(float dt) = 0;
-		virtual void Render(float dt) = 0;
-
-		// user has requested to quit
-		bool mQuit;
-		// only start closing the applications once we're ready to close
-		bool mReadyToClose;
-		bool mPaused;
-		Int32 mFps;
-		Int32 mClosedThreads;
-
-		UtilitiesCore::IClock* mClock;
 
 	private:
 		// To avoid creation of this object without inheritance

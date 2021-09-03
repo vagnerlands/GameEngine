@@ -56,6 +56,11 @@ void UtilitiesCore::CClockOGL::StartFrame()
 	mStartFrameTime = now;
 }
 
+inline Int32 UtilitiesCore::CClockOGL::FramesPerSecond() const
+{
+    return mFps.GetFramesPerSecond();
+}
+
 void UtilitiesCore::CClockOGL::Hold(Int32 numberOfFramesPerSecond)
 {
 	// if there is a limitation of frames per second, then we must:
@@ -63,12 +68,10 @@ void UtilitiesCore::CClockOGL::Hold(Int32 numberOfFramesPerSecond)
 	{
 		// how many miliseconds we have with this frame rate?
 		const Float miliPerFrame = 1.F / numberOfFramesPerSecond;
+        Float delta = 0.f;
 		// then we wait in this while until the elapsed time is greater than miliPerFrame
-		while ((getTimeNow() - mStartFrameTime) < miliPerFrame)
-		{
-			// do nothing
-		} 
-
+		while ((delta = (getTimeNow() - mStartFrameTime)) < miliPerFrame) { /* remains in hold */ } 
+        mFps.Add(delta); // count delta time for fps calculation
 	}
 }
 

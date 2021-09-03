@@ -199,6 +199,8 @@
     <Text Include="..\Binaries\Assets\skyVertexshader.txt" />
     <Text Include="..\Binaries\Assets\solidModelFragmentshader.txt" />
     <Text Include="..\Binaries\Assets\solidModelVertexshader.txt" />
+    <Text Include="..\Binaries\Assets\textFragmentshader.txt" />
+    <Text Include="..\Binaries\Assets\textVertexshader.txt" />
     <Text Include="..\Binaries\Assets\windowFragmentshader.txt" />
     <Text Include="..\Binaries\Assets\windowVertexshader.txt" />
   </ItemGroup>

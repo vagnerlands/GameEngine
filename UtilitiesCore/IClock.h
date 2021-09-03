@@ -25,6 +25,8 @@ namespace UtilitiesCore
 		IClock();
 		// virtual destructor
 		virtual ~IClock();
+
+        virtual Int32 FramesPerSecond() const = 0;
     
 		virtual Float GetElapsedTime();
 

@@ -52,7 +52,7 @@ void EngineCore::IGame::Display()
 		// render a scene according to current position of objects
 		Render(mClock->GetTimeInMili());
 
-		mClock->Hold(mGame->GetFps());
+		mClock->Hold(mGame->GetMaxFPS());
 	}
 
 	if (ReadyToClose())
@@ -74,7 +74,7 @@ EngineCore::IGame::IGame() :
 	mPaused(false), 
 	mQuit(false),
 	mReadyToClose(false),
-	mFps(0),
+	mMaxFps(0),
 	mClosedThreads(0)
 {
 	// 
@@ -113,4 +113,9 @@ void
 EngineCore::IGame::Reshape(Int32 w, Int32 h)
 {
 	Graphics::IRenderer::mRenderer->Resize(w, h);
+}
+
+Int32 EngineCore::IGame::GetFPS() const
+{
+    return mClock->FramesPerSecond();
 }

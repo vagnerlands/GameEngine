@@ -1,4 +1,5 @@
 #include "CRendererOGL.h"
+#include "TextRendererOGL.h"
 #include "IvMath.h"
 #include "IvMatrix33.h"
 #include "GL/glut.h"
@@ -12,6 +13,7 @@ bool Graphics::CRendererOGL::Create()
 	if (mRenderer == nullptr)
 	{
 		mRenderer = new CRendererOGL();
+        TextRendererOGL::Create();
 	}
 	return (mRenderer != nullptr);
 }
@@ -38,25 +40,25 @@ void Graphics::CRendererOGL::PrepareFrame()
 #include <glm/glm.hpp>
 void Graphics::CRendererOGL::PrepareCamera2D()
 {
-    glm::mat4 proj = glm::ortho(0.f, (float)mWidth, (float)mHeight, 0.f, -1.f, 1.f);
+    glm::mat4 proj = glm::ortho(0.f, (float)mWidth, 0.f, (float)mHeight);
 
 	IvMatrix44 ortho;
 
     const Float cNear   = -1.0;
     const Float cFar    =  1.0;
 
-	Float recipX = (mWidth - 0);
-	Float recipY = (mHeight - 0);
+	Float recipX = (mWidth);
+	Float recipY = (mHeight);
 	Float recipZ = (cFar - cNear);
 
 
 	ortho(0, 0) = 2.0f/recipX;
-    ortho(1, 1) = -2.0f/recipY;
-    ortho(2, 2) = -2.0f/recipZ;
+    ortho(1, 1) = 2.0f/recipY;
+    ortho(2, 2) = 1.f; //2.0f/recipZ;
 
 	ortho(0, 3) = -(mWidth/recipX);
-	ortho(1, 3) = (mHeight/recipY);
-	ortho(2, 3) = -((cFar + cNear)/recipZ);
+	ortho(1, 3) = -(mHeight/recipY);
+	//ortho(2, 3) =  ((cFar + cNear)/recipZ);
 
     SetProjectionMatrix(ortho);
 }
