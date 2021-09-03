@@ -8,6 +8,10 @@ using namespace Types;
 const std::string Graphics::Window2DOGL::s_shaderName = "window"; // default shader for a window, not thinking about specializations for now
 cwc::glShader* Graphics::Window2DOGL::s_pShader = nullptr; // 1 shader to rule them all...
 
+Graphics::Window2DOGL::Window2DOGL(const IvVector4& color, const std::string& textureFile) :
+    Window2D(color, textureFile)
+{}
+
 Graphics::Window2DOGL::~Window2DOGL()
 {
     glDeleteVertexArrays(1, &m_data.m_vertexArrayObject);

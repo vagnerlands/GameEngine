@@ -176,6 +176,7 @@
     <ClCompile Include="Scene\Ilumination.cpp" />
     <ClCompile Include="Scene\IluminationItem.cpp" />
     <ClCompile Include="Scene\RenderScene.cpp" />
+    <ClCompile Include="Scene\RenderUI.cpp" />
     <ClCompile Include="Scene\SceneItem.cpp" />
     <ClCompile Include="Scene\SceneItemFactory.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="OpenGL\Window2DOGL.h" />
     <ClInclude Include="Scene\Query\SceneQuery.h" />
     <ClInclude Include="Scene\Query\SceneQueryParticles.h" />
+    <ClInclude Include="Scene\RenderUI.h" />
     <ClInclude Include="Scene\SceneItemAnimatedAndShadowed.h" />
     <ClInclude Include="Scene\SceneItemFactory.h" />
     <ClInclude Include="Scene\Ilumination.h" />

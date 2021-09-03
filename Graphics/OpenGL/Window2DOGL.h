@@ -24,6 +24,7 @@ namespace Graphics
         UInt32 VBO = 0;
         virtual void draw(Float dt) override;
 	public:
+        explicit Window2DOGL(const IvVector4& color, const std::string& textureFile);
         virtual ~Window2DOGL();
         virtual void Setup() override; 
 	};

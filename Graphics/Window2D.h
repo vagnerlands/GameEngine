@@ -17,11 +17,10 @@ namespace Graphics
         std::string m_texture; // file name 
         virtual void draw(Float dt) = 0; // to be implemented in DirectX, OpenGL, Vulkan ...
     public:
-        Window2D() {}
-        Window2D(const IvVector2& location, const IvVector2& size, const IvVector4& color);
-        Window2D(const IvVector2& location, const IvVector2& size, const IvVector4& color, const std::string& textureFile);
-        virtual ~Window2D(); 
-        virtual void Setup() = 0; // to be implemented in DirectX, OpenGL, Vulkan ...
+        explicit Window2D(const IvVector4& color, const std::string& textureFile);
+        explicit Window2D(const IvVector2& location, const IvVector2& size, const IvVector4& color);
+        explicit Window2D(const IvVector2& location, const IvVector2& size, const IvVector4& color, const std::string& textureFile);
+        virtual ~Window2D();         
         virtual void Draw(Float dt) override;
         void SetTexture(const char* textureName) { m_texture = textureName; }
         void SetColor(const IvVector4& color) { m_color = color; }

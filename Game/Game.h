@@ -4,7 +4,6 @@
 #include "IGame.h"
 #include "CGameController.h"
 #include "IvVector3.h" // DEBUG - delete me
-#include "OpenGL/Window2DOGL.h"
 
 class Game : 
     public EngineCore::IGame,
@@ -68,9 +67,6 @@ private:
     Float m_bias;
     Float m_shadowDetailsFactor;
     IvVector3 m_ambient;
-    Graphics::Window2DOGL wind1;
-    //Graphics::Window2DOGL wind2;
-    //Graphics::Window2DOGL wind3;
 };
 
 

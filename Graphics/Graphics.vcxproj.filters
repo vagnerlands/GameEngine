@@ -125,6 +125,9 @@
     <ClInclude Include="OpenGL\TextRendererOGL.h">
       <Filter>Src\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\RenderUI.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IRenderer.cpp">
@@ -191,6 +194,9 @@
       <Filter>Src\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="TextRenderer.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\RenderUI.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>

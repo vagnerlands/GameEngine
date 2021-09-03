@@ -1,5 +1,10 @@
 ﻿#include "Window2D.h"
 
+Graphics::Window2D::Window2D(const IvVector4& color, const std::string& textureFile) :
+    m_color(color),
+    m_texture(textureFile)
+{}
+
 Graphics::Window2D::Window2D(const IvVector2& location, const IvVector2& size, const IvVector4& color) :
     m_color(color)
 {
@@ -16,9 +21,7 @@ Graphics::Window2D::Window2D(const IvVector2& location, const IvVector2& size, c
 }
 
 Graphics::Window2D::~Window2D()
-{
-
-}
+{}
 
 void Graphics::Window2D::Draw(Float dt)
 {

@@ -43,7 +43,7 @@ namespace EngineCore
         Int32 mMaxFps;
         Int32 mClosedThreads;
 
-        UtilitiesCore::IClock* mClock;
+        std::shared_ptr<UtilitiesCore::IClock> mClock;
 	public:
 		// Create needs to be implemented in the derived Game class
 		static bool Create();

@@ -10,7 +10,9 @@ EngineCore::IGame* EngineCore::IGame::mGame = nullptr;
 
 void EngineCore::IGame::Destroy()
 {
-	if (mGame != nullptr)
+    if (mGame->mClock != nullptr)
+        mGame->mClock = nullptr;
+    if (mGame != nullptr)
 		delete mGame;	
 }
 
@@ -63,7 +65,7 @@ void EngineCore::IGame::Display()
 		// release the rendering resources
 		Graphics::IRenderer::Destroy();
 		// release other game related resources
-		EngineCore::IGame::Destroy();
+		EngineCore::IGame::Destroy();        
 		// exit with no error if get to this point
 		exit(0);
 	}
@@ -97,7 +99,7 @@ bool EngineCore::IGame::SetupSubsystems(Types::EGraphicsAPI gfxApi)
 	if (gfxApi == Types::EGraphicsAPI::EGraphics_OGL)
 	{
 		// Open GL implementation
-		mClock = new UtilitiesCore::CClockOGL();
+		mClock = std::make_shared<UtilitiesCore::CClockOGL>();
 	}
 	else
 	{

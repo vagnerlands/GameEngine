@@ -15,6 +15,7 @@
 // debug
 #include "Rendered/Skybox.h"
 #include "IClock.h"
+#include "OpenGL/Window2DOGL.h"
 
 #include "GL/glut.h"
 #include "CGameController.h"
@@ -25,6 +26,7 @@
 #include "CSoundHolder.h"
 #include "Scene/Query/SceneQueryParticles.h"
 #include "Rendered/SceneItemBoundingBox.h"
+#include "RenderUI.h"
 #include "TextRenderer.h"
 
 using namespace _Keys;
@@ -43,25 +45,8 @@ Game::Game() :
     m_shadowDetailsFactor(0.59F),
     m_ambient(.5F, .5F, .5F)
 {
-    wind1.SetTexture("window.bmp");
-
-    wind1.SetLocation(IvVector2(10.f, 10.f))
-        .SetSize(IvVector2(400.f, 500.f));
-    /*wind2.SetLocation(IvVector2(50.f, 50.f))
-        .SetSize(IvVector2(400.f, 400.f));
-    wind3.SetLocation(IvVector2(50.f, 50.f))
-        .SetSize(IvVector2(300.f, 300.f));*/
-
-    wind1.SetColor(IvVector4(1, 1, 1, 1));
-    /*wind2.SetColor(IvVector4(1, 1, 1, 1));
-    wind3.SetColor(IvVector4(0, 0, 1, 1));*/
-    
-    wind1.Setup();
-    /*wind2.Setup();
-    wind3.Setup();*/
-/*
-    wind2.Append(&wind3);
-    wind1.Append(&wind2);*/
+    auto window = Graphics::RenderUI::Instance().Add("logger", std::make_shared<Graphics::Window2DOGL>(IvVector4(1.f,1.f, 1.f, 1.f), "window.bmp"));
+    window->SetLocation({ 10.f, 10.f }).SetSize({ 400.f, 500.f });
 
 	mpGameInput = new CGameController(1280, 720);
     KeyDispatcherFactory::Create(mpGameInput);
@@ -167,9 +152,9 @@ bool Game::PostRendererInitialize()
         .SetScale(IvVector3(20000.0, 1.0, 20000.0))
         .SetTextureUV(IvVector2(100.f, 100.f));
 
-	Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple)
-        .SetScale(IvVector3(0.01f, 0.01f, 0.01f))
-        .SetCastShadows(false);
+	//Graphics::RenderScene::Instance().Add("lightDebug", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple)
+    //       .SetScale(IvVector3(0.01f, 0.01f, 0.01f))
+    //       .SetCastShadows(false);
 
     Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed)
         .SetScale(IvVector3(1.f, 1.f, 1.f))
@@ -188,7 +173,7 @@ bool Game::PostRendererInitialize()
         .SetCastShadows(false);
 
 	Graphics::SceneQueryParticles part;
-	part.Set(Graphics::ParticleSeeds(300, 100, 150, 1200, 4200, 500, 2500, 50, 100, 100, 200, "flame.png"));
+	part.Set(Graphics::ParticleSeeds(300, 100, 150, 10000, 12000, 10000, 12000, 50, 100, 100, 200, "flame.png"));
 	Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 
 	//CSoundHolder::s_pInstance->PlaySoundById("door.wav", eSoundType_Effect, 0.1f);
@@ -241,23 +226,23 @@ void Game::UpdateObjects(float dt)
         m_lightAngle -= 1.f;
     }
 
-	static Float SpreadConst = 10;
-	static Float HeightConst = 1000;
-	static Float SizeConst = 1200;
+	static Float SpreadConst = 100;
+	static Float HeightConst = 10000;
+	static Float SizeConst = 12000;
 	static Float NumberOfParticles = 100;
 
 	if (mpGameInput->m_bKey['o'].isPressed)
 	{
 		SpreadConst += 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 300 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
+		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	else if (mpGameInput->m_bKey['p'].isPressed)
 	{
 		SpreadConst -= 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+        part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 
@@ -265,28 +250,28 @@ void Game::UpdateObjects(float dt)
 	{
 		HeightConst += 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+        part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	else if (mpGameInput->m_bKey['l'].isPressed)
 	{
 		HeightConst -= 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500+ SizeConst, 200+HeightConst, 400 + HeightConst, 30+SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+        part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	if (mpGameInput->m_bKey['n'].isPressed)
 	{
 		SizeConst += 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+        part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	else if (mpGameInput->m_bKey['m'].isPressed)
 	{
 		SizeConst -= 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+        part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	
@@ -294,14 +279,14 @@ void Game::UpdateObjects(float dt)
 	{
 		NumberOfParticles -= 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+        part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	else if (mpGameInput->m_bKey['2'].isPressed)
 	{
 		NumberOfParticles += 1.f;
 		Graphics::SceneQueryParticles part;
-		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 100, 150, SizeConst, 500 + SizeConst, 200 + HeightConst, 400 + HeightConst, 30 + SpreadConst, 70 + SpreadConst, 100, 200, "flame.png"));
+        part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
     if (mpGameInput->m_bKey['c'].isPressed)
@@ -354,6 +339,7 @@ void Game::UpdateObjects(float dt)
         500, 
         cos(m_lightAngle * 3.14159 / 180.F) * MoveRadius);
 
+    Graphics::RenderScene::Instance().Translate("Particles2", lightLocation);
 	Graphics::Ilumination::Instance().Update("main", lightLocation);
 	Graphics::RenderScene::Instance().Translate("lightDebug", lightLocation);
 
@@ -474,7 +460,7 @@ void Game::Render(float dt)
 	Graphics::RenderScene::Instance().Render(dt, false);
 
     Graphics::IRenderer::mRenderer->PrepareCamera2D();
-    wind1.Draw(dt);
+    Graphics::RenderUI::Instance().Render(dt);
     Graphics::TextRenderer::Instance().Render(string("FPS ") += std::to_string(GetFPS()), 12, 470, 0.25f, IvVector3(0, 1, 0));
 
 	glutSwapBuffers();
