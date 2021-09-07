@@ -134,3 +134,12 @@ void Graphics::IRenderer::SetProjectionMatrix(const IvMatrix44& matrix)
 	mWVPMat = mProjectionMat*mViewMat*mWorldMat;
 }
 
+bool Graphics::IRenderer::IsClip(const IvVector3 & point)
+{
+    return mFrustum.IsPointInFrustum(point);
+}
+
+bool Graphics::IRenderer::IsClip(const IvVector3 & min, const IvVector3 & max)
+{
+    return mFrustum.IsRectangleInFrustum(min, max);
+}

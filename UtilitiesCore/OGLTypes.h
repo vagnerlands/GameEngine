@@ -125,14 +125,7 @@ namespace Types
         glm::vec3 Bitangent;
     };
 
-    // axis aligned bounding box
-    struct AABB
-    {
-        AABB(): Min { 0 }, Max{ 0 } {}
-        glm::vec3 Min;
-        glm::vec3 Max;
-    };
-	
+
 	struct SVertexBoneData
 	{
 		UInt32 ids[NUM_BONES_PER_VERTEX] = {};   // we have 4 bone ids for EACH vertex & 4 weights for EACH vertex

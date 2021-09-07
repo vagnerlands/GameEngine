@@ -1,5 +1,6 @@
 #include "RenderScene.h"
 #include "SceneItemFactory.h"
+#include "IRenderer.h"
 
 Graphics::RenderScene & Graphics::RenderScene::Instance()
 {
@@ -94,7 +95,10 @@ void Graphics::RenderScene::Render(float dt, bool isRenderingShadows) const
 	for (auto& it = m_items.begin(); it != m_items.end(); it++)
 	{
 		shared_ptr<Graphics::SceneItem> pObj = *it;
-		pObj->Render(dt, isRenderingShadows);
+        const IvVector3& loc = pObj->GetLocation();
+        const AABB& bb = pObj->GetDrawable()->GetBoundaryBox();
+        if (Graphics::IRenderer::mRenderer->IsClip(loc))
+		    pObj->Render(dt, isRenderingShadows);
 	}
 }
 

@@ -17,7 +17,7 @@
 //-------------------------------------------------------------------------------
 
 #include "CommonTypes.h"
-
+#include "IvVector3.h"
 //-------------------------------------------------------------------------------
 //-- Typedefs, Structs ----------------------------------------------------------
 //-------------------------------------------------------------------------------
@@ -93,6 +93,9 @@ public:
     // dot product
     float              Dot( const IvVector4& vector ) const;
     friend float       Dot( const IvVector4& vector1, const IvVector4& vector2 );
+
+    IvVector3           Cross(const IvVector4& vector) const;
+    friend IvVector3    Cross(const IvVector4& vector1, const IvVector4& vector2);
 
     // matrix products
     friend IvVector4 operator*( const IvVector4& vector, const IvMatrix44& mat );

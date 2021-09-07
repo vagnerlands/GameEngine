@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include <assert.h>
+#include "glm/glm.hpp"
 
 #include "Debugger.h"
 
@@ -214,6 +215,14 @@ namespace Types
 		eSceneItemType_NonAnimatedAndShadowed, // not animated, but cast shadows
 		eSceneItemType_ParticlesSystem // animated according to different parameters
 	};
+
+    // axis aligned bounding box
+    struct AABB
+    {
+        AABB() : Min{ 0 }, Max{ 0 } {}
+        glm::vec3 Min;
+        glm::vec3 Max;
+    };
 
 	//-------------------------------------------------------------------------------
 	//-- Typedefs, Structs ----------------------------------------------------------

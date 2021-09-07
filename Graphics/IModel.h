@@ -19,8 +19,7 @@ namespace Graphics
         virtual bool Create() = 0;
 		virtual bool Apply(const Model* pModelInfo) = 0;
 		virtual shared_ptr<Model> Allocate() = 0;
-		virtual bool Commit() = 0;
-        virtual const AABB& GetBoundaryBox() const = 0;
+		virtual bool Commit() = 0;        
         virtual void SetWireMode(bool display) = 0;
 	protected:
 		// data to be used, this shall be released once Commit() is called

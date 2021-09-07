@@ -159,7 +159,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="Camera\CCamera.cpp" />
+    <ClCompile Include="Camera\Frustum.cpp" />
     <ClCompile Include="CParticle.cpp" />
     <ClCompile Include="Factory\ModelFactory.cpp" />
     <ClCompile Include="Factory\ModelFactoryOGL.cpp" />
@@ -181,7 +182,8 @@
     <ClCompile Include="Scene\SceneItemFactory.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="Window2D.cpp" />
-    <ClInclude Include="CCamera.h" />
+    <ClInclude Include="Camera\CCamera.h" />
+    <ClInclude Include="Camera\Frustum.h" />
     <ClInclude Include="CParticle.h" />
     <ClCompile Include="IRenderer.cpp" />
     <ClInclude Include="Factory\ModelFactory.h" />

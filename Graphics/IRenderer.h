@@ -3,7 +3,8 @@
 
 #include "CommonTypes.h"
 #include "IvMatrix44.h"
-#include "CCamera.h"
+#include "Camera/CCamera.h"
+#include "Camera/Frustum.h"
 
 using namespace Types;
 
@@ -54,6 +55,8 @@ namespace Graphics
 		virtual void SetViewMatrix(const IvMatrix44& matrix);
 		IvMatrix44& GetProjectionMatrix();
 		virtual void SetProjectionMatrix(const IvMatrix44& matrix);
+        bool IsClip(const IvVector3& point);
+        bool IsClip(const IvVector3& min, const IvVector3& max);
 
 		virtual Int32 InitializeGraphics(Int32 width, Int32 height, bool isFullScreen);
 
@@ -97,6 +100,7 @@ namespace Graphics
 		IvVector4		  mLightDirection;
 
 		CCamera           mCamera;
+        Frustum           mFrustum;
 
 	private:
 		// copy operations

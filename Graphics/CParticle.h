@@ -22,7 +22,7 @@ namespace Graphics
 		virtual void Update(float dt) override;
 		//bool SetShader(const string& shaderName);
 		virtual void Draw(const SceneItem& si, float dt, bool isRenderingShadows) override;
-
+        virtual const AABB& GetBoundaryBox() const override;
 
 		void SetLoopCount(Int32 loopCount = -1);
 		void SetMaxNumberOfParticles(Int32 maxNumberOfParticles);

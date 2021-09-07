@@ -116,6 +116,12 @@ void Graphics::CParticle::Draw(const SceneItem& si, float dt, bool isRenderingSh
 	glUseProgram(0);
 }
 
+const AABB & Graphics::CParticle::GetBoundaryBox() const
+{
+    static const AABB aabb;
+    return aabb;
+}
+
 #pragma optimize( "", off )
 cwc::glShader* Graphics::CParticle::generateShader(const string& shaderName)
 {

@@ -21,6 +21,9 @@
     <Filter Include="Src\Factory">
       <UniqueIdentifier>{1d713eac-4b05-4539-8f81-81ec811faac6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Camera">
+      <UniqueIdentifier>{fb8798dc-2073-45c9-909a-5a5ad3f8909f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderer.h">
@@ -30,9 +33,6 @@
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="IModel.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="CCamera.h">
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="I2dImage.h">
@@ -128,6 +128,12 @@
     <ClInclude Include="Scene\RenderUI.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="Camera\CCamera.h">
+      <Filter>Src\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Frustum.h">
+      <Filter>Src\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IRenderer.cpp">
@@ -137,9 +143,6 @@
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="IModel.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="CCamera.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="I2dImage.cpp">
@@ -198,6 +201,12 @@
     </ClCompile>
     <ClCompile Include="Scene\RenderUI.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\CCamera.cpp">
+      <Filter>Src\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Frustum.cpp">
+      <Filter>Src\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

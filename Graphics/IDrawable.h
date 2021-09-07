@@ -26,6 +26,7 @@ namespace Graphics
 		virtual void Update(float dt) = 0;
 		// render this object as is
 		virtual void Draw(const class SceneItem& si, float dt, bool isRenderingShadows) = 0;
+        virtual const AABB& GetBoundaryBox() const = 0;
 
 	private:
 		// copy operations

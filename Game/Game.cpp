@@ -140,7 +140,7 @@ bool Game::PostRendererInitialize()
 
 	
 	// test sound
-	//CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
+	CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
 	//CSoundHolder::s_pInstance->PlaySoundById("highlands.wav", eSoundType_Music, 0.5f);
 	// Build a debug scenario
 	// [Light]
@@ -373,12 +373,12 @@ void Game::OnKeyEvent(const KeyEscape & e)
 
 void Game::OnKeyEvent(const Keyv & e)
 {
-    //Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(0, 5, 0));
+    Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(1, 1, 0));
 }
 
 void Game::OnKeyEvent(const Keyb & e)
 {
-    Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(0, 1, 0));
+    Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(-1, 1, 0));
 }
 
 void Game::OnKeyEvent(const Keyn & e)

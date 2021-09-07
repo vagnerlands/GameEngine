@@ -145,3 +145,8 @@ void UtilitiesCore::Skybox::Tick(float delta_time)
 {
 	// TODO: maybe animate the sky by playing a bit with the textures
 }
+
+const AABB & UtilitiesCore::Skybox::GetBoundaryBox() const
+{
+    return m_sceneItem.GetDrawable()->GetBoundaryBox();
+}

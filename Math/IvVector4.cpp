@@ -379,3 +379,29 @@ Dot( const IvVector4& vector1, const IvVector4& vector2 )
             + vector1.w*vector2.w);
 
 }   // End of Dot()
+
+//-------------------------------------------------------------------------------
+// @ Cross()
+//-------------------------------------------------------------------------------
+// Cross product method operator
+//-------------------------------------------------------------------------------
+IvVector3           
+IvVector4::Cross(const IvVector4& vector) const
+{
+    return IvVector3(y*vector.z - z * vector.y,
+        z*vector.x - x * vector.z,
+        x*vector.y - y * vector.x);
+}
+
+//-------------------------------------------------------------------------------
+// @ Cross()
+//-------------------------------------------------------------------------------
+// Cross product friend operator
+//-------------------------------------------------------------------------------
+IvVector3    
+Cross(const IvVector4& vector1, const IvVector4& vector2)
+{
+    return IvVector3(vector1.y*vector2.z - vector1.z*vector2.y,
+        vector1.z*vector2.x - vector1.x*vector2.z,
+        vector1.x*vector2.y - vector1.y*vector2.x);
+}

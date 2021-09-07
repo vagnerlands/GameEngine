@@ -5,9 +5,6 @@
 #include "GL/glut.h"
 #include <iostream>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H 
-
 bool Graphics::CRendererOGL::Create()
 {
 	if (mRenderer == nullptr)
@@ -36,11 +33,12 @@ void Graphics::CRendererOGL::PrepareFrame()
 	// Set background (clear) color to black
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 }
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/glm.hpp>
 void Graphics::CRendererOGL::PrepareCamera2D()
 {
-    glm::mat4 proj = glm::ortho(0.f, (float)mWidth, 0.f, (float)mHeight);
+    // debug purposes
+    //glm::mat4 proj = glm::ortho(0.f, (float)mWidth, 0.f, (float)mHeight);
 
 	IvMatrix44 ortho;
 
@@ -60,7 +58,7 @@ void Graphics::CRendererOGL::PrepareCamera2D()
 	ortho(1, 3) = -(mHeight/recipY);
 	//ortho(2, 3) =  ((cFar + cNear)/recipZ);
 
-    SetProjectionMatrix(ortho);
+    SetProjectionMatrix(ortho);    
 }
 
 void Graphics::CRendererOGL::PrepareCamera3D()
@@ -117,6 +115,7 @@ void Graphics::CRendererOGL::PrepareCamera3D()
 	matrix(1, 3) = eyeInverse.GetY();
 	matrix(2, 3) = eyeInverse.GetZ();
 	SetViewMatrix(matrix);
+    mFrustum.CalculateFrustum();
 }
 
 //-------------------------------------------------------------------------------
@@ -189,21 +188,7 @@ Int32 Graphics::CRendererOGL::InitializeGraphics(Int32 width, Int32 height, bool
 }
 
 Graphics::CRendererOGL::CRendererOGL() 
-{
-    FT_Library ft;
-    if (FT_Init_FreeType(&ft))
-    {
-        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-        //return ;
-    }
-
-    FT_Face face;
-    if (FT_New_Face(ft, "Assets/Fonts/tahoma.ttf", 0, &face))
-    {
-        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-        //return ;
-    }
-}
+{}
 
 //-------------------------------------------------------------------------------
 // @ IvRendererOGL::SetProjectionMatrix()

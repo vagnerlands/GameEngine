@@ -160,7 +160,7 @@ IvPlane::Set( float a, float b, float c, float d )
     // normalize for cheap distance checks
     float lensq = a*a + b*b + c*c;
     // length of normal had better not be zero
-    ASSERT( !::IsZero( lensq ) );
+    //ASSERT( !::IsZero( lensq ) );
 
     // recover gracefully
     if ( ::IsZero( lensq ) )
