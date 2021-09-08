@@ -71,6 +71,7 @@ namespace Graphics
         const IvVector3& GetScale() const;
         const IvQuat& GetRotation() const;
         const IvVector2& GetUVFactor() const;
+        const AABB& GetBoundingBox() const;
 
         const shared_ptr<Graphics::IDrawable> GetDrawable() const;
 
@@ -97,6 +98,8 @@ namespace Graphics
 		IvMatrix44		m_model;
 		// does this item cast a shadow
 		bool			m_hasShadow;
+        // bounding box of the inner drawable + transformations
+        AABB            m_boundingBox;
         // shall display a bounding box around the Drawable
         std::shared_ptr<SceneItem>  m_nextScene = nullptr;
 	};

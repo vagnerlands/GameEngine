@@ -15,38 +15,38 @@
 //																		 //
 //***********************************************************************//
 
-// Like above, instead of saying a number for the ABC and D of the plane, we
-// want to be more descriptive.
-enum PlaneData
-{
-    A = 0,				// The X value of the plane's normal
-    B = 1,				// The Y value of the plane's normal
-    C = 2,				// The Z value of the plane's normal
-    D = 3				// The distance the plane is from the origin
-};
+//// Like above, instead of saying a number for the ABC and D of the plane, we
+//// want to be more descriptive.
+//enum PlaneData
+//{
+//    A = 0,				// The X value of the plane's normal
+//    B = 1,				// The Y value of the plane's normal
+//    C = 2,				// The Z value of the plane's normal
+//    D = 3				// The distance the plane is from the origin
+//};
 
-///////////////////////////////// NORMALIZE PLANE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////	This normalizes a plane (A side) from a given frustum.
-/////
-///////////////////////////////// NORMALIZE PLANE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-
-void NormalizePlane(float frustum[6][4], int side)
-{
-    // Here we calculate the magnitude of the normal to the plane (point A B C)
-    // Remember that (A, B, C) is that same thing as the normal's (X, Y, Z).
-    // To calculate magnitude you use the equation:  magnitude = sqrt( x^2 + y^2 + z^2)
-    float magnitude = (float)sqrt(frustum[side][A] * frustum[side][A] +
-        frustum[side][B] * frustum[side][B] +
-        frustum[side][C] * frustum[side][C]);
-
-    // Then we divide the plane's values by it's magnitude.
-    // This makes it easier to work with.
-    frustum[side][A] /= magnitude;
-    frustum[side][B] /= magnitude;
-    frustum[side][C] /= magnitude;
-    frustum[side][D] /= magnitude;
-}
+/////////////////////////////////// NORMALIZE PLANE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+///////
+///////	This normalizes a plane (A side) from a given frustum.
+///////
+/////////////////////////////////// NORMALIZE PLANE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+//
+//void NormalizePlane(float frustum[6][4], int side)
+//{
+//    // Here we calculate the magnitude of the normal to the plane (point A B C)
+//    // Remember that (A, B, C) is that same thing as the normal's (X, Y, Z).
+//    // To calculate magnitude you use the equation:  magnitude = sqrt( x^2 + y^2 + z^2)
+//    float magnitude = (float)sqrt(frustum[side][A] * frustum[side][A] +
+//        frustum[side][B] * frustum[side][B] +
+//        frustum[side][C] * frustum[side][C]);
+//
+//    // Then we divide the plane's values by it's magnitude.
+//    // This makes it easier to work with.
+//    frustum[side][A] /= magnitude;
+//    frustum[side][B] /= magnitude;
+//    frustum[side][C] /= magnitude;
+//    frustum[side][D] /= magnitude;
+//}
 
 
 ///////////////////////////////// CALCULATE FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
@@ -115,8 +115,7 @@ void Frustum::CalculateFrustum()
     //    fClip[11] - fClip[8], 
     //    fClip[15] - fClip[12]
     //);
-
-    IvVector4 right = IvVector4(-columns[0].GetX(), -columns[0].GetY(), -columns[0].GetZ(), -columns[0].GetW()) + columns[3] ;
+    IvVector4 right = -columns[0] + columns[3];
     m_frustum[eFrustumSide_Right] = IvPlane(right.GetX(), right.GetY(), right.GetZ(), right.GetW());
     /*m_frustum[eFrustumSide_Right] = IvPlane(
         fClip[3] - fClip[0],
@@ -191,7 +190,7 @@ void Frustum::CalculateFrustum()
     //    fClip[11] - fClip[9],
     //    fClip[15] - fClip[13]
     //);
-    IvVector4 top = IvVector4(-columns[1].GetX(), -columns[1].GetY(), -columns[1].GetZ(), -columns[1].GetW()) + columns[3];
+    IvVector4 top = -columns[1] + columns[3];
     m_frustum[eFrustumSide_Top] = IvPlane(top.GetX(), top.GetY(), top.GetZ(), top.GetW());
     //m_Frustum[TOP][A] = clip[3] - clip[1];
     //m_Frustum[TOP][B] = clip[7] - clip[5];
@@ -237,7 +236,7 @@ void Frustum::CalculateFrustum()
     //    fClip[11] + fClip[10],
     //    fClip[15] + fClip[14]
     //);
-    IvVector4 _far = IvVector4(-columns[2].GetX(), -columns[2].GetY(), -columns[2].GetZ(), -columns[2].GetW()) + columns[3];
+    IvVector4 _far = -columns[2] + columns[3];
     m_frustum[eFrustumSide_Front] = IvPlane(_far.GetX(), _far.GetY(), _far.GetZ(), _far.GetW());
     //m_Frustum[FRONT][A] = clip[3] + clip[2];
     //m_Frustum[FRONT][B] = clip[7] + clip[6];

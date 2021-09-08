@@ -1,7 +1,8 @@
 #include "Skybox.h"
 // TODO: make this cross platform
 #include "Factory/ModelFactory.h"
-#include "glm/glm.hpp"
+#include "IvVector2.h"
+#include "IvVector3.h"
 
 shared_ptr<UtilitiesCore::Skybox> UtilitiesCore::Skybox::CreateSky(const std::string& id, const vector<std::string>& faces)
 {
@@ -67,24 +68,24 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 	tex.m_isCubeMap = true;
 	meshValue.m_textures.push_back(tex);
 
-	glm::vec3 boxVertexes[] =
+    IvVector3 boxVertexes[] =
 	{
-		glm::vec3(-1.0, -1.0,  1.0),
-		glm::vec3(1.0, -1.0,  1.0),
-		glm::vec3(1.0,  1.0,  1.0),
-		glm::vec3(-1.0,  1.0,  1.0),
-		glm::vec3(-1.0, -1.0, -1.0),
-		glm::vec3(1.0, -1.0, -1.0),
-		glm::vec3(1.0,  1.0, -1.0),
-		glm::vec3(-1.0,  1.0, -1.0)
+        IvVector3(-1.0, -1.0,  1.0),
+        IvVector3(1.0, -1.0,  1.0),
+        IvVector3(1.0,  1.0,  1.0),
+        IvVector3(-1.0,  1.0,  1.0),
+        IvVector3(-1.0, -1.0, -1.0),
+        IvVector3(1.0, -1.0, -1.0),
+        IvVector3(1.0,  1.0, -1.0),
+        IvVector3(-1.0,  1.0, -1.0)
 	};
 
-	glm::vec2 boxTextCoords[] = 
+    IvVector2 boxTextCoords[] =
 	{
-		glm::vec2(0, 0),
-		glm::vec2(0, 1),
-		glm::vec2(1, 1),
-		glm::vec2(1, 0)
+        IvVector2(0, 0),
+        IvVector2(0, 1),
+        IvVector2(1, 1),
+        IvVector2(1, 0)
 	};
 
 	const Int32 cCountElements = sizeof(boxVertexes) / sizeof(boxVertexes[0]);

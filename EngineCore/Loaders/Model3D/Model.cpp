@@ -55,62 +55,15 @@ SModelMesh Model::processMesh(aiMesh * mesh, const aiScene * scene)
     for (UInt32 i = 0; i < mesh->mNumVertices; i++)
     {
         SModelVertex vertex;
-        glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
-        // positions
-        vector.x = mesh->mVertices[i].x;
-        vector.y = mesh->mVertices[i].y;
-        vector.z = mesh->mVertices[i].z;
-        vertex.Position = vector;
-        // normals
-        if (mesh->mNormals) // does the mesh contain normal coordinates
-        {
-            vector.x = mesh->mNormals[i].x;
-            vector.y = mesh->mNormals[i].y;
-            vector.z = mesh->mNormals[i].z;
-            vertex.Normal = vector;
-        }
-        else
-        {
-            vertex.Normal = glm::vec3(0.f, 1.f, 0.f);
-        }
-        // texture coordinates
-        if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
-        {
-            glm::vec2 vec;
-            // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
-            // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
-            vec.x = mesh->mTextureCoords[0][i].x;
-            vec.y = mesh->mTextureCoords[0][i].y;
-            vertex.TexCoords = vec;
-        }
-        else
-        {
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
-        }
-        // tangent
-        if (mesh->mTangents != nullptr)
-        {
-            vector.x = mesh->mTangents[i].x;
-            vector.y = mesh->mTangents[i].y;
-            vector.z = mesh->mTangents[i].z;
-            vertex.Tangent = vector;
-        }
-        else
-        {
-            vertex.Tangent = glm::vec3(0.f, 0.f, 0.f);
-        }
-        // bitangent
-        if (mesh->mBitangents != nullptr)
-        {
-            vector.x = mesh->mBitangents[i].x;
-            vector.y = mesh->mBitangents[i].y;
-            vector.z = mesh->mBitangents[i].z;
-            vertex.Bitangent = vector;
-        }
-        else
-        {
-            vertex.Bitangent = glm::vec3(0.f, 0.f, 0.f);
-        }
+
+        setIvVector3(mesh->mVertices, i, vertex.Position);
+        setIvVector3(mesh->mNormals, i, vertex.Normal);
+        // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
+        // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
+        setIvVector2(mesh->mTextureCoords[0], i, vertex.TexCoords);
+        setIvVector3(mesh->mTangents, i, vertex.Tangent);
+        setIvVector3(mesh->mBitangents, i, vertex.Bitangent);
+
         processedMesh.m_vertices.push_back(vertex);
     }
     // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
@@ -239,6 +192,16 @@ vector<SModelTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType
     return textures;
 }
 
+void Model::setIvVector3(const aiVector3D * input, UInt32 offset, IvVector3 & output) const
+{
+    output = IvVector3(input[offset].x, input[offset].y, input[offset].z);
+}
+
+void Model::setIvVector2(const aiVector3D * input, UInt32 offset, IvVector2 & output) const
+{
+    output = IvVector2(input[offset].x, input[offset].y);
+}
+
 AABB Model::calculateBoundingBox(const vector<SModelMesh>& meshes) const
 {
     AABB result;
@@ -247,19 +210,19 @@ AABB Model::calculateBoundingBox(const vector<SModelMesh>& meshes) const
         for (SModelVertex m : mesh.m_vertices)
         {
             // Maximals
-            if (result.Max.x < m.Position.x)
-                result.Max.x = m.Position.x;
-            if (result.Max.y < m.Position.y)
-                result.Max.y = m.Position.y;
-            if (result.Max.z < m.Position.z)
-                result.Max.z = m.Position.z;
+            if (result.Max.GetX() < m.Position.GetX())
+                result.Max.SetX(m.Position.GetX());
+            if (result.Max.GetY() < m.Position.GetY())
+                result.Max.SetY(m.Position.GetY());
+            if (result.Max.GetZ() < m.Position.GetZ())
+                result.Max.SetZ(m.Position.GetZ());
             // Minimals
-            if (result.Min.x > m.Position.x)
-                result.Min.x = m.Position.x;
-            if (result.Min.y > m.Position.y)
-                result.Min.y = m.Position.y;
-            if (result.Min.z > m.Position.z)
-                result.Min.z = m.Position.z;
+            if (result.Min.GetX() > m.Position.GetX())
+                result.Min.SetX(m.Position.GetX());
+            if (result.Min.GetY() > m.Position.GetY())
+                result.Min.SetY(m.Position.GetY());
+            if (result.Min.GetZ() > m.Position.GetZ())
+                result.Min.SetZ(m.Position.GetZ());
         }
     }
     return result;

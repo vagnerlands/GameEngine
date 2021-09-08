@@ -16,6 +16,11 @@ Graphics::SceneItem& Graphics::RenderScene::Add(const std::string& id, shared_pt
     return *scene;
 }
 
+Graphics::SceneItem& Graphics::RenderScene::Find(const std::string& id)
+{
+    return *find(id);
+}
+
 void Graphics::RenderScene::Change(const std::string& id, shared_ptr<IDrawable> pDrawable)
 {
     shared_ptr<Graphics::SceneItem> pObj = find(id);

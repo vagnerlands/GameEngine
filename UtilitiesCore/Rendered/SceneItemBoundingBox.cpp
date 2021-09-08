@@ -1,7 +1,7 @@
 #include "SceneItemBoundingBox.h"
 #include "Factory/ModelFactory.h" 
 #include "OpenGL/CModelOGL.h"
-#include "glm/glm.hpp"
+//#include "glm/glm.hpp"
 
 namespace UtilitiesCore
 {
@@ -23,15 +23,15 @@ namespace UtilitiesCore
         Types::SModelMesh meshValue;        
         meshValue.m_shaderName = "boundingBox";
         // box vertexes
-        vector<glm::vec3> vertices = {
-            glm::vec3(-1.0f, -1.0f, -1.0f),
-            glm::vec3(1.0f, -1.0f, -1.0f),
-            glm::vec3(1.0f, 1.0f, -1.0f),
-            glm::vec3(-1.0f, 1.0f, -1.0f),
-            glm::vec3(-1.0f, -1.0f, 1.0f),
-            glm::vec3(1.0f, -1.0f, 1.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            glm::vec3(-1.0f, 1.0f, 1.0f)
+        vector<IvVector3> vertices = {
+            IvVector3(-1.0f, -1.0f, -1.0f),
+            IvVector3(1.0f, -1.0f, -1.0f),
+            IvVector3(1.0f, 1.0f, -1.0f),
+            IvVector3(-1.0f, 1.0f, -1.0f),
+            IvVector3(-1.0f, -1.0f, 1.0f),
+            IvVector3(1.0f, -1.0f, 1.0f),
+            IvVector3(1.0f, 1.0f, 1.0f),
+            IvVector3(-1.0f, 1.0f, 1.0f)
         };
 
 
@@ -42,14 +42,14 @@ namespace UtilitiesCore
             const AABB& bb = modelOglRef->GetBoundaryBox();
             vertices.clear();
             vertices = {
-                glm::vec3(bb.Min.x, bb.Min.y,bb.Min.z),
-                glm::vec3(bb.Max.x, bb.Min.y,bb.Min.z),
-                glm::vec3(bb.Max.x, bb.Max.y,bb.Min.z),
-                glm::vec3(bb.Min.x, bb.Max.y,bb.Min.z),
-                glm::vec3(bb.Min.x, bb.Min.y,bb.Max.z),
-                glm::vec3(bb.Max.x, bb.Min.y,bb.Max.z),
-                glm::vec3(bb.Max.x, bb.Max.y,bb.Max.z),
-                glm::vec3(bb.Min.x, bb.Max.y,bb.Max.z)
+                IvVector3(bb.Min.GetX(), bb.Min.GetY(),bb.Min.GetZ()),
+                IvVector3(bb.Max.GetX(), bb.Min.GetY(),bb.Min.GetZ()),
+                IvVector3(bb.Max.GetX(), bb.Max.GetY(),bb.Min.GetZ()),
+                IvVector3(bb.Min.GetX(), bb.Max.GetY(),bb.Min.GetZ()),
+                IvVector3(bb.Min.GetX(), bb.Min.GetY(),bb.Max.GetZ()),
+                IvVector3(bb.Max.GetX(), bb.Min.GetY(),bb.Max.GetZ()),
+                IvVector3(bb.Max.GetX(), bb.Max.GetY(),bb.Max.GetZ()),
+                IvVector3(bb.Min.GetX(), bb.Max.GetY(),bb.Max.GetZ())
             };
         }
 
@@ -59,7 +59,7 @@ namespace UtilitiesCore
         {
             SModelVertex entry;
             entry.Position = vertices[i];
-            entry.TexCoords = glm::vec2(0,0);
+            entry.TexCoords = IvVector2(0.f,0.f);
             meshValue.m_vertices.push_back(entry);
         }
 

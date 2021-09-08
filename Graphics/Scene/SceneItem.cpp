@@ -58,6 +58,8 @@ void Graphics::SceneItem::updateModel()
 	translateModel.Translation(GetLocation());
 	// combine both transformations
 	m_model = translateModel * scaleModel * rotateModel;
+    //m_boundingBox.Min = m_boundingBox.Min * translateModel * scaleModel * rotateModel;
+    //m_boundingBox.Max = m_boundingBox.Max * translateModel * scaleModel * rotateModel;
 
 }
 
@@ -132,5 +134,10 @@ Graphics::SceneItem::DisplayBoundingBox(bool display)
     return *this;
 }
 
+const AABB& 
+Graphics::SceneItem::GetBoundingBox() const
+{
+    return m_boundingBox;
+}
 
 

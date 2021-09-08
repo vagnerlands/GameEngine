@@ -26,6 +26,8 @@ namespace Graphics
 
 		virtual Graphics::SceneItem& Add(const std::string& id, shared_ptr<IDrawable> pDrawable, eSceneItemType type);
 
+        virtual Graphics::SceneItem& Find(const std::string& id);
+
 		// replace the current model by another model
 		virtual void Change(const std::string& id, shared_ptr<IDrawable> pDrawable);
 

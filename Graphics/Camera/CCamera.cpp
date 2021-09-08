@@ -63,18 +63,21 @@ void CCamera::MoveForward(Float Distance)
 	IvVector3 viewDir = m_camRotation.GetColumn(2);
 	//m_position = m_position + (m_viewDir * (-Distance));
 	m_position = m_position + (viewDir * (-Distance));
+    //cout << " Camera x: " << m_position.GetX() << ", y: " << m_position.GetY() << ", z: " << m_position.GetZ() << endl;
 }
 
 void CCamera::MoveUpward(Float Distance)
 {
 	IvVector3 upVector = m_camRotation.GetColumn(1);
 	m_position = m_position + (upVector * Distance);
+    //cout << " Camera x: " << m_position.GetX() << ", y: " << m_position.GetY() << ", z: " << m_position.GetZ() << endl;
 }
 
 void CCamera::MoveRight(Float Distance)
 {
 	IvVector3 rightVector = m_camRotation.GetColumn(0);
 	m_position = m_position + (rightVector* Distance);
+    cout << " Camera x: " << m_position.GetX() << ", y: " << m_position.GetY() << ", z: " << m_position.GetZ() << endl;
 }
 
 void CCamera::HoverForward(Float Distance)

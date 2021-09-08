@@ -12,6 +12,8 @@
 #include "IvVector3.h"
 #include "IvVector4.h"
 
+#include "AABB.h"
+
 #include <glm/glm.hpp>
 
 #include "GL/glew.h"
@@ -114,15 +116,15 @@ namespace Types
     struct SModelVertex
     {
         // position
-        glm::vec3 Position;
+        IvVector3 Position = { 0.f, 0.f, 0.f };
         // normal
-        glm::vec3 Normal;
+        IvVector3 Normal = { 0.f, 0.f, 0.f};
         // texCoords
-        glm::vec2 TexCoords;
+        IvVector2 TexCoords = { 0.f, 0.f };
         // tangent
-        glm::vec3 Tangent;
+        IvVector3 Tangent = {0.f, 0.f, 0.f};
         // bitangent
-        glm::vec3 Bitangent;
+        IvVector3 Bitangent = { 0.f, 0.f, 0.f};
     };
 
 

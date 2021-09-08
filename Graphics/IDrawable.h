@@ -4,6 +4,7 @@
 #include "CommonTypes.h"
 #include "IvVector3.h"
 #include "IvQuat.h"
+#include "AABB.h"
 #include "Shaders/glsl.h"
 
 using namespace Types;

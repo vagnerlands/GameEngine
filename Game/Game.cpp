@@ -90,11 +90,13 @@ bool Game::PostRendererInitialize()
     KeyDispatcher::Instance().Bind('w', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveForward(dt*(clamp(cInitialSpeed+(cycles*cAcceleration), cMaxSpeed)));
+        //cout << "Distance from Camera to Yoni2 is << " << Distance(Graphics::IRenderer::mRenderer->GetCamera().m_position, Graphics::RenderScene::Instance().Find("Yoni2").GetLocation()) << endl;
     });
 
     KeyDispatcher::Instance().Bind('s', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveForward(-dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
+        //cout << "Distance from Camera to Yoni2 is << " << Distance(Graphics::IRenderer::mRenderer->GetCamera().m_position, Graphics::RenderScene::Instance().Find("Yoni2").GetLocation()) << endl;
     });
 
     KeyDispatcher::Instance().Bind('d', [=](Float dt, Int32 cycles)
@@ -122,7 +124,7 @@ bool Game::PostRendererInitialize()
 	// Set the view parameters in renderer
 	Graphics::IRenderer::mRenderer->SetFOV(90.0F);
 	// Update camera to be above ground
-	Graphics::IRenderer::mRenderer->GetCamera().MoveRight(5.f);
+	Graphics::IRenderer::mRenderer->GetCamera().MoveRight(500.f);
 	Graphics::IRenderer::mRenderer->GetCamera().MoveForward(1000.f);
 	Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(180.f);
 	Graphics::IRenderer::mRenderer->GetCamera().RotateY(90.f);
@@ -158,7 +160,7 @@ bool Game::PostRendererInitialize()
 
     Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed)
         .SetScale(IvVector3(1.f, 1.f, 1.f))
-        .SetLocation(IvVector3(200.0, 0.5, 0));
+        .SetLocation(IvVector3(500.0, 0.5, 0));
 
     //Graphics::RenderScene::Instance().Add("Yoni1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed)
     //    .SetScale(IvVector3(1.f, 1.f, 1.f))
@@ -461,7 +463,7 @@ void Game::Render(float dt)
 
     Graphics::IRenderer::mRenderer->PrepareCamera2D();
     Graphics::RenderUI::Instance().Render(dt);
-    Graphics::TextRenderer::Instance().Render(string("FPS ") += std::to_string(GetFPS()), 12, 470, 0.25f, IvVector3(0, 1, 0));
+    Graphics::TextRenderer::Instance().Render(string("FPS ") += std::to_string(GetFPS()), 12, 0, 0.25f, IvVector3(0, 1, 0));
 
 	glutSwapBuffers();
 }

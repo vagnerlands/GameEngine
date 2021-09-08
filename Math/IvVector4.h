@@ -80,6 +80,8 @@ public:
     // addition/subtraction
     IvVector4 operator+( const IvVector4& other ) const;
     IvVector4& operator+=( const IvVector4& other );
+
+    IvVector4 operator-() const;
     IvVector4 operator-( const IvVector4& other ) const;
     IvVector4& operator-=( const IvVector4& other );
 
