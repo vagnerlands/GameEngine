@@ -32,7 +32,7 @@ bool CSoundHolder::Create(const string& pathToTexturesFile, UInt32 maxAllocSize)
 		initAudio();
 
 		/* While using delay for showcase, don't actually do this in your project */
-		SDL_Delay(5000);
+		SDL_Delay(1000);
 	}
 	return false;
 }

@@ -304,7 +304,10 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 
 		// draw all meshes mesh
 		glBindVertexArray(m_drawAttr[i].m_vertexArrayObject);
-		glDrawElements(GL_TRIANGLES, m_drawAttr[i].m_indicesCount, GL_UNSIGNED_INT, 0);
+		glDrawElements(convertRenderingPrimitive(si.GetRenderingPrimitive()), 
+            m_drawAttr[i].m_indicesCount, 
+            GL_UNSIGNED_INT, 
+            0);
 
 		// set back the opengl directives back to what it was
 		if (m_isWireMode)
@@ -342,6 +345,22 @@ bool Graphics::CModelOGL::Commit()
 
 	// return creation status
 	return retVal;
+}
+
+GLenum Graphics::CModelOGL::convertRenderingPrimitive(eRenderingPrimitive primitive) const
+{
+    switch (primitive)
+    {
+        case eRenderingPrimitive::eRenderingPrimitive_TriangleFan:
+            return GL_TRIANGLE_FAN;
+        case eRenderingPrimitive::eRenderingPrimitive_TriangleStrip:
+            return GL_TRIANGLE_STRIP;
+        case eRenderingPrimitive::eRenderingPrimitive_Lines:
+            return GL_LINES;
+        case eRenderingPrimitive::eRenderingPrimitive_Triangles:
+        default:        
+            return GL_TRIANGLES;
+    }
 }
 
 UInt32 Graphics::CModelOGL::findPosition(float p_animation_time, const aiNodeAnim* p_node_anim)

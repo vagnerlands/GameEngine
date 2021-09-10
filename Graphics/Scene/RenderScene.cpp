@@ -106,6 +106,11 @@ void Graphics::RenderScene::Render(float dt, bool isRenderingShadows) const
         {
             pObj->Render(dt, isRenderingShadows);
         }
+        else
+        {
+            // debug
+            cout << pObj->GetId().c_str() << " is out of frustum" << endl;
+        }
 	}
 }
 

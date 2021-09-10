@@ -23,6 +23,7 @@ namespace Graphics
 		virtual void PrepareFrame() = 0;
 		virtual void PrepareCamera2D() = 0;
 		virtual void PrepareCamera3D() = 0;
+        virtual void SwapBuffer() = 0;
 
 		virtual void Resize(UInt32 width, UInt32 height) = 0;
 

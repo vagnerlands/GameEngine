@@ -10,10 +10,7 @@ public:
 	{
 
 	}
-	virtual ~MainOgl()
-	{
-
-	}
+    virtual ~MainOgl();
 
 	virtual void StartUp(int argv, char** argc);
 };

@@ -147,6 +147,10 @@ void KeyboardRelease(UByte key, int x, int y)
 	EngineCore::IGame::mGame->GetGameController()->VOnKeyUp(key);
 }
 
+MainOgl::~MainOgl()
+{
+}
+
 void MainOgl::StartUp(int argv, char** argc)
 {
     // Initialize all Factories

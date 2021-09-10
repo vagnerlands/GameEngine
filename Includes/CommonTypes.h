@@ -83,6 +83,14 @@ namespace Types
 		ProcessType_LoadShader
 	};
 
+    enum eRenderingPrimitive
+    {
+        eRenderingPrimitive_Triangles = 0,
+        eRenderingPrimitive_TriangleStrip,
+        eRenderingPrimitive_TriangleFan,
+        eRenderingPrimitive_Lines,
+    };
+
 
 
 

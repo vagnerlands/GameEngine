@@ -33,6 +33,7 @@ namespace Graphics
         virtual SceneItem& SetRotation(const IvQuat& newRotation);
         virtual SceneItem& SetTextureUV(const IvVector2& uvFactor);
         virtual SceneItem& DisplayBoundingBox(bool display);
+        virtual SceneItem& SetRenderingPrimitive(eRenderingPrimitive primitive);
         // end of groovy
 
         virtual void SetUpScene(cwc::glShader* pShader) const;
@@ -72,6 +73,7 @@ namespace Graphics
         const IvQuat& GetRotation() const;
         const IvVector2& GetUVFactor() const;
         IvAABB GetBoundingBox() const;
+        eRenderingPrimitive GetRenderingPrimitive() const;
 
         const shared_ptr<Graphics::IDrawable> GetDrawable() const;
 
@@ -85,21 +87,22 @@ namespace Graphics
 		// model to be rendered
         shared_ptr<Graphics::IDrawable> m_pDrawable;
 		// identification
-		std::string		m_sceneItemId;
+		std::string		        m_sceneItemId;
 		// world location of this drawable
-		IvVector3		m_location;
+		IvVector3		        m_location;
 		// scale resize for the model
-		IvVector3		m_scale;
+		IvVector3		        m_scale;
 		// rotation matrix for the model
-		IvQuat			m_rotation;
+		IvQuat			        m_rotation;
 		// texture resize, default value is 1x1
-		IvVector2		m_uvFactor;
+		IvVector2		        m_uvFactor;
 		// pre-calculated model
-		IvMatrix44		m_model;
+		IvMatrix44		        m_model;
 		// does this item cast a shadow
-		bool			m_hasShadow;
+		bool			        m_hasShadow;
+        eRenderingPrimitive     m_primitive;
         // bounding box of the inner drawable + transformations
-        const IvAABB*   m_pBoundingBox;
+        const IvAABB*           m_pBoundingBox;
         // shall display a bounding box around the Drawable
         std::shared_ptr<SceneItem>  m_nextScene = nullptr;
 	};
@@ -123,6 +126,11 @@ inline const IvQuat& Graphics::SceneItem::GetRotation() const
 inline const IvVector2& Graphics::SceneItem::GetUVFactor() const
 {
 	return m_uvFactor;
+}
+
+inline eRenderingPrimitive Graphics::SceneItem::GetRenderingPrimitive() const
+{
+    return m_primitive;
 }
 
 inline const IvMatrix44& Graphics::SceneItem::GetModel() const

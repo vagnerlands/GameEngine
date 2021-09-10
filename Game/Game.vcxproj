@@ -169,9 +169,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameControls.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameControls.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Binaries\Assets\animatedModelFragmentshader.txt" />

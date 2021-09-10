@@ -37,8 +37,7 @@ void Graphics::CRendererOGL::PrepareFrame()
 //#include <glm/glm.hpp>
 void Graphics::CRendererOGL::PrepareCamera2D()
 {
-    // debug purposes
-    //glm::mat4 proj = glm::ortho(0.f, (float)mWidth, 0.f, (float)mHeight);
+    glClear(GL_DEPTH_BUFFER_BIT); // avoid 2d objects to be "cut" by 3d objects in the scene
 
 	IvMatrix44 ortho;
 
@@ -116,6 +115,11 @@ void Graphics::CRendererOGL::PrepareCamera3D()
 	matrix(2, 3) = eyeInverse.GetZ();
 	SetViewMatrix(matrix);
     mFrustum.CalculateFrustum();
+}
+
+void Graphics::CRendererOGL::SwapBuffer()
+{
+    glutSwapBuffers();
 }
 
 //-------------------------------------------------------------------------------

@@ -4,7 +4,18 @@
 #include "IClock.h"
 #include "CClockOGL.h"
 #include "CThreadHolder.h"
-#include "GL/glut.h"
+//#include "GL/glut.h"
+#include "RenderUI.h"
+#include "Ilumination.h"
+#include "RenderScene.h"
+#include "CModelHolder.h"
+
+#include "CShaderHolder.h"
+#include "CModelHolder.h"
+#include "CParticlesSystemHolder.h"
+#include "CSoundHolder.h"
+#include "CTextureHolder.h"
+
 
 EngineCore::IGame* EngineCore::IGame::mGame = nullptr;
 
@@ -24,6 +35,16 @@ bool EngineCore::IGame::PreRendererInitialize(int argc, char * argv[])
 
 	if (!SetupSubsystems(Types::EGraphicsAPI::EGraphics_OGL))
 	{ }
+
+    //TODO: initialize lighting default values (some basic light somewhere)
+    CShaderHolder::Create();
+    // create model holder
+    CModelHolder::s_pInstance->Create(".\\Assets\\model.zip");
+    CParticlesSystemHolder::s_pInstance->Create(".\\Assets\\model.zip");
+    CSoundHolder::s_pInstance->Create("test", 1);
+    // allocation for VRAM textures
+    const UInt32 cTextureCacheSizeInMBs = 120;
+    CTextureHolder::s_pInstance->Create(".\\Assets\\textures.zip", cTextureCacheSizeInMBs * 1024U * 1024U);
 
 	return true;
 }
@@ -79,12 +100,15 @@ EngineCore::IGame::IGame() :
 	mMaxFps(0),
 	mClosedThreads(0)
 {
-	// 
 }
 
 EngineCore::IGame::~IGame()
 {
-	// TODO: destroy objects in the inverse order of the creation
+    // release all allocated resources
+    delete CParticlesSystemHolder::s_pInstance;
+    delete CTextureHolder::s_pInstance;
+    delete CShaderHolder::s_pInstance;
+    delete CModelHolder::s_pInstance;
 }
 
 bool EngineCore::IGame::ParseCommandLine(int argc, char * argv[])
@@ -109,6 +133,35 @@ bool EngineCore::IGame::SetupSubsystems(Types::EGraphicsAPI gfxApi)
 	// TODO: initialize mutexes/semaphores
 
 	return true;
+}
+
+void 
+EngineCore::IGame::Render(float dt)
+{   
+    CModelHolder::s_pInstance->Refresh(); // load pending objects into the Model database
+    
+    Graphics::IRenderer::mRenderer->PrepareFrame(); // set which buffers are used, set the modelview matrix and more
+
+    // first pass, using the shadows depth shader
+    Graphics::Ilumination::Instance().StartShadowsDepth();
+    Graphics::RenderScene::Instance().Render(dt, true);
+    Graphics::Ilumination::Instance().FinishShadowsDepth();
+
+    // adjust camera projection and view according to the current 
+    // frustum parameters (3d - perspective mode)
+    Graphics::IRenderer::mRenderer->PrepareCamera3D();    
+    Graphics::RenderScene::Instance().Render(dt, false); // Render everything in the scene database
+
+    // adjust camera projection and view according to the current 
+    // ortho parameters (2d - orthogonal mode)
+    Graphics::IRenderer::mRenderer->PrepareCamera2D();
+    Graphics::RenderUI::Instance().Render(dt); // render all UI objects
+}
+
+void
+EngineCore::IGame::PostRender()
+{
+    Graphics::IRenderer::mRenderer->SwapBuffer();
 }
 
 void

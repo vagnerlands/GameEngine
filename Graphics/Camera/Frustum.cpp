@@ -2,6 +2,7 @@
 #include "IRenderer.h"
 #include "OGLTypes.h"
 #include "glm/glm.hpp"
+#include <iostream>
 
 //***********************************************************************//
 //																		 //
@@ -18,6 +19,7 @@
 ///////////////////////////////// CALCULATE FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////
 /////	This extracts our frustum from the projection and modelview matrix.
+/////    and build the 6 planes of the frustum
 /////
 ///////////////////////////////// CALCULATE FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
@@ -39,6 +41,11 @@ void Frustum::CalculateFrustum()
 
     IvVector4 bottom = columns[1] + columns[3];
     m_frustum[eFrustumSide_Bottom] = IvPlane(bottom.GetX(), bottom.GetY(), bottom.GetZ(), bottom.GetW());
+    //std::cout << "--> BOTTOM offset " << m_frustum[eFrustumSide_Bottom].GetOffset() 
+    //    << " X: " << m_frustum[eFrustumSide_Bottom] .GetNormal().GetX() 
+    //    << " Y: " << m_frustum[eFrustumSide_Bottom].GetNormal().GetY()
+    //    << " Z: " << m_frustum[eFrustumSide_Bottom].GetNormal().GetZ()
+    //    << std::endl;
 
     IvVector4 top = -columns[1] + columns[3];
     m_frustum[eFrustumSide_Top] = IvPlane(top.GetX(), top.GetY(), top.GetZ(), top.GetW());
@@ -70,7 +77,7 @@ bool Frustum::IsSphereInFrustum(const IvVector3& point, float radius)
     // so we are inside of the frustum, but a distance of 3.  This is reflected below.
 
     // Go through all the sides of the frustum
-    for (Int32 i = eFrustumSide_First; i < eFrustumSide_Total; i++)
+    for (Int32 i = eFrustumSide_First; i < eFrustumSide_Front; i++)
     {
         if (m_frustum[i].Test(point) < -radius)
             return false;
@@ -106,7 +113,7 @@ bool Frustum::IsPointInFrustum(const IvVector3& point)
 //
 bool Frustum::IsCubeInFrustum(const IvVector3& min, const IvVector3& max)
 {
-    for (Int32 i = eFrustumSide_First; i < eFrustumSide_Total; i++)
+    for (Int32 i = eFrustumSide_First; i < eFrustumSide_Front; i++)
     {
         if (m_frustum[i].Test(min) < 0.f)
             return false;

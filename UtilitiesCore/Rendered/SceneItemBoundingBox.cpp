@@ -63,10 +63,16 @@ namespace UtilitiesCore
             meshValue.m_vertices.push_back(entry);
         }
 
+        //meshValue.m_indices = {
+        //    5, 4, 0, 1, 5, 0, 6, 5, 1, 2, 6, 1,
+        //    7, 6, 2, 3, 7, 2, 4, 7, 3, 0, 4, 3,
+        //    6, 7, 4, 5, 6, 4, 1, 0, 3, 2, 1, 3 
+        //};
+
         meshValue.m_indices = {
-            5, 4, 0, 1, 5, 0, 6, 5, 1, 2, 6, 1,
-            7, 6, 2, 3, 7, 2, 4, 7, 3, 0, 4, 3,
-            6, 7, 4, 5, 6, 4, 1, 0, 3, 2, 1, 3 
+            0, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 7,
+            7, 3, 7, 6, 6, 5, 5, 4, 1, 5, 5, 6,
+            6, 2
         };
 
 
@@ -75,7 +81,8 @@ namespace UtilitiesCore
         pBoundingBoxModel->Commit();
         /*this*/ReplaceDrawable(pBoundingBoxModel);
         /*this*/SetCastShadows(false);
-        pBoundingBoxModel->SetWireMode(true);
+        m_primitive = eRenderingPrimitive_Lines;
+        //pBoundingBoxModel->SetWireMode(true);
     }
 
     SceneItemBoundingBox::~SceneItemBoundingBox()

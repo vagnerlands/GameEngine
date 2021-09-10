@@ -10,7 +10,8 @@ Graphics::SceneItem::SceneItem(const std::string& id, shared_ptr<Graphics::IDraw
 	m_location(0.f, 0.f, 0.f), // default location
 	m_scale(1.f, 1.f, 1.f), // default scale (original size from editor)
 	m_uvFactor(1.f, 1.f),
-	m_hasShadow(true)    
+	m_hasShadow(true),
+    m_primitive(eRenderingPrimitive_Triangles)
 {
     if (pDrawable != nullptr)
         m_pBoundingBox = pDrawable->GetBoundaryBox();
@@ -131,6 +132,13 @@ Graphics::SceneItem::DisplayBoundingBox(bool display)
         m_nextScene->SetRotation(GetRotation());
         m_nextScene->SetScale(GetScale());
     }
+    return *this;
+}
+
+Graphics::SceneItem & 
+Graphics::SceneItem::SetRenderingPrimitive(eRenderingPrimitive primitive)
+{
+    m_primitive = primitive;
     return *this;
 }
 

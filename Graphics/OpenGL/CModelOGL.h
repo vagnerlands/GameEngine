@@ -67,7 +67,7 @@ namespace Graphics
         IvAABB                  m_boundaryBox;
 
 	private:
-		void applyTextures(const SDrawData& renderObject);
+        GLenum convertRenderingPrimitive(eRenderingPrimitive primitive) const;
 		UInt32 findPosition(float p_animation_time, const aiNodeAnim* p_node_anim);
 		UInt32 findRotation(float p_animation_time, const aiNodeAnim* p_node_anim);
 		UInt32 findScaling(float p_animation_time, const aiNodeAnim* p_node_anim);

@@ -13,9 +13,15 @@
     <ClCompile Include="Game.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="GameControls.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="GameControls.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
