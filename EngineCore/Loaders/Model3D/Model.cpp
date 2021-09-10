@@ -202,27 +202,14 @@ void Model::setIvVector2(const aiVector3D * input, UInt32 offset, IvVector2 & ou
     output = IvVector2(input[offset].x, input[offset].y);
 }
 
-AABB Model::calculateBoundingBox(const vector<SModelMesh>& meshes) const
+IvAABB Model::calculateBoundingBox(const vector<SModelMesh>& meshes) const
 {
-    AABB result;
+    IvAABB result;
     for (auto& mesh : meshes)
     {
         for (SModelVertex m : mesh.m_vertices)
         {
-            // Maximals
-            if (result.Max.GetX() < m.Position.GetX())
-                result.Max.SetX(m.Position.GetX());
-            if (result.Max.GetY() < m.Position.GetY())
-                result.Max.SetY(m.Position.GetY());
-            if (result.Max.GetZ() < m.Position.GetZ())
-                result.Max.SetZ(m.Position.GetZ());
-            // Minimals
-            if (result.Min.GetX() > m.Position.GetX())
-                result.Min.SetX(m.Position.GetX());
-            if (result.Min.GetY() > m.Position.GetY())
-                result.Min.SetY(m.Position.GetY());
-            if (result.Min.GetZ() > m.Position.GetZ())
-                result.Min.SetZ(m.Position.GetZ());
+            result.AddPoint(m.Position);
         }
     }
     return result;

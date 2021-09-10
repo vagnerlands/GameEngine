@@ -96,6 +96,7 @@ UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& 
 		vertices.Position = boxVertexes[i];
 		vertices.TexCoords = boxTextCoords[i%4];
 		meshValue.m_vertices.push_back(vertices);
+        pModel->m_boundaryBox.AddPoint(vertices.Position);
 	}
 
 	// make sure the vector is clear
@@ -147,7 +148,7 @@ void UtilitiesCore::Skybox::Tick(float delta_time)
 	// TODO: maybe animate the sky by playing a bit with the textures
 }
 
-const AABB & UtilitiesCore::Skybox::GetBoundaryBox() const
+const IvAABB*  UtilitiesCore::Skybox::GetBoundaryBox() const
 {
     return m_sceneItem.GetDrawable()->GetBoundaryBox();
 }

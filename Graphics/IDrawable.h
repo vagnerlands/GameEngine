@@ -4,7 +4,7 @@
 #include "CommonTypes.h"
 #include "IvVector3.h"
 #include "IvQuat.h"
-#include "AABB.h"
+#include "Collision/IvAABB.h"
 #include "Shaders/glsl.h"
 
 using namespace Types;
@@ -27,7 +27,7 @@ namespace Graphics
 		virtual void Update(float dt) = 0;
 		// render this object as is
 		virtual void Draw(const class SceneItem& si, float dt, bool isRenderingShadows) = 0;
-        virtual const AABB& GetBoundaryBox() const = 0;
+        virtual const IvAABB* GetBoundaryBox() const = 0;
 
 	private:
 		// copy operations

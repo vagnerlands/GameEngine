@@ -56,7 +56,7 @@ namespace Graphics
 		IvMatrix44& GetProjectionMatrix();
 		virtual void SetProjectionMatrix(const IvMatrix44& matrix);
         bool IsClip(const IvVector3& point);
-        bool IsClip(const IvVector3& min, const IvVector3& max);
+        bool IsClip(const IvAABB& aabb);
 
 		virtual Int32 InitializeGraphics(Int32 width, Int32 height, bool isFullScreen);
 

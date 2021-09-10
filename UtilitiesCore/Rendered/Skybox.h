@@ -30,7 +30,7 @@ namespace UtilitiesCore
 		virtual void Update(float dt) override;
 		virtual void Draw(const class Graphics::SceneItem& si, float dt, bool isRenderingShadows) override;
 		virtual void Tick(float delta_time);
-        virtual const AABB& GetBoundaryBox() const override;
+        virtual const IvAABB* GetBoundaryBox() const override;
 
 	protected:
 		// generated sky model

@@ -576,9 +576,9 @@ aiQuaternion Graphics::CModelOGL::nlerp(aiQuaternion a, aiQuaternion b, float bl
 	return result.Normalize();
 }
 
-const AABB& Graphics::CModelOGL::GetBoundaryBox() const
+const IvAABB* Graphics::CModelOGL::GetBoundaryBox() const
 {
-    return m_boundaryBox;
+    return &m_boundaryBox;
 }
 void Graphics::CModelOGL::SetWireMode(bool display)
 {

@@ -139,7 +139,7 @@ bool Graphics::IRenderer::IsClip(const IvVector3 & point)
     return mFrustum.IsPointInFrustum(point);
 }
 
-bool Graphics::IRenderer::IsClip(const IvVector3 & min, const IvVector3 & max)
+bool Graphics::IRenderer::IsClip(const IvAABB& aabb)
 {
-    return mFrustum.IsRectangleInFrustum(min, max);
+    return mFrustum.IsAABBInFrustum(aabb);
 }

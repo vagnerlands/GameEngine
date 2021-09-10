@@ -30,7 +30,7 @@ public:
     bool                            hasAnimations;
     Assimp::Importer*               m_importer;
     SBoneInformation*               m_pBoneInformation;
-    AABB                            m_boundaryBox;
+    IvAABB                          m_boundaryBox;
     
     // public methods
     Model();
@@ -52,7 +52,7 @@ private:
     vector<SModelTexture>   loadMaterialTextures(aiMaterial *mat, aiTextureType type, const string& typeName);
     void                    setIvVector3(const aiVector3D* input, UInt32 offset, IvVector3& output) const;
     void                    setIvVector2(const aiVector3D* input, UInt32 offset, IvVector2& output) const;
-    AABB                    calculateBoundingBox(const vector<SModelMesh>& meshes) const;
+    IvAABB                  calculateBoundingBox(const vector<SModelMesh>& meshes) const;
     UInt32                  estimateMeshesCount(aiNode * node) const;
     void                    estimateMeshesCountLooper(aiNode * node, UInt32& meshesCount) const;    
 };

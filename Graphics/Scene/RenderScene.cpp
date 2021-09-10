@@ -100,10 +100,12 @@ void Graphics::RenderScene::Render(float dt, bool isRenderingShadows) const
 	for (auto& it = m_items.begin(); it != m_items.end(); it++)
 	{
 		shared_ptr<Graphics::SceneItem> pObj = *it;
-        const IvVector3& loc = pObj->GetLocation();
-        const AABB& bb = pObj->GetDrawable()->GetBoundaryBox();
-        if (Graphics::IRenderer::mRenderer->IsClip(loc))
-		    pObj->Render(dt, isRenderingShadows);
+        //const IvVector3& loc = pObj->GetLocation();
+        const IvAABB bb = pObj->GetBoundingBox();
+        if (Graphics::IRenderer::mRenderer->IsClip(bb))
+        {
+            pObj->Render(dt, isRenderingShadows);
+        }
 	}
 }
 

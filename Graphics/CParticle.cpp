@@ -116,10 +116,10 @@ void Graphics::CParticle::Draw(const SceneItem& si, float dt, bool isRenderingSh
 	glUseProgram(0);
 }
 
-const AABB & Graphics::CParticle::GetBoundaryBox() const
+const IvAABB* Graphics::CParticle::GetBoundaryBox() const
 {
-    static const AABB aabb;
-    return aabb;
+    static const IvAABB aabb(IvVector3{ 0.f, 0.f, 0.f }, IvVector3{ 0.f, 0.f, 0.f });
+    return &aabb;
 }
 
 #pragma optimize( "", off )

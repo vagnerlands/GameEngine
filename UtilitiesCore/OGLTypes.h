@@ -12,7 +12,7 @@
 #include "IvVector3.h"
 #include "IvVector4.h"
 
-#include "AABB.h"
+#include "Collision/IvAABB.h"
 
 #include <glm/glm.hpp>
 
@@ -176,7 +176,7 @@ namespace Types
         // bone information
         vector<SVertexBoneData>	bones_id_weights_for_each_vertex;
         // axis aligned bounding box for clipping/collision purposes
-        AABB                    m_aabb;
+        IvAABB                  m_aabb;
         // shader name (Model.h will try to resolve the shader based on certain )
         string					m_shaderName = "model";
 

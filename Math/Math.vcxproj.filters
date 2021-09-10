@@ -5,6 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Src\Collision">
+      <UniqueIdentifier>{d9dc1dbd-61ea-4a28-9938-254f3c430ab5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -49,8 +52,8 @@
     <ClCompile Include="IvPlane.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="AABB.cpp">
-      <Filter>Src</Filter>
+    <ClCompile Include="Collision\IvAABB.cpp">
+      <Filter>Src\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,8 +102,8 @@
     <ClInclude Include="CommonMath.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="AABB.h">
-      <Filter>Src</Filter>
+    <ClInclude Include="Collision\IvAABB.h">
+      <Filter>Src\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

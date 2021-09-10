@@ -39,7 +39,7 @@ namespace Graphics
 		// commit changes
 		virtual bool Commit();
 
-        virtual const AABB& GetBoundaryBox() const override;
+        virtual const IvAABB* GetBoundaryBox() const override;
         virtual void SetWireMode(bool display) override;
 
 	protected:
@@ -64,7 +64,7 @@ namespace Graphics
 		Assimp::Importer		m_Importer;
 		bool                    m_hasAnimations;
 		bool                    m_isWireMode;
-        AABB                    m_boundaryBox;
+        IvAABB                  m_boundaryBox;
 
 	private:
 		void applyTextures(const SDrawData& renderObject);

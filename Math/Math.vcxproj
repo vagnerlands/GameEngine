@@ -159,7 +159,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AABB.cpp" />
+    <ClCompile Include="Collision\IvAABB.cpp" />
     <ClCompile Include="IvGaussianElim.cpp" />
     <ClCompile Include="IvLine3.cpp" />
     <ClCompile Include="IvLineSegment3.cpp" />
@@ -175,7 +175,7 @@
     <ClCompile Include="IvVector4.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AABB.h" />
+    <ClInclude Include="Collision\IvAABB.h" />
     <ClInclude Include="CommonMath.h" />
     <ClInclude Include="IvGaussianElim.h" />
     <ClInclude Include="IvLine3.h" />

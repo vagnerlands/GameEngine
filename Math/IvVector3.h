@@ -37,6 +37,7 @@ class IvVector3
     friend class IvPlane;
     friend class IvQuat;
     friend class IvRay3;
+    friend class IvAABB;
     
 public:
     // constructor/destructor

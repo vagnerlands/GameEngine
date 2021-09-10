@@ -10,8 +10,10 @@ Graphics::SceneItem::SceneItem(const std::string& id, shared_ptr<Graphics::IDraw
 	m_location(0.f, 0.f, 0.f), // default location
 	m_scale(1.f, 1.f, 1.f), // default scale (original size from editor)
 	m_uvFactor(1.f, 1.f),
-	m_hasShadow(true)
+	m_hasShadow(true)    
 {
+    if (pDrawable != nullptr)
+        m_pBoundingBox = pDrawable->GetBoundaryBox();
 	m_rotation.Identity();
 }
 
@@ -30,6 +32,7 @@ void Graphics::SceneItem::Render(float dt, bool isRenderingShadows) const
 void Graphics::SceneItem::ReplaceDrawable(shared_ptr<Graphics::IDrawable> pDrawable)
 {
 	m_pDrawable = pDrawable;
+    m_pBoundingBox = pDrawable->GetBoundaryBox();
 }
 
 void Graphics::SceneItem::Release()
@@ -58,9 +61,6 @@ void Graphics::SceneItem::updateModel()
 	translateModel.Translation(GetLocation());
 	// combine both transformations
 	m_model = translateModel * scaleModel * rotateModel;
-    //m_boundingBox.Min = m_boundingBox.Min * translateModel * scaleModel * rotateModel;
-    //m_boundingBox.Max = m_boundingBox.Max * translateModel * scaleModel * rotateModel;
-
 }
 
 void Graphics::SceneItem::SetUpScene(cwc::glShader* pShader) const
@@ -134,10 +134,10 @@ Graphics::SceneItem::DisplayBoundingBox(bool display)
     return *this;
 }
 
-const AABB& 
+IvAABB
 Graphics::SceneItem::GetBoundingBox() const
 {
-    return m_boundingBox;
+    return IvAABB(m_model.Transform(m_pBoundingBox->GetMinima()), m_model.Transform(m_pBoundingBox->GetMaxima())) ;
 }
 
 

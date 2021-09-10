@@ -39,17 +39,17 @@ namespace UtilitiesCore
         const Graphics::CModelOGL* modelOglRef = dynamic_cast<const Graphics::CModelOGL*>(mMeshReference.GetDrawable().get());
         if (modelOglRef != nullptr)
         {
-            const AABB& bb = modelOglRef->GetBoundaryBox();
+            const IvAABB& bb = *modelOglRef->GetBoundaryBox();
             vertices.clear();
             vertices = {
-                IvVector3(bb.Min.GetX(), bb.Min.GetY(),bb.Min.GetZ()),
-                IvVector3(bb.Max.GetX(), bb.Min.GetY(),bb.Min.GetZ()),
-                IvVector3(bb.Max.GetX(), bb.Max.GetY(),bb.Min.GetZ()),
-                IvVector3(bb.Min.GetX(), bb.Max.GetY(),bb.Min.GetZ()),
-                IvVector3(bb.Min.GetX(), bb.Min.GetY(),bb.Max.GetZ()),
-                IvVector3(bb.Max.GetX(), bb.Min.GetY(),bb.Max.GetZ()),
-                IvVector3(bb.Max.GetX(), bb.Max.GetY(),bb.Max.GetZ()),
-                IvVector3(bb.Min.GetX(), bb.Max.GetY(),bb.Max.GetZ())
+                IvVector3(bb.GetMinima().GetX(), bb.GetMinima().GetY(),bb.GetMinima().GetZ()),
+                IvVector3(bb.GetMaxima().GetX(), bb.GetMinima().GetY(),bb.GetMinima().GetZ()),
+                IvVector3(bb.GetMaxima().GetX(), bb.GetMaxima().GetY(),bb.GetMinima().GetZ()),
+                IvVector3(bb.GetMinima().GetX(), bb.GetMaxima().GetY(),bb.GetMinima().GetZ()),
+                IvVector3(bb.GetMinima().GetX(), bb.GetMinima().GetY(),bb.GetMaxima().GetZ()),
+                IvVector3(bb.GetMaxima().GetX(), bb.GetMinima().GetY(),bb.GetMaxima().GetZ()),
+                IvVector3(bb.GetMaxima().GetX(), bb.GetMaxima().GetY(),bb.GetMaxima().GetZ()),
+                IvVector3(bb.GetMinima().GetX(), bb.GetMaxima().GetY(),bb.GetMaxima().GetZ())
             };
         }
 
