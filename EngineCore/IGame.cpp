@@ -15,7 +15,7 @@
 #include "CParticlesSystemHolder.h"
 #include "CSoundHolder.h"
 #include "CTextureHolder.h"
-
+#include "Utils/Jobs.h"
 
 EngineCore::IGame* EngineCore::IGame::mGame = nullptr;
 
@@ -58,6 +58,7 @@ bool EngineCore::IGame::PostRendererInitialize()
 void EngineCore::IGame::ExecuteBackground()
 {
 	// this method should be overloaded
+    _Utils::Jobs::Instance().Process();
 }
 
 
@@ -74,6 +75,9 @@ void EngineCore::IGame::Display()
 		UpdateObjects(mClock->GetElapsedTime());
 		// render a scene according to current position of objects
 		Render(mClock->GetTimeInMili());
+
+        // build textures, if there are any to be build...
+        CTextureHolder::s_pInstance->Update();
 
 		mClock->Hold(mGame->GetMaxFPS());
 	}
@@ -98,8 +102,10 @@ EngineCore::IGame::IGame() :
 	mQuit(false),
 	mReadyToClose(false),
 	mMaxFps(0),
-	mClosedThreads(0)
+	mClosedThreads(0),
+    mGameController(1280, 720)
 {
+    KeyDispatcherFactory::Create(&mGameController);
 }
 
 EngineCore::IGame::~IGame()
@@ -168,6 +174,7 @@ void
 EngineCore::IGame::Reshape(Int32 w, Int32 h)
 {
 	Graphics::IRenderer::mRenderer->Resize(w, h);
+    mGameController.Resize(w, h);
 }
 
 Int32 EngineCore::IGame::GetFPS() const

@@ -11,6 +11,8 @@ using namespace std;
 
 class CPng : public I2dImage
 {
+    Byte* m_pImageDataBuffer;
+    void copyPngDataToOutputBuffer(UInt32 imageWidth, UInt32 imageHeight, UInt32 pixelDataSize, Byte* pPixelData);
 public:
 	CPng();
 
@@ -21,10 +23,6 @@ public:
 
 	virtual ~CPng();
 
-private:
-	static void ReadDataFromInputStream(png_structp png_ptr, png_bytep outBytes,
-		png_size_t byteCountToRead);
-	
 };
 
 #endif //_CPNG_H_

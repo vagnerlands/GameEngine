@@ -603,3 +603,27 @@ void Graphics::CModelOGL::SetWireMode(bool display)
 {
     m_isWireMode = display;
 }
+
+bool Graphics::CModelOGL::SetTexture(eTextures texture, const char * pTextureFile)
+{
+    bool found = false;
+    // if texture already exists, we replace it by the given texture
+    for (SModelTexture& t : m_drawAttr[0].m_textures)
+    {
+        if (t.m_uniformName == sTextureNames[texture])
+        {
+            t.m_filename = pTextureFile;
+            found = true;
+            break;
+        }
+    }
+    // if not found, we add this to the texture list 
+    // TODO: in case textures are added, the Shader and VBA should be replaced as well...
+    //if (!found)
+    //{
+    //    SModelTexture entry(sTextureNames[texture].c_str(), pTextureFile);
+    //    m_drawAttr[0].m_textures.push_back(entry);
+    //}
+
+    return found;
+}

@@ -21,6 +21,7 @@ namespace Graphics
 		virtual shared_ptr<Model> Allocate() = 0;
 		virtual bool Commit() = 0;        
         virtual void SetWireMode(bool display) = 0;
+        virtual bool SetTexture(eTextures texture, const char* pTextureFile = "__no_valid_texture__.bmp") = 0;
 	protected:
 		// data to be used, this shall be released once Commit() is called
         shared_ptr<Model>	m_pData;

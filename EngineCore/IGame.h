@@ -2,8 +2,7 @@
 #define _IGAME_H_
 
 #include "CommonTypes.h"
-
-class CGameController;
+#include "CGameController.h"
 
 using namespace Types;
 
@@ -87,6 +86,7 @@ namespace EngineCore
 		}
 
 		static IGame* mGame;          // global pointer
+        CGameController mGameController;
 
 	private:
 		// To avoid creation of this object without inheritance

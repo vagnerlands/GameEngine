@@ -41,15 +41,16 @@ public:
 
 	static bool Create(const string& pathToTexturesFile, UInt32 maxAllocSize);
 	void LoadTexture(const string& textId);
+    std::shared_ptr<I2dImage> PrepareTexture(const string& textId);
 	void RemoveTexture(const string& textId);
 	Graphics::ITexture* getTextureById(const string& textId);
 	Graphics::ITexture* getTextureVector(const vector<SModelTexture>& attr);
 	bool Bind(const string& texId) const ;
 	CTextureHolder::~CTextureHolder();
+    void Update();
 
 	// external callback event in case a resource is deallocated
 	static void OnRemoveEvent(const string& removeItem);
-
 	// local instance
 	static CTextureHolder* s_pInstance;
 
@@ -74,6 +75,7 @@ private:
     UInt32                  m_maxAllocSize;
     // total VRAM size in usage 
     UInt32                  m_sizeInUse;
+    static const string     sc_invalidTextureName;
     
 
 };

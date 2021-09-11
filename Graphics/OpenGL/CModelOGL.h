@@ -41,6 +41,7 @@ namespace Graphics
 
         virtual const IvAABB* GetBoundaryBox() const override;
         virtual void SetWireMode(bool display) override;
+        virtual bool SetTexture(eTextures texture, const char* pTextureFile = "__no_valid_texture__.bmp") override;
 
 	protected:
 

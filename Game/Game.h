@@ -6,8 +6,7 @@
 #include "GameControls.h"
 #include "IvVector3.h" // DEBUG - delete me
 
-class Game : 
-    public EngineCore::IGame
+class Game : public EngineCore::IGame
 {
 public:
 	Game();
@@ -27,7 +26,7 @@ protected:
 private:
 	Game(const Game& other) = delete;
 	Game& operator=(const Game& other) = delete;
-
+    // all the game input controls are handled here...
     GameControls mControls;
 };
 

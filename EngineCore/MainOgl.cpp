@@ -42,7 +42,7 @@ DWORD WINAPI BackgroundLoader(LPVOID lpParameter)
 
 void Reshape(Int32 w, Int32 h)
 {
-	Graphics::IRenderer::mRenderer->Resize(w, h);
+    EngineCore::IGame::mGame->Reshape(w, h);
 }
 
 void RunWrap()

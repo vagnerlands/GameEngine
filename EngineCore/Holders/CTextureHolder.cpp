@@ -9,8 +9,10 @@
 #endif
 #include "IMutex.h"
 #include "CFactory2dImage.h"
+#include "Utils/Jobs.h"
 
 CTextureHolder* CTextureHolder::s_pInstance = NULL;
+const string CTextureHolder::sc_invalidTextureName = "__no_valid_texture__.bmp";
 
 bool CTextureHolder::Create(const string& pathToTexturesFile, UInt32 maxAllocSize)
 {
@@ -22,6 +24,7 @@ bool CTextureHolder::Create(const string& pathToTexturesFile, UInt32 maxAllocSiz
 		if ((s_pInstance != nullptr) 
             && (s_pInstance->m_pResHandler->VOpen()))
 		{
+            s_pInstance->LoadTexture(sc_invalidTextureName);
 			return true;
 		}
 	}
@@ -34,7 +37,7 @@ CTextureHolder::CTextureHolder(const string& pathToTexturesFile, UInt32 maxAlloc
     m_sizeInUse(0U)
 {
 	// cross platform implementation for mutex creation
-	m_textureContentMapMutex = MutexFactory::Instance().Create("TextureMapMutex");
+	m_textureContentMapMutex = MutexFactory::Instance().Create("TextureMapMutex");    
 }
 
 void 
@@ -89,6 +92,51 @@ CTextureHolder::LoadTexture(const string& textId)
     printf(" [Texture] Finished loading [%s] in %.2fms\n", textId.data(), (float)(clock() - start));
 }
 
+std::shared_ptr<I2dImage> CTextureHolder::PrepareTexture(const string & textId)
+{
+    std::shared_ptr<I2dImage> pRawImage = nullptr;
+    // start loading measuring time
+    clock_t start = clock();
+
+    printf(" [Texture] Start loading [%s]...\n", textId.data());
+
+    // cache missed - must reload it from resources db
+    CResource resourceItem(textId);
+
+    Byte*  textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem);
+    UInt32 textureDataLength = m_pResHandler->VGetResourceSize(resourceItem);
+    // status OK
+    if (textureDataStream != 0)
+    {
+        // checks the first 2 bytes of the stream to know if we know how to parse it
+        Byte fileType[3];
+        memcpy(&fileType, textureDataStream, 3);
+        pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
+        if (pRawImage != nullptr) // is this file a BMP?
+        {
+            if (!pRawImage->ParseStream(textureDataStream, textureDataLength))
+            {
+                pRawImage = nullptr;
+                std::cout << " Bad input stream, failed to load texture [" << textId << "]" << std::endl;
+            }
+        }
+    }
+    else
+    {
+        DEBUG_OUT("Texture %s not found\n", textId);
+    }
+
+    if (textureDataStream != nullptr)
+    {
+        delete[] textureDataStream;
+    }
+
+    // time measurement
+    printf(" [Texture] Finished loading [%s] in %.2fms\n", textId.data(), (float)(clock() - start));
+
+    return pRawImage;
+}
+
 void CTextureHolder::BuildTexture(const string& textureId, const std::shared_ptr<I2dImage>& pData)
 {
 	Graphics::ITexture* pTextureObj = NULL;
@@ -140,10 +188,11 @@ void CTextureHolder::removeLastItem()
     STextureItem& doomed = m_lru.back();
     RemoveTexture(doomed.m_name);
     m_sizeInUse -= doomed.m_size;
-    printf(" [Texture] Removed %s :: Current %ud (Free %ud) %.1f\n", 
+    printf(" [Texture] Removed %s :: Current %d (Free %d) %f\n", 
         doomed.m_name.c_str(), 
-        m_maxAllocSize - m_sizeInUse, 
-        (m_sizeInUse/(float)m_maxAllocSize)*100.f);
+        (Int32)(m_sizeInUse),
+        (Int32)(m_maxAllocSize - m_sizeInUse), 
+        (Float)(m_sizeInUse/m_maxAllocSize)*100.f);
     m_lru.pop_back();
 }
 
@@ -169,12 +218,11 @@ CTextureHolder::getTextureById(const string& textId)
 		return result->second;
 	}
 
-	// cache miss - then add this texture to the process list
-	// TODO: make the loading asynchronous
-	LoadTexture(textId);
+    _Utils::Jobs::Instance().PushRequest([&](const string& id) {return s_pInstance->PrepareTexture(id); }, textId);
 
-	// if it somehow failed, returns -1
-	return nullptr;
+    // if it somehow failed, returns -1
+    increaseTexturePriority(sc_invalidTextureName);
+	return m_textures.find(sc_invalidTextureName)->second;
 }
 
 Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture>& attr)
@@ -271,5 +319,20 @@ CTextureHolder::~CTextureHolder()
 		it->second->Destroy();
 		m_textures.erase(it);
 	}		
+}
+
+void CTextureHolder::Update()
+{
+    // TODO: move this to another place
+    auto next = _Utils::Jobs::Instance().GetNextResult();
+    if (next.first != nullptr)
+    {
+        // extra check, it's possible that in between the thread executions, this job was already processed, so we have to discard before allocating 
+        // graphic resources
+        if (m_textures.find(next.second) == m_textures.end())
+        {
+            BuildTexture(next.second, next.first);
+        }
+    }
 }
 

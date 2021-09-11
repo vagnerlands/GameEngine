@@ -91,7 +91,22 @@ namespace Types
         eRenderingPrimitive_Lines,
     };
 
+    enum eTextures
+    {
+        eTexture_Diffuse = 0,
+        eTexture_Specular,
+        eTexture_Normals,
+        eTexture_Ambient,
+        eTexture_Total
+    };
 
+    const string sTextureNames[eTexture_Total] = 
+    {
+        "diffuseMap",
+        "specularMap",
+        "normalMap",
+        "ambientMap"
+    };
 
 
 

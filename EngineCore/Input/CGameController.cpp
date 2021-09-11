@@ -17,10 +17,23 @@ CGameController::~CGameController()
 	// empty implementation
 }
 
-void 
-CGameController::OnUpdate()
+void CGameController::Resize(Int32 w, Int32 h)
 {
+    mCenterOfScreen_X = w / 2;
+    mCenterOfScreen_Y = h / 2;
+}
 
+void 
+CGameController::OnUpdate(float dt)
+{
+    // update all listening components about the pressed key (if any)
+    for (Int32 key = 0; key < 256; ++key)
+    {
+        if (m_bKey[key].isPressed)
+        {
+            KeyDispatcher::Instance().Event(dt, key);
+        }
+    }
 }
 
 bool 

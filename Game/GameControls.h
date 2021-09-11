@@ -30,7 +30,7 @@ class GameControls :
 {
 public:
     friend class Game;
-    GameControls(EngineCore::IGame* pGameEngine);
+    GameControls(EngineCore::IGame* pGameEngine, CGameController& pController);
 	virtual ~GameControls();
     CGameController* GetGameController();
     void Execute(float dt);
@@ -55,8 +55,8 @@ private:
     GameControls(const GameControls& other) = delete;
     GameControls& operator=(const GameControls& other) = delete;
 
-    EngineCore::IGame* mpGameEngine;
-	CGameController* mpGameInput;
+    EngineCore::IGame* mpGameEngine; // a reference to the parent class (GameEngine)
+	CGameController& mGameInput; // for mouse and keyboard input
 
     // Debug shit...
     Float m_lightAngle;

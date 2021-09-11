@@ -191,6 +191,7 @@
     <ClCompile Include="OS\Windows\ThreadFactoryWin.cpp" />
     <ClCompile Include="Sound\audio.c" />
     <ClCompile Include="Utils\JobList.cpp" />
+    <ClCompile Include="Utils\Jobs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cache\ResourceCache\CResHandle.h" />
@@ -241,6 +242,7 @@
     <ClInclude Include="OS\Windows\ThreadFactoryWin.h" />
     <ClInclude Include="Sound\audio.h" />
     <ClInclude Include="Utils\JobList.h" />
+    <ClInclude Include="Utils\Jobs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

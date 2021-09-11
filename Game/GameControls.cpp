@@ -7,15 +7,14 @@
 #include "IGame.h"
 
 using namespace _Keys;
-GameControls::GameControls(EngineCore::IGame* pGameEngine) : 
+GameControls::GameControls(EngineCore::IGame* pGameEngine, CGameController& pController) :
     mpGameEngine(pGameEngine),
+    mGameInput(pController),
     m_lightAngle(0.F),
     m_bias(10.6F),
     m_shadowDetailsFactor(0.59F),
     m_ambient(.5F, .5F, .5F)
 {
-    mpGameInput = new CGameController(1280, 720);
-    KeyDispatcherFactory::Create(mpGameInput);
     BindKey(Key0, this);
     BindKey(Key1, this);
     BindKey(Key2, this);
@@ -75,7 +74,7 @@ GameControls::~GameControls()
 
 CGameController * GameControls::GetGameController()
 {
-    return mpGameInput;
+    return &mGameInput;
 }
 
 
@@ -84,20 +83,14 @@ void GameControls::Execute(float dt)
     const Float cSpeed = 15.0f;
 	const Float cMouseSensibility = 5.f;
 
-    // update all listening components about the pressed key (if any)
-    for (Int32 key = 0; key < 256; ++key)
-    {
-        if (mpGameInput->m_bKey[key].isPressed)
-        {
-            KeyDispatcher::Instance().Event(dt, key);
-        }
-    }
+    // must be called cyclically to activate any events
+    mGameInput.OnUpdate(dt);
     
-    if (mpGameInput->m_bKey['y'].isPressed)
+    if (mGameInput.m_bKey['y'].isPressed)
     {
         m_lightAngle += 1.f;
     }
-    else if (mpGameInput->m_bKey['t'].isPressed)
+    else if (mGameInput.m_bKey['t'].isPressed)
     {
         m_lightAngle -= 1.f;
     }
@@ -107,14 +100,14 @@ void GameControls::Execute(float dt)
 	static Float SizeConst = 12000;
 	static Float NumberOfParticles = 100;
 
-	if (mpGameInput->m_bKey['o'].isPressed)
+	if (mGameInput.m_bKey['o'].isPressed)
 	{
 		SpreadConst += 1.f;
 		Graphics::SceneQueryParticles part;
 		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mpGameInput->m_bKey['p'].isPressed)
+	else if (mGameInput.m_bKey['p'].isPressed)
 	{
 		SpreadConst -= 1.f;
 		Graphics::SceneQueryParticles part;
@@ -122,28 +115,28 @@ void GameControls::Execute(float dt)
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 
-	if (mpGameInput->m_bKey['k'].isPressed)
+	if (mGameInput.m_bKey['k'].isPressed)
 	{
 		HeightConst += 1.f;
 		Graphics::SceneQueryParticles part;
         part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mpGameInput->m_bKey['l'].isPressed)
+	else if (mGameInput.m_bKey['l'].isPressed)
 	{
 		HeightConst -= 1.f;
 		Graphics::SceneQueryParticles part;
         part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	if (mpGameInput->m_bKey['n'].isPressed)
+	if (mGameInput.m_bKey['n'].isPressed)
 	{
 		SizeConst += 1.f;
 		Graphics::SceneQueryParticles part;
         part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mpGameInput->m_bKey['m'].isPressed)
+	else if (mGameInput.m_bKey['m'].isPressed)
 	{
 		SizeConst -= 1.f;
 		Graphics::SceneQueryParticles part;
@@ -151,57 +144,57 @@ void GameControls::Execute(float dt)
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 	
-	if (mpGameInput->m_bKey['1'].isPressed)
+	if (mGameInput.m_bKey['1'].isPressed)
 	{
 		NumberOfParticles -= 1.f;
 		Graphics::SceneQueryParticles part;
         part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mpGameInput->m_bKey['2'].isPressed)
+	else if (mGameInput.m_bKey['2'].isPressed)
 	{
 		NumberOfParticles += 1.f;
 		Graphics::SceneQueryParticles part;
         part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-    if (mpGameInput->m_bKey['c'].isPressed)
+    if (mGameInput.m_bKey['c'].isPressed)
     {
         Graphics::IRenderer::mRenderer->SetShadowFactor(m_shadowDetailsFactor += .1F);
         std::cout << "[ DEBUG ] Shadow details factor value " << m_shadowDetailsFactor << std::endl;
     }
-    if (mpGameInput->m_bKey['v'].isPressed)
+    if (mGameInput.m_bKey['v'].isPressed)
     {
         Graphics::IRenderer::mRenderer->SetShadowFactor(m_shadowDetailsFactor -= .1F);
         std::cout << "[ DEBUG ] Shadow details factor value " << m_shadowDetailsFactor << std::endl;
     }
 
 
-    if (mpGameInput->m_bKey['g'].isPressed)
+    if (mGameInput.m_bKey['g'].isPressed)
     {
         Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", -.000001F);
     }
-    if (mpGameInput->m_bKey['h'].isPressed)
+    if (mGameInput.m_bKey['h'].isPressed)
     {
         Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", +.000001F);
     }
 
-	if (mpGameInput->m_isLeftButtonPressed)
+	if (mGameInput.m_isLeftButtonPressed)
 	{		
-		const Float cosValue = cos((mpGameInput->m_movementAngle * (3.14159 / 180.F)));
-		const Float sinValue = sin((mpGameInput->m_movementAngle * (3.14159 / 180.F)));
-		//printf(" Intensity X %d Y %d cos %f sin %f\n", mpGameInput->m_movementIntensityX, mpGameInput->m_movementIntensityY, cosValue, sinValue);
-		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(mpGameInput->m_movementIntensityY) * dt * cMouseSensibility);
-		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(-mpGameInput->m_movementIntensityX) * dt * cMouseSensibility);
+		const Float cosValue = cos((mGameInput.m_movementAngle * (3.14159 / 180.F)));
+		const Float sinValue = sin((mGameInput.m_movementAngle * (3.14159 / 180.F)));
+		//printf(" Intensity X %d Y %d cos %f sin %f\n", mGameInput.m_movementIntensityX, mGameInput.m_movementIntensityY, cosValue, sinValue);
+		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(mGameInput.m_movementIntensityY) * dt * cMouseSensibility);
+		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(-mGameInput.m_movementIntensityX) * dt * cMouseSensibility);
 	}
 
-	if (mpGameInput->m_isRightButtonPressed)
+	if (mGameInput.m_isRightButtonPressed)
 	{
-		const Float cosValue = cos((mpGameInput->m_angleFromCenter * (3.14159 / 180.F)));
-		const Float sinValue = sin((mpGameInput->m_angleFromCenter * (3.14159 / 180.F)));
+		const Float cosValue = cos((mGameInput.m_angleFromCenter * (3.14159 / 180.F)));
+		const Float sinValue = sin((mGameInput.m_angleFromCenter * (3.14159 / 180.F)));
 
-		const Float MovementIntensityOnX = clamp(0, mpGameInput->m_distanceFromCenter - 50);
-		const Float MovementIntensityOnY = clamp(0, mpGameInput->m_distanceFromCenter - 50);
+		const Float MovementIntensityOnX = clamp(0, mGameInput.m_distanceFromCenter - 50);
+		const Float MovementIntensityOnY = clamp(0, mGameInput.m_distanceFromCenter - 50);
 
 		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(MovementIntensityOnY) * dt * 0.5f);
 		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(MovementIntensityOnX) * dt * 0.5f);

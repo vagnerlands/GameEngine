@@ -25,8 +25,10 @@ public:
 	// destructor
 	virtual ~CGameController();
 
+    void Resize(Int32 w, Int32 h);
+
 	// this function is called cyclically and this updates the game status...
-	void OnUpdate();
+	void OnUpdate(float dt);
 
 	virtual bool VOnMouseMove(const IvPoint &mousePos);
 

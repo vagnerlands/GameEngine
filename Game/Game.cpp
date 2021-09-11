@@ -28,7 +28,7 @@ EngineCore::IGame::Create()
 
 Game::Game() :
     EngineCore::IGame(),
-    mControls(this)
+    mControls(this, IGame::mGameController)
 {
     auto window = Graphics::RenderUI::Instance().Add("logger", std::make_shared<Graphics::Window2DOGL>(IvVector4(1.f,1.f, 1.f, 1.f), "window.bmp"));
     window->SetLocation({ 10.f, 10.f }).SetSize({ 400.f, 500.f });
@@ -70,7 +70,15 @@ bool Game::PostRendererInitialize()
 
     Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed)
         .SetScale(IvVector3(1.f, 1.f, 1.f))
-        .SetLocation(IvVector3(500.0, 0.5, 0));
+        .SetLocation(IvVector3(5000.0, 0.5, 0));
+
+    Graphics::RenderScene::Instance().Add("Nemesis1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed)
+        .SetScale(IvVector3(1.f, 1.f, 1.f))
+        .SetLocation(IvVector3(-5000.0, 0.5, 0));
+
+    Graphics::RenderScene::Instance().Add("Warrior1", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"), eSceneItemType_AnimatedAndShadowed)
+        .SetScale(IvVector3(1.f, 1.f, 1.f))
+        .SetLocation(IvVector3(0.f, 0.5, 5000.f));
 
 	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem)
         .SetLocation(IvVector3(0.f, 100.0f, 200.5f))
@@ -91,6 +99,7 @@ bool Game::PostRendererInitialize()
 
 void Game::ExecuteBackground()
 {	
+    IGame::ExecuteBackground();
 	// Update objects based on current timestamp
 	CModelHolder::s_pInstance->Update(mClock->GetTimeInMili());
 }

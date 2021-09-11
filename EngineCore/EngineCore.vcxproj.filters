@@ -151,6 +151,9 @@
     <ClCompile Include="Loaders\Model3D\Model.cpp">
       <Filter>Src\Loaders\Model3D</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Jobs.cpp">
+      <Filter>Src\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IGame.h">
@@ -296,6 +299,9 @@
     </ClInclude>
     <ClInclude Include="Loaders\Model3D\Model.h">
       <Filter>Src\Loaders\Model3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Jobs.h">
+      <Filter>Src\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
