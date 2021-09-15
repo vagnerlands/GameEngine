@@ -2,7 +2,7 @@
 #include "SceneItemFactory.h"
 #include "IRenderer.h"
 #include "TextRenderer.h"
-#include "IGame.h"
+#include "Logger/ILogger.h"
 
 Graphics::RenderScene & Graphics::RenderScene::Instance()
 {
@@ -114,7 +114,7 @@ void Graphics::RenderScene::Render(float dt, bool isRenderingShadows) const
             // debug
             string t(pObj->GetId());
             t += " is out of frustum";
-            LOG(t);
+            //LOG(t);
         }
 	}
 }

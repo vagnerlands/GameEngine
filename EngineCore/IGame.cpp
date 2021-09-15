@@ -18,7 +18,7 @@
 #include "Utils/Jobs.h"
 
 #include "OpenGL/Window2DOGL.h"
-#include "OpenGL/TextArea2DOGL.h"
+#include "Logger/ILogger.h"
 
 EngineCore::IGame* EngineCore::IGame::mGame = nullptr;
 
@@ -92,6 +92,7 @@ void EngineCore::IGame::Display()
 		CThreadHolder::instance()->DestroyAll();
 		// release the rendering resources
 		Graphics::IRenderer::Destroy();
+        UtilitiesCore::ILogger::Destroy();
         Graphics::RenderUI::Instance().Destroy();
 		// release other game related resources
 		EngineCore::IGame::Destroy();        
@@ -107,21 +108,18 @@ EngineCore::IGame::IGame() :
 	mReadyToClose(false),
 	mMaxFps(0),
 	mClosedThreads(0),
-    mGameController(1280, 720),
-    pLogger(std::make_shared<Graphics::TextArea2DOGL>(IvVector4(0.f, 0.f, 0.f, 0.f), IvVector3(1.f, 1.f, 1.f), 0.25f))
+    mGameController(1280, 720)
 {
-    KeyDispatcherFactory::Create(&mGameController);
+    KeyDispatcherFactory::Create(&mGameController);    
 
     auto logger = Graphics::RenderUI::Instance().Add("logger", std::make_shared<Graphics::Window2DOGL>(IvVector4(0.f, 0.f, 0.f, .5f), ""));
     logger->SetLocation({ 20.f, 40.f }).SetSize({ 400.f, 480.f });    
 
+    mpLogger = UtilitiesCore::ILogger::Create(logger);
+
     auto logger_input = Graphics::RenderUI::Instance().Add("logger_input", std::make_shared<Graphics::Window2DOGL>(IvVector4(1.f, 1.f, 1.f, 1.f),""));
     logger_input->SetLocation({ 0.f, -20.f }).SetSize({ 400.f, 20.f });
-    logger->Append(logger_input);
-
-    auto logger_text_area = Graphics::RenderUI::Instance().Add("logger_text_area", pLogger);
-    logger_text_area->SetLocation({ 0.f, 0.f }).SetSize({ 400.f, 480.f });
-    logger->Append(logger_text_area);
+    logger->Append(logger_input);    
 }
 
 EngineCore::IGame::~IGame()
@@ -196,9 +194,4 @@ EngineCore::IGame::Reshape(Int32 w, Int32 h)
 Int32 EngineCore::IGame::GetFPS() const
 {
     return mClock->FramesPerSecond();
-}
-
-void EngineCore::IGame::Log(const string & log)
-{
-    (static_cast<Graphics::TextArea2D*>(pLogger.get()))->AddLine(log);
 }

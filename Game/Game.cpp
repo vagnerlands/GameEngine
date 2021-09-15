@@ -109,6 +109,6 @@ void Game::Render(float dt)
 {
     IGame::Render(dt);    
     IGame::PostRender();	
-    Graphics::TextRenderer::Instance().Add("frame_rate", string("FPS ") += std::to_string(GetFPS()), 12.f, 0.f, 0.25f, IvVector3(0.f, 1.f, 0.f));
+    Graphics::TextRenderer::Instance().Add("frame_rate", string("FPS ") += std::to_string(GetFPS()), IvVector2(12.f, 0.f), 0.25f, IvVector3(0.f, 1.f, 0.f));
 }
 

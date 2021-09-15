@@ -7,6 +7,7 @@
 #include "OpenGL/CTextureOGL.h"
 #include "OpenGL/CCubeTextureOGL.h"
 #endif
+#include "Logger/ILogger.h"
 #include "IMutex.h"
 #include "CFactory2dImage.h"
 #include "Utils/Jobs.h"
@@ -52,7 +53,7 @@ CTextureHolder::LoadTexture(const string& textId)
 	// start loading measuring time
 	clock_t start = clock();
 
-    printf(" [Texture] Start loading [%s]...\n", textId.data());
+    LOG("Start loading [" + textId.c_str() + "]");
 
 	// cache missed - must reload it from resources db
 	CResource resourceItem(textId);
@@ -74,13 +75,13 @@ CTextureHolder::LoadTexture(const string& textId)
 			}
 			else
 			{
-				std::cout << " Bad input stream, failed to load texture [" << textId << "]" << std::endl;
+                LOG("Bad input stream, failed to load texture [" + textId.c_str() + "]");
 			}
 		}
 	}
 	else
 	{
-		DEBUG_OUT("Texture %s not found\n", textId);
+        LOG("Texture [" + textId.c_str() + "] not found");
 	}
 
     if (textureDataStream != nullptr)
@@ -89,7 +90,7 @@ CTextureHolder::LoadTexture(const string& textId)
     }
 	
 	// time measurement
-    printf(" [Texture] Finished loading [%s] in %.2fms\n", textId.data(), (float)(clock() - start));
+    LOG("Finished loading [" + textId.c_str() + "] in " + to_string((float)(clock() - start)) + "ms");
 }
 
 std::shared_ptr<I2dImage> CTextureHolder::PrepareTexture(const string & textId)
@@ -98,7 +99,7 @@ std::shared_ptr<I2dImage> CTextureHolder::PrepareTexture(const string & textId)
     // start loading measuring time
     clock_t start = clock();
 
-    printf(" [Texture] Start loading [%s]...\n", textId.data());
+    LOG("Start loading [" + textId.c_str() + "]");
 
     // cache missed - must reload it from resources db
     CResource resourceItem(textId);
@@ -117,13 +118,13 @@ std::shared_ptr<I2dImage> CTextureHolder::PrepareTexture(const string & textId)
             if (!pRawImage->ParseStream(textureDataStream, textureDataLength))
             {
                 pRawImage = nullptr;
-                std::cout << " Bad input stream, failed to load texture [" << textId << "]" << std::endl;
+                LOG("Bad input stream, failed to load texture [" + textId.c_str() + "]");
             }
         }
     }
     else
     {
-        DEBUG_OUT("Texture %s not found\n", textId);
+        LOG("Texture [" + textId.c_str() + "] not found");
     }
 
     if (textureDataStream != nullptr)
@@ -132,7 +133,7 @@ std::shared_ptr<I2dImage> CTextureHolder::PrepareTexture(const string & textId)
     }
 
     // time measurement
-    printf(" [Texture] Finished loading [%s] in %.2fms\n", textId.data(), (float)(clock() - start));
+    LOG("Finished loading [" + textId.c_str() + "] in " + to_string((float)(clock() - start)) + "ms");
 
     return pRawImage;
 }
@@ -188,11 +189,12 @@ void CTextureHolder::removeLastItem()
     STextureItem& doomed = m_lru.back();
     RemoveTexture(doomed.m_name);
     m_sizeInUse -= doomed.m_size;
-    printf(" [Texture] Removed %s :: Current %d (Free %d) %f\n", 
-        doomed.m_name.c_str(), 
-        (Int32)(m_sizeInUse),
-        (Int32)(m_maxAllocSize - m_sizeInUse), 
-        (Float)(m_sizeInUse/m_maxAllocSize)*100.f);
+    LOG("Removed Texture "
+        + doomed.m_name
+        + " Current "
+        + to_string(m_sizeInUse)
+        + " (Free " + to_string((m_maxAllocSize - m_sizeInUse))
+        + ") %" + to_string(((Float)m_sizeInUse / m_maxAllocSize)*100.f));
     m_lru.pop_back();
 }
 
@@ -241,8 +243,7 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 	// start loading measuring time
 	clock_t start = clock();
 
-    printf(" [Texture] Start loading 3D texture [%s]\n", textureId.data());
-
+    LOG("Start loading 3D texture [" + textureId + "]");
 	const UInt32 arrLen = attr.size();
 
 	// cache missed - must reload it from resources db
@@ -282,7 +283,7 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 	delete[] resourceItem;
 
 	// time measurement
-	printf(" [Texture] Finished loading 3D texture [%s] in %.2fms\n", textureId.data(), (float)(clock() - start));
+    LOG("Finished loading [" + textureId + "] in " + to_string((float)(clock() - start)) + "ms");
 
 	// if it somehow failed, returns -1
 	return nullptr;

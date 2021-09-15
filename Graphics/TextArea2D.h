@@ -20,8 +20,8 @@ namespace Graphics
         static UInt32 s_UID_Generator;
         list<std::string> m_memo;
         bool m_isLru = true; // implements least recent used (keep track of the list depth, when it hits the maximum, removes the oldest entry)
-        UInt32 m_maxDepth = 35U;
-        UInt32 m_maxStrLen = 32U;
+        UInt32 m_maxDepth = 50U;
+        UInt32 m_maxStrLen = UINT32_MAX;
         virtual void draw(Float dt) = 0; // to be implemented in DirectX, OpenGL, Vulkan ...
     public:
         explicit TextArea2D(const IvVector4& background_color, const IvVector3& foreground_color, Float scale);

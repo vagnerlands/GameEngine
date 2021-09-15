@@ -14,6 +14,9 @@
     <Filter Include="Src\Rendered">
       <UniqueIdentifier>{a23ccd03-0031-4034-9210-de6d58619c1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Logger">
+      <UniqueIdentifier>{abccd3cb-4b3a-4d75-9098-bed0637161d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Debugger.cpp">
@@ -36,6 +39,9 @@
     </ClCompile>
     <ClCompile Include="Rendered\SceneItemBoundingBox.cpp">
       <Filter>Src\Rendered</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger\ILogger.cpp">
+      <Filter>Src\Logger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="Rendered\SceneItemBoundingBox.h">
       <Filter>Src\Rendered</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger\ILogger.h">
+      <Filter>Src\Logger</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

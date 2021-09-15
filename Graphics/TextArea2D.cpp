@@ -27,18 +27,18 @@ Graphics::TextArea2D::~TextArea2D()
 
 void Graphics::TextArea2D::AddLine(const std::string & line)
 {
-    std::string entry = line;
-    if (entry.length() > m_maxStrLen)
-    {
-        entry = entry.substr(0, m_maxStrLen);
-    }
+    //std::string entry = line;
+    //if (entry.length() > m_maxStrLen)
+    //{
+    //    entry = entry.substr(0, m_maxStrLen);
+    //}
 
     if (m_memo.size() + 1 > m_maxDepth)
     {
         m_memo.pop_back();
     }
 
-    m_memo.push_front(entry);
+    m_memo.push_front(line);
 }
 
 void Graphics::TextArea2D::Clear()
@@ -57,6 +57,6 @@ void Graphics::TextArea2D::Draw(Float dt)
         logtext += "\n";
     }
     IvVector2 transformed_location(m_location.GetX() + m_transforms.GetFloatPtr()[12], m_location.GetX() + m_transforms.GetFloatPtr()[13]);
-    TextRenderer::Instance().Add("TextArea_" + to_string(m_uid), logtext, transformed_location.GetX(), transformed_location.GetY(), m_scale, m_foregroundColor);
+    TextRenderer::Instance().Add("TextArea_" + to_string(m_uid), logtext, transformed_location, m_size, m_scale, m_foregroundColor);
     Widget::DrawChildren(dt);
 }

@@ -120,19 +120,31 @@ void Graphics::TextRendererOGL::Render()
         glActiveTexture(GL_TEXTURE0);
         glBindVertexArray(VAO);
 
+        const Int32 cLineSpace = (40 * i._scale);
+        const Int32 cTopOffsetY = i._position.GetY() + i._area.GetY();
+
         // future implementations may include text wrap, so keep this
-        Int32 x = i._posX; 
-        Int32 y = i._posY;
-        Int32 line_counter = 0;
+        Int32 x = i._position.GetX();
+        Int32 y = cTopOffsetY - cLineSpace;
+        if (y < 0) 
+            y = 0;
+        Int32 line_counter = 1;
         // iterate through all characters
         std::string::const_iterator c;
         for (c = i._text.begin(); c != i._text.end(); c++)
         {
-            if (*c == '\n')
+            // in case there is a "new line" or the text has reached the x axis limit, 
+            // we must perform a "carriage return" and "new line feed"
+            if ((*c == '\n') 
+                || (x > i._area.GetX()))
             {
                 ++line_counter;
-                x = i._posX;
-                y = i._posY + (line_counter * (40 * i._scale));
+                x = i._position.GetX();
+                y = cTopOffsetY - (line_counter * cLineSpace);
+                if (y < i._position.GetY()) // if next line has crossed the bottom most tolerable limit, we must stop
+                {
+                    break;
+                }
                 continue; // move to the next 
             }
             Character ch = Characters[*c];
@@ -153,8 +165,6 @@ void Graphics::TextRendererOGL::Render()
                 { xpos + w, ypos,       1.0f, 1.0f },
                 { xpos + w, ypos + h,   1.0f, 0.0f }
             };
-            //glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(1280), 0.0f, static_cast<float>(720));
-            //IvVector4 test = projMatrix * IvVector4(vertices[0][0], vertices[0][1], 0, 0);
             // render glyph texture over quad
             glBindTexture(GL_TEXTURE_2D, ch.TextureID);
             // update content of VBO memory

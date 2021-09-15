@@ -14,6 +14,7 @@ namespace Graphics
 namespace UtilitiesCore
 {
 	class IClock;
+    class ILogger;
 }
 
 namespace EngineCore
@@ -90,11 +91,9 @@ namespace EngineCore
 			mMaxFps = framesPerSecond;
 		}
 
-        void Log(const string& log);
-
 		static IGame* mGame;          // global pointer
         CGameController mGameController;
-        std::shared_ptr<Graphics::Widget> pLogger;
+        std::shared_ptr<UtilitiesCore::ILogger> mpLogger;
 
 	private:
 		// To avoid creation of this object without inheritance
@@ -103,5 +102,4 @@ namespace EngineCore
 		IGame& operator=(const IGame& other);
 	};    
 }
-#define LOG(x) EngineCore::IGame::mGame->Log(x);
 #endif // _IGAME_H_
