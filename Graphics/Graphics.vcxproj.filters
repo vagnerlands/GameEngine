@@ -134,6 +134,12 @@
     <ClInclude Include="Camera\Frustum.h">
       <Filter>Src\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="TextArea2D.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL\TextArea2DOGL.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IRenderer.cpp">
@@ -207,6 +213,12 @@
     </ClCompile>
     <ClCompile Include="Camera\Frustum.cpp">
       <Filter>Src\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TextArea2D.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL\TextArea2DOGL.cpp">
+      <Filter>Src\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

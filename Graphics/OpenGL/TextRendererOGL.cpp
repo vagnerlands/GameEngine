@@ -97,7 +97,7 @@ void Graphics::TextRendererOGL::Setup()
     glBindVertexArray(0);
 }
 
-void Graphics::TextRendererOGL::Render(const std::string& text, Float x, Float y, Float scale, IvVector3 color)
+void Graphics::TextRendererOGL::Render()
 {
     // clear gl errors
     GLenum error = glGetError();
@@ -110,48 +110,64 @@ void Graphics::TextRendererOGL::Render(const std::string& text, Float x, Float y
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // activate corresponding render state	
     s_pShader->Use();
-    // projection
-    IvMatrix44& projMatrix = Graphics::IRenderer::mRenderer->GetProjectionMatrix();
-    s_pShader->setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
-    s_pShader->setUniform3f("textColor", color.GetX(), color.GetY(), color.GetZ());
-    glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(VAO);
-
-    // iterate through all characters
-    std::string::const_iterator c;
-    for (c = text.begin(); c != text.end(); c++)
+    for (const auto& it : _texts)
     {
-        Character ch = Characters[*c];
+        const auto& i = it.second;
+        // projection
+        IvMatrix44& projMatrix = Graphics::IRenderer::mRenderer->GetProjectionMatrix();
+        s_pShader->setUniformMatrix4fv("projection", 1, false, (GLfloat*)projMatrix.GetFloatPtr());
+        s_pShader->setUniform3f("textColor", i._color.GetX(), i._color.GetY(), i._color.GetZ());
+        glActiveTexture(GL_TEXTURE0);
+        glBindVertexArray(VAO);
 
-        float xpos = x + ch.Bearing.GetX() * scale;
-        float ypos = y - (ch.Size.GetY() - ch.Bearing.GetY()) * scale;
-
-        float w = ch.Size.GetX() * scale;
-        float h = ch.Size.GetY() * scale;
-        // update VBO for each character
-        float vertices[6][4] = 
+        // future implementations may include text wrap, so keep this
+        Int32 x = i._posX; 
+        Int32 y = i._posY;
+        Int32 line_counter = 0;
+        // iterate through all characters
+        std::string::const_iterator c;
+        for (c = i._text.begin(); c != i._text.end(); c++)
         {
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos,     ypos,       0.0f, 1.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
+            if (*c == '\n')
+            {
+                ++line_counter;
+                x = i._posX;
+                y = i._posY + (line_counter * (40 * i._scale));
+                continue; // move to the next 
+            }
+            Character ch = Characters[*c];
 
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
-            { xpos + w, ypos + h,   1.0f, 0.0f }
-        };
-        //glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(1280), 0.0f, static_cast<float>(720));
-        //IvVector4 test = projMatrix * IvVector4(vertices[0][0], vertices[0][1], 0, 0);
-        // render glyph texture over quad
-        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-        // update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        // render quad
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+            float xpos = x + ch.Bearing.GetX() * i._scale;
+            float ypos = y - (ch.Size.GetY() - ch.Bearing.GetY()) * i._scale;
+
+            float w = ch.Size.GetX() * i._scale;
+            float h = ch.Size.GetY() * i._scale;
+            // update VBO for each character
+            float vertices[6][4] =
+            {
+                { xpos,     ypos + h,   0.0f, 0.0f },
+                { xpos,     ypos,       0.0f, 1.0f },
+                { xpos + w, ypos,       1.0f, 1.0f },
+
+                { xpos,     ypos + h,   0.0f, 0.0f },
+                { xpos + w, ypos,       1.0f, 1.0f },
+                { xpos + w, ypos + h,   1.0f, 0.0f }
+            };
+            //glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(1280), 0.0f, static_cast<float>(720));
+            //IvVector4 test = projMatrix * IvVector4(vertices[0][0], vertices[0][1], 0, 0);
+            // render glyph texture over quad
+            glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+            // update content of VBO memory
+            glBindBuffer(GL_ARRAY_BUFFER, VBO);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            // render quad
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+            // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+            x += (ch.Advance >> 6) * i._scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+        }
     }
+
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_CULL_FACE);

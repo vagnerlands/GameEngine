@@ -11,7 +11,7 @@ namespace Graphics
 	{
     protected:
         std::string m_id;
-        Widget* m_pChild = nullptr;
+        list<std::shared_ptr<Widget>> m_children;
 	public:
         Widget() {}
         virtual ~Widget() {}
@@ -19,12 +19,19 @@ namespace Graphics
         virtual void Draw(Float dt) = 0; // implements the rendering for each platform
         virtual void SetId(const std::string& id) { m_id = id; }
         virtual const std::string& Id() const { return m_id; }
-        void Append(Widget* pChild)
+        void Append(std::shared_ptr<Widget> pChild)
         {
             if (pChild != nullptr)
             { 
-                m_pChild = pChild;
-                m_pChild->SetParent(this); // for transformation purposes.
+                m_children.push_back(pChild);
+                pChild->SetParent(this); // for transformation purposes.
+            }
+        }
+        void DrawChildren(Float dt)
+        {
+            for (std::shared_ptr<Widget> child : m_children)
+            {
+                child->Draw(dt);
             }
         }
 	};

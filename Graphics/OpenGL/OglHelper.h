@@ -75,7 +75,7 @@ namespace Graphics
 
             DWORD ret1 = GetFileAttributes((LPCWSTR)geometryFilename);
             int ret2 = GetLastError();
-            bool isGeometryFileNotFound = (ret1 == INVALID_FILE_ATTRIBUTES) && (ret2 == ERROR_FILE_NOT_FOUND);
+            bool isGeometryFileNotFound = (ret1 == INVALID_FILE_ATTRIBUTES) || (ret2 == ERROR_FILE_NOT_FOUND);
 
             // checks if the geometry shader actually is required
             if (isGeometryFileNotFound)

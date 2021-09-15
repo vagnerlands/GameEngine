@@ -172,6 +172,7 @@
     <ClCompile Include="OpenGL\CRendererOGL.cpp" />
     <ClCompile Include="OpenGL\CTextureOGL.cpp" />
     <ClCompile Include="OpenGL\ShadowsOGL.cpp" />
+    <ClCompile Include="OpenGL\TextArea2DOGL.cpp" />
     <ClCompile Include="OpenGL\TextRendererOGL.cpp" />
     <ClCompile Include="OpenGL\Window2DOGL.cpp" />
     <ClCompile Include="Scene\Ilumination.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="Scene\RenderUI.cpp" />
     <ClCompile Include="Scene\SceneItem.cpp" />
     <ClCompile Include="Scene\SceneItemFactory.cpp" />
+    <ClCompile Include="TextArea2D.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="Window2D.cpp" />
     <ClInclude Include="Camera\CCamera.h" />
@@ -199,6 +201,7 @@
     <ClInclude Include="OpenGL\CTextureOGL.h" />
     <ClInclude Include="OpenGL\OglHelper.h" />
     <ClInclude Include="OpenGL\ShadowsOGL.h" />
+    <ClInclude Include="OpenGL\TextArea2DOGL.h" />
     <ClInclude Include="OpenGL\TextRendererOGL.h" />
     <ClInclude Include="OpenGL\Window2DOGL.h" />
     <ClInclude Include="Scene\Query\SceneQuery.h" />
@@ -215,6 +218,7 @@
     <ClInclude Include="Scene\SceneItemShadowedSimple.h" />
     <ClInclude Include="Scene\SceneItemSimple.h" />
     <ClInclude Include="Scene\SceneItemSkyBox.h" />
+    <ClInclude Include="TextArea2D.h" />
     <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="Widget.h" />
     <ClInclude Include="WidgetTransforms.h" />

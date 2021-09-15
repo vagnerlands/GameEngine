@@ -1,5 +1,6 @@
 #include "RenderUI.h"
 #include "Widget.h"
+#include "TextRenderer.h"
 
 Graphics::RenderUI & Graphics::RenderUI::Instance()
 {
@@ -64,6 +65,8 @@ void Graphics::RenderUI::Render(float dt) const
 	{
         (*it).second->Draw(dt);
 	}
+    // render all texts
+    TextRenderer::Instance().Render();
 }
 
 shared_ptr<Graphics::Widget> Graphics::RenderUI::find(const std::string & id)

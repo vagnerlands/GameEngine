@@ -30,7 +30,7 @@ namespace Graphics
     public:
         static void Create();
         ~TextRendererOGL();        
-        virtual void Render(const std::string& text, Float posX, Float posY, Float scale, IvVector3 color) override;
+        virtual void Render() override;
     };
 
 

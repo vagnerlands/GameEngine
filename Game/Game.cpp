@@ -12,7 +12,6 @@
 #include "Scene/Ilumination.h"
 // debug
 #include "Rendered/Skybox.h"
-#include "OpenGL/Window2DOGL.h"
 
 #include "CSoundHolder.h"
 #include "Scene/Query/SceneQueryParticles.h"
@@ -29,10 +28,7 @@ EngineCore::IGame::Create()
 Game::Game() :
     EngineCore::IGame(),
     mControls(this, IGame::mGameController)
-{
-    auto window = Graphics::RenderUI::Instance().Add("logger", std::make_shared<Graphics::Window2DOGL>(IvVector4(1.f,1.f, 1.f, 1.f), "window.bmp"));
-    window->SetLocation({ 10.f, 10.f }).SetSize({ 400.f, 500.f });
-}
+{}
 
 Game::~Game()
 {
@@ -111,8 +107,8 @@ void Game::UpdateObjects(float dt)
 
 void Game::Render(float dt)
 {
-    IGame::Render(dt);
-    Graphics::TextRenderer::Instance().Render(string("FPS ") += std::to_string(GetFPS()), 12, 0, 0.25f, IvVector3(0, 1, 0));
+    IGame::Render(dt);    
     IGame::PostRender();	
+    Graphics::TextRenderer::Instance().Add("frame_rate", string("FPS ") += std::to_string(GetFPS()), 12.f, 0.f, 0.25f, IvVector3(0.f, 1.f, 0.f));
 }
 

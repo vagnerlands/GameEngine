@@ -1,6 +1,8 @@
 #include "RenderScene.h"
 #include "SceneItemFactory.h"
 #include "IRenderer.h"
+#include "TextRenderer.h"
+#include "IGame.h"
 
 Graphics::RenderScene & Graphics::RenderScene::Instance()
 {
@@ -97,6 +99,7 @@ void Graphics::RenderScene::ApplyQuery(const std::string& id, SceneQuery& query)
 
 void Graphics::RenderScene::Render(float dt, bool isRenderingShadows) const
 {
+    Int32 debug = 0;
 	for (auto& it = m_items.begin(); it != m_items.end(); it++)
 	{
 		shared_ptr<Graphics::SceneItem> pObj = *it;
@@ -109,7 +112,9 @@ void Graphics::RenderScene::Render(float dt, bool isRenderingShadows) const
         else
         {
             // debug
-            cout << pObj->GetId().c_str() << " is out of frustum" << endl;
+            string t(pObj->GetId());
+            t += " is out of frustum";
+            LOG(t);
         }
 	}
 }

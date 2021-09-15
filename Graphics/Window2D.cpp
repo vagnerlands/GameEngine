@@ -26,8 +26,5 @@ Graphics::Window2D::~Window2D()
 void Graphics::Window2D::Draw(Float dt)
 {
     draw(dt); // calls concrete implementation (OpengGL, DirectX, or any other)
-    if (m_pChild != nullptr)
-    {
-        m_pChild->Draw(dt);
-    }
+    Widget::DrawChildren(dt);
 }
