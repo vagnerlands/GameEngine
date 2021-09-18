@@ -113,9 +113,8 @@ EngineCore::IGame::IGame() :
     KeyDispatcherFactory::Create(&mGameController);    
 
     auto logger = Graphics::RenderUI::Instance().Add("logger", std::make_shared<Graphics::Window2DOGL>(IvVector4(0.f, 0.f, 0.f, .5f), ""));
-    logger->SetLocation({ 20.f, 40.f }).SetSize({ 400.f, 480.f });    
-
-    mpLogger = UtilitiesCore::ILogger::Create(logger);
+    logger->SetLocation({ 20.f, 40.f }).SetSize({ 400.f, 280.f });    
+    mpLogger = UtilitiesCore::ILogger::Create(logger); // the ILogger will be placed into the "logger" window
 
     auto logger_input = Graphics::RenderUI::Instance().Add("logger_input", std::make_shared<Graphics::Window2DOGL>(IvVector4(1.f, 1.f, 1.f, 1.f),""));
     logger_input->SetLocation({ 0.f, -20.f }).SetSize({ 400.f, 20.f });

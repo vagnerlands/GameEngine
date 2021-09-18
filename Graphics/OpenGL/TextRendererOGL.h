@@ -17,6 +17,8 @@ namespace Graphics
         unsigned int TextureID;  // ID handle of the glyph texture
         IvVector2    Size;       // Size of glyph
         IvVector2    Bearing;    // Offset from baseline to left/top of glyph
+        IvVector2    TextCoordsS; // X axis Texture coordinates (mapping)
+        IvVector2    TextCoordsT; // Y axis Texture coordinates (mapping)
         unsigned int Advance;    // Offset to advance to next glyph
     };    
 

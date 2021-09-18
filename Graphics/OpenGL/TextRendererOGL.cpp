@@ -4,6 +4,7 @@
 #include "OglHelper.h"
 #include "IRenderer.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <png.h>
 const std::string Graphics::TextRendererOGL::s_shaderName = "text"; // default shader for a window, not thinking about specializations for now
 cwc::glShader* Graphics::TextRendererOGL::s_pShader = nullptr; // 1 shader to rule them all...
 
@@ -27,65 +28,116 @@ void Graphics::TextRendererOGL::Setup()
     {
         s_pShader = Graphics::OglHelper::generateShader(s_shaderName);
     }
-    FT_Library ft;    
+    FT_Library ft;
     if (FT_Init_FreeType(&ft))
     {
         std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-        return ;
+        return;
     }
 
     FT_Face face;
     if (FT_New_Face(ft, "Assets/Fonts/tahoma.ttf", 0, &face))
     {
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-        return ;
+        return;
     }
 
     FT_Set_Pixel_Sizes(face, 0, 48);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
 
-    for (unsigned char c = 0; c < 128; c++)
+    // generate texture
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    const UInt32 cFontSize = 50U;
+    const UInt32 cTextureWidth = 640;
+    const UInt32 cTextureHeight = 480;
+    UInt32 offsetX = 0;
+    UInt32 offsetY = 0;
+    UInt32 bufferOffset = 0;
+
+    UByte FontAtlas[cTextureWidth * cTextureHeight] = { 0x00 };
+    UByte cor = 0xff;
+    for (unsigned char ch = 32; ch < 127; ch++)
     {
         // load character glyph 
-        if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+        if (FT_Load_Char(face, ch, FT_LOAD_RENDER))
         {
             std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
             continue;
         }
-        // generate texture
-        unsigned int texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_RED,
-            face->glyph->bitmap.width,
-            face->glyph->bitmap.rows,
-            0,
-            GL_RED,
-            GL_UNSIGNED_BYTE,
-            face->glyph->bitmap.buffer
-        );
+
+        const UInt32 cBufferSize = face->glyph->bitmap.width * face->glyph->bitmap.rows;
+        for (Int32 r = 0; r < cFontSize; ++r)
+        {
+            const UInt32 cOffset = (cFontSize * offsetX) + (cFontSize * (offsetY * cTextureWidth) + (r * cTextureWidth));
+            if (r < face->glyph->bitmap.rows)
+            {
+                memcpy(&FontAtlas[cOffset], face->glyph->bitmap.buffer + r * face->glyph->bitmap.width, face->glyph->bitmap.width);
+            }
+        }
         // set texture options
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        IvVector2 coordsS((Float)((offsetX * cFontSize) / (Float)cTextureWidth), (Float)((offsetY * cFontSize) / (Float)cTextureHeight));
+        IvVector2 coordsT((Float)((offsetX * cFontSize + face->glyph->bitmap.width) / (Float)cTextureWidth), (Float)((offsetY * cFontSize + face->glyph->bitmap.rows) / (Float)cTextureHeight));
+
         // now store character for later use
         Character character = {
             texture,
             IvVector2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
             IvVector2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+            coordsS,
+            coordsT,
             face->glyph->advance.x
         };
-        Characters.insert(std::pair<char, Character>(c, character));
+        Characters.insert(std::pair<char, Character>(ch, character));
+
+        ++offsetX;
+        if ((offsetX * cFontSize) >= cTextureWidth)
+        {
+            offsetX = 0;
+            offsetY++;
+        }
     }
+
+    // ENABLE THIS TO DEBUG CONTENT...
+    //char* bmp_data = new char[cTextureWidth * cTextureHeight * 3];
+    //for (int i = 0; i < (cTextureWidth * cTextureHeight); ++i)
+    //{
+    //    bmp_data[i * 3 + 0] = 0xff;
+    //    bmp_data[i * 3 + 1] = FontAtlas[i];
+    //    bmp_data[i * 3 + 2] = 0xff;
+    //}
+    //FILE* fd;
+    //fopen_s(&fd, "./out.bmp", "wb");
+    //UByte bmp_header[54] = { 0x42, 0x4D, 0x36, 0x10, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x80, 0x02, 0x00, 0x00, 0xE0, 0x01, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    //fwrite(bmp_header, sizeof(bmp_header), 1, fd);
+    //fwrite(bmp_data, cTextureWidth* cTextureHeight * 3, 1, fd);
+    //fclose(fd);
+    //delete bmp_data;
+
 
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
-    
+
+    glTexImage2D(
+        GL_TEXTURE_2D,
+        0,
+        GL_RED, // only 1ch required
+        cTextureWidth,
+        cTextureHeight,
+        0,
+        GL_RED,
+        GL_UNSIGNED_BYTE,
+        FontAtlas
+    );
+
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
@@ -105,9 +157,11 @@ void Graphics::TextRendererOGL::Render()
     {
         std::cout << "OpenGL Error: " << error << std::endl;
     }
+
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBindTexture(GL_TEXTURE_2D, Characters[32].TextureID);
     // activate corresponding render state	
     s_pShader->Use();
     for (const auto& it : _texts)
@@ -123,19 +177,25 @@ void Graphics::TextRendererOGL::Render()
         const Int32 cLineSpace = (40 * i._scale);
         const Int32 cTopOffsetY = i._position.GetY() + i._area.GetY();
 
-        // future implementations may include text wrap, so keep this
+        // text is written from top-left to right-down
+        // before writting each character, we check the limits of the text area
+        // if the text won't fit in the X-axis of the text area, we advance the Y-axis
+        // and reset the X-axis.
+        // if the Y-axis reachs to the Y-axis text area limit, we stop writting this string and
+        // move to the next string.
+        Int32 line_counter = 1;
         Int32 x = i._position.GetX();
         Int32 y = cTopOffsetY - cLineSpace;
-        if (y < 0) 
+        if (y < 0)
             y = 0;
-        Int32 line_counter = 1;
+
         // iterate through all characters
-        std::string::const_iterator c;
+        std::string::const_iterator c = i._text.begin();
         for (c = i._text.begin(); c != i._text.end(); c++)
         {
             // in case there is a "new line" or the text has reached the x axis limit, 
             // we must perform a "carriage return" and "new line feed"
-            if ((*c == '\n') 
+            if ((*c == '\n')
                 || (x > i._area.GetX()))
             {
                 ++line_counter;
@@ -157,16 +217,15 @@ void Graphics::TextRendererOGL::Render()
             // update VBO for each character
             float vertices[6][4] =
             {
-                { xpos,     ypos + h,   0.0f, 0.0f },
-                { xpos,     ypos,       0.0f, 1.0f },
-                { xpos + w, ypos,       1.0f, 1.0f },
+                { xpos,     ypos + h,   ch.TextCoordsS.GetX(), ch.TextCoordsS.GetY() },
+                { xpos,     ypos,       ch.TextCoordsS.GetX(), ch.TextCoordsT.GetY()},
+                { xpos + w, ypos,       ch.TextCoordsT.GetX(), ch.TextCoordsT.GetY() },
 
-                { xpos,     ypos + h,   0.0f, 0.0f },
-                { xpos + w, ypos,       1.0f, 1.0f },
-                { xpos + w, ypos + h,   1.0f, 0.0f }
+                { xpos,     ypos + h,   ch.TextCoordsS.GetX(), ch.TextCoordsS.GetY() },
+                { xpos + w, ypos,       ch.TextCoordsT.GetX(), ch.TextCoordsT.GetY() },
+                { xpos + w, ypos + h,   ch.TextCoordsT.GetX(), ch.TextCoordsS.GetY() }
             };
-            // render glyph texture over quad
-            glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+
             // update content of VBO memory
             glBindBuffer(GL_ARRAY_BUFFER, VBO);
             glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
