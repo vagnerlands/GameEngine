@@ -38,7 +38,8 @@ jobs:
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "Start building the trunk..."
       - run: |
-          Start-Process "cmd.exe"  "/c build.bat" -Wait -NoNewWindow
+          Start-Process "cmd.exe"  "/c setup.bat" -Wait -NoNewWindow
+          msbuild Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild
           if ($errorlevel -ne 0){exit $errorlevel}
       - name: List files in the repository
         run: |
