@@ -16,7 +16,7 @@ jobs:
       - run: echo "Start building the trunk..."
       - run: |
           call build.bat
-          IF %errorlevel% NEQ 0 exit /b %errorlevel%
+          IF (%errorlevel% NEQ 0) exit /b %errorlevel%
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
