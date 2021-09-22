@@ -6,6 +6,7 @@ on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: windows-latest
+    steps:
     - name: Setup MSBuild (vswhere-path)
       id: setup_msbuild_explicit
       uses: ./
@@ -28,8 +29,7 @@ jobs:
         echo "PATH: ${{ steps.setup_msbuild_path.outputs.msbuildPath }}"
         echo "Fallback: ${{ steps.setup_msbuild_fallback.outputs.msbuildPath }}"
     - name: echo MSBuild
-      run: msbuild -version    
-    steps:
+      run: msbuild -version     
       - run: echo "Job will start due to ${{ github.event_name }} event."
       - run: echo "Job is running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
