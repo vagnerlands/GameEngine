@@ -15,7 +15,7 @@ jobs:
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "Start building the trunk..."
       - run: |
-          call build.bat
+          Start-Process "cmd.exe"  "/c build.bat" -Wait -NoNewWindow
           if ($errorlevel -ne 0){exit $errorlevel}
       - name: List files in the repository
         run: |
