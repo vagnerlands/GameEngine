@@ -16,8 +16,8 @@ jobs:
       - run: echo "Start building the trunk..."
       - run: |
           call build.bat
-          IF (%errorlevel% NEQ 0) exit /b %errorlevel%
+          if ($errorlevel -ne 0){exit $errorlevel}
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - run: echo "Job status is ${{ job.status }}."
