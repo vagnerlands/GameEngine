@@ -1,4 +1,4 @@
-# GameEngine
+# GameEngine ![example workflow](https://github.com/vagnerlands/GameEngine/actions/workflows/demo.yml/badge.svg)
 A complete Game Engine using best practices in C++ and OpenGL. The design is also extensible for DirectX. This is the first part of a personal project.
 
 ![alt text](https://github.com/vagnerlands/GameEngine/blob/master/Screenshots/animated_models.png?raw=true)
