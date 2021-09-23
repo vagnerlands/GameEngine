@@ -13,7 +13,13 @@ jobs:
         id: checkout_code
         
       - name: List files in Workspace
-        run: dir ${{ github.workspace }}
+        run: dir ${{ github.workspace }}        
+        
+      - name: Setup environment
+        id: setup_environment
+        working-directory: $
+        shell: cmd
+        run: .\Setup.bat        
       
       - name: Setup MSBuild and add to PATH
         uses: microsoft/setup-msbuild@v1.0.0
@@ -23,12 +29,6 @@ jobs:
 
       - name: List files in D
         run: dir ${{ github.workspace }}
-        
-      - name: Setup environment
-        id: setup_environment
-        working-directory: $
-        shell: pwsh
-        run: Start-Process "cmd.exe"  "/c setup.bat" -Wait -NoNewWindow
 
       - name: Run MSBuild
         id: run_msbuild
