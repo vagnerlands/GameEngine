@@ -1,6 +1,6 @@
 name: GameEngineBuild
-
-on: [push]
+# disable it until fixed...
+#on: [push] 
 
 jobs:
   Game-Engine-Build:
