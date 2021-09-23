@@ -34,7 +34,7 @@ jobs:
         run: msbuild .\Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild      
         
       - name: Check Build Status
-        id: run_msbuild
+        id: check_status
         working-directory: $
         run: if %errorlevel% neq 0 exit /b %errorlevel%
         
