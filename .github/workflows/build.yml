@@ -27,7 +27,7 @@ jobs:
       - name: Setup environment
         id: setup_environment
         working-directory: $
-        run: ${{ github.workspace }}\Setup.bat
+        run: call ${{ github.workspace }}\Setup.bat
 
       - name: Run MSBuild
         id: run_msbuild
