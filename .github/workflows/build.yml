@@ -15,21 +15,18 @@ jobs:
       - name: List files in Workspace
         run: dir ${{ github.workspace }}        
         
-      - name: Setup environment
-        id: setup_environment
-        working-directory: $
-        shell: cmd
-        run: .\Setup.bat        
+#      - name: Setup environment
+#        id: setup_environment
+#        working-directory: $
+#        shell: cmd
+#        run: .\Setup.bat        
       
       - name: Setup MSBuild and add to PATH
         uses: microsoft/setup-msbuild@v1.0.0
         id: setup_msbuild
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-
-      - name: List files in D
-        run: dir ${{ github.workspace }}
-
+          
       - name: Run MSBuild
         id: run_msbuild
         working-directory: $
