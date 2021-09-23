@@ -1,47 +1,92 @@
+name: Build 
+
+on: [push]
+  branches:
+    - master
+    # - test/*
+    # - feature/*
+    # - bugfix/*
+    
+jobs:
+  run-msbuild-vstest:
+  runs-on: windows-latest
+  name: Run MSBuild 
+  
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v2.1.0
+      id: checkout_code
+
+    - name: Setup MSBuild and add to PATH
+      uses: microsoft/setup-msbuild@v1.0.0
+      id: setup_msbuild
+      
+    - name: Setup environment
+      id: setup_environment
+      working-directory: $
+      run: .\Setup.bat
+
+    - name: Run MSBuild
+      id: run_msbuild
+      working-directory: $
+      run: msbuild .\Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild      
+
+    #- name: Setup VSTest and add to PATH
+    #  uses: darenm/Setup-VSTest@v1
+    #  id: setup_vstest
+
+    #- name: Run VSTest
+    #  id: run_vstest
+    #  working-directory: $\x64\Debug\
+    #  run: vstest.console.exe /Platform:x64 .\UnitTests.dll
+
+
+
+
 ############################################
 # Windows
 ############################################
-name: GameEngine Build Check
-on: [push]
-jobs:
-  Explore-GitHub-Actions:
-    runs-on: windows-latest
-    steps:
-    - name: Setup MSBuild (vswhere-path)
-      id: setup_msbuild_explicit
-      uses: ./
-      with:
-        vswhere-path: C:\ProgramData\chocolatey\bin
+# name: GameEngine Build Check
+# on: [push]
+# jobs:
+  # Explore-GitHub-Actions:
+    # runs-on: windows-latest
+    # steps:
+    # - name: Setup MSBuild (vswhere-path)
+      # id: setup_msbuild_explicit
+      # uses: ./
+      # with:
+        # vswhere-path: C:\ProgramData\chocolatey\bin
 
-    - name: Setup MSBuild (PATH)
-      id: setup_msbuild_path
-      uses: ./
+    # - name: Setup MSBuild (PATH)
+      # id: setup_msbuild_path
+      # uses: ./
 
-    - name: Setup MSBuild (fallback)
-      id: setup_msbuild_fallback
-      uses: ./
-      env:
-        PATH: ''
+    # - name: Setup MSBuild (fallback)
+      # id: setup_msbuild_fallback
+      # uses: ./
+      # env:
+        # PATH: ''
 
-    - name: echo msbuild path
-      run: |
-        echo "vswhere-path: ${{ steps.setup_msbuild_explicit.outputs.msbuildPath }}"
-        echo "PATH: ${{ steps.setup_msbuild_path.outputs.msbuildPath }}"
-        echo "Fallback: ${{ steps.setup_msbuild_fallback.outputs.msbuildPath }}"
-    - name: echo MSBuild
-      run: msbuild -version     
-      - run: echo "Job will start due to ${{ github.event_name }} event."
-      - run: echo "Job is running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "Start building the trunk..."
-      - run: |
-          Start-Process "cmd.exe"  "/c setup.bat" -Wait -NoNewWindow
-          msbuild Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild
-          if ($errorlevel -ne 0){exit $errorlevel}
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "Job status is ${{ job.status }}."
+    # - name: echo msbuild path
+      # run: |
+        # echo "vswhere-path: ${{ steps.setup_msbuild_explicit.outputs.msbuildPath }}"
+        # echo "PATH: ${{ steps.setup_msbuild_path.outputs.msbuildPath }}"
+        # echo "Fallback: ${{ steps.setup_msbuild_fallback.outputs.msbuildPath }}"
+    # - name: echo MSBuild
+      # run: msbuild -version     
+      # - run: echo "Job will start due to ${{ github.event_name }} event."
+      # - run: echo "Job is running on a ${{ runner.os }} server hosted by GitHub!"
+      # - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      # - name: Check out repository code
+        # uses: actions/checkout@v2
+      # - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+      # - run: echo "Start building the trunk..."
+      # - run: |
+          # Start-Process "cmd.exe"  "/c setup.bat" -Wait -NoNewWindow
+          # msbuild Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild
+          # if ($errorlevel -ne 0){exit $errorlevel}
+      # - name: List files in the repository
+        # run: |
+          # ls ${{ github.workspace }}
+      # - run: echo "Job status is ${{ job.status }}."
