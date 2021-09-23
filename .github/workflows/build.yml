@@ -32,13 +32,13 @@ jobs:
 #        working-directory: $
 #        run: msbuild ${{ github.workspace }}\Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild      
         
-      - name: Check Build Status
-        id: check_status
-        working-directory: $
-        run: |
-           Start-Process "cmd.exe"  "/c setup.bat" -Wait -NoNewWindow
-           msbuild Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild
-           if ($errorlevel -ne 0){exit $errorlevel}
+#      - name: Check Build Status
+#        id: check_status
+#        working-directory: $
+#        run: |
+#           Start-Process "cmd.exe"  "/c setup.bat" -Wait -NoNewWindow
+#           msbuild Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild
+#           if ($errorlevel -ne 0){exit $errorlevel}
         
 
     #- name: Setup VSTest and add to PATH
