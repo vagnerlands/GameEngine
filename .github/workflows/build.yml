@@ -20,6 +20,8 @@ jobs:
       - name: Setup MSBuild and add to PATH
         uses: microsoft/setup-msbuild@v1.0.0
         id: setup_msbuild
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       
       - name: Setup environment
         id: setup_environment
