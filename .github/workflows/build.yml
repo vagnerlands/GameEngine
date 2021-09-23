@@ -27,8 +27,8 @@ jobs:
       - name: Setup environment
         id: setup_environment
         working-directory: $
-        shell: cmd
-        run: call ${{ github.workspace }}\Setup.bat
+        shell: pwsh
+        run: Start-Process "cmd.exe"  "/c setup.bat" -Wait -NoNewWindow
 
       - name: Run MSBuild
         id: run_msbuild
