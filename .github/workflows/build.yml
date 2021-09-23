@@ -35,7 +35,10 @@ jobs:
       - name: Check Build Status
         id: check_status
         working-directory: $
-        run: if %errorlevel% neq 0 exit /b %errorlevel%
+        run: |
+           Start-Process "cmd.exe"  "/c setup.bat" -Wait -NoNewWindow
+           msbuild Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild
+           if ($errorlevel -ne 0){exit $errorlevel}
         
 
     #- name: Setup VSTest and add to PATH
