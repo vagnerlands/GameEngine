@@ -21,12 +21,12 @@ jobs:
       - name: Setup environment
         id: setup_environment
         working-directory: $
-        run: .\Setup.bat
+        run: D:\a\GameEngine\GameEngine\Setup.bat
 
       - name: Run MSBuild
         id: run_msbuild
         working-directory: $
-        run: msbuild .\Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild      
+        run: msbuild D:\a\GameEngine\GameEngine\Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild      
         
       - name: Check Build Status
         id: check_status
