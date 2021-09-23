@@ -27,10 +27,10 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
           
-      - name: Run MSBuild
-        id: run_msbuild
-        working-directory: $
-        run: msbuild ${{ github.workspace }}\Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild      
+#      - name: Run MSBuild
+#        id: run_msbuild
+#        working-directory: $
+#        run: msbuild ${{ github.workspace }}\Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild      
         
       - name: Check Build Status
         id: check_status
