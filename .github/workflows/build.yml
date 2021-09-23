@@ -15,24 +15,24 @@ jobs:
       - name: List files in Workspace
         run: dir ${{ github.workspace }}
       
-      - name: List files in D
-        run: dir D:\a\GameEngine\GameEngine\
-
       - name: Setup MSBuild and add to PATH
         uses: microsoft/setup-msbuild@v1.0.0
         id: setup_msbuild
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      
+
+      - name: List files in D
+        run: dir ${{ github.workspace }}
+        
       - name: Setup environment
         id: setup_environment
         working-directory: $
-        run: D:\a\GameEngine\GameEngine\Setup.bat
+        run: ${{ github.workspace }}\Setup.bat
 
       - name: Run MSBuild
         id: run_msbuild
         working-directory: $
-        run: msbuild D:\a\GameEngine\GameEngine\Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild      
+        run: msbuild ${{ github.workspace }}\Game.sln /p:Platform=x64 /p:Configuration=Debug /t:Rebuild      
         
       - name: Check Build Status
         id: check_status
