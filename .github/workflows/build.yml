@@ -11,6 +11,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         id: checkout_code
+        
+      - name: List files in Workspace
+        run: dir ${{ github.workspace }}
+      
+      - name: List files in D
+        run: dir D:\a\GameEngine\GameEngine\
 
       - name: Setup MSBuild and add to PATH
         uses: microsoft/setup-msbuild@v1.0.0
