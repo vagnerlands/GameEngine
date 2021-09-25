@@ -159,6 +159,7 @@
     <ClCompile Include="CClockOGL.cpp" />
     <ClCompile Include="Debugger.cpp" />
     <ClCompile Include="IClock.cpp" />
+    <ClCompile Include="InvalidTexture.cpp" />
     <ClCompile Include="Logger\ILogger.cpp" />
     <ClCompile Include="Rendered\SceneItemBoundingBox.cpp" />
     <ClCompile Include="Rendered\Skybox.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="CClockOGL.h" />
     <ClInclude Include="Debugger.h" />
     <ClInclude Include="IClock.h" />
+    <ClInclude Include="InvalidTexture.h" />
     <ClInclude Include="Logger\ILogger.h" />
     <ClInclude Include="OGLTypes.h" />
     <ClInclude Include="Rendered\SceneItemBoundingBox.h" />

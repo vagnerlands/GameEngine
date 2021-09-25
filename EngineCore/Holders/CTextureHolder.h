@@ -76,8 +76,6 @@ private:
     // total VRAM size in usage 
     UInt32                  m_sizeInUse;
     static const string     sc_invalidTextureName;
-    
-
 };
 
 #endif //CTEXTMANAGER_H_

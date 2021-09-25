@@ -1,0 +1,1 @@
+conan install . -s arch=x86_64 -s compiler="Visual Studio" -s compiler.version=15 -g deploy

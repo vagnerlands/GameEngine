@@ -11,6 +11,7 @@
 #include "IMutex.h"
 #include "CFactory2dImage.h"
 #include "Utils/Jobs.h"
+#include "InvalidTexture.h"
 
 CTextureHolder* CTextureHolder::s_pInstance = NULL;
 const string CTextureHolder::sc_invalidTextureName = "__no_valid_texture__.bmp";
@@ -52,6 +53,7 @@ CTextureHolder::LoadTexture(const string& textId)
 {
 	// start loading measuring time
 	clock_t start = clock();
+	bool mustFreeDS = true;
 
     LOG("Start loading [" + textId.c_str() + "]");
 
@@ -60,31 +62,33 @@ CTextureHolder::LoadTexture(const string& textId)
 
 	Byte*  textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem);
 	UInt32 textureDataLength = m_pResHandler->VGetResourceSize(resourceItem);
-	// status OK
-	if (textureDataStream != 0)
+
+	if (textureDataStream == 0)
 	{
-		// checks the first 2 bytes of the stream to know if we know how to parse it
-		Byte fileType[3];
-		memcpy(&fileType, textureDataStream, 3);
-		std::shared_ptr<I2dImage> pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
-		if (pRawImage != nullptr) // is this file a BMP?
-		{
-			if (pRawImage->ParseStream(textureDataStream, textureDataLength))
-			{
-				BuildTexture(textId, pRawImage);
-			}
-			else
-			{
-                LOG("Bad input stream, failed to load texture [" + textId.c_str() + "]");
-			}
-		}
-	}
-	else
-	{
-        LOG("Texture [" + textId.c_str() + "] not found");
+		mustFreeDS = false;
+		LOG("Texture [" + textId.c_str() + "] not found");
+		textureDataStream = UtilitiesCore::InvalidTexture::Value;
+		textureDataLength = sizeof(UtilitiesCore::InvalidTexture::Value);
 	}
 
-    if (textureDataStream != nullptr)
+	// checks the first 2 bytes of the stream to know if we know how to parse it
+	Byte fileType[3];
+	memcpy(&fileType, textureDataStream, 3);
+	std::shared_ptr<I2dImage> pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
+	if (pRawImage != nullptr) // is this file a BMP?
+	{
+		if (pRawImage->ParseStream(textureDataStream, textureDataLength))
+		{
+			BuildTexture(textId, pRawImage);
+		}
+		else
+		{
+			LOG("Bad input stream, failed to load texture [" + textId.c_str() + "]");
+		}
+	}
+
+    if ((textureDataStream != nullptr) 
+		&& (mustFreeDS))
     {
         delete[] textureDataStream;
     }
@@ -95,6 +99,7 @@ CTextureHolder::LoadTexture(const string& textId)
 
 std::shared_ptr<I2dImage> CTextureHolder::PrepareTexture(const string & textId)
 {
+	bool mustFreeDS = true;
     std::shared_ptr<I2dImage> pRawImage = nullptr;
     // start loading measuring time
     clock_t start = clock();
@@ -106,28 +111,30 @@ std::shared_ptr<I2dImage> CTextureHolder::PrepareTexture(const string & textId)
 
     Byte*  textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem);
     UInt32 textureDataLength = m_pResHandler->VGetResourceSize(resourceItem);
-    // status OK
-    if (textureDataStream != 0)
+
+	if (textureDataStream == 0)
+	{
+		mustFreeDS = false;
+		LOG("Texture [" + textId.c_str() + "] not found");
+		textureDataStream = UtilitiesCore::InvalidTexture::Value;
+		textureDataLength = sizeof(UtilitiesCore::InvalidTexture::Value);
+	}
+
+    // checks the first 2 bytes of the stream to know if we know how to parse it
+    Byte fileType[3];
+    memcpy(&fileType, textureDataStream, 3);
+    pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
+    if (pRawImage != nullptr) // is this file a BMP?
     {
-        // checks the first 2 bytes of the stream to know if we know how to parse it
-        Byte fileType[3];
-        memcpy(&fileType, textureDataStream, 3);
-        pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
-        if (pRawImage != nullptr) // is this file a BMP?
+        if (!pRawImage->ParseStream(textureDataStream, textureDataLength))
         {
-            if (!pRawImage->ParseStream(textureDataStream, textureDataLength))
-            {
-                pRawImage = nullptr;
-                LOG("Bad input stream, failed to load texture [" + textId.c_str() + "]");
-            }
+            pRawImage = nullptr;
+            LOG("Bad input stream, failed to load texture [" + textId.c_str() + "]");
         }
     }
-    else
-    {
-        LOG("Texture [" + textId.c_str() + "] not found");
-    }
 
-    if (textureDataStream != nullptr)
+    if ((textureDataStream != nullptr) 
+		&& mustFreeDS)
     {
         delete[] textureDataStream;
     }

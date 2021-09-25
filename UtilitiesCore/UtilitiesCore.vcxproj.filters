@@ -43,6 +43,9 @@
     <ClCompile Include="Logger\ILogger.cpp">
       <Filter>Src\Logger</Filter>
     </ClCompile>
+    <ClCompile Include="InvalidTexture.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debugger.h">
@@ -86,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="Logger\ILogger.h">
       <Filter>Src\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="InvalidTexture.h">
+      <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
