@@ -1,0 +1,20 @@
+[requires]
+assimp/5.0.1
+libpng/1.6.37
+freeglut/3.2.1
+glew/2.2.0
+zlib/1.2.11
+
+[generators]
+gcc
+cmake
+txt
+
+[options]
+poco:shared=True
+openssl:shared=True
+
+[imports]
+#bin, *.* -> ./Bin # Copies all dll files from the package "bin" folder to my project "bin" folder
+#lib, *.* -> ./Lib # 
+#include, *.* -> ./Include # 
