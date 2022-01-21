@@ -53,7 +53,7 @@ bool Game::PostRendererInitialize()
 	
 	// test sound
 	CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
-	//CSoundHolder::s_pInstance->PlaySoundById("highlands.wav", eSoundType_Music, 0.5f);
+	CSoundHolder::s_pInstance->PlaySoundById("highlands.wav", eSoundType_Music, 0.5f);
 	// Build a debug scenario
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
@@ -64,13 +64,13 @@ bool Game::PostRendererInitialize()
         .SetScale(IvVector3(20000.0, 1.0, 20000.0))
         .SetTextureUV(IvVector2(100.f, 100.f));
 
-    Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed)
-        .SetScale(IvVector3(1.f, 1.f, 1.f))
-        .SetLocation(IvVector3(5000.0, 0.5, 0));
+    //Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed)
+    //    .SetScale(IvVector3(1.f, 1.f, 1.f))
+    //    .SetLocation(IvVector3(5000.0, 0.5, 0));
 
-    Graphics::RenderScene::Instance().Add("Nemesis1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed)
-        .SetScale(IvVector3(1.f, 1.f, 1.f))
-        .SetLocation(IvVector3(-5000.0, 0.5, 0));
+    //Graphics::RenderScene::Instance().Add("Nemesis1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed)
+    //    .SetScale(IvVector3(1.f, 1.f, 1.f))
+    //    .SetLocation(IvVector3(-5000.0, 0.5, 0));
 
     Graphics::RenderScene::Instance().Add("Warrior1", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"), eSceneItemType_AnimatedAndShadowed)
         .SetScale(IvVector3(1.f, 1.f, 1.f))

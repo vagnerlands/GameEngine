@@ -17,7 +17,7 @@ namespace UtilitiesCore
 {
 	struct InvalidTexture
 	{
-		static Byte Value[49206];
+		static UByte Value[49206];
 	};
 }
 

@@ -27,12 +27,6 @@ Graphics::TextArea2D::~TextArea2D()
 
 void Graphics::TextArea2D::AddLine(const std::string & line)
 {
-    //std::string entry = line;
-    //if (entry.length() > m_maxStrLen)
-    //{
-    //    entry = entry.substr(0, m_maxStrLen);
-    //}
-
     if (m_memo.size() + 1 > m_maxDepth)
     {
         m_memo.pop_back();

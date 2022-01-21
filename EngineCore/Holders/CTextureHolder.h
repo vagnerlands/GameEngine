@@ -20,13 +20,9 @@ struct STextureItem
 {
     STextureItem() : m_name(""), m_size(0U) {}
     STextureItem(string name, UInt32 size) : m_name(name), m_size(size) {}
-    bool operator==(const STextureItem& other)
-    {
-        if (other.m_name == this->m_name)
-            return true;
-        else
-            return false;
-    }
+	bool operator==(const STextureItem& other);
+	friend bool operator==(const STextureItem& oth1, const STextureItem& oth2);
+    
     string                  m_name;
     UInt32                  m_size;
 };
@@ -77,5 +73,13 @@ private:
     UInt32                  m_sizeInUse;
     static const string     sc_invalidTextureName;
 };
+
+inline bool STextureItem::operator==(const STextureItem& other)
+{
+	if (other.m_name == this->m_name)
+		return true;
+	else
+		return false;
+}
 
 #endif //CTEXTMANAGER_H_

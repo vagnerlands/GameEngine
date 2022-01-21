@@ -217,7 +217,7 @@ void GameControls::Execute(float dt)
 void GameControls::OnKeyEvent(const Keyt& e)
 {
 	//Graphics::RenderScene::Instance().Change("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"));
-    Graphics::RenderScene::Instance().DisplayBoundingBox("Yoni2", true);
+    Graphics::RenderScene::Instance().DisplayBoundingBox("Warrior1", true);
 }
 
 void GameControls::OnKeyEvent(const Keyy& e)
@@ -242,22 +242,22 @@ void GameControls::OnKeyEvent(const KeyEscape & e)
 
 void GameControls::OnKeyEvent(const Keyv & e)
 {
-    Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(1, 1, 0));
+    Graphics::RenderScene::Instance().Translate("Warrior1", IvVector3(1, 1, 0));
 }
 
 void GameControls::OnKeyEvent(const Keyb & e)
 {
-    Graphics::RenderScene::Instance().Translate("Yoni2", IvVector3(-1, 1, 0));
+    Graphics::RenderScene::Instance().Translate("Warrior1", IvVector3(-1, 1, 0));
 }
 
 void GameControls::OnKeyEvent(const Keyn & e)
 {
-    Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(5.f, 5.f, 5.f));
+    Graphics::RenderScene::Instance().Scale("Warrior1", IvVector3(5.f, 5.f, 5.f));
 }
 
 void GameControls::OnKeyEvent(const Keym & e)
 {
-    Graphics::RenderScene::Instance().Scale("Yoni2", IvVector3(1.f, 1.f, 1.f));
+    Graphics::RenderScene::Instance().Scale("Warrior1", IvVector3(1.f, 1.f, 1.f));
 }
 
 void GameControls::OnKeyEvent(const Keyz& e)

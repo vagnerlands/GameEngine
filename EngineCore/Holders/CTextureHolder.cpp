@@ -67,7 +67,7 @@ CTextureHolder::LoadTexture(const string& textId)
 	{
 		mustFreeDS = false;
 		LOG("Texture [" + textId.c_str() + "] not found");
-		textureDataStream = UtilitiesCore::InvalidTexture::Value;
+		textureDataStream = reinterpret_cast<Byte*>(&UtilitiesCore::InvalidTexture::Value);
 		textureDataLength = sizeof(UtilitiesCore::InvalidTexture::Value);
 	}
 
@@ -116,7 +116,7 @@ std::shared_ptr<I2dImage> CTextureHolder::PrepareTexture(const string & textId)
 	{
 		mustFreeDS = false;
 		LOG("Texture [" + textId.c_str() + "] not found");
-		textureDataStream = UtilitiesCore::InvalidTexture::Value;
+		textureDataStream = reinterpret_cast<Byte*>(&UtilitiesCore::InvalidTexture::Value);
 		textureDataLength = sizeof(UtilitiesCore::InvalidTexture::Value);
 	}
 
@@ -164,31 +164,25 @@ void CTextureHolder::BuildTexture(const string& textureId, const std::shared_ptr
 void CTextureHolder::increaseTexturePriority(const string& textureId, UInt32 size = 0U)
 {
 	LockGuard lock(m_textureContentMapMutex);
-    for (TextureLru::iterator it = m_lru.begin(); it != m_lru.end(); it++)
-    {
-        if ((*it).m_name == textureId)
-        {
-            // creates a copy of the iterator value
-            STextureItem copyItem = *it;
-            // remove the item from whichever place it's now
-            m_lru.remove(*it);
-            // and re-insert on top
-            m_lru.push_front(copyItem);
-            
-			return;
-        }
-    }
+	STextureItem copyItem(textureId, size);
+	auto iterator = std::find_if(m_lru.begin(), m_lru.end(), [&](const STextureItem& entry) { return copyItem == entry; });
+	if (iterator != m_lru.end())
+	{
+		copyItem = *iterator;
+		m_lru.remove(*iterator);
+		m_sizeInUse -= copyItem.m_size;
+	}
 
     // create new record in LRU
-    if (size > 0U)
+    if (copyItem.m_size > 0U)
     {
         while ((size + m_sizeInUse) > m_maxAllocSize)
         {
             removeLastItem();
         }
-        m_sizeInUse += size;
-        m_lru.push_front(STextureItem(textureId, size));
+        m_sizeInUse += copyItem.m_size;
     }
+	m_lru.push_front(copyItem);
 }
 
 void CTextureHolder::removeLastItem()
@@ -342,5 +336,13 @@ void CTextureHolder::Update()
             BuildTexture(next.second, next.first);
         }
     }
+}
+
+bool operator==(const STextureItem& oth1, const STextureItem& oth2)
+{
+	if (oth1.m_name == oth2.m_name)
+		return true;
+	else
+		return false;
 }
 
