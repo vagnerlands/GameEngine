@@ -4,23 +4,26 @@
 @Set BIN_TARGET=%CD%\Binaries
 
 Set LIB_DEPENDENCY=^
-glew32.lib;^
-freeglut.lib;^
 Graphics.lib;^
 Math.lib;^
 EngineCore.lib;^
 UtilitiesCore.lib;^
-libpngd.lib;^
+glew32.lib;^
+freeglut.lib;^
 assimp-vc140-mt.lib;^
 DevIL.lib;^
 ILU.lib;^
 ILUT.lib;^
 SDL2.lib;^
 SDL2main.lib;^
-freetype.lib;^
 shell32.lib;^
-zlibd.lib
-
+brotlicommon-static.lib;^
+brotlidec-static.lib;^
+brotlienc-static.lib;^
+bz2.lib;^
+freetype.lib;^
+libpng16.lib;^
+zlib.lib;
 
 
 :: kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;
@@ -35,10 +38,12 @@ Set LIB_PATHS_X86_RELEASE=^
 
 Set LIB_PATHS_X64_DEBUG=^
 %PROJECT_ROOT%\Libs;^
+%PROJECT_ROOT%\Dependencies\Libs\x64;^
 %PROJECT_ROOT%\Libs\x64\Debug;
 
 Set LIB_PATHS_X64_RELEASE=^
 %PROJECT_ROOT%\Libs;^
+%PROJECT_ROOT%\Dependencies\Libs\x64;^
 %PROJECT_ROOT%\Libs\x64\Release;
 
 Set INCLUDE_PATHS=^
@@ -48,8 +53,12 @@ Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\Game-Editor;^
 %PROJECT_ROOT%\Graphics;^
 %PROJECT_ROOT%\Graphics\Scene;^
-%PROJECT_ROOT%\Includes;^
-%PROJECT_ROOT%\Includes\assimp;^
+%PROJECT_ROOT%\Dependencies;^
+%PROJECT_ROOT%\Dependencies\Includes;^
+%PROJECT_ROOT%\Dependencies\GL;^
+%PROJECT_ROOT%\Dependencies\SDL2;^
+%PROJECT_ROOT%\Dependencies\assimp;^
+%PROJECT_ROOT%\Dependencies\freetype\include\freetype2;^
 %PROJECT_ROOT%\Math;^
 %PROJECT_ROOT%\UtilitiesCore;^
 %PROJECT_ROOT%\EngineCore\Cache;^
