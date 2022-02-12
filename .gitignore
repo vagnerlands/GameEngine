@@ -24,3 +24,7 @@ Libs/x64/Debug/Graphics.pdb
 Libs/x64/Debug/Graphics.lib
 Libs/x64/Debug/EngineCore.pdb
 Libs/x64/Debug/EngineCore.lib
+
+Libs/x64/Release/Graphics.lib
+
+Libs/x64/Release/Graphics.pdb

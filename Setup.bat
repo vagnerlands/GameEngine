@@ -56,7 +56,6 @@ Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\Dependencies;^
 %PROJECT_ROOT%\Dependencies\Includes;^
 %PROJECT_ROOT%\Dependencies\GL;^
-%PROJECT_ROOT%\Dependencies\SDL2;^
 %PROJECT_ROOT%\Dependencies\assimp;^
 %PROJECT_ROOT%\Dependencies\freetype\include\freetype2;^
 %PROJECT_ROOT%\Math;^
