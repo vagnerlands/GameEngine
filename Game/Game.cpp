@@ -72,7 +72,7 @@ bool Game::PostRendererInitialize()
     //    .SetScale(IvVector3(1.f, 1.f, 1.f))
     //    .SetLocation(IvVector3(-5000.0, 0.5, 0));
 
-    Graphics::RenderScene::Instance().Add("Warrior1", CModelHolder::s_pInstance->GetModelById("Warrior_Attack.dae"), eSceneItemType_AnimatedAndShadowed)
+    Graphics::RenderScene::Instance().Add("Warrior1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed)
         .SetScale(IvVector3(1.f, 1.f, 1.f))
         .SetLocation(IvVector3(0.f, 0.5, 5000.f));
 

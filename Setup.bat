@@ -10,7 +10,7 @@ EngineCore.lib;^
 UtilitiesCore.lib;^
 glew32.lib;^
 freeglut.lib;^
-assimp-vc140-mt.lib;^
+assimp-vc142-mt.lib;^
 DevIL.lib;^
 ILU.lib;^
 ILUT.lib;^
