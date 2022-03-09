@@ -13,6 +13,18 @@ Binaries/
 Game-Editor/obj/
 Game/Debug/
 Game/Release/
+Libs/x64/Debug/Math.lib
+Libs/x64/Debug/EngineCore.lib
+Libs/x64/Debug/Graphics.lib
+Libs/x64/Debug/UtilitiesCore.lib
+Libs/x64/Debug/*.idb
+Libs/x64/Debug/*.pdb
+Libs/x64/Release/Math.lib
+Libs/x64/Release/EngineCore.lib
+Libs/x64/Release/Graphics.lib
+Libs/x64/Release/UtilitiesCore.lib
+Libs/x64/Release/*.idb
+Libs/x64/Release/*.pdb
 
 # Compiled source #
 Game/Debug.txt

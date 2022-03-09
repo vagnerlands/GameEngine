@@ -194,12 +194,18 @@ vector<SModelTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType
 
 void Model::setIvVector3(const aiVector3D * input, UInt32 offset, IvVector3 & output) const
 {
-    output = IvVector3(input[offset].x, input[offset].y, input[offset].z);
+    if (input != nullptr)
+    {
+        output = IvVector3(input[offset].x, input[offset].y, input[offset].z);
+    }
 }
 
 void Model::setIvVector2(const aiVector3D * input, UInt32 offset, IvVector2 & output) const
 {
-    output = IvVector2(input[offset].x, input[offset].y);
+    if (input != nullptr)
+    {
+        output = IvVector2(input[offset].x, input[offset].y);
+    }
 }
 
 IvAABB Model::calculateBoundingBox(const vector<SModelMesh>& meshes) const
