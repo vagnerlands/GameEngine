@@ -23,10 +23,10 @@ bool CTextureHolder::Create(const string& pathToTexturesFile, UInt32 maxAllocSiz
 		// creates instance of CModelHolder
 		s_pInstance = new CTextureHolder(pathToTexturesFile, maxAllocSize);
 		// tries to open the resource file - out of the constructor so errors may be reported
-		if ((s_pInstance != nullptr) 
-            && (s_pInstance->m_pResHandler->VOpen()))
+		if (s_pInstance != nullptr) 
 		{
-            s_pInstance->LoadTexture(sc_invalidTextureName);
+			s_pInstance->m_pResHandler->VOpen();
+            s_pInstance->LoadTexture(sc_invalidTextureName);			
 			return true;
 		}
 	}
@@ -60,41 +60,53 @@ CTextureHolder::LoadTexture(const string& textId)
 	// cache missed - must reload it from resources db
 	CResource resourceItem(textId);
 
-	Byte*  textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem);
-	UInt32 textureDataLength = m_pResHandler->VGetResourceSize(resourceItem);
+	Byte* textureDataStream;
+	UInt32 textureDataLength;
 
-	if (textureDataStream == 0)
+	try
+	{
+		textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem);
+		textureDataLength = m_pResHandler->VGetResourceSize(resourceItem);
+	}
+	catch (const std::exception& e)
 	{
 		mustFreeDS = false;
-		LOG("Texture [" + textId.c_str() + "] not found");
+		LOG("Texture [" + textId.c_str() + "] not found. Reason: " + e.what());
 		textureDataStream = reinterpret_cast<Byte*>(&UtilitiesCore::InvalidTexture::Value);
 		textureDataLength = sizeof(UtilitiesCore::InvalidTexture::Value);
 	}
 
-	// checks the first 2 bytes of the stream to know if we know how to parse it
-	Byte fileType[3];
-	memcpy(&fileType, textureDataStream, 3);
-	std::shared_ptr<I2dImage> pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
-	if (pRawImage != nullptr) // is this file a BMP?
+	if (textureDataStream != nullptr)
 	{
-		if (pRawImage->ParseStream(textureDataStream, textureDataLength))
+		// checks the first 2 bytes of the stream to know if we know how to parse it
+		Byte fileType[3];
+		memcpy(&fileType, textureDataStream, 3);
+		std::shared_ptr<I2dImage> pRawImage = CFactory2dImage::instance()->Create2dImage(fileType);
+		if (pRawImage != nullptr) // is this file a BMP?
 		{
-			BuildTexture(textId, pRawImage);
+			if (pRawImage->ParseStream(textureDataStream, textureDataLength))
+			{
+				BuildTexture(textId, pRawImage);
+			}
+			else
+			{
+				LOG("Bad input stream, failed to load texture [" + textId.c_str() + "]");
+			}
 		}
-		else
-		{
-			LOG("Bad input stream, failed to load texture [" + textId.c_str() + "]");
-		}
-	}
 
-    if ((textureDataStream != nullptr) 
-		&& (mustFreeDS))
-    {
-        delete[] textureDataStream;
-    }
-	
-	// time measurement
-    LOG("Finished loading [" + textId.c_str() + "] in " + to_string((float)(clock() - start)) + "ms");
+		if ((textureDataStream != nullptr)
+			&& (mustFreeDS))
+		{
+			delete[] textureDataStream;
+		}
+
+		// time measurement
+		LOG("Finished loading [" + textId.c_str() + "] in " + to_string((float)(clock() - start)) + "ms");
+	}
+	else
+	{
+		LOG("Couldn't load texture: " + textId.c_str());
+	}
 }
 
 std::shared_ptr<I2dImage> CTextureHolder::PrepareTexture(const string & textId)
@@ -109,8 +121,21 @@ std::shared_ptr<I2dImage> CTextureHolder::PrepareTexture(const string & textId)
     // cache missed - must reload it from resources db
     CResource resourceItem(textId);
 
-    Byte*  textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem);
-    UInt32 textureDataLength = m_pResHandler->VGetResourceSize(resourceItem);
+	Byte* textureDataStream;
+	UInt32 textureDataLength;
+
+	try
+	{
+		textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem);
+		textureDataLength = m_pResHandler->VGetResourceSize(resourceItem);
+	}
+	catch (const std::exception& e)
+	{
+		mustFreeDS = false;
+		LOG("Texture [" + textId.c_str() + "] not found. Reason: " + e.what());
+		textureDataStream = reinterpret_cast<Byte*>(&UtilitiesCore::InvalidTexture::Value);
+		textureDataLength = sizeof(UtilitiesCore::InvalidTexture::Value);
+	}
 
 	if (textureDataStream == 0)
 	{
@@ -253,8 +278,23 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 	for (UInt32 i = 0; i < arrLen; ++i)
 	{
 		resourceItem[i].SetName(attr[i].m_filename);
-		Byte*  textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem[i]);
-		UInt32 textureDataLength = m_pResHandler->VGetResourceSize(resourceItem[i]);
+
+		Byte* textureDataStream;
+		UInt32 textureDataLength;
+		bool mustFree = true;
+
+		try
+		{
+			textureDataStream = m_pResHandler->VAllocateAndGetResource(resourceItem[i]);
+			textureDataLength = m_pResHandler->VGetResourceSize(resourceItem[i]);
+		}
+		catch (const std::exception& e)
+		{
+			mustFree = false;
+			LOG("Texture [" + attr[i].m_filename.c_str() + "] not found. Reason: " + e.what());
+			textureDataStream = reinterpret_cast<Byte*>(&UtilitiesCore::InvalidTexture::Value);
+			textureDataLength = sizeof(UtilitiesCore::InvalidTexture::Value);
+		}
 		// checks the first 2 bytes of the stream to know if we know how to parse it
 		Byte fileType[3];
 		memcpy(&fileType, textureDataStream, 3);
@@ -264,8 +304,8 @@ Graphics::ITexture * CTextureHolder::getTextureVector(const vector<SModelTexture
 		{
 
 		}
-		// free file content buffer
-		delete[] textureDataStream;
+		if (mustFree)
+			delete[] textureDataStream;
 	}
 
 	// build 3D Cube texture data

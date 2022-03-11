@@ -25,6 +25,14 @@ Libs/x64/Release/Graphics.lib
 Libs/x64/Release/UtilitiesCore.lib
 Libs/x64/Release/*.idb
 Libs/x64/Release/*.pdb
+Dependencies
+!Dependencies/GL/
+!Dependencies/CommonTypes.h
+!Dependencies/conanfile.txt
+!Dependencies/GetDependencies.bat
+!Dependencies/ViewDependencyGraph.bat
+
+
 
 # Compiled source #
 Game/Debug.txt

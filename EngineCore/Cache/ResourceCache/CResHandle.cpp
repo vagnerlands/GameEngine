@@ -22,19 +22,18 @@ bool CResourceZipFile::VOpen()
 	m_pZipFile = new ZipFile();
 	if (m_pZipFile)
 	{
-		return m_pZipFile->Init(m_resFileName.c_str());
+		_isInitialized = m_pZipFile->Init(m_resFileName.c_str());
 	}
-	return false;
+	return _isInitialized;
 }
 
 int CResourceZipFile::VGetResourceSize(const CResource &r)
 {
 	int size = 0;
 	int resourceNum = m_pZipFile->Find(r.m_name.c_str());
-	if (resourceNum != -999999)
-	{
-		size = m_pZipFile->GetFileLen(resourceNum);
-	}
+	if (resourceNum == -999999)
+		throw std::runtime_error("Entry '" + r.m_name + "' was not found in '" + m_resFileName + "'");
+	size = m_pZipFile->GetFileLen(resourceNum);
 	return size;
 }
 
@@ -54,6 +53,8 @@ CResourceZipFile::VGetResource(const CResource &r, char *buffer)
 char* 
 CResourceZipFile::VAllocateAndGetResource(const CResource &r)
 {
+	if (!_isInitialized)
+		throw std::runtime_error("Resource Zip was not initialized properly " + m_resFileName);
 	// data to be returned to user - starts with no data (null)
 	char* contentBuffer = 0;
 	// retrieve file size

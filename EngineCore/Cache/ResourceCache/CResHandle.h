@@ -43,9 +43,14 @@ class CResourceZipFile : public IResourceFile
 {
 	ZipFile* m_pZipFile;
 	string m_resFileName;
+	bool _isInitialized;
 
 public:
-	CResourceZipFile(const char* resFileName, void* textMngHandle) {
+	CResourceZipFile(const char* resFileName, void* textMngHandle) : 
+		m_pZipFile(nullptr), 
+		m_resFileName(""), 
+		_isInitialized(false) 
+	{
 		m_pZipFile = NULL;
 		m_resFileName = resFileName;
 		m_textMngHandle = (OnRemoveEvent)textMngHandle;
