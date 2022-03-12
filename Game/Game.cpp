@@ -18,6 +18,9 @@
 #include "RenderUI.h"
 #include "TextRenderer.h"
 
+#include "Serializer/SerializationRecipe.h"
+#include <filesystem>
+
 bool 
 EngineCore::IGame::Create()
 {
@@ -59,22 +62,36 @@ bool Game::PostRendererInitialize()
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
 	Graphics::Ilumination::Instance().SetAmbientLightColor(IvVector3(mControls.m_ambient.GetX(), mControls.m_ambient.GetY(), mControls.m_ambient.GetZ()));
 
+
+	// try to load the level_1 file
+	const std::filesystem::path level_str = "Assets/level_1.json";
+	if (!std::filesystem::exists(level_str))
+		throw std::runtime_error("file not found: " + level_str.generic_string());
+
+	std::ifstream file(level_str, std::ios::in | std::ios::ate);
+	std::streamsize size = file.tellg();
+	file.seekg(0, std::ios::beg);
+
+	if (file.bad())
+	{
+		throw std::runtime_error("file is corrupted: " + level_str.generic_string());
+	}
+	std::vector<char> buffer(size);
+	file.read(buffer.data(), size);
+	JsonModel config;
+	TryToConvert(buffer.data(), config);	
+
 	// [Models]
-	Graphics::RenderScene::Instance().Add("Ground1", CModelHolder::s_pInstance->GetModelById("Cube.obj"), eSceneItemType_Simple)
-        .SetScale(IvVector3(20000.0, 1.0, 20000.0))
-        .SetTextureUV(IvVector2(100.f, 100.f));
 
-    //Graphics::RenderScene::Instance().Add("Yoni2", CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed)
-    //    .SetScale(IvVector3(1.f, 1.f, 1.f))
-    //    .SetLocation(IvVector3(5000.0, 0.5, 0));
-
-    //Graphics::RenderScene::Instance().Add("Nemesis1", CModelHolder::s_pInstance->GetModelById("nemesis.dae"), eSceneItemType_AnimatedAndShadowed)
-    //    .SetScale(IvVector3(1.f, 1.f, 1.f))
-    //    .SetLocation(IvVector3(-5000.0, 0.5, 0));
-
-    Graphics::RenderScene::Instance().Add("Warrior1", CModelHolder::s_pInstance->GetModelById("Warrior.dae"), eSceneItemType_AnimatedAndShadowed)
-        .SetScale(IvVector3(1.f, 1.f, 1.f))
-        .SetLocation(IvVector3(0.f, 0.5, 5000.f));
+	for (const auto& model : config.Models)
+	{
+		Graphics::RenderScene::Instance().Add(model.Name,
+			CModelHolder::s_pInstance->GetModelById(model.ModelId),
+			static_cast<Types::eSceneItemType>(model.sceneType))
+			.SetScale(IvVector3{ model.scale })
+			.SetLocation(IvVector3{ model.position })
+			.SetTextureUV(IvVector2{ model.texture });
+	}
 
 	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem)
         .SetLocation(IvVector3(0.f, 100.0f, 200.5f))

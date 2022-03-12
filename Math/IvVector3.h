@@ -50,6 +50,7 @@ public:
 
     // copy operations
     IvVector3(const IvVector3& other);
+    IvVector3(const double other[]);
     IvVector3& operator=(const IvVector3& other);
 
     // text output (for debugging)

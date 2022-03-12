@@ -40,6 +40,13 @@ IvVector3::IvVector3(const IvVector3& other) :
 
 }   // End of IvVector3::IvVector3()
 
+IvVector3::IvVector3(const double other[]) :
+    x(other[0]),
+    y(other[1]),
+    z(other[2])
+{
+}
+
 
 //-------------------------------------------------------------------------------
 // @ IvVector3::operator=()

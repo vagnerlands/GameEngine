@@ -177,6 +177,8 @@
     <ClInclude Include="OGLTypes.h" />
     <ClInclude Include="Rendered\SceneItemBoundingBox.h" />
     <ClInclude Include="Rendered\Skybox.h" />
+    <ClInclude Include="Serializer\SerializationRecipe.h" />
+    <ClInclude Include="Serializer\Serializer.h" />
     <ClInclude Include="Shaders\glsl.h" />
     <ClInclude Include="SocketUtils.h" />
     <ClInclude Include="zlib\ioapi.h" />

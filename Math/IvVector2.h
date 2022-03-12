@@ -35,6 +35,11 @@ public:
         x(_x), y(_y)
     {
     }
+    inline IvVector2(const double other[]) :
+        x(other[0]),
+        y(other[1])
+    {
+    }
     inline ~IvVector2() {}
     
     // text output (for debugging)
