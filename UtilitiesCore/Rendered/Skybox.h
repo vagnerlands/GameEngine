@@ -10,7 +10,6 @@
 #include "OGLTypes.h"
 #include "IDrawable.h"
 #include "SceneItemSkyBox.h"
-
 #include <vector>
 
 using namespace Types;
@@ -23,8 +22,8 @@ namespace UtilitiesCore
 	class Skybox : public Graphics::IDrawable
 	{
     public:
-        Skybox(const std::string& id, const vector<std::string>& faces);
-        static shared_ptr<Skybox> CreateSky(const std::string& id, const vector<std::string>& faces);
+        Skybox(const std::string& id, const vector<string>& faces);
+        static shared_ptr<Skybox> CreateSky(const std::string& id, const vector<string>& faces);
 		virtual ~Skybox();
 
 		virtual void Update(float dt) override;

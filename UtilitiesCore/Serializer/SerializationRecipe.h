@@ -10,14 +10,22 @@ struct JsonModelInfo
     std::string Name;
     std::string ModelId;
     int sceneType;
-    double position[3];
-    double scale[3];
-    double texture[2];
+    Double position[3];
+    Double scale[3];
+    Double texture[2];
 };
 
-struct JsonModel
+struct JsonBackgroundMusicInfo
+{
+    std::string Name;
+    Float Volume;
+};
+
+struct JsonLevelData
 {
     std::vector<JsonModelInfo> Models;
+    std::vector<string> SkyBox;
+    std::vector<JsonBackgroundMusicInfo> BackgroundMusic;
 };
 
 IMPLEMENT_JSON_SERIALIZATION(JsonModelInfo,
@@ -29,8 +37,15 @@ IMPLEMENT_JSON_SERIALIZATION(JsonModelInfo,
     texture
 );
 
-IMPLEMENT_JSON_SERIALIZATION(JsonModel,
-    Models
+IMPLEMENT_JSON_SERIALIZATION(JsonBackgroundMusicInfo,
+    Name,
+    Volume
+);
+
+IMPLEMENT_JSON_SERIALIZATION(JsonLevelData,
+    Models,
+    SkyBox,
+    BackgroundMusic
 );
 
 template <typename Type>

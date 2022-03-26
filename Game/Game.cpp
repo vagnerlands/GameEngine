@@ -56,7 +56,7 @@ bool Game::PostRendererInitialize()
 	
 	// test sound
 	CSoundHolder::s_pInstance->PlaySoundById("windhowl.wav", eSoundType_Effect, 0.1f);
-	CSoundHolder::s_pInstance->PlaySoundById("highlands.wav", eSoundType_Music, 0.5f);
+
 	// Build a debug scenario
 	// [Light]
 	Graphics::Ilumination::Instance().Add(new Graphics::IluminationItem("main", IvVector3(0.f, 0.f, 0.f), Graphics::LightType_Omni));
@@ -78,7 +78,7 @@ bool Game::PostRendererInitialize()
 	}
 	std::vector<char> buffer(size);
 	file.read(buffer.data(), size);
-	JsonModel config;
+	JsonLevelData config;
 	TryToConvert(buffer.data(), config);	
 
 	// [Models]
@@ -93,6 +93,12 @@ bool Game::PostRendererInitialize()
 			.SetTextureUV(IvVector2{ model.texture });
 	}
 
+	// [SkyBox]
+	Graphics::RenderScene::Instance().Add("SKY1", UtilitiesCore::Skybox::CreateSky("sky1", config.SkyBox), eSceneItemType_SkyBox);
+
+	// [Background Music]
+	CSoundHolder::s_pInstance->PlaySoundById(config.BackgroundMusic[0].Name, eSoundType_Music, config.BackgroundMusic[0].Volume);
+
 	Graphics::RenderScene::Instance().Add("Particles2", CParticlesSystemHolder::s_pInstance->GetParticleById("basic"), eSceneItemType_ParticlesSystem)
         .SetLocation(IvVector3(0.f, 100.0f, 200.5f))
         .SetCastShadows(false);
@@ -101,9 +107,6 @@ bool Game::PostRendererInitialize()
 	part.Set(Graphics::ParticleSeeds(300, 100, 150, 10000, 12000, 10000, 12000, 50, 100, 100, 200, "flame.png"));
 	Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 
-	// 6 faces of the sky - external interface must provide these
-    vector<std::string> faces = { "skyright.bmp" , "skyleft.bmp", "skybottom.bmp", "skytop.bmp", "skyfront.bmp", "skyback.bmp" };
-    Graphics::RenderScene::Instance().Add("SKY1", UtilitiesCore::Skybox::CreateSky("sky1", faces), eSceneItemType_SkyBox);
 	// [Landscape]
     // TODO...
 

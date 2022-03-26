@@ -4,12 +4,12 @@
 #include "IvVector2.h"
 #include "IvVector3.h"
 
-shared_ptr<UtilitiesCore::Skybox> UtilitiesCore::Skybox::CreateSky(const std::string& id, const vector<std::string>& faces)
+shared_ptr<UtilitiesCore::Skybox> UtilitiesCore::Skybox::CreateSky(const std::string& id, const vector<string>& faces)
 {
     return make_shared<UtilitiesCore::Skybox>(id, faces);
 }
 
-UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<std::string>& faces) :
+UtilitiesCore::Skybox::Skybox(const std::string& id, const vector<string>& faces) :
 	Graphics::IDrawable(), 
     m_sceneItem(id, shared_ptr<Graphics::IDrawable>(nullptr))
 {

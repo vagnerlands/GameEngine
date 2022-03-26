@@ -1,0 +1,34 @@
+{
+	"Models": [
+	{
+		"Name": "Ground1",
+		"ModelId": "Cube.obj",
+		"sceneType": 1,
+		"position": [0, 0, 0],
+		"scale": [20000, 1, 20000],
+		"texture": [100, 100]
+    },
+	{
+		"Name": "Warrior1",
+		"ModelId": "nemesis.dae",
+		"sceneType": 4,
+		"position": [0, 0.5, 0],
+		"scale": [1, 1, 1],
+		"texture": [1, 1]
+    }
+	],
+	"SkyBox":[
+		"skyright.bmp",
+		"skyleft.bmp",
+		"skybottom.bmp", 
+		"skytop.bmp",
+		"skyfront.bmp",
+		"skyback.bmp"
+	],
+	"BackgroundMusic":[
+	{
+		"Name": "highlands.wav",
+		"Volume": 0.5
+	}
+	]
+}
