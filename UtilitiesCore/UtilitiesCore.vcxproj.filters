@@ -17,6 +17,9 @@
     <Filter Include="Src\Logger">
       <UniqueIdentifier>{abccd3cb-4b3a-4d75-9098-bed0637161d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Serializer">
+      <UniqueIdentifier>{60da7adf-2578-46a6-9a5d-e9ec3131f6d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Debugger.cpp">
@@ -92,6 +95,12 @@
     </ClInclude>
     <ClInclude Include="InvalidTexture.h">
       <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Serializer\Serializer.h">
+      <Filter>Src\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Serializer\SerializationRecipe.h">
+      <Filter>Src\Serializer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

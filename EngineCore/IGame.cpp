@@ -46,7 +46,7 @@ bool EngineCore::IGame::PreRendererInitialize(int argc, char * argv[])
     CParticlesSystemHolder::s_pInstance->Create(".\\Assets\\model.zip");
     CSoundHolder::s_pInstance->Create("test", 1);
     // allocation for VRAM textures
-    const UInt32 cTextureCacheSizeInMBs = 120;
+    const UInt32 cTextureCacheSizeInMBs = 250;
     CTextureHolder::s_pInstance->Create(".\\Assets\\textures.zip", cTextureCacheSizeInMBs * 1024U * 1024U);
 
 	return true;

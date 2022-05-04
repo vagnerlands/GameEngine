@@ -330,7 +330,7 @@ void Graphics::CModelOGL::Draw(const SceneItem& si, float dt, bool isRenderingSh
 shared_ptr<Model> Graphics::CModelOGL::Allocate()
 {
 	// creates a new buffer for the model object
-	m_pData = shared_ptr<Model>(new Model());
+	m_pData = make_shared<Model>();
 	// return this buffer for edit
 	return m_pData;
 }
