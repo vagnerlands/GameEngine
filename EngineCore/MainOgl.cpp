@@ -59,12 +59,6 @@ void ReshapeWrap(Int32 w, Int32 h)
 // reads the user input key - KEY DOWN
 void KeyboardInput(UByte key, Int32 x, Int32 y)
 {
-	if (key == 'c')
-	{
-		s_lastState = GLUT_DOWN;
-		s_lastCursorX = -1;
-		s_lastCursorY = -1;
-	}
 	EngineCore::IGame::mGame->GetGameController()->VOnKeyDown(key);
 }
 

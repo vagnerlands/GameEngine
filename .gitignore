@@ -9,6 +9,8 @@ Math/Debug/
 Math/Release/
 UtilitiesCore/Debug/
 UtilitiesCore/Release/
+Editor-GL/Debug/
+Editor-GL/Release/
 Binaries/
 Game-Editor/obj/
 Game/Debug/

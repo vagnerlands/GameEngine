@@ -9,6 +9,8 @@ Math.lib;^
 EngineCore.lib;^
 UtilitiesCore.lib;^
 glew32.lib;^
+glfw3.lib;^
+imgui.lib;^
 freeglut.lib;^
 assimp-vc142-mt.lib;^
 DevIL.lib;^
@@ -39,11 +41,13 @@ Set LIB_PATHS_X86_RELEASE=^
 Set LIB_PATHS_X64_DEBUG=^
 %PROJECT_ROOT%\Libs;^
 %PROJECT_ROOT%\Dependencies\Libs\x64;^
+%PROJECT_ROOT%\Dependencies\glfw-bin\src\Debug;^
 %PROJECT_ROOT%\Libs\x64\Debug;
 
 Set LIB_PATHS_X64_RELEASE=^
 %PROJECT_ROOT%\Libs;^
 %PROJECT_ROOT%\Dependencies\Libs\x64;^
+%PROJECT_ROOT%\Dependencies\glfw-bin\src\Release;^
 %PROJECT_ROOT%\Libs\x64\Release;
 
 Set INCLUDE_PATHS=^
@@ -55,6 +59,7 @@ Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\Graphics\Scene;^
 %PROJECT_ROOT%\Dependencies;^
 %PROJECT_ROOT%\Dependencies\Includes;^
+::%PROJECT_ROOT%\Dependencies\glfw\include;^
 %PROJECT_ROOT%\Dependencies\GL;^
 %PROJECT_ROOT%\Dependencies\assimp;^
 %PROJECT_ROOT%\Dependencies\freetype\include\freetype2;^
@@ -81,5 +86,6 @@ Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\UtilitiesCore\Shaders;^
 %PROJECT_ROOT%\UtilitiesCore\zlib;^
 %PROJECT_ROOT%\UtilitiesCore\Rendered;
+
 
 ::"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\msbuild.exe" "%PROJECT_ROOT%"\Game.sln /t:Rebuild /p:Platform=x64 /p:Configuration=Release

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{9ACB1789-6E86-4D18-BF31-11E4DCCDE6EA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphics", "Graphics\Graphi
 	ProjectSection(ProjectDependencies) = postProject
 		{5176FB6E-7622-4A7D-9090-F3518141B00D} = {5176FB6E-7622-4A7D-9090-F3518141B00D}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor-GL", "Editor-GL\Editor-GL.vcxproj", "{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +92,16 @@ Global
 		{F8A5F79F-2534-4D62-88D5-023F20628C5B}.Release|x64.Build.0 = Release|x64
 		{F8A5F79F-2534-4D62-88D5-023F20628C5B}.Release|x86.ActiveCfg = Release|Win32
 		{F8A5F79F-2534-4D62-88D5-023F20628C5B}.Release|x86.Build.0 = Release|Win32
+		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Debug|x64.ActiveCfg = Debug|x64
+		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Debug|x64.Build.0 = Debug|x64
+		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Debug|x86.ActiveCfg = Debug|Win32
+		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Debug|x86.Build.0 = Debug|Win32
+		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Release|Any CPU.ActiveCfg = Release|Win32
+		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Release|x64.ActiveCfg = Release|x64
+		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Release|x64.Build.0 = Release|x64
+		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Release|x86.ActiveCfg = Release|Win32
+		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
