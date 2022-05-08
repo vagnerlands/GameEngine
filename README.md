@@ -5,3 +5,7 @@ A complete Game Engine using best practices in C++ and OpenGL. The design is als
 
 # Attention
 This first compiles only under Debug/x64 and Release/x64
+
+# Tips
+- In order to run the Editor, execute the Editor.bat
+- In order to run the Game Demo, execute the Game.bat

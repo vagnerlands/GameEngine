@@ -108,7 +108,7 @@ namespace _Keys
 		void Bind(KeyBinder* b) { m_listeners.push_back(b); }
 		void Event()
 		{
-			for (list<KeyBinder*>::iterator i = m_listeners.begin(); i != m_listeners.end(); i++)
+			for (auto i = m_listeners.begin(); i != m_listeners.end(); i++)
 			{
 				(*i)->OnKeyEvent(KeyBinder());
 			}

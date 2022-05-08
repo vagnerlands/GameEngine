@@ -8,6 +8,8 @@
 
 using namespace Types;
 
+class IvAABB;
+
 namespace Graphics
 {
 
@@ -60,6 +62,8 @@ namespace Graphics
         bool IsClip(const IvAABB& aabb);
 
 		virtual Int32 InitializeGraphics(Int32 width, Int32 height, bool isFullScreen);
+
+		virtual bool IsOperational() = 0;
 
 		static IRenderer*  mRenderer;          // global pointer
 

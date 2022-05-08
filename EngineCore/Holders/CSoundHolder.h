@@ -22,7 +22,7 @@ public:
 	void PlaySoundById(const string& id, eSoundType type, Float volume);
 	void RemoveSound(const string& id);
 	void Destroy(const string& id);
-	CSoundHolder::~CSoundHolder();
+	~CSoundHolder();
 
 	//void AudioCallback(void* userData, Uint8* stream, int streamLength);
 	void LockMix();

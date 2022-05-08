@@ -25,7 +25,7 @@ void Graphics::Ilumination::Add(IluminationItem * pLightSource)
 
 void Graphics::Ilumination::Update(const std::string & id, const IvVector3 & newLocation)
 {
-	for (std::list<Graphics::IluminationItem*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
+	for (auto it = m_lights.begin(); it != m_lights.end(); it++)
 	{
 		// de-reference the iterator to the list type
 		Graphics::IluminationItem* pLightObj = *it;
@@ -40,7 +40,7 @@ void Graphics::Ilumination::Update(const std::string & id, const IvVector3 & new
 
 void Graphics::Ilumination::IncreaseAttenuationBy(const std::string& id, const float attenuationIncrease)
 {
-	for (std::list<Graphics::IluminationItem*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
+	for (auto it = m_lights.begin(); it != m_lights.end(); it++)
 	{
 		// de-reference the iterator to the list type
 		Graphics::IluminationItem* pLightObj = *it;
@@ -55,7 +55,7 @@ void Graphics::Ilumination::IncreaseAttenuationBy(const std::string& id, const f
 
 void Graphics::Ilumination::SetLightColor(const std::string& id, const IvVector3& lightColor)
 {
-	for (std::list<Graphics::IluminationItem*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
+	for (auto it = m_lights.begin(); it != m_lights.end(); it++)
 	{
 		// de-reference the iterator to the list type
 		Graphics::IluminationItem* pLightObj = *it;
@@ -75,7 +75,7 @@ void Graphics::Ilumination::SetAmbientLightColor(const IvVector3& lightColor)
 
 void Graphics::Ilumination::Remove(const std::string & id)
 {
-	for (std::list<Graphics::IluminationItem*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
+	for (auto it = m_lights.begin(); it != m_lights.end(); it++)
 	{
 		// de-reference the iterator to the list type
 		Graphics::IluminationItem* pLightObj = *it;
@@ -106,7 +106,7 @@ void Graphics::Ilumination::GetIluminationItemLocationPtr(const std::string & id
 
 void Graphics::Ilumination::GetIluminationItemLocation(const std::string & id, IvVector3 & location)
 {
-	for (std::list<Graphics::IluminationItem*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
+	for (auto it = m_lights.begin(); it != m_lights.end(); it++)
 	{
 		Graphics::IluminationItem* pLightObj = *it;
 		if (*pLightObj == id)
@@ -130,12 +130,16 @@ void Graphics::Ilumination::HasAnimations(bool value)
 
 float Graphics::Ilumination::GetLightAttenuation() const
 {
-	return (*m_lights.begin())->GetLightAttenuation();
+	if (m_lights.size() > 0U)
+		return (*m_lights.begin())->GetLightAttenuation();
+	return 1.f;
 }
 
 const IvVector3& Graphics::Ilumination::GetLightColor() const
 {
-	return (*m_lights.begin())->GetLightColor();
+	if (m_lights.size() > 0U)
+		return (*m_lights.begin())->GetLightColor();
+	return IvVector3(1, 1, 1);
 }
 
 const IvVector3& Graphics::Ilumination::GetAmbientLightColor() const
@@ -145,17 +149,21 @@ const IvVector3& Graphics::Ilumination::GetAmbientLightColor() const
 
 void Graphics::Ilumination::UpdateBoneTransformations(Float* boneTransformMat44, UInt32 boneIndex)
 {
-	m_pShadows->UpdateBoneTransformations(boneTransformMat44, boneIndex);
+	if (m_pShadows)
+		m_pShadows->UpdateBoneTransformations(boneTransformMat44, boneIndex);
 }
 
 void Graphics::Ilumination::BindShadowTexture()
 {
-    m_pShadows->BindShadowTexture();
+	if (m_pShadows)
+		m_pShadows->BindShadowTexture();
 }
 
 UInt32 Graphics::Ilumination::GetShadowTexture()
 {
-    return m_pShadows->GetDepthMapId();
+	if (m_pShadows)
+		return m_pShadows->GetDepthMapId();
+	return 0;
 }
 
 

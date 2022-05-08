@@ -18,7 +18,7 @@ namespace Graphics
 
         static void Graphics::OglHelper::applyTextures(cwc::glShader* pShader, const vector<SModelTexture>& textures)
         {
-            const UInt32 cTexturesCount = textures.size();
+            const size_t cTexturesCount = textures.size();
             if (cTexturesCount > 0)
             {
                 // checks whether is a cubemap - in this case, there will be a texture id for the 6 cube faces

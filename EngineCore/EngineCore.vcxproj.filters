@@ -154,6 +154,9 @@
     <ClCompile Include="Utils\Jobs.cpp">
       <Filter>Src\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="MainGLFW.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IGame.h">
@@ -302,6 +305,9 @@
     </ClInclude>
     <ClInclude Include="Utils\Jobs.h">
       <Filter>Src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGLFW.h">
+      <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

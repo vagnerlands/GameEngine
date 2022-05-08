@@ -1,5 +1,4 @@
-#ifndef _ILight_H_
-#define _ILight_H_
+#pragma once
 
 #include "CommonTypes.h"
 #include "IvVector3.h"
@@ -18,7 +17,7 @@ namespace Graphics
 	class IluminationItem
 	{
 	public:
-		IluminationItem(const std::string id, IvVector3& location, ELightType type);
+		IluminationItem(const std::string id, IvVector3&& location, ELightType type);
 
 		// virtual destructor
 		virtual ~IluminationItem()
@@ -103,4 +102,3 @@ namespace Graphics
 	}
 
 }
-#endif // _ILight_H_

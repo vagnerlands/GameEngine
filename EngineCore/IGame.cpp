@@ -20,14 +20,13 @@
 #include "OpenGL/Window2DOGL.h"
 #include "Logger/ILogger.h"
 
-EngineCore::IGame* EngineCore::IGame::mGame = nullptr;
+std::shared_ptr<EngineCore::IGame> EngineCore::IGame::mGame = nullptr;
 
 void EngineCore::IGame::Destroy()
 {
     if (mGame->mClock != nullptr)
         mGame->mClock = nullptr;
-    if (mGame != nullptr)
-		delete mGame;	
+	mGame = nullptr;
 }
 
 bool EngineCore::IGame::PreRendererInitialize(int argc, char * argv[])

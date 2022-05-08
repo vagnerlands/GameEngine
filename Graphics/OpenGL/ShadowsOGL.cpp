@@ -1,7 +1,6 @@
 #include "ShadowsOGL.h"
 #include "CShaderHolder.h"
 #include <GL/glew.h>
-//#include "glm/glm.hpp"
 #include "IRenderer.h"
 #include "Ilumination.h"
 #include <time.h>
@@ -134,6 +133,11 @@ void Graphics::ShadowsOGL::Stop()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // stop using shader
     glUseProgram(0);
+
+
+	GLenum glErr = 0;
+	while ((glErr= glGetError()) != GL_NO_ERROR)
+		printf("Failed while stop shadows %d\n", glErr);
 }
 
 UInt32 Graphics::ShadowsOGL::GetDepthMapId() const

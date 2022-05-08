@@ -1,6 +1,4 @@
-#ifndef _TextRendererOgl_H_
-#define _TextRendererOgl_H_
-
+#pragma once
 #include "TextRenderer.h"
 #include "glsl.h"
 #include "IvVector2.h"
@@ -37,4 +35,3 @@ namespace Graphics
 
 
 }
-#endif // _TextRendererOgl_H_

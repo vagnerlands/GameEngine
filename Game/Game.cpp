@@ -24,7 +24,7 @@
 bool 
 EngineCore::IGame::Create()
 {
-	IGame::mGame = new Game();
+	IGame::mGame = std::make_shared<Game>();
 	return (IGame::mGame != nullptr);
 }
 

@@ -10,7 +10,6 @@ EngineCore.lib;^
 UtilitiesCore.lib;^
 glew32.lib;^
 glfw3.lib;^
-imgui.lib;^
 freeglut.lib;^
 assimp-vc142-mt.lib;^
 DevIL.lib;^

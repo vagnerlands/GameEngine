@@ -4,13 +4,16 @@
 
 bool Graphics::CTextureOGL::BuildTexture(const std::shared_ptr<I2dImage>& pData)
 {
+	Int32 err = 0;
+	while ((err = glGetError()) != GL_NO_ERROR)
+		printf("Graphics::CTextureOGL::BuildTexture error cleaning... =%d\n", err);
 	// allocate a texture name
 	m_textureId = -1;
 	// then, allocate an indexer for new texture
 	glGenTextures(1, &m_textureId);
 	// binds this texture as a 2D bitmap
 	glBindTexture(GL_TEXTURE_2D, m_textureId);
-	Int32 err = glGetError();
+	err = glGetError();
 	if (err != GL_NO_ERROR)
 	{
 		printf("glError BindTexture=%d\n", err);
@@ -20,7 +23,7 @@ bool Graphics::CTextureOGL::BuildTexture(const std::shared_ptr<I2dImage>& pData)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	// always good to get the error in case it happens
 	err = glGetError();
 	if (err != GL_NO_ERROR)

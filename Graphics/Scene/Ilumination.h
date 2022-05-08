@@ -1,6 +1,4 @@
-#ifndef _Ilumination_H_
-#define _Ilumination_H_
-
+#pragma once
 #include "CommonTypes.h"
 #include "IluminationItem.h"
 #include "Shadows.h"
@@ -14,7 +12,7 @@ namespace Graphics
 	class Ilumination
 	{
 	public:
-		Ilumination() : m_ambientColor(0.15f, 0.15f, 0.15f)
+		Ilumination() : m_ambientColor{0.15f, 0.15f, 0.15f}, m_pShadows{ nullptr }
 		{
 
 
@@ -83,4 +81,3 @@ namespace Graphics
 
 
 }
-#endif // _Ilumination_H_

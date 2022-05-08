@@ -1,16 +1,26 @@
 # do not track files in these folders #
 EngineCore/Debug/
 EngineCore/Release/
+EngineCore/Editor-Debug/
+EngineCore/Editor-Release/
 GameDLL/Debug/
 GameDLL/Release/
 Graphics/Debug/
 Graphics/Release/
+Graphics/Editor-Debug/
+Graphics/Editor-Release/
 Math/Debug/
 Math/Release/
+Math/Editor-Debug/
+Math/Editor-Release/
 UtilitiesCore/Debug/
 UtilitiesCore/Release/
+UtilitiesCore/Editor-Debug/
+UtilitiesCore/Editor-Release/
 Editor-GL/Debug/
 Editor-GL/Release/
+Editor-GL/Editor-Debug/
+Editor-GL/Editor-Release/
 Binaries/
 Game-Editor/obj/
 Game/Debug/
@@ -27,6 +37,12 @@ Libs/x64/Release/Graphics.lib
 Libs/x64/Release/UtilitiesCore.lib
 Libs/x64/Release/*.idb
 Libs/x64/Release/*.pdb
+Libs/x64/Editor-Debug/*.lib
+Libs/x64/Editor-Debug/*.pdb
+Libs/x64/Editor-Debug/*.idb
+Libs/x64/Editor-Release/*.lib
+Libs/x64/Editor-Release/*.pdb
+Libs/x64/Editor-Release/*.idb
 Dependencies
 !Dependencies/GL/
 !Dependencies/CommonTypes.h
@@ -46,7 +62,5 @@ Libs/x64/Debug/Graphics.pdb
 Libs/x64/Debug/Graphics.lib
 Libs/x64/Debug/EngineCore.pdb
 Libs/x64/Debug/EngineCore.lib
-
 Libs/x64/Release/Graphics.lib
-
 Libs/x64/Release/Graphics.pdb

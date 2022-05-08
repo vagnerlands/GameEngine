@@ -32,6 +32,12 @@ void Graphics::Window2DOGL::Setup()
         s_pShader = Graphics::OglHelper::generateShader(s_shaderName);
     }
 
+    error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        std::cout << "generateShader(" << s_shaderName << ", OpenGL Error : " << error << std::endl;
+    }
+
     // same shader for all windows
     m_data.m_pShader = s_pShader;
 

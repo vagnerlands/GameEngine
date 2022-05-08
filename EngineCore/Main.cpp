@@ -7,7 +7,9 @@
 #include "gl/glut.h"
 
 #include "MainWinOgl.h"
-
+#ifdef _IS_EDITOR_
+#include "MainGLFW.h"
+#endif
 #include <iostream>
 
 #ifndef IRIS_DEBUG_MEM_ALLOC
@@ -17,7 +19,7 @@ void* operator new(size_t size)
 
     if (size > (1024*1024 * 1))
     {
-        std::cout << " [+] Allocating new big chunk of [" << size / 1024 / 1024 << "] MBs" << endl;
+        //std::cout << " [+] Allocating new big chunk of [" << size / 1024 / 1024 << "] MBs" << endl;
     }
 
     return memory;
@@ -29,7 +31,7 @@ void* operator new[](size_t size)
 
     if (size > (1024 * 1024 * 1))
     {
-        std::cout << " [+] Allocating new[] big chunk of [" << size / 1024 / 1024 << "] MBs" << endl;
+        //std::cout << " [+] Allocating new[] big chunk of [" << size / 1024 / 1024 << "] MBs" << endl;
     }
 
     return memory;
@@ -49,39 +51,28 @@ void operator delete[](void* p)
 int 
 main(int argv, char** argc)
 {
-	// starts defaultively on OGL
-	int initializationMode = 1;
-
+	std::unique_ptr<EngineCore::IMain> run_mode;
+#ifdef _IS_EDITOR_
+	run_mode = std::make_unique<MainGLFW>();
+#else
+	run_mode = std::make_unique<MainOgl>();
+#endif
 	// checks if there is another argument
 	// then checks if the argument is explicitly OGL or WINOGL (case insensitive)
 	if (argv == 2)
 	{		
 		if (strcmp(strupr(argc[1]), "OGL") == 0)
-			initializationMode = 1;
+			run_mode = std::make_unique<MainOgl>();
 		else if (strcmp(strupr(argc[1]), "WINOGL") == 0)
-			initializationMode = 2;
-	}
-
-	EngineCore::IMain* obj;
-	if (initializationMode == 1)
-	{
-		obj = new MainOgl();
-	}
-	else if (initializationMode == 2)
-	{
-		obj = new MainWinOgl();
+			run_mode = std::make_unique<MainWinOgl>();
 	}
 
 	// most of the time, the arguments are pointless
 	// but for some implementations it's a must
 	// let's keep it here
-	obj->StartUp(argv, argc);
+	run_mode->StartUp(argv, argc);
 
 	// ... this point shouldn't be reached
-
-	// release allocated object
-	delete obj;
-	obj = nullptr;
 
 	// close application
 	exit(0);

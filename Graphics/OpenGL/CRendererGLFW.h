@@ -1,15 +1,16 @@
-#ifndef _CRENDEREROGL_H_
-#define _CRENDEREROGL_H_
+#pragma once
 
 #include "CommonTypes.h"
 #include "IRenderer.h"
 
 using namespace Types;
 
+struct GLFWwindow;
+
 namespace Graphics
 {
 
-	class CRendererOGL : public IRenderer
+	class CRendererGLFW : public IRenderer
 	{
 	public:
 		static bool Create();
@@ -31,24 +32,23 @@ namespace Graphics
 		virtual void SetWorldMatrix(const IvMatrix44& matrix) override;
 
 		// we want inherited classes to be able to delete this object
-		virtual ~CRendererOGL();
+		virtual ~CRendererGLFW();
 
 		Int32 InitializeGraphics(Int32 width, Int32 height, bool isFullScreen) override;
 
-		bool IsOperational() override 
-		{
-			return true;
-		}
+		bool IsOperational() override;
 
 	protected:
 		// only possible to create this object through "Create()" method
-		CRendererOGL();
+		CRendererGLFW();
 
 	private:
 		// copy operations
-		CRendererOGL(const CRendererOGL& other);
-		CRendererOGL& operator=(const CRendererOGL& other);
+		CRendererGLFW(const CRendererGLFW& other);
+		CRendererGLFW& operator=(const CRendererGLFW& other);
+
+		// global
+		GLFWwindow* mWindow = nullptr;
 	};
 
 }
-#endif // _CRENDEREROGL_H_

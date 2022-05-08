@@ -140,6 +140,9 @@
     <ClInclude Include="OpenGL\TextArea2DOGL.h">
       <Filter>Src\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGL\CRendererGLFW.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IRenderer.cpp">
@@ -218,6 +221,9 @@
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="OpenGL\TextArea2DOGL.cpp">
+      <Filter>Src\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL\CRendererGLFW.cpp">
       <Filter>Src\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>

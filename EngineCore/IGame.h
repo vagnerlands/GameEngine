@@ -91,7 +91,7 @@ namespace EngineCore
 			mMaxFps = framesPerSecond;
 		}
 
-		static IGame* mGame;          // global pointer
+		static std::shared_ptr<IGame> mGame;          // global pointer
         CGameController mGameController;
         std::shared_ptr<UtilitiesCore::ILogger> mpLogger;
 
