@@ -30,11 +30,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphics", "Graphics\Graphi
 		{5176FB6E-7622-4A7D-9090-F3518141B00D} = {5176FB6E-7622-4A7D-9090-F3518141B00D}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor-GL", "Editor-GL\Editor-GL.vcxproj", "{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}"
-	ProjectSection(ProjectDependencies) = postProject
-		{05AA9618-545F-4469-BC81-281B635B2E56} = {05AA9618-545F-4469-BC81-281B635B2E56}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,26 +146,6 @@ Global
 		{F8A5F79F-2534-4D62-88D5-023F20628C5B}.Release|x64.Build.0 = Release|x64
 		{F8A5F79F-2534-4D62-88D5-023F20628C5B}.Release|x86.ActiveCfg = Release|Win32
 		{F8A5F79F-2534-4D62-88D5-023F20628C5B}.Release|x86.Build.0 = Release|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Debug|x64.ActiveCfg = Debug|x64
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Debug|x64.Build.0 = Debug|x64
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Debug|x86.ActiveCfg = Debug|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Debug|x86.Build.0 = Debug|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Editor-Debug|Any CPU.ActiveCfg = Editor-Debug|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Editor-Debug|x64.ActiveCfg = Editor-Debug|x64
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Editor-Debug|x64.Build.0 = Editor-Debug|x64
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Editor-Debug|x86.ActiveCfg = Editor-Debug|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Editor-Debug|x86.Build.0 = Editor-Debug|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Editor-Release|Any CPU.ActiveCfg = Editor-Release|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Editor-Release|x64.ActiveCfg = Editor-Release|x64
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Editor-Release|x64.Build.0 = Editor-Release|x64
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Editor-Release|x86.ActiveCfg = Editor-Release|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Editor-Release|x86.Build.0 = Editor-Release|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Release|Any CPU.ActiveCfg = Release|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Release|x64.ActiveCfg = Release|x64
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Release|x64.Build.0 = Release|x64
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Release|x86.ActiveCfg = Release|Win32
-		{29B659A4-8BE9-4FE6-9D8D-27A4E191E807}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

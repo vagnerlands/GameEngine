@@ -12,7 +12,7 @@
 #endif
 #include <iostream>
 
-#ifndef IRIS_DEBUG_MEM_ALLOC
+#ifdef _DEBUG
 void* operator new(size_t size)
 {
     void* memory = malloc(size);

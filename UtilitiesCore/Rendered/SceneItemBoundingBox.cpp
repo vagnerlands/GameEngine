@@ -53,7 +53,7 @@ namespace UtilitiesCore
             };
         }
 
-        const Int32 cCountElements = vertices.size();
+        const auto cCountElements = vertices.size();
 
         for (Int32 i = 0; i < cCountElements; ++i)
         {

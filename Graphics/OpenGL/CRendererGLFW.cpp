@@ -4,15 +4,14 @@
 #include "IvMatrix33.h"
 #include <iostream>
 
+#ifdef _IS_EDITOR_
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
-
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "gdi32.lib")
-
 #include "imgui.h"
 #include "imgui/res/bindings/imgui_impl_glfw.h"
 #include "imgui/res/bindings/imgui_impl_opengl3.h"
-
+#endif
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -78,9 +77,9 @@ void Graphics::CRendererGLFW::PrepareCamera2D()
     const Float cNear   = -1.0;
     const Float cFar    =  1.0;
 
-	Float recipX = (mWidth);
-	Float recipY = (mHeight);
-	Float recipZ = (cFar - cNear);
+	Float recipX = (Float)(mWidth);
+	Float recipY = (Float)(mHeight);
+	Float recipZ = (Float)(cFar - cNear);
 
 
 	ortho(0, 0) = 2.0f/recipX;

@@ -36,8 +36,8 @@ public:
     {
     }
     inline IvVector2(const double other[]) :
-        x(other[0]),
-        y(other[1])
+        x((float)other[0]),
+        y((float)other[1])
     {
     }
     inline ~IvVector2() {}

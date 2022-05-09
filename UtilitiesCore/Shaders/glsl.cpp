@@ -634,7 +634,7 @@ bool glShader::setTexture(const GLcharARB* varname, Graphics::ITexture* pTexture
 	else
 	{
 		// the index will be the size of the shader map
-		samplerIndex = m_samplerInShaderMap.size();
+		samplerIndex = (Int32)m_samplerInShaderMap.size();
 		// pray that this value will never be bigger than 32, if so, we set it back to zero
 		if (samplerIndex >= 31)
 		{
@@ -1410,12 +1410,12 @@ unsigned long getFileLength(ifstream& file)
 {
     if(!file.good()) return 0;
     
-    unsigned long pos=file.tellg();
+    auto pos=file.tellg();
     file.seekg(0,ios::end);
-    unsigned long len = file.tellg();
+    auto len = file.tellg();
     file.seekg(ios::beg);
     
-    return len;
+    return (unsigned int)len;
 }
 
 

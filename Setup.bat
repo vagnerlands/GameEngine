@@ -49,6 +49,18 @@ Set LIB_PATHS_X64_RELEASE=^
 %PROJECT_ROOT%\Dependencies\glfw-bin\src\Release;^
 %PROJECT_ROOT%\Libs\x64\Release;
 
+Set LIB_PATHS_X64_EDITOR_DEBUG=^
+%PROJECT_ROOT%\Libs;^
+%PROJECT_ROOT%\Dependencies\Libs\x64;^
+%PROJECT_ROOT%\Dependencies\glfw-bin\src\Debug;^
+%PROJECT_ROOT%\Libs\x64\Editor-Debug;
+
+Set LIB_PATHS_X64_EDITOR_RELEASE=^
+%PROJECT_ROOT%\Libs;^
+%PROJECT_ROOT%\Dependencies\Libs\x64;^
+%PROJECT_ROOT%\Dependencies\glfw-bin\src\Release;^
+%PROJECT_ROOT%\Libs\x64\Editor-Release;
+
 Set INCLUDE_PATHS=^
 %PROJECT_ROOT%\EngineCore;^
 %PROJECT_ROOT%\Game;^

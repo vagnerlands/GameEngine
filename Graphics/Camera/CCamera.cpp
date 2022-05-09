@@ -23,7 +23,7 @@ void CCamera::SetLookAtMatrix()
 
 void CCamera::RotateX(Float Angle)
 {
-	Angle *= 0.1;
+	Angle *= 0.1f;
 
 	// rotate the camera based on given angle (use quaternion)
 	IvMatrix33 rotate;
@@ -36,7 +36,7 @@ void CCamera::RotateX(Float Angle)
 
 void CCamera::RotateY(Float Angle)
 {
-	Angle *= 0.1;
+	Angle *= 0.1f;
 
     // rotate the camera based on given angle (use quaternion)
 	IvMatrix33 rotate;
@@ -48,7 +48,7 @@ void CCamera::RotateY(Float Angle)
 
 void CCamera::RotateZ(Float Angle)
 {
-	Angle *= 0.1;
+	Angle *= 0.1f;
 
     // rotate the camera based on given angle (use quaternion)
 	IvMatrix33 rotate;

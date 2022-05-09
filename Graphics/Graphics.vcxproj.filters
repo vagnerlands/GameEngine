@@ -24,6 +24,9 @@
     <Filter Include="Src\Camera">
       <UniqueIdentifier>{fb8798dc-2073-45c9-909a-5a5ad3f8909f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\OpenGL\imgui">
+      <UniqueIdentifier>{1119bf89-d48f-4e33-8452-4b8cf897b8df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderer.h">
@@ -143,6 +146,12 @@
     <ClInclude Include="OpenGL\CRendererGLFW.h">
       <Filter>Src\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="..\Dependencies\imgui\res\bindings\imgui_impl_glfw.h">
+      <Filter>Src\OpenGL\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\imgui\res\bindings\imgui_impl_opengl3.h">
+      <Filter>Src\OpenGL\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IRenderer.cpp">
@@ -225,6 +234,12 @@
     </ClCompile>
     <ClCompile Include="OpenGL\CRendererGLFW.cpp">
       <Filter>Src\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\imgui\res\bindings\imgui_impl_glfw.cpp">
+      <Filter>Src\OpenGL\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\imgui\res\bindings\imgui_impl_opengl3.cpp">
+      <Filter>Src\OpenGL\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

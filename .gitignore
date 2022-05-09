@@ -1,4 +1,4 @@
-# do not track files in these folders #
+-# do not track files in these folders #
 EngineCore/Debug/
 EngineCore/Release/
 EngineCore/Editor-Debug/
@@ -25,6 +25,8 @@ Binaries/
 Game-Editor/obj/
 Game/Debug/
 Game/Release/
+Game/Editor-Debug/
+Game/Editor-Release/
 Libs/x64/Debug/Math.lib
 Libs/x64/Debug/EngineCore.lib
 Libs/x64/Debug/Graphics.lib
