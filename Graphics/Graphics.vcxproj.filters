@@ -146,10 +146,10 @@
     <ClInclude Include="OpenGL\CRendererGLFW.h">
       <Filter>Src\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\res\bindings\imgui_impl_glfw.h">
+    <ClInclude Include="..\Dependencies\imgui\res\bindings\imgui_impl_opengl3.h">
       <Filter>Src\OpenGL\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\imgui\res\bindings\imgui_impl_opengl3.h">
+    <ClInclude Include="..\Dependencies\imgui\res\bindings\imgui_impl_glut.h">
       <Filter>Src\OpenGL\imgui</Filter>
     </ClInclude>
   </ItemGroup>
@@ -235,10 +235,10 @@
     <ClCompile Include="OpenGL\CRendererGLFW.cpp">
       <Filter>Src\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\res\bindings\imgui_impl_glfw.cpp">
+    <ClCompile Include="..\Dependencies\imgui\res\bindings\imgui_impl_opengl3.cpp">
       <Filter>Src\OpenGL\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\Dependencies\imgui\res\bindings\imgui_impl_opengl3.cpp">
+    <ClCompile Include="..\Dependencies\imgui\res\bindings\imgui_impl_glut.cpp">
       <Filter>Src\OpenGL\imgui</Filter>
     </ClCompile>
   </ItemGroup>

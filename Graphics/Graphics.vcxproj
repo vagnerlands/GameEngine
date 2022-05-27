@@ -304,10 +304,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Dependencies\imgui\res\bindings\imgui_impl_glfw.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\Dependencies\imgui\res\bindings\imgui_impl_glut.cpp" />
     <ClCompile Include="..\Dependencies\imgui\res\bindings\imgui_impl_opengl3.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -341,10 +338,7 @@
     <ClCompile Include="TextArea2D.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="Window2D.cpp" />
-    <ClInclude Include="..\Dependencies\imgui\res\bindings\imgui_impl_glfw.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\Dependencies\imgui\res\bindings\imgui_impl_glut.h" />
     <ClInclude Include="..\Dependencies\imgui\res\bindings\imgui_impl_opengl3.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

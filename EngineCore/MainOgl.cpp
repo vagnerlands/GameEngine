@@ -3,7 +3,7 @@
 
 #include "Debugger.h"
 #include "gl/glew.h"
-#include "gl/glut.h"
+#include "gl/freeglut.h"
 #include "OpenGL/CRendererOGL.h"
 #include "CThreadHolder.h"
 #include "IvPoint.h"
@@ -19,6 +19,12 @@
 #include "Factory/ModelFactoryOGL.h"
 #include "Ilumination.h"
 #include "OpenGL/ShadowsOGL.h"
+
+#ifdef _IS_EDITOR_
+#include "imgui.h"
+#include "imgui/res/bindings/imgui_impl_glut.h"
+#include "imgui/res/bindings/imgui_impl_opengl3.h"
+#endif
 
 static Int32 s_lastState = GLUT_UP;
 static Int32 s_lastCursorX = -1;
@@ -54,12 +60,18 @@ void RunWrap()
 void ReshapeWrap(Int32 w, Int32 h)
 {
 	EngineCore::IGame::mGame->Reshape(w, h);
+#ifdef _IS_EDITOR_
+	ImGui_ImplGLUT_ReshapeFunc(w, h);
+#endif
 }
 
 // reads the user input key - KEY DOWN
 void KeyboardInput(UByte key, Int32 x, Int32 y)
 {
 	EngineCore::IGame::mGame->GetGameController()->VOnKeyDown(key);
+#ifdef _IS_EDITOR_
+	ImGui_ImplGLUT_KeyboardFunc(key, x, y);
+#endif
 }
 
 void MouseMotion(int x, int y)
@@ -78,6 +90,10 @@ void MouseMotion(int x, int y)
 	{
 		s_lastCursorY = y;
 	}
+
+#ifdef _IS_EDITOR_
+	ImGui_ImplGLUT_MotionFunc(x, y);
+#endif
 }
 
 void MouseInput(Int32 button, Int32 state, Int32 x, Int32 y)
@@ -132,13 +148,18 @@ void MouseInput(Int32 button, Int32 state, Int32 x, Int32 y)
 		DEBUG_OUT("Button %d - %s At %d %d\n", button, (state == GLUT_DOWN) ? "Down" : "Up", x, y);
 	}
 
-
+#ifdef _IS_EDITOR_
+	ImGui_ImplGLUT_MouseFunc(button, state, x, y);
+#endif
 }
 
 // reads the user input key - KEY UP
 void KeyboardRelease(UByte key, int x, int y)
 {
 	EngineCore::IGame::mGame->GetGameController()->VOnKeyUp(key);
+#ifdef _IS_EDITOR_
+	ImGui_ImplGLUT_KeyboardUpFunc(key, x, y);
+#endif
 }
 
 MainOgl::~MainOgl()
@@ -157,8 +178,11 @@ void MainOgl::StartUp(int argv, char** argc)
 	// Use a single buffered window in RGB mode (as opposed to a double-buffered
 	// window or color-index mode).
 	glutInit(&argv, argc);
+#ifdef __FREEGLUT_EXT_H__
+	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+#endif
 	// only one buffer
-	glutInitDisplayMode(GLUT_ALPHA | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_ALPHA | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 
 	// Position window at (80,80) and sets to it a title
 	glutInitWindowPosition(200, 20);
@@ -206,18 +230,18 @@ void MainOgl::StartUp(int argv, char** argc)
 	// declares the drawing function to opengl state machine
 	glutDisplayFunc(RunWrap);
 	// declares the reshape function to opengl state machine
-	glutReshapeFunc(ReshapeWrap);
+	glutReshapeFunc(ReshapeWrap); 
 	// declares the idle function to opengl state machine
 	glutIdleFunc(RunWrap);
 	// key press down event
-	glutKeyboardFunc(KeyboardInput);
+	glutKeyboardFunc(KeyboardInput); 
 	// key press up event
-	glutKeyboardUpFunc(KeyboardRelease);
+	glutKeyboardUpFunc(KeyboardRelease); 
 	// mouse click input
 	glutMouseFunc(MouseInput);
-	glutMotionFunc(MouseMotion);
+	glutMotionFunc(MouseMotion); 
 	// mouse motion input
-	glutPassiveMotionFunc(MouseMotion);
+	glutPassiveMotionFunc(MouseMotion); 
 
 	// creates a thread for loading resources purpose
 	CThreadHolder::instance()->registerThread("thBackgroundLoader", 0x03, BackgroundLoader);

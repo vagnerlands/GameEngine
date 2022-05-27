@@ -36,34 +36,34 @@ GameControls::GameControls(EngineCore::IGame* pGameEngine, CGameController& pCon
     const Float cAcceleration = 100.5f;
     const Float cMaxSpeed = 2000.f;
 
-    KeyDispatcher::Instance().Bind('w', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('W', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveForward(dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
         //cout << "Distance from Camera to Yoni2 is << " << Distance(Graphics::IRenderer::mRenderer->GetCamera().m_position, Graphics::RenderScene::Instance().Find("Yoni2").GetLocation()) << endl;
     });
 
-    KeyDispatcher::Instance().Bind('s', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('S', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveForward(-dt * (clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
         //cout << "Distance from Camera to Yoni2 is << " << Distance(Graphics::IRenderer::mRenderer->GetCamera().m_position, Graphics::RenderScene::Instance().Find("Yoni2").GetLocation()) << endl;
     });
 
-    KeyDispatcher::Instance().Bind('d', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('D', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveRight(dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
     });
 
-    KeyDispatcher::Instance().Bind('a', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('A', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveRight(-dt * (clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
     });
 
-    KeyDispatcher::Instance().Bind('e', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('E', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(dt*(clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
     });
 
-    KeyDispatcher::Instance().Bind('q', [=](Float dt, Int32 cycles)
+    KeyDispatcher::Instance().Bind('Q', [=](Float dt, Int32 cycles)
     {
         Graphics::IRenderer::mRenderer->GetCamera().MoveUpward(-dt * (clamp(cInitialSpeed + (cycles*cAcceleration), cMaxSpeed)));
     });
@@ -100,14 +100,14 @@ void GameControls::Execute(float dt)
 	static Float SizeConst = 12000;
 	static Float NumberOfParticles = 100;
 
-	if (mGameInput.m_bKey['o'].isPressed)
+	if (mGameInput.m_bKey['O'].isPressed)
 	{
 		SpreadConst += 1.f;
 		Graphics::SceneQueryParticles part;
 		part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mGameInput.m_bKey['p'].isPressed)
+	else if (mGameInput.m_bKey['P'].isPressed)
 	{
 		SpreadConst -= 1.f;
 		Graphics::SceneQueryParticles part;
@@ -115,28 +115,28 @@ void GameControls::Execute(float dt)
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
 
-	if (mGameInput.m_bKey['k'].isPressed)
+	if (mGameInput.m_bKey['K'].isPressed)
 	{
 		HeightConst += 1.f;
 		Graphics::SceneQueryParticles part;
         part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mGameInput.m_bKey['l'].isPressed)
+	else if (mGameInput.m_bKey['L'].isPressed)
 	{
 		HeightConst -= 1.f;
 		Graphics::SceneQueryParticles part;
         part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	if (mGameInput.m_bKey['n'].isPressed)
+	if (mGameInput.m_bKey['N'].isPressed)
 	{
 		SizeConst += 1.f;
 		Graphics::SceneQueryParticles part;
         part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-	else if (mGameInput.m_bKey['m'].isPressed)
+	else if (mGameInput.m_bKey['M'].isPressed)
 	{
 		SizeConst -= 1.f;
 		Graphics::SceneQueryParticles part;
@@ -158,23 +158,23 @@ void GameControls::Execute(float dt)
         part.Set(Graphics::ParticleSeeds(NumberOfParticles, 300, 150, SizeConst, 5000 + SizeConst, 2000 + HeightConst, 3000 + HeightConst, 30, 40 + SpreadConst, 100, 200, "flame.png"));
 		Graphics::RenderScene::Instance().ApplyQuery("Particles2", part);
 	}
-    if (mGameInput.m_bKey['c'].isPressed)
+    if (mGameInput.m_bKey['C'].isPressed)
     {
         Graphics::IRenderer::mRenderer->SetShadowFactor(m_shadowDetailsFactor += .1F);
         std::cout << "[ DEBUG ] Shadow details factor value " << m_shadowDetailsFactor << std::endl;
     }
-    if (mGameInput.m_bKey['v'].isPressed)
+    if (mGameInput.m_bKey['V'].isPressed)
     {
         Graphics::IRenderer::mRenderer->SetShadowFactor(m_shadowDetailsFactor -= .1F);
         std::cout << "[ DEBUG ] Shadow details factor value " << m_shadowDetailsFactor << std::endl;
     }
 
 
-    if (mGameInput.m_bKey['g'].isPressed)
+    if (mGameInput.m_bKey['G'].isPressed)
     {
         Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", -.000001F);
     }
-    if (mGameInput.m_bKey['h'].isPressed)
+    if (mGameInput.m_bKey['H'].isPressed)
     {
         Graphics::Ilumination::Instance().IncreaseAttenuationBy("main", +.000001F);
     }
@@ -184,8 +184,11 @@ void GameControls::Execute(float dt)
 		const Float cosValue = cos((mGameInput.m_movementAngle * (3.14159 / 180.F)));
 		const Float sinValue = sin((mGameInput.m_movementAngle * (3.14159 / 180.F)));
 		//printf(" Intensity X %d Y %d cos %f sin %f\n", mGameInput.m_movementIntensityX, mGameInput.m_movementIntensityY, cosValue, sinValue);
-		Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(mGameInput.m_movementIntensityY) * dt * cMouseSensibility);
-		Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(-mGameInput.m_movementIntensityX) * dt * cMouseSensibility);
+        //if (abs(cosValue) > 0.0001f)
+        {
+            Graphics::IRenderer::mRenderer->GetCamera().RotateX(cosValue * abs(mGameInput.m_movementIntensityY) * dt * cMouseSensibility);
+            Graphics::IRenderer::mRenderer->GetCamera().RotateY(sinValue * abs(-mGameInput.m_movementIntensityX) * dt * cMouseSensibility);
+        }
 	}
 
 	if (mGameInput.m_isRightButtonPressed)

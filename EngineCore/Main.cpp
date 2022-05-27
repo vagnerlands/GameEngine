@@ -2,10 +2,6 @@
 //
 
 #include "MainOgl.h"
-
-#include "gl/glew.h"
-#include "gl/glut.h"
-
 #include "MainWinOgl.h"
 #ifdef _IS_EDITOR_
 #include "MainGLFW.h"
@@ -53,7 +49,8 @@ main(int argv, char** argc)
 {
 	std::unique_ptr<EngineCore::IMain> run_mode;
 #ifdef _IS_EDITOR_
-	run_mode = std::make_unique<MainGLFW>();
+	//run_mode = std::make_unique<MainGLFW>();
+	run_mode = std::make_unique<MainOgl>();
 #else
 	run_mode = std::make_unique<MainOgl>();
 #endif

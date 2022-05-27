@@ -15,38 +15,6 @@
 		"position": [0, 0.5, 0],
 		"scale": [1, 1, 1],
 		"texture": [1, 1]
-    },
-	{
-		"Name": "Warrior2",
-		"ModelId": "Warrior.dae",
-		"sceneType": 4,
-		"position": [-100.0, 0.5, 0],
-		"scale": [1, 1, 1],
-		"texture": [1, 1]
-    },
-	{
-		"Name": "Warrior3",
-		"ModelId": "nemesis.dae",
-		"sceneType": 4,
-		"position": [100.0, 0.5, 0],
-		"scale": [1, 1, 1],
-		"texture": [1, 1]
-    },
-	{
-		"Name": "Warrior4",
-		"ModelId": "Warrior.dae",
-		"sceneType": 4,
-		"position": [-200.0, 0.5, 0],
-		"scale": [1, 1, 1],
-		"texture": [1, 1]
-    },
-	{
-		"Name": "Warrior5",
-		"ModelId": "nemesis.dae",
-		"sceneType": 4,
-		"position": [200.0, 0.5, 0],
-		"scale": [1, 1, 1],
-		"texture": [1, 1]
     }
 	],
 	"SkyBox":[
